@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="DTO_Models\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Classes\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Wman.Data\Wman.Data.csproj" />
+    <ProjectReference Include="..\Wman.Repository\Wman.Repository.csproj" />
+  </ItemGroup>
+
+</Project>
