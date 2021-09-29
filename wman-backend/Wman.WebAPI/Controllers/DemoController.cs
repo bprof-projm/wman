@@ -23,12 +23,24 @@ namespace Wman.WebAPI.Controllers
             this.repo = new debugRepo(db);
             this.logic = new DebugLogic(repo);
         }
+        /// <summary>
+        /// HTTPGET test method
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public List<WorkEvent> HelloWorld()
         {
             this.logic.testadd();
             return this.logic.testlist();
         }
-        
+        /// <summary>
+        /// HTTPPost test method
+        /// </summary>
+        /// <returns>OK</returns>
+        [HttpPost]
+        public ActionResult test()
+        {
+            return Ok();
+        }
     }
 }

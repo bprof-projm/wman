@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Wman.WebAPI</name>
+    </assembly>
+    <members>
+        <member name="M:Wman.WebAPI.Controllers.DemoController.HelloWorld">
+            <summary>
+            HTTPGET test method
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.DemoController.test">
+            <summary>
+            HTTPPost test method
+            </summary>
+            <returns>OK</returns>
+        </member>
+    </members>
+</doc>
