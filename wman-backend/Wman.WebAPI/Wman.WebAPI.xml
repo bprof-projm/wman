@@ -4,6 +4,52 @@
         <name>Wman.WebAPI</name>
     </assembly>
     <members>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.CreateUser(Wman.Logic.DTO_Models.Login)">
+            <summary>
+            Create a new user
+            </summary>
+            <param name="model">Login model</param>
+            <returns>ActionResult</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.GetAllUsers">
+            <summary>
+            Get a list of all users
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.GetUser(System.String)">
+            <summary>
+            Get one specific user
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.DeleteUser(System.Int32)">
+            <summary>
+            Delete a user
+            </summary>
+            <param name="id">Id of the user to be deleted</param>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.UpdateUser(System.Int32,Wman.Data.DB_Models.WmanUser)">
+            <summary>
+            Update a user
+            </summary>
+            <param name="oldId">Prev. id</param>
+            <param name="user">User to be updated</param>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.Login(Wman.Logic.DTO_Models.Login)">
+            <summary>
+            Login/generate jwt token
+            </summary>
+            <param name="model">Login details</param>
+            <returns>Hopefully a jwt token</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.debugreg">
+            <summary>
+            debug endpoint
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Wman.WebAPI.Controllers.DemoController.HelloWorld">
             <summary>
             HTTPGET test method
