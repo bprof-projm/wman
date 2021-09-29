@@ -6,10 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Wman.Data.DB_Models;
 
 namespace Wman.Data
 {
-    public class wmanDb : IdentityDbContext<IdentityUser>
+    public class wmanDb : IdentityDbContext<WmanUser>
     {
         public wmanDb()
         {

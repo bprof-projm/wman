@@ -5,11 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DTO_Models\" />
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Wman.Data\Wman.Data.csproj" />
     <ProjectReference Include="..\Wman.Repository\Wman.Repository.csproj" />
   </ItemGroup>
