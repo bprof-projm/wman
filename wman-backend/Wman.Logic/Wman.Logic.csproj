@@ -7,7 +7,6 @@
   <ItemGroup>
     <Folder Include="DTO_Models\" />
     <Folder Include="Interfaces\" />
-    <Folder Include="Classes\" />
   </ItemGroup>
 
   <ItemGroup>

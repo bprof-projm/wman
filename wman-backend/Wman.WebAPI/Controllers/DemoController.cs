@@ -3,6 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Wman.Data;
+using Wman.Data.DB_Models;
+using Wman.Logic.Classes;
+using Wman.Repository;
 
 namespace Wman.WebAPI.Controllers
 {
@@ -10,10 +14,21 @@ namespace Wman.WebAPI.Controllers
     [Route("{controller}")]
     public class DemoController : ControllerBase
     {
-        [HttpGet]
-        public string HelloWorld()
+        private wmanDb db;
+        private debugRepo repo;
+        private DebugLogic logic;
+        public DemoController()
         {
-            return "Hello world";
+            this.db = new wmanDb();
+            this.repo = new debugRepo(db);
+            this.logic = new DebugLogic(repo);
         }
+        [HttpGet]
+        public List<WorkEvent> HelloWorld()
+        {
+            this.logic.testadd();
+            return this.logic.testlist();
+        }
+        
     }
 }
