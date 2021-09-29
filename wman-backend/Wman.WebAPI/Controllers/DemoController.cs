@@ -11,7 +11,7 @@ using Wman.Repository;
 namespace Wman.WebAPI.Controllers
 {
     [ApiController]
-    [Route("{controller}")]
+    [Route("[controller]")]
     public class DemoController : ControllerBase
     {
         private wmanDb db;

@@ -9,7 +9,7 @@ using Wman.Logic.DTO_Models;
 
 namespace Wman.Logic.Interfaces
 {
-    interface IAuthLogic
+    public interface IAuthLogic
     {
 
         WmanUser GetOneUser(int userId, string email);
@@ -25,7 +25,7 @@ namespace Wman.Logic.Interfaces
         Task<string> DeleteUser(WmanUser inUser);
 
 
-        Task<string> UpdateUser(string oldId, WmanUser newUser);
+        Task<string> UpdateUser(int oldId, WmanUser newUser);
 
         Task<TokenModel> LoginUser(Login login);
 

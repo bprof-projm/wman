@@ -13,7 +13,7 @@ using Wman.Logic.Interfaces;
 
 namespace Wman.Logic.Classes
 {
-    class AuthLogic : IAuthLogic
+    public class AuthLogic : IAuthLogic
     {
 
         UserManager<WmanUser> userManager;
@@ -46,7 +46,7 @@ namespace Wman.Logic.Classes
             }
         }
 
-        public async Task<string> UpdateUser(string oldId, WmanUser newUser)
+        public async Task<string> UpdateUser(int oldId, WmanUser newUser)
         {
             await userManager.UpdateAsync(newUser);
             return "Success";
