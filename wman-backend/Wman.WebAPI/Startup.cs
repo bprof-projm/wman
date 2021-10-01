@@ -70,8 +70,10 @@ namespace Wman.WebAPI
                 {securityScheme, new string[] { }}
                 });
             });
-            var connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=testwmandb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-            services.AddDbContext<wmanDb>(options => options.UseSqlServer(connectionString));
+            string appsettingsConnectionString = Configuration.GetConnectionString("wmandb");
+            ;
+           
+            services.AddDbContext<wmanDb>(options => options.UseSqlServer(appsettingsConnectionString));
 
             services.AddIdentity<WmanUser, IdentityRole>(
                      option =>

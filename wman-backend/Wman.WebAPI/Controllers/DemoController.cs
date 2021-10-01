@@ -17,9 +17,9 @@ namespace Wman.WebAPI.Controllers
         private wmanDb db;
         private debugRepo repo;
         private DebugLogic logic;
-        public DemoController()
+        public DemoController(wmanDb inDb)
         {
-            this.db = new wmanDb();
+            this.db = inDb;
             this.repo = new debugRepo(db);
             this.logic = new DebugLogic(repo);
         }
