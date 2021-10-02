@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -18,12 +19,10 @@ namespace Wman.Logic.Classes
         UserManager<WmanUser> userManager;
         RoleManager<IdentityRole> roleManager;
 
-        private IdentityErrorDescriber desc;
         public AuthLogic(UserManager<WmanUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
-            desc = new IdentityErrorDescriber();
         }
         public async Task<IQueryable<WmanUser>> GetAllUsers()
         {
@@ -32,12 +31,12 @@ namespace Wman.Logic.Classes
 
         public async Task<WmanUser> GetOneUser(string username)
         {
-            return userManager.Users.Where(x => x.UserName == username).SingleOrDefault();
+            return await userManager.Users.Where(x => x.UserName == username).SingleOrDefaultAsync();
         }
 
         public async Task<IdentityResult> UpdateUser(string oldUsername, userDTO newUser)
         {
-            
+
             var result = new IdentityResult();
             var user = userManager.Users.Where(x => x.UserName == oldUsername).SingleOrDefault();
             if (user == null)
@@ -61,14 +60,14 @@ namespace Wman.Logic.Classes
         {
             var myerror = new IdentityError() { Code = "UserNotFound", Description = "User not found!" };
             var result = new IdentityResult();
-                var user = userManager.Users.Where(x => x.UserName == uname).SingleOrDefault();
+            var user = userManager.Users.Where(x => x.UserName == uname).SingleOrDefault();
             if (user == null)
             {
                 return IdentityResult.Failed(myerror);
             }
             result = await userManager.DeleteAsync(user);
-            
-                return result;
+
+            return result;
 
         }
 
@@ -116,7 +115,7 @@ namespace Wman.Logic.Classes
             {
                 user = await userManager.FindByNameAsync(model.Username);
             }
-            else if(model.Email != null)
+            else if (model.Email != null)
             {
                 user = await userManager.FindByNameAsync(model.Email);
             }
@@ -162,7 +161,7 @@ namespace Wman.Logic.Classes
 
         public async Task<bool> HasRole(WmanUser user, string role)
         {
-            if (userManager.IsInRoleAsync(user, role).Result)
+            if ( await userManager.IsInRoleAsync(user, role))
             {
                 return true;
             }
@@ -180,7 +179,7 @@ namespace Wman.Logic.Classes
         }
         public async Task<IEnumerable<string>> GetAllRolesOfUser(WmanUser user)
         {
-            return userManager.GetRolesAsync(user).Result.ToList();
+            return await userManager.GetRolesAsync(user);
         }
 
         public async Task<bool> AssignRolesToUser(WmanUser user, List<string> roles)

@@ -12,14 +12,20 @@ using Wman.Logic.Interfaces;
 
 namespace Wman.WebAPI.Controllers
 {
-
+    /// <summary>
+    /// Auth controller
+    /// </summary>
     [ApiController]
 
     [Route("[controller]")]
+    
     public class AuthController : Controller
     {
         IAuthLogic authLogic;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="authLogic"></param>
         public AuthController(IAuthLogic authLogic)
         {
             this.authLogic = authLogic;
@@ -30,8 +36,8 @@ namespace Wman.WebAPI.Controllers
         /// <param name="model">Login model</param>
         /// <returns>ActionResult</returns>
         [HttpPost]
-        
-        public async Task<ActionResult> CreateUser([FromBody] userDTO model) 
+
+        public async Task<ActionResult> CreateUser([FromBody] userDTO model)
         {
             if (!ModelState.IsValid)
             {
@@ -61,19 +67,19 @@ namespace Wman.WebAPI.Controllers
         {
             try
             {
-                return Ok(Converter.MassConvert( await authLogic.GetAllUsers()));
+                return Ok(Converter.MassConvert(await authLogic.GetAllUsers()));
             }
             catch (Exception ex)
             {
                 return BadRequest(new { Error = ex.Message });
             }
-            
+
         }
 
         /// <summary>
         /// Get one specific user
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="username"></param>
         /// <returns></returns>
         [HttpGet("username")]
         //[Route("getOne")]
@@ -91,7 +97,7 @@ namespace Wman.WebAPI.Controllers
         /// <summary>
         /// Delete a user
         /// </summary>
-        /// <param name="id">Id of the user to be deleted</param>
+        /// <param name="username">Id of the user to be deleted</param>
         [HttpDelete("{username}")]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteUser(string username)
@@ -101,7 +107,7 @@ namespace Wman.WebAPI.Controllers
             {
                 result = await this.authLogic.DeleteUser(username);
                 if (result.Succeeded)
-                return Ok("User deleted successfully");
+                    return Ok("User deleted successfully");
             }
             catch (Exception ex)
             {
@@ -114,7 +120,7 @@ namespace Wman.WebAPI.Controllers
         /// <summary>
         /// Update a user
         /// </summary>
-        /// <param name="oldId">Prev. id</param>
+        /// <param name="oldUsername">Prev. id</param>
         /// <param name="user">User to be updated</param>
         [HttpPut("{oldUsername}")]
         //[Authorize(Roles = "Admin")]
@@ -146,7 +152,7 @@ namespace Wman.WebAPI.Controllers
         [HttpPut]
         [Route("login")]
 
-        public async Task<ActionResult> Login([FromBody] LoginDTO model) 
+        public async Task<ActionResult> Login([FromBody] LoginDTO model)
         {
             if (!ModelState.IsValid)
             {
