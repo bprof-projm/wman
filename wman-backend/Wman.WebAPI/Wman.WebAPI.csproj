@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>C:\proj2\wman\wman-backend\Wman.WebAPI\Wman.WebAPI.xml</DocumentationFile>
+    <DocumentationFile>..\Wman.WebAPI\Wman.WebAPI.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
