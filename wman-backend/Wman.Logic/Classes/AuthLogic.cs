@@ -46,7 +46,7 @@ namespace Wman.Logic.Classes
             }
         }
 
-        public async Task<string> UpdateUser(int oldId, WmanUser newUser)
+        public async Task<string> UpdateUser(string oldUsername, WmanUser newUser)
         {
             await userManager.UpdateAsync(newUser);
             return "Success";

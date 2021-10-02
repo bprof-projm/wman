@@ -24,7 +24,7 @@ namespace Wman.Logic.Interfaces
         Task<string> DeleteUser(string uname);
 
 
-        Task<string> UpdateUser(int oldId, WmanUser newUser);
+        Task<string> UpdateUser(string oldUsername, WmanUser newUser);
 
         Task<TokenModel> LoginUser(Login login);
 

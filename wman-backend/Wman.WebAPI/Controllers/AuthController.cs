@@ -80,11 +80,11 @@ namespace Wman.WebAPI.Controllers
         /// </summary>
         /// <param name="oldId">Prev. id</param>
         /// <param name="user">User to be updated</param>
-        [HttpPut("{oldId}")]
+        [HttpPut("{oldUsername}")]
         //[Authorize(Roles = "Admin")]
-        public async void UpdateUser(int oldId, [FromBody] WmanUser user)
+        public async void UpdateUser(string oldUsername, [FromBody] WmanUser user)
         {
-            await this.authLogic.UpdateUser(oldId, user);
+            await this.authLogic.UpdateUser(oldUsername, user);
         }
 
         /// <summary>
@@ -93,6 +93,7 @@ namespace Wman.WebAPI.Controllers
         /// <param name="model">Login details</param>
         /// <returns>Hopefully a jwt token</returns>
         [HttpPut]
+        [Route("login")]
         public async Task<ActionResult> Login([FromBody] Login model)
         {
             try
