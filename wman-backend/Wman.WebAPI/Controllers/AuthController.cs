@@ -39,9 +39,9 @@ namespace Wman.WebAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         //[Authorize(Roles = "Admin")]
-        public IEnumerable<WmanUser> GetAllUsers()
+        public async Task<IEnumerable<WmanUser>> GetAllUsers()
         {
-            return authLogic.GetAllUsers();
+            return authLogic.GetAllUsers().Result;
         }
 
         /// <summary>
@@ -52,15 +52,15 @@ namespace Wman.WebAPI.Controllers
         [HttpGet]
         [Route("getOne")]
         //[Authorize(Roles = "Admin")]
-        public WmanUser GetUser([FromQuery] string id)
+        public async Task<WmanUser> GetUser([FromQuery] string id)
         {
             if (id.Contains('@'))
             {
-                return this.authLogic.GetOneUser(-1, id);
+                return await this.authLogic.GetOneUser(-1, id);
             }
             else
             {
-                return this.authLogic.GetOneUser(int.Parse(id), null);
+                return await this.authLogic.GetOneUser(int.Parse(id), null);
             }
         }
 

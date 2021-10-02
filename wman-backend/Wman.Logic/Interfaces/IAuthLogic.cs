@@ -12,10 +12,10 @@ namespace Wman.Logic.Interfaces
     public interface IAuthLogic
     {
 
-        WmanUser GetOneUser(int userId, string email);
+        Task<WmanUser> GetOneUser(int userId, string email);
 
 
-        IQueryable<WmanUser> GetAllUsers();
+        Task<IQueryable<WmanUser>> GetAllUsers();
 
 
         Task<string> CreateUser(Login login);
@@ -28,13 +28,13 @@ namespace Wman.Logic.Interfaces
 
         Task<TokenModel> LoginUser(Login login);
 
-        bool HasRole(WmanUser user, string role);
+        Task<bool> HasRole(WmanUser user, string role);
 
 
-        IEnumerable<string> GetAllRolesOfUser(WmanUser user);
+        Task<IEnumerable<string>> GetAllRolesOfUser(WmanUser user);
 
 
-        bool AssignRolesToUser(WmanUser user, List<string> roles);
+        Task<bool> AssignRolesToUser(WmanUser user, List<string> roles);
 
 
         Task<List<WmanUser>> GetAllUsersOfRole(string roleId);

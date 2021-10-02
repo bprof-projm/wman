@@ -25,12 +25,12 @@ namespace Wman.Logic.Classes
             this.userManager = userManager;
             this.roleManager = roleManager;
         }
-        public IQueryable<WmanUser> GetAllUsers()
+        public async Task<IQueryable<WmanUser>> GetAllUsers()
         {
             return userManager.Users;
         }
 
-        public WmanUser GetOneUser(int id, string email)
+        public async Task<WmanUser> GetOneUser(int id, string email)
         {
             if (id != -1)
             {
@@ -135,7 +135,7 @@ namespace Wman.Logic.Classes
             throw new ArgumentException("Login failed");
         }
 
-        public bool HasRole(WmanUser user, string role)
+        public async Task<bool> HasRole(WmanUser user, string role)
         {
             if (userManager.IsInRoleAsync(user, role).Result)
             {
@@ -153,15 +153,15 @@ namespace Wman.Logic.Classes
             }
             return false;
         }
-        public IEnumerable<string> GetAllRolesOfUser(WmanUser user)
+        public async Task<IEnumerable<string>> GetAllRolesOfUser(WmanUser user)
         {
             return userManager.GetRolesAsync(user).Result.ToList();
         }
 
-        public bool AssignRolesToUser(WmanUser user, List<string> roles)
+        public async Task<bool> AssignRolesToUser(WmanUser user, List<string> roles)
         {
             WmanUser selectedUser;
-            selectedUser = GetOneUser(user.Id, null);
+            selectedUser = GetOneUser(user.Id, null).Result;
             userManager.AddToRolesAsync(selectedUser, roles).Wait();
             return true;
         }
@@ -195,8 +195,8 @@ namespace Wman.Logic.Classes
         {
             try
             {
-                var user = this.GetOneUser(-1, userName);
-                foreach (var role in this.GetAllRolesOfUser(user))
+                var user = this.GetOneUser(-1, userName).Result;
+                foreach (var role in this.GetAllRolesOfUser(user).Result)
                 {
                     await this.RemoveUserFromRole(user.UserName, role);
                 }
