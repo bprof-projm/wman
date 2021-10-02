@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using Wman.Data;
 using Wman.Data.DB_Models;
 using Wman.Logic.Classes;
+//using System.Data.Entity.Database;
 
 namespace Wman.WebAPI
 {
@@ -73,7 +74,7 @@ namespace Wman.WebAPI
             string appsettingsConnectionString = Configuration.GetConnectionString("wmandb");
             ;
            
-            services.AddDbContext<wmanDb>(options => options.UseSqlServer(appsettingsConnectionString));
+            services.AddDbContext<wmanDb>(options => options.UseSqlServer(appsettingsConnectionString, b => b.MigrationsAssembly("Wman.WebAPI")));
 
             services.AddIdentity<WmanUser, IdentityRole>(
                      option =>
