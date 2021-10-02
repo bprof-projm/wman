@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -28,10 +29,19 @@ namespace Wman.WebAPI.Controllers
         /// <param name="model">Login model</param>
         /// <returns>ActionResult</returns>
         [HttpPost]
-        public async Task<ActionResult> CreateUser([FromBody] Login model)
+        public async Task<ActionResult> CreateUser([FromBody] Login model) 
         {
-            string result = await authLogic.CreateUser(model);
-            return Ok(new { UserName = result });
+            IEnumerable<IdentityError> result;
+            try
+            {
+                result = await authLogic.CreateUser(model);
+                if (result == null) return Ok("User created successfully");
+            }
+            catch (Exception ex)
+            {
+                return UnprocessableEntity(new { Error = ex.Message });
+            }
+            return UnprocessableEntity(result);
         }
         /// <summary>
         /// Get a list of all users
@@ -39,9 +49,17 @@ namespace Wman.WebAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         //[Authorize(Roles = "Admin")]
-        public async Task<IEnumerable<WmanUser>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<WmanUser>>> GetAllUsers()
         {
-            return authLogic.GetAllUsers().Result;
+            try
+            {
+                return Ok(authLogic.GetAllUsers().Result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
+            
         }
 
         /// <summary>
@@ -52,9 +70,9 @@ namespace Wman.WebAPI.Controllers
         [HttpGet("username")]
         //[Route("getOne")]
         //[Authorize(Roles = "Admin")]
-        public async Task<WmanUser> GetUser(string username)
+        public async Task<ActionResult<WmanUser>> GetUser(string username)
         {
-            return await authLogic.GetOneUser(username);
+            return Ok(authLogic.GetOneUser(username));
         }
 
         /// <summary>
@@ -63,9 +81,19 @@ namespace Wman.WebAPI.Controllers
         /// <param name="id">Id of the user to be deleted</param>
         [HttpDelete("{username}")]
         //[Authorize(Roles = "Admin")]
-        public async void DeleteUser(string username)
+        public async Task<ActionResult> DeleteUser(string username)
         {
-            await this.authLogic.DeleteUser(username);
+            try
+            {
+                await this.authLogic.DeleteUser(username);
+                return Ok("User deleted successfully");
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { Error = ex.Message });
+            }
+            
         }
 
         /// <summary>
@@ -75,9 +103,18 @@ namespace Wman.WebAPI.Controllers
         /// <param name="user">User to be updated</param>
         [HttpPut("{oldUsername}")]
         //[Authorize(Roles = "Admin")]
-        public async void UpdateUser(string oldUsername, [FromBody] WmanUser user)
+        public async Task<ActionResult> UpdateUser(string oldUsername, [FromBody] WmanUser user)
         {
-            await this.authLogic.UpdateUser(oldUsername, user);
+            try
+            {
+                await this.authLogic.UpdateUser(oldUsername, user);
+                return Ok("User updated successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
+           
         }
 
         /// <summary>
@@ -87,7 +124,7 @@ namespace Wman.WebAPI.Controllers
         /// <returns>Hopefully a jwt token</returns>
         [HttpPut]
         [Route("login")]
-        public async Task<ActionResult> Login([FromBody] Login model)
+        public async Task<ActionResult> Login([FromBody] Login model) 
         {
             try
             {
@@ -95,19 +132,19 @@ namespace Wman.WebAPI.Controllers
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(new { Error = ex.Message });
+                return BadRequest("username/password does not match");
             }
         }
-        /// <summary>
-        /// debug endpoint
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("test")]
-        public async Task<ActionResult> debugreg()
-        {
-            string result = await authLogic.CreateUser(new Login() { Email = "luxederzoltan@gmail.com", Password = "asdf123"});
-            return Ok(new { UserName = result });
-        }
+        ///// <summary>
+        ///// debug endpoint
+        ///// </summary>
+        ///// <returns></returns>
+        //[HttpGet]
+        //[Route("test")]
+        //public async Task<ActionResult> debugreg()
+        //{
+        //    IEnumerable<IdentityResult result = await authLogic.CreateUser(new Login() { Email = "asd123@gmail.com", Password = "asdf123"});
+        //    return Ok(new { UserName = result });
+        //}
     }
 }

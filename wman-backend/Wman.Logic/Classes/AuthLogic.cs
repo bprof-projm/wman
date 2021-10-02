@@ -32,32 +32,26 @@ namespace Wman.Logic.Classes
 
         public async Task<WmanUser> GetOneUser(string username)
         {
-            return userManager.Users.Where(x => x.UserName == username).Single();
+            return userManager.Users.Where(x => x.UserName == username).SingleOrDefault();
         }
 
-        public async Task<string> UpdateUser(string oldUsername, WmanUser newUser)
+        public async Task<bool> UpdateUser(string oldUsername, WmanUser newUser)
         {
             await userManager.UpdateAsync(newUser);
-            return "Success";
+            return true;
         }
 
 
-        public async Task<string> DeleteUser(string uname)
+        public async Task<bool> DeleteUser(string uname)
         {
-            try
-            {
-                var user = userManager.Users.Where(x => x.UserName == uname).Single();
+
+                var user = userManager.Users.Where(x => x.UserName == uname).SingleOrDefault();
                 await userManager.DeleteAsync(user);
-                return "Success";
-            }
-            catch (Exception)
-            {
-                return "Fail";
-            }
+                return true;
 
         }
 
-        public async Task<string> CreateUser(Login model)
+        public async Task<IEnumerable<IdentityError>> CreateUser(Login model)
         {
             var user = new WmanUser
             {
@@ -69,9 +63,9 @@ namespace Wman.Logic.Classes
             if (result.Succeeded)
             {
                 await userManager.AddToRoleAsync(user, "Debug");
-                return "OK";
+                return null;
             }
-            return "NOT OK";
+            return result.Errors;
         }
 
         public async Task<TokenModel> LoginUser(Login model)

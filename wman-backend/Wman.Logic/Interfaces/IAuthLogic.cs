@@ -18,13 +18,13 @@ namespace Wman.Logic.Interfaces
         Task<IQueryable<WmanUser>> GetAllUsers();
 
 
-        Task<string> CreateUser(Login login);
+        Task<IEnumerable<IdentityError>> CreateUser(Login login);
 
 
-        Task<string> DeleteUser(string uname);
+        Task<bool> DeleteUser(string uname);
 
 
-        Task<string> UpdateUser(string oldUsername, WmanUser newUser);
+        Task<bool> UpdateUser(string oldUsername, WmanUser newUser);
 
         Task<TokenModel> LoginUser(Login login);
 

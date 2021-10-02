@@ -44,12 +44,6 @@
             <param name="model">Login details</param>
             <returns>Hopefully a jwt token</returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.debugreg">
-            <summary>
-            debug endpoint
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Wman.WebAPI.Controllers.DemoController.HelloWorld">
             <summary>
             HTTPGET test method
