@@ -49,19 +49,12 @@ namespace Wman.WebAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet]
-        [Route("getOne")]
+        [HttpGet("username")]
+        //[Route("getOne")]
         //[Authorize(Roles = "Admin")]
-        public async Task<WmanUser> GetUser([FromQuery] string id)
+        public async Task<WmanUser> GetUser(string username)
         {
-            if (id.Contains('@'))
-            {
-                return await this.authLogic.GetOneUser(-1, id);
-            }
-            else
-            {
-                return await this.authLogic.GetOneUser(int.Parse(id), null);
-            }
+            return await authLogic.GetOneUser(username);
         }
 
         /// <summary>

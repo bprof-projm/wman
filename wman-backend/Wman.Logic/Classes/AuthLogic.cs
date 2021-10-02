@@ -30,20 +30,9 @@ namespace Wman.Logic.Classes
             return userManager.Users;
         }
 
-        public async Task<WmanUser> GetOneUser(int id, string email)
+        public async Task<WmanUser> GetOneUser(string username)
         {
-            if (id != -1)
-            {
-                return userManager.Users.Where(x => x.Id == id).SingleOrDefault();
-            }
-            else if (email != null)
-            {
-                return userManager.Users.Where(x => x.Email == email).SingleOrDefault();
-            }
-            else
-            {
-                throw new ArgumentException();
-            }
+            return userManager.Users.Where(x => x.UserName == username).Single();
         }
 
         public async Task<string> UpdateUser(string oldUsername, WmanUser newUser)
@@ -161,7 +150,7 @@ namespace Wman.Logic.Classes
         public async Task<bool> AssignRolesToUser(WmanUser user, List<string> roles)
         {
             WmanUser selectedUser;
-            selectedUser = GetOneUser(user.Id, null).Result;
+            selectedUser = GetOneUser(user.UserName).Result;
             userManager.AddToRolesAsync(selectedUser, roles).Wait();
             return true;
         }
@@ -195,7 +184,7 @@ namespace Wman.Logic.Classes
         {
             try
             {
-                var user = this.GetOneUser(-1, userName).Result;
+                var user = this.GetOneUser(userName).Result;
                 foreach (var role in this.GetAllRolesOfUser(user).Result)
                 {
                     await this.RemoveUserFromRole(user.UserName, role);

@@ -12,7 +12,7 @@ namespace Wman.Logic.Interfaces
     public interface IAuthLogic
     {
 
-        Task<WmanUser> GetOneUser(int userId, string email);
+        Task<WmanUser> GetOneUser(string username);
 
 
         Task<IQueryable<WmanUser>> GetAllUsers();
