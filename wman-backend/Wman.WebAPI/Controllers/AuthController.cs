@@ -16,9 +16,9 @@ namespace Wman.WebAPI.Controllers
     [Route("[controller]")]
     public class AuthController : Controller
     {
-        AuthLogic authLogic;
+        IAuthLogic authLogic;
 
-        public AuthController(AuthLogic authLogic)
+        public AuthController(IAuthLogic authLogic)
         {
             this.authLogic = authLogic;
         }

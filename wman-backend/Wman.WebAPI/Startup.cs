@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using Wman.Data;
 using Wman.Data.DB_Models;
 using Wman.Logic.Classes;
+using Wman.Logic.Interfaces;
 //using System.Data.Entity.Database;
 
 namespace Wman.WebAPI
@@ -41,7 +42,7 @@ namespace Wman.WebAPI
         {
 
             services.AddControllers();
-            services.AddTransient<AuthLogic, AuthLogic>();
+            services.AddTransient<IAuthLogic, AuthLogic>();
             //TODO: Use transients
 
 
