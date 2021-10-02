@@ -29,7 +29,7 @@ namespace Wman.WebAPI.Controllers
         /// <param name="model">Login model</param>
         /// <returns>ActionResult</returns>
         [HttpPost]
-        public async Task<ActionResult> CreateUser([FromBody] Login model) 
+        public async Task<ActionResult> CreateUser([FromBody] LoginDTO model) 
         {
             IdentityResult result;
             try
@@ -130,7 +130,7 @@ namespace Wman.WebAPI.Controllers
         /// <returns>Hopefully a jwt token</returns>
         [HttpPut]
         [Route("login")]
-        public async Task<ActionResult> Login([FromBody] Login model) 
+        public async Task<ActionResult> Login([FromBody] LoginDTO model) 
         {
             try
             {
@@ -141,16 +141,5 @@ namespace Wman.WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        ///// <summary>
-        ///// debug endpoint
-        ///// </summary>
-        ///// <returns></returns>
-        //[HttpGet]
-        //[Route("test")]
-        //public async Task<ActionResult> debugreg()
-        //{
-        //    IEnumerable<IdentityResult result = await authLogic.CreateUser(new Login() { Email = "asd123@gmail.com", Password = "asdf123"});
-        //    return Ok(new { UserName = result });
-        //}
     }
 }

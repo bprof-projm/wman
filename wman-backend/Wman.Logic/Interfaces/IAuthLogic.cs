@@ -18,7 +18,7 @@ namespace Wman.Logic.Interfaces
         Task<IQueryable<WmanUser>> GetAllUsers();
 
 
-        Task<IdentityResult> CreateUser(Login login);
+        Task<IdentityResult> CreateUser(LoginDTO login);
 
 
         Task<IdentityResult> DeleteUser(string uname);
@@ -26,7 +26,7 @@ namespace Wman.Logic.Interfaces
 
         Task<IdentityResult> UpdateUser(string oldUsername, WmanUser newUser);
 
-        Task<TokenModel> LoginUser(Login login);
+        Task<TokenModel> LoginUser(LoginDTO login);
 
         Task<bool> HasRole(WmanUser user, string role);
 

@@ -64,7 +64,7 @@ namespace Wman.Logic.Classes
 
         }
 
-        public async Task<IdentityResult> CreateUser(Login model)
+        public async Task<IdentityResult> CreateUser(LoginDTO model)
         {
             var user = new WmanUser
             {
@@ -82,7 +82,7 @@ namespace Wman.Logic.Classes
             return result;
         }
 
-        public async Task<TokenModel> LoginUser(Login model)
+        public async Task<TokenModel> LoginUser(LoginDTO model)
         {
             var user = await userManager.FindByNameAsync(model.Email);
             if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
