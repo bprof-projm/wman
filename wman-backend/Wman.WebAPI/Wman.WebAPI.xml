@@ -24,7 +24,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.DeleteUser(System.Int32)">
+        <member name="M:Wman.WebAPI.Controllers.AuthController.DeleteUser(System.String)">
             <summary>
             Delete a user
             </summary>

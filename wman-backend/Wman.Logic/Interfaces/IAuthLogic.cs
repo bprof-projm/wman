@@ -20,9 +20,8 @@ namespace Wman.Logic.Interfaces
 
         Task<string> CreateUser(Login login);
 
-        Task<string> DeleteUser(int userId);
 
-        Task<string> DeleteUser(WmanUser inUser);
+        Task<string> DeleteUser(string uname);
 
 
         Task<string> UpdateUser(int oldId, WmanUser newUser);

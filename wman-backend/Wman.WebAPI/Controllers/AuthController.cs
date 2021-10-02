@@ -68,11 +68,11 @@ namespace Wman.WebAPI.Controllers
         /// Delete a user
         /// </summary>
         /// <param name="id">Id of the user to be deleted</param>
-        [HttpDelete("{id}")]
+        [HttpDelete("{username}")]
         //[Authorize(Roles = "Admin")]
-        public async void DeleteUser(int id)
+        public async void DeleteUser(string username)
         {
-            await this.authLogic.DeleteUser(id);
+            await this.authLogic.DeleteUser(username);
         }
 
         /// <summary>

@@ -52,25 +52,13 @@ namespace Wman.Logic.Classes
             return "Success";
         }
 
-        public async Task<string> DeleteUser(int userId)
-        {
-            try
-            {
-                var selectedUser = userManager.Users.Where(x => x.Id == userId).Single();
-                await userManager.DeleteAsync(selectedUser);
-                return "Success";
-            }
-            catch (Exception)
-            {
-                return "Fail";
-            }
-        }
 
-        public async Task<string> DeleteUser(WmanUser inUser)
+        public async Task<string> DeleteUser(string uname)
         {
             try
             {
-                await userManager.DeleteAsync(inUser);
+                var user = userManager.Users.Where(x => x.UserName == uname).Single();
+                await userManager.DeleteAsync(user);
                 return "Success";
             }
             catch (Exception)
