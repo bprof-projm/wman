@@ -31,17 +31,19 @@ namespace Wman.WebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateUser([FromBody] Login model) 
         {
-            IEnumerable<IdentityError> result;
+            IdentityResult result;
             try
             {
                 result = await authLogic.CreateUser(model);
-                if (result == null) return Ok("User created successfully");
+
+                if (result.Succeeded) return Ok("User created successfully");
             }
             catch (Exception ex)
             {
                 return UnprocessableEntity(new { Error = ex.Message });
+                throw;
             }
-            return UnprocessableEntity(result);
+            return BadRequest(result.Errors);
         }
         /// <summary>
         /// Get a list of all users
@@ -83,9 +85,11 @@ namespace Wman.WebAPI.Controllers
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteUser(string username)
         {
+            IdentityResult result;
             try
             {
-                await this.authLogic.DeleteUser(username);
+                result = await this.authLogic.DeleteUser(username);
+                if (result.Succeeded)
                 return Ok("User deleted successfully");
             }
             catch (Exception ex)
@@ -93,7 +97,7 @@ namespace Wman.WebAPI.Controllers
 
                 return BadRequest(new { Error = ex.Message });
             }
-            
+            return BadRequest(result.Errors);
         }
 
         /// <summary>
@@ -105,16 +109,18 @@ namespace Wman.WebAPI.Controllers
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult> UpdateUser(string oldUsername, [FromBody] WmanUser user)
         {
+            IdentityResult result;
             try
             {
-                await this.authLogic.UpdateUser(oldUsername, user);
-                return Ok("User updated successfully");
+                result = await this.authLogic.UpdateUser(oldUsername, user);
+                if (result.Succeeded)
+                    return Ok("User updated successfully");
             }
             catch (Exception ex)
             {
                 return BadRequest(new { Error = ex.Message });
             }
-           
+            return BadRequest(result.Errors);
         }
 
         /// <summary>
@@ -132,7 +138,7 @@ namespace Wman.WebAPI.Controllers
             }
             catch (ArgumentException ex)
             {
-                return BadRequest("username/password does not match");
+                return BadRequest(ex.Message);
             }
         }
         ///// <summary>

@@ -15,15 +15,15 @@ namespace Wman.Logic.Classes
 {
     public class AuthLogic : IAuthLogic
     {
-
         UserManager<WmanUser> userManager;
         RoleManager<IdentityRole> roleManager;
 
-
+        private IdentityErrorDescriber desc;
         public AuthLogic(UserManager<WmanUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
+            desc = new IdentityErrorDescriber();
         }
         public async Task<IQueryable<WmanUser>> GetAllUsers()
         {
@@ -35,23 +35,36 @@ namespace Wman.Logic.Classes
             return userManager.Users.Where(x => x.UserName == username).SingleOrDefault();
         }
 
-        public async Task<bool> UpdateUser(string oldUsername, WmanUser newUser)
+        public async Task<IdentityResult> UpdateUser(string oldUsername, WmanUser newUser)
         {
-            await userManager.UpdateAsync(newUser);
-            return true;
+            var myerror = new IdentityError() { Code = "UserNotFound", Description = "Username not found" };
+            var result = new IdentityResult();
+            var user = userManager.Users.Where(x => x.UserName == oldUsername).SingleOrDefault();
+            if (user == null)
+            {
+                return IdentityResult.Failed(myerror);
+            }
+            result = await userManager.UpdateAsync(newUser);
+            return result;
         }
 
 
-        public async Task<bool> DeleteUser(string uname)
+        public async Task<IdentityResult> DeleteUser(string uname)
         {
-
+            var myerror = new IdentityError() { Code = "UserNotFound", Description = "Username not found" };
+            var result = new IdentityResult();
                 var user = userManager.Users.Where(x => x.UserName == uname).SingleOrDefault();
-                await userManager.DeleteAsync(user);
-                return true;
+            if (user == null)
+            {
+                return IdentityResult.Failed(myerror);
+            }
+            result = await userManager.DeleteAsync(user);
+            
+                return result;
 
         }
 
-        public async Task<IEnumerable<IdentityError>> CreateUser(Login model)
+        public async Task<IdentityResult> CreateUser(Login model)
         {
             var user = new WmanUser
             {
@@ -65,7 +78,8 @@ namespace Wman.Logic.Classes
                 await userManager.AddToRoleAsync(user, "Debug");
                 return null;
             }
-            return result.Errors;
+
+            return result;
         }
 
         public async Task<TokenModel> LoginUser(Login model)
@@ -98,17 +112,6 @@ namespace Wman.Logic.Classes
                   expires: DateTime.Now.AddMinutes(60),
                   signingCredentials: new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256)
                 );
-                bool adminState = false;
-                if (roles.Contains("Admin"))
-                {
-                    adminState = true;
-                }
-
-                bool editorState = false;
-                if (roles.Contains("Editor"))
-                {
-                    editorState = true;
-                }
                 return new TokenModel
                 {
                     Token = new JwtSecurityTokenHandler().WriteToken(token),
