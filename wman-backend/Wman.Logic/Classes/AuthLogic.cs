@@ -85,7 +85,7 @@ namespace Wman.Logic.Classes
             var user = new WmanUser
             {
                 Email = model.Email,
-                UserName = model.Email,
+                UserName = model.Username,
                 SecurityStamp = Guid.NewGuid().ToString()
             };
             var result = await userManager.CreateAsync(user, model.Password);
