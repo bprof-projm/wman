@@ -14,6 +14,7 @@ namespace Wman.WebAPI.Controllers
 {
 
     [ApiController]
+
     [Route("[controller]")]
     public class AuthController : Controller
     {
@@ -29,8 +30,13 @@ namespace Wman.WebAPI.Controllers
         /// <param name="model">Login model</param>
         /// <returns>ActionResult</returns>
         [HttpPost]
+        
         public async Task<ActionResult> CreateUser([FromBody] userDTO model) 
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             IdentityResult result;
             try
             {
@@ -74,7 +80,12 @@ namespace Wman.WebAPI.Controllers
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<userDTO>> GetUser(string username)
         {
-            return Ok(Converter.Convert(await authLogic.GetOneUser(username)));
+            var output = Converter.Convert(await authLogic.GetOneUser(username));
+            if (output == null)
+            {
+                return BadRequest("User not found");
+            }
+            return Ok(output);
         }
 
         /// <summary>
@@ -109,6 +120,10 @@ namespace Wman.WebAPI.Controllers
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult> UpdateUser(string oldUsername, [FromBody] userDTO user)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             IdentityResult result;
             try
             {
@@ -130,8 +145,13 @@ namespace Wman.WebAPI.Controllers
         /// <returns>Hopefully a jwt token</returns>
         [HttpPut]
         [Route("login")]
+
         public async Task<ActionResult> Login([FromBody] LoginDTO model) 
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             try
             {
                 return Ok(await authLogic.LoginUser(model));

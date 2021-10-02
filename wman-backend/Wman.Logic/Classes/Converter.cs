@@ -19,6 +19,10 @@ namespace Wman.Logic.Classes
 
         public static userDTO Convert(WmanUser user)
         {
+            if (user == null)
+            {
+                return null;
+            }
             var output = new userDTO();
             output.Email = user.Email;
             output.Firstname = user.FirstName;
