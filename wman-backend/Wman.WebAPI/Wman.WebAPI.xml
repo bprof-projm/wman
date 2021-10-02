@@ -4,7 +4,7 @@
         <name>Wman.WebAPI</name>
     </assembly>
     <members>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.CreateUser(Wman.Logic.DTO_Models.Login)">
+        <member name="M:Wman.WebAPI.Controllers.AuthController.CreateUser(Wman.Logic.DTO_Models.userDTO)">
             <summary>
             Create a new user
             </summary>
@@ -30,14 +30,14 @@
             </summary>
             <param name="id">Id of the user to be deleted</param>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.UpdateUser(System.String,Wman.Data.DB_Models.WmanUser)">
+        <member name="M:Wman.WebAPI.Controllers.AuthController.UpdateUser(System.String,Wman.Logic.DTO_Models.userDTO)">
             <summary>
             Update a user
             </summary>
             <param name="oldId">Prev. id</param>
             <param name="user">User to be updated</param>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.Login(Wman.Logic.DTO_Models.Login)">
+        <member name="M:Wman.WebAPI.Controllers.AuthController.Login(Wman.Logic.DTO_Models.LoginDTO)">
             <summary>
             Login/generate jwt token
             </summary>

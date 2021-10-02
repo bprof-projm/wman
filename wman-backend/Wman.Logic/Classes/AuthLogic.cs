@@ -35,16 +35,24 @@ namespace Wman.Logic.Classes
             return userManager.Users.Where(x => x.UserName == username).SingleOrDefault();
         }
 
-        public async Task<IdentityResult> UpdateUser(string oldUsername, WmanUser newUser)
+        public async Task<IdentityResult> UpdateUser(string oldUsername, userDTO newUser)
         {
-            var myerror = new IdentityError() { Code = "UserNotFound", Description = "Username not found" };
+            
             var result = new IdentityResult();
             var user = userManager.Users.Where(x => x.UserName == oldUsername).SingleOrDefault();
             if (user == null)
             {
+                var myerror = new IdentityError() { Code = "UserNotFound", Description = "Username not found" };
                 return IdentityResult.Failed(myerror);
             }
-            result = await userManager.UpdateAsync(newUser);
+            user.UserName = newUser.Username; //Not using converter class/automapper on purpose
+            user.Email = newUser.Email;
+            user.FirstName = newUser.Firstname;
+            user.LastName = newUser.Lastname;
+            user.Picture = newUser.Picture;
+            user.PasswordHash = userManager.PasswordHasher.HashPassword(user, newUser.Password);
+
+            result = await userManager.UpdateAsync(user);
             return result;
         }
 
@@ -64,19 +72,22 @@ namespace Wman.Logic.Classes
 
         }
 
-        public async Task<IdentityResult> CreateUser(LoginDTO model)
+        public async Task<IdentityResult> CreateUser(userDTO model)
         {
             var user = new WmanUser
             {
                 Email = model.Email,
                 UserName = model.Username,
+                Picture = model.Picture,
+                FirstName = model.Firstname,
+                LastName = model.Lastname,
                 SecurityStamp = Guid.NewGuid().ToString()
             };
             var result = await userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
                 await userManager.AddToRoleAsync(user, "Debug");
-                return null;
+                return result;
             }
 
             return result;

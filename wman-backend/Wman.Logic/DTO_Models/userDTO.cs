@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Wman.Logic.DTO_Models
 {
-    class userDTO
+    public class userDTO
     {
         public string Username { get; set; }
         public string Email { get; set; }

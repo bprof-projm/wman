@@ -29,7 +29,7 @@ namespace Wman.WebAPI.Controllers
         /// <param name="model">Login model</param>
         /// <returns>ActionResult</returns>
         [HttpPost]
-        public async Task<ActionResult> CreateUser([FromBody] LoginDTO model) 
+        public async Task<ActionResult> CreateUser([FromBody] userDTO model) 
         {
             IdentityResult result;
             try
@@ -51,11 +51,11 @@ namespace Wman.WebAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         //[Authorize(Roles = "Admin")]
-        public async Task<ActionResult<IEnumerable<WmanUser>>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<userDTO>>> GetAllUsers()
         {
             try
             {
-                return Ok(authLogic.GetAllUsers().Result);
+                return Ok(Converter.MassConvert( await authLogic.GetAllUsers()));
             }
             catch (Exception ex)
             {
@@ -72,9 +72,9 @@ namespace Wman.WebAPI.Controllers
         [HttpGet("username")]
         //[Route("getOne")]
         //[Authorize(Roles = "Admin")]
-        public async Task<ActionResult<WmanUser>> GetUser(string username)
+        public async Task<ActionResult<userDTO>> GetUser(string username)
         {
-            return Ok(authLogic.GetOneUser(username));
+            return Ok(Converter.Convert(await authLogic.GetOneUser(username)));
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace Wman.WebAPI.Controllers
         /// <param name="user">User to be updated</param>
         [HttpPut("{oldUsername}")]
         //[Authorize(Roles = "Admin")]
-        public async Task<ActionResult> UpdateUser(string oldUsername, [FromBody] WmanUser user)
+        public async Task<ActionResult> UpdateUser(string oldUsername, [FromBody] userDTO user)
         {
             IdentityResult result;
             try
