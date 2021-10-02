@@ -42,7 +42,7 @@ namespace Wman.Logic.Classes
             var user = userManager.Users.Where(x => x.UserName == oldUsername).SingleOrDefault();
             if (user == null)
             {
-                var myerror = new IdentityError() { Code = "UserNotFound", Description = "Username not found" };
+                var myerror = new IdentityError() { Code = "UserNotFound", Description = "User not found!" };
                 return IdentityResult.Failed(myerror);
             }
             user.UserName = newUser.Username; //Not using converter class/automapper on purpose
@@ -59,7 +59,7 @@ namespace Wman.Logic.Classes
 
         public async Task<IdentityResult> DeleteUser(string uname)
         {
-            var myerror = new IdentityError() { Code = "UserNotFound", Description = "Username not found" };
+            var myerror = new IdentityError() { Code = "UserNotFound", Description = "User not found!" };
             var result = new IdentityResult();
                 var user = userManager.Users.Where(x => x.UserName == uname).SingleOrDefault();
             if (user == null)
@@ -74,7 +74,23 @@ namespace Wman.Logic.Classes
 
         public async Task<IdentityResult> CreateUser(userDTO model)
         {
-            var user = new WmanUser
+            var result = new IdentityResult();
+            var user = new WmanUser();
+            //Reinvented the wheel, it does this by itself :(
+
+            //user = userManager.Users.Where(x => x.UserName == model.Username).SingleOrDefault();
+            //if (user != null)
+            //{
+            //    var myerror = new IdentityError() { Code = "UsernameExists", Description = "Username already exists!" };
+            //    return IdentityResult.Failed(myerror);
+            //}
+            user = userManager.Users.Where(x => x.Email == model.Email).SingleOrDefault();
+            if (user != null)
+            {
+                var myerror = new IdentityError() { Code = "EmailExists", Description = "An accunt with this email address already exists!" };
+                return IdentityResult.Failed(myerror);
+            }
+            user = new WmanUser
             {
                 Email = model.Email,
                 UserName = model.Username,
@@ -83,7 +99,7 @@ namespace Wman.Logic.Classes
                 LastName = model.Lastname,
                 SecurityStamp = Guid.NewGuid().ToString()
             };
-            var result = await userManager.CreateAsync(user, model.Password);
+            result = await userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
                 await userManager.AddToRoleAsync(user, "Debug");
@@ -95,7 +111,19 @@ namespace Wman.Logic.Classes
 
         public async Task<TokenModel> LoginUser(LoginDTO model)
         {
-            var user = await userManager.FindByNameAsync(model.Email);
+            var user = new WmanUser();
+            if (model.Username != null)
+            {
+                user = await userManager.FindByNameAsync(model.Username);
+            }
+            else if(model.Email != null)
+            {
+                user = await userManager.FindByNameAsync(model.Email);
+            }
+            else
+            {
+                throw new ArgumentException("No username/email was provided!");
+            }
             if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
             {
 
@@ -158,7 +186,7 @@ namespace Wman.Logic.Classes
         public async Task<bool> AssignRolesToUser(WmanUser user, List<string> roles)
         {
             WmanUser selectedUser;
-            selectedUser = GetOneUser(user.UserName).Result;
+            selectedUser = await GetOneUser(user.UserName);
             userManager.AddToRolesAsync(selectedUser, roles).Wait();
             return true;
         }

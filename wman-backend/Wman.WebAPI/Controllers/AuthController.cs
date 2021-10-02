@@ -156,7 +156,7 @@ namespace Wman.WebAPI.Controllers
             {
                 return Ok(await authLogic.LoginUser(model));
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
