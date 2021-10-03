@@ -9,6 +9,7 @@ namespace Wman.Logic.DTO_Models
 {
     public class LoginDTO
     {
+        [Required(AllowEmptyStrings = false)]
         [DataType(DataType.Text)]
         [MaxLength(254)]
         public string LoginName{ get; set; }

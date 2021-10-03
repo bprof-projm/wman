@@ -114,11 +114,7 @@ namespace Wman.Logic.Classes
         public async Task<TokenModel> LoginUser(LoginDTO model)
         {
             var user = new WmanUser();
-            if (string.IsNullOrWhiteSpace(model.LoginName))
-            {
-                throw new ArgumentException("No username/email was provided!");
-            }
-            else if (model.LoginName.Contains('@'))
+            if (model.LoginName.Contains('@'))
             {
                 user = await userManager.Users.Where(x => x.Email == model.LoginName).SingleOrDefaultAsync();
             }
