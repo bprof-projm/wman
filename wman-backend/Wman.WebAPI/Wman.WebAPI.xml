@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Wman.WebAPI</name>
+    </assembly>
+    <members>
+        <member name="T:Wman.WebAPI.Controllers.AuthController">
+            <summary>
+            Auth controller
+            </summary>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.#ctor(Wman.Logic.Interfaces.IAuthLogic)">
+            <summary>
+            
+            </summary>
+            <param name="authLogic"></param>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.CreateUser(Wman.Logic.DTO_Models.UserDTO)">
+            <summary>
+            Create a new user
+            </summary>
+            <param name="model">Login model</param>
+            <returns>ActionResult</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.GetAllUsers">
+            <summary>
+            Get a list of all users
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.GetUser(System.String)">
+            <summary>
+            Get one specific user
+            </summary>
+            <param name="username"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.DeleteUser(System.String)">
+            <summary>
+            Delete a user
+            </summary>
+            <param name="username">Id of the user to be deleted</param>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.UpdateUser(System.String,Wman.Logic.DTO_Models.UserDTO)">
+            <summary>
+            Update a user
+            </summary>
+            <param name="oldUsername">Prev. id</param>
+            <param name="user">User to be updated</param>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.Login(Wman.Logic.DTO_Models.LoginDTO)">
+            <summary>
+            Login/generate jwt token
+            </summary>
+            <param name="model">Login details</param>
+            <returns>Hopefully a jwt token</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.DemoController.HelloWorld">
+            <summary>
+            HTTPGET test method
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.DemoController.test">
+            <summary>
+            HTTPPost test method
+            </summary>
+            <returns>OK</returns>
+        </member>
+    </members>
+</doc>
