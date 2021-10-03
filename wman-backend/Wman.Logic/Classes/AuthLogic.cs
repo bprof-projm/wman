@@ -114,7 +114,11 @@ namespace Wman.Logic.Classes
         public async Task<TokenModel> LoginUser(LoginDTO model)
         {
             var user = new WmanUser();
-            if (model.LoginName.Contains('@'))
+            if (string.IsNullOrWhiteSpace(model.LoginName))
+            {
+                throw new ArgumentException("No username/email was provided!");
+            }
+            else if (model.LoginName.Contains('@'))
             {
                 user = await userManager.Users.Where(x => x.Email == model.LoginName).SingleOrDefaultAsync();
             }
@@ -122,14 +126,12 @@ namespace Wman.Logic.Classes
             {
                 user = await userManager.FindByNameAsync(model.LoginName);
             }
-            else
+            if (user == null)
             {
-                throw new ArgumentException("No username/email was provided!");
+                throw new ArgumentException("Username/email not found");
             }
-            if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
+            else if (await userManager.CheckPasswordAsync(user, model.Password))
             {
-
-
                 var claims = new List<Claim>
                 {
                   new Claim(JwtRegisteredClaimNames.Sub, user.Email),
@@ -158,7 +160,7 @@ namespace Wman.Logic.Classes
                     ExpirationDate = token.ValidTo
                 };
             }
-            throw new ArgumentException("Login failed");
+            throw new ArgumentException("Incorrect password");
         }
 
         public async Task<bool> HasRole(WmanUser user, string role)
