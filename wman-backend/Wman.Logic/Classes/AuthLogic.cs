@@ -37,7 +37,7 @@ namespace Wman.Logic.Classes
             return await userManager.Users.Where(x => x.UserName == username).SingleOrDefaultAsync();
         }
 
-        public async Task<IdentityResult> UpdateUser(string oldUsername, userDTO newUser)
+        public async Task<IdentityResult> UpdateUser(string oldUsername, UserDTO newUser)
         {
 
             var result = new IdentityResult();
@@ -74,7 +74,7 @@ namespace Wman.Logic.Classes
 
         }
 
-        public async Task<IdentityResult> CreateUser(userDTO model)
+        public async Task<IdentityResult> CreateUser(UserDTO model)
         {
             var result = new IdentityResult();
             var user = new WmanUser();

@@ -37,7 +37,7 @@ namespace Wman.WebAPI.Controllers
         /// <returns>ActionResult</returns>
         [HttpPost]
 
-        public async Task<ActionResult> CreateUser([FromBody] userDTO model)
+        public async Task<ActionResult> CreateUser([FromBody] UserDTO model)
         {
             if (!ModelState.IsValid)
             {
@@ -63,7 +63,7 @@ namespace Wman.WebAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         //[Authorize(Roles = "Admin")]
-        public async Task<ActionResult<IEnumerable<userDTO>>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUsers()
         {
             try
             {
@@ -84,7 +84,7 @@ namespace Wman.WebAPI.Controllers
         [HttpGet("username")]
         //[Route("getOne")]
         //[Authorize(Roles = "Admin")]
-        public async Task<ActionResult<userDTO>> GetUser(string username)
+        public async Task<ActionResult<UserDTO>> GetUser(string username)
         {
             var output = Converter.Convert(await authLogic.GetOneUser(username));
             if (output == null)
@@ -124,7 +124,7 @@ namespace Wman.WebAPI.Controllers
         /// <param name="user">User to be updated</param>
         [HttpPut("{oldUsername}")]
         //[Authorize(Roles = "Admin")]
-        public async Task<ActionResult> UpdateUser(string oldUsername, [FromBody] userDTO user)
+        public async Task<ActionResult> UpdateUser(string oldUsername, [FromBody] UserDTO user)
         {
             if (!ModelState.IsValid)
             {

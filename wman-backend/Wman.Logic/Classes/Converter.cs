@@ -12,18 +12,18 @@ namespace Wman.Logic.Classes
     public static class Converter
         //Ugly. Might use Automapper in the future, but we had performance (and other) concerns about it on our initial meeting. 
     {
-        public static WmanUser Convert(userDTO user) 
+        public static WmanUser Convert(UserDTO user) 
         {
             throw new NotImplementedException();
         }
 
-        public static userDTO Convert(WmanUser user)
+        public static UserDTO Convert(WmanUser user)
         {
             if (user == null)
             {
                 return null;
             }
-            var output = new userDTO();
+            var output = new UserDTO();
             output.Email = user.Email;
             output.Firstname = user.FirstName;
             output.Lastname = user.LastName;
@@ -35,9 +35,9 @@ namespace Wman.Logic.Classes
 
         }
 
-        public static IEnumerable<userDTO> MassConvert(IEnumerable<WmanUser> input)
+        public static IEnumerable<UserDTO> MassConvert(IEnumerable<WmanUser> input)
         {
-            var output = new List<userDTO>();
+            var output = new List<UserDTO>();
             foreach (var item in input)
             {
                 output.Add(Convert(item));

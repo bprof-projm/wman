@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Wman.Logic.DTO_Models
 {
-    public class userDTO
+    public class UserDTO
     {
         [DataType(DataType.Text)]
         [Required(AllowEmptyStrings = false)]
