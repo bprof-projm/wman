@@ -114,13 +114,13 @@ namespace Wman.Logic.Classes
         public async Task<TokenModel> LoginUser(LoginDTO model)
         {
             var user = new WmanUser();
-            if (model.Username != null)
+            if (model.LoginName.Contains('@'))
             {
-                user = await userManager.FindByNameAsync(model.Username);
+                user = await userManager.Users.Where(x => x.Email == model.LoginName).SingleOrDefaultAsync();
             }
-            else if (model.Email != null)
+            else if (model.LoginName != null)
             {
-                user = await userManager.FindByNameAsync(model.Email);
+                user = await userManager.FindByNameAsync(model.LoginName);
             }
             else
             {
@@ -132,7 +132,7 @@ namespace Wman.Logic.Classes
 
                 var claims = new List<Claim>
                 {
-                  new Claim(JwtRegisteredClaimNames.Sub, model.Email),
+                  new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                   new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                   new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) //TODO: .tostring might break something, test.
                 };

@@ -10,12 +10,8 @@ namespace Wman.Logic.DTO_Models
     public class LoginDTO
     {
         [DataType(DataType.Text)]
-        [StringLength(30, MinimumLength = 3)]
-        public string Username { get; set; }
-
-        [EmailAddress]
         [MaxLength(254)]
-        public string Email { get; set; }
+        public string LoginName{ get; set; }
         [Required(AllowEmptyStrings =false)]
         [DataType(DataType.Password)]
         [StringLength(20, MinimumLength = 6)]

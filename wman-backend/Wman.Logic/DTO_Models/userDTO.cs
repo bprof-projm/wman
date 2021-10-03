@@ -12,7 +12,7 @@ namespace Wman.Logic.DTO_Models
         [DataType(DataType.Text)]
         [Required(AllowEmptyStrings = false)]
         [StringLength(30, MinimumLength = 3)]
-
+        [RegularExpression(@"^[a-zA-Z0-9]+$")]
         public string Username { get; set; }
 
         [DataType(DataType.EmailAddress)]
@@ -37,7 +37,7 @@ namespace Wman.Logic.DTO_Models
         public string Lastname { get; set; }
 
         //[DataType(DataType.ImageUrl)]
-        [StringLength(100)]
+        [StringLength(200)]
         public string Picture { get; set; }
 
 
