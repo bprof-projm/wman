@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -18,11 +19,13 @@ namespace Wman.Logic.Classes
     {
         UserManager<WmanUser> userManager;
         RoleManager<IdentityRole> roleManager;
+        private IConfiguration Configuration;
 
-        public AuthLogic(UserManager<WmanUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AuthLogic(UserManager<WmanUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
+            this.Configuration = configuration;
         }
         public async Task<IQueryable<WmanUser>> GetAllUsers()
         {
@@ -139,9 +142,8 @@ namespace Wman.Logic.Classes
                 ;
                 claims.AddRange(roles.Select(role => new Claim(ClaimsIdentity.DefaultRoleClaimType, role)));
 
-
                 var signinKey = new SymmetricSecurityKey(
-                  Encoding.UTF8.GetBytes("abc 123 970608 yxcvbnm"));
+                  Encoding.UTF8.GetBytes(Configuration.GetValue<string>("SigningKey")));
 
                 var token = new JwtSecurityToken(
                   issuer: "http://www.security.org",

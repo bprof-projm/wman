@@ -40,11 +40,12 @@ namespace Wman.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            string signingKey = Configuration.GetValue<string>("SigningKey");
+            ;
             services.AddControllers();
             services.AddTransient<IAuthLogic, AuthLogic>();
             //TODO: Use transients
-
+            //services.AddSingleton(Configuration);
 
             services.AddSwaggerGen(c =>
             {
@@ -105,7 +106,7 @@ namespace Wman.WebAPI
                     ValidateAudience = true,
                     ValidAudience = "http://www.security.org",
                     ValidIssuer = "http://www.security.org",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("abc 123 970608 yxcvbnm"))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey))
                 };
             });
             services.AddAuthorization(options =>
