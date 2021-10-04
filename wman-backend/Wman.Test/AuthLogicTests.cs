@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
@@ -24,9 +25,12 @@ namespace Wman.Test
         {
             users = new List<WmanUser>();
 
-            users.Add(new WmanUser { Id = 0, FirstName = "Sanyi", LastName = "Hurutos", Picture="asd" });
-            users.Add(new WmanUser { Id = 1, FirstName = "Hamis", LastName = "Süni", Picture = "asd" });
-            users.Add(new WmanUser { Id = 2, FirstName = "Medve", LastName = "Obudai", Picture = "asd" });
+            users.Add(new WmanUser { Id = 0, UserName="LmaoRandom", Email = "sanyesz@gmail.com",
+                FirstName = "Sanyi", LastName = "Hurutos", Picture="asd", SecurityStamp = Guid.NewGuid().ToString() });
+            users.Add(new WmanUser { Id = 1, UserName="TigoleBitties", Email = "foksok@gmail.com",
+                FirstName = "Hamis", LastName = "Süni", Picture = "asd", SecurityStamp = Guid.NewGuid().ToString() });
+            users.Add(new WmanUser { Id = 2, UserName="ArnoldBalValla",Email = "zsoltas@gmail.com",
+                FirstName = "Medve", LastName = "Obudai", Picture = "asd", SecurityStamp = Guid.NewGuid().ToString() });
 
             userManager = GetUserManager(users);
             roleManager = GetMockRoleManager();
@@ -38,11 +42,13 @@ namespace Wman.Test
         {
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, config.Object);
 
-            //UserDTO user = new UserDTO() { Username }
+            UserDTO user = new UserDTO() { Username = "fogvaratartottGyik", Email = "maszkosfutocsiga@gmail.com",
+                Password = "miAR3dV2Sf0s", Firstname = "Kronikus", Lastname = "VeszettMacska", Picture = "Keka" };
 
-            //var result = await authLogic.CreateUser(user);
+            var result = await authLogic.CreateUser(user);
 
-            //Assert.That(users.Count == 4);
+            Assert.That(result.Succeeded);
+            Assert.That(users.Count == 4);
         }
 
         public static Mock<UserManager<WmanUser>> GetUserManager(List<WmanUser> ls)
