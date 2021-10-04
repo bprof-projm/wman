@@ -15,5 +15,8 @@ namespace Wman.Data.DB_Models
         public int Id { get; set; }
 
         public string JobDescription { get; set; }
+        public DateTime EstimatedStartDate { get; set; }
+        public DateTime EstimatedFinishDate { get; set; }
+        
     }
 }
