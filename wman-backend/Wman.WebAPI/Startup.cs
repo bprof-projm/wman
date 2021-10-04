@@ -24,6 +24,8 @@ using Wman.Data;
 using Wman.Data.DB_Models;
 using Wman.Logic.Classes;
 using Wman.Logic.Interfaces;
+using Wman.Repository.Classes;
+using Wman.Repository.Interfaces;
 //using System.Data.Entity.Database;
 
 namespace Wman.WebAPI
@@ -44,8 +46,15 @@ namespace Wman.WebAPI
             ;
             services.AddControllers();
             services.AddTransient<IAuthLogic, AuthLogic>();
+            services.AddTransient<ICalendarEventLogic, CalendarEventLogic>();
+
+            
             //TODO: Use transients
             //services.AddSingleton(Configuration);
+            
+            
+            
+            services.AddTransient<IWorkEventRepo, WorkEventRepo>();
 
             services.AddSwaggerGen(c =>
             {
