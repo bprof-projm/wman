@@ -34,10 +34,36 @@ namespace Wman.Logic.Classes
             return output;
 
         }
+        public static CalendarWorkEventDTO Convert(WorkEvent input)
+        {
+            if (input == null)
+            {
+                return null;
+            }
+            var output = new CalendarWorkEventDTO();
+            output.Id = input.Id;
+            output.JobDescription = input.JobDescription;
+            output.EstimatedStartDate = input.EstimatedStartDate;
+            output.EstimatedFinishDate = input.EstimatedFinishDate;
+            
+
+            return output;
+
+        }
 
         public static IEnumerable<UserDTO> MassConvert(IEnumerable<WmanUser> input)
         {
             var output = new List<UserDTO>();
+            foreach (var item in input)
+            {
+                output.Add(Convert(item));
+            }
+
+            return output;
+        }
+        public static IEnumerable<CalendarWorkEventDTO> CalendarWorkEventConverter(IEnumerable<WorkEvent> input)
+        {
+            var output = new List<CalendarWorkEventDTO>();
             foreach (var item in input)
             {
                 output.Add(Convert(item));

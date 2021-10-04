@@ -55,6 +55,52 @@
             <param name="model">Login details</param>
             <returns>Hopefully a jwt token</returns>
         </member>
+        <member name="T:Wman.WebAPI.Controllers.CalendarEventController">
+            <summary>
+            CalendarEvent controller
+            </summary>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.CalendarEventController.#ctor(Wman.Logic.Interfaces.ICalendarEventLogic)">
+            <summary>
+            ctor
+            </summary>
+            <param name="calendarEvent"></param>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.CalendarEventController.GetCurrentDayEvents">
+            <summary>
+            gets events of today
+            </summary>
+            <returns>CalendarWorkEventDTO</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.CalendarEventController.GetCurrentWeekEvents">
+            <summary>
+            gets events from this week
+            </summary>
+            <returns>CalendarWorkEventDTO</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.CalendarEventController.GetDayEvents(System.Int32)">
+            <summary>
+            gets custom day events 
+            </summary>
+            <param name="day"></param>
+            <returns>CalendarWorkEventDTO</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Wman.WebAPI.Controllers.CalendarEventController.GetWeekEvents(System.Int32)" -->
+        <member name="M:Wman.WebAPI.Controllers.CalendarEventController.GetDayEvents(System.DateTime)">
+            <summary>
+            gets custom day events
+            </summary>
+            <param name="time"></param>
+            <returns>CalendarWorkEventDTO</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.CalendarEventController.GetWeekEvents(System.DateTime,System.DateTime)">
+            <summary>
+            gets custom week events
+            </summary>
+            <param name="startEventDate"></param>
+            <param name="finishEventDate"></param>
+            <returns>CalendarWorkEventDTO</returns>
+        </member>
         <member name="M:Wman.WebAPI.Controllers.DemoController.HelloWorld">
             <summary>
             HTTPGET test method

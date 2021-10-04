@@ -38,14 +38,7 @@ namespace Wman.Repository.Classes
             var entity = (from x in db.WorkEvent
                           where x.Id == key
                           select x).FirstOrDefault();
-            if (entity!=null)
-            {
-                return entity;
-            }
-            else
-            {
-                return null;
-            }
+            return entity;
         }
 
         public void Update(int oldKey, WorkEvent element)

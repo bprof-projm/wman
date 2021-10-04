@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
+using Wman.Logic.DTO_Models;
 using Wman.Logic.Interfaces;
 using Wman.Repository.Interfaces;
 
@@ -18,15 +19,16 @@ namespace Wman.Logic.Classes
         {
             this.workEventRepo = workEventRepo;
         }
-        public async Task<List<WorkEvent>> GetCurrentDayEvents()
+        public async Task<List<CalendarWorkEventDTO>> GetCurrentDayEvents()
         {
             var events = await (from x in workEventRepo.GetAll()
                          where x.EstimatedStartDate.DayOfYear == DateTime.Now.DayOfYear
                          select x).ToListAsync();
-            return events;
+            var eventDTOs = Converter.CalendarWorkEventConverter(events);
+            return eventDTOs.ToList();
         }
 
-        public async Task<List<WorkEvent>> GetCurrentWeekEvents()
+        public async Task<List<CalendarWorkEventDTO>> GetCurrentWeekEvents()
         {
             DateTime firstDayOfTheWeek = new DateTime();
             DateTime lastDayOfTheWeek = new DateTime();
@@ -72,17 +74,19 @@ namespace Wman.Logic.Classes
             var events = await(from x in workEventRepo.GetAll()
                           where x.EstimatedStartDate.DayOfYear >= firstDayOfTheWeek.DayOfYear && x.EstimatedStartDate.DayOfYear <=lastDayOfTheWeek.DayOfYear
                           select x).ToListAsync();
-            return events;
+            var eventDTOs = Converter.CalendarWorkEventConverter(events);
+            return eventDTOs.ToList();
         }
 
-        public async Task<List<WorkEvent>> GetDayEvents(int day)
+        public async Task<List<CalendarWorkEventDTO>> GetDayEvents(int day)
         {
-            if (day > 0 && day < 365)
+            if (day > 0 && day < 367)
             {
                 var events = await (from x in workEventRepo.GetAll()
                                     where x.EstimatedStartDate.DayOfYear == day
                                     select x).ToListAsync();
-                return events;
+                var eventDTOs = Converter.CalendarWorkEventConverter(events);
+                return eventDTOs.ToList();
             }
             else
             {
@@ -91,7 +95,7 @@ namespace Wman.Logic.Classes
             
         }
 
-        public List<WorkEvent> GetWeekEvents(int week)
+        public List<CalendarWorkEventDTO> GetWeekEvents(int week)
         {
             if (week > 0 && week < 54)
             {
@@ -107,7 +111,8 @@ namespace Wman.Logic.Classes
 
                 });
 
-                return find.ToList();
+                var eventDTOs = Converter.CalendarWorkEventConverter(find);
+                return eventDTOs.ToList();
             }
             else
             {
@@ -115,21 +120,23 @@ namespace Wman.Logic.Classes
             }
             
         }
-        public async Task<List<WorkEvent>> GetDayEvents(DateTime day)
+        public async Task<List<CalendarWorkEventDTO>> GetDayEvents(DateTime day)
         {
 
             var events = await (from x in workEventRepo.GetAll()
                           where x.EstimatedStartDate.DayOfYear == day.DayOfYear
                           select x).ToListAsync();
-            return events;
+            var eventDTOs = Converter.CalendarWorkEventConverter(events);
+            return eventDTOs.ToList();
         }
 
-        public async Task<List<WorkEvent>> GetWeekEvents(DateTime firstDayOfTheWeek, DateTime lastDayOfTheWeek)
+        public async Task<List<CalendarWorkEventDTO>> GetWeekEvents(DateTime firstDayOfTheWeek, DateTime lastDayOfTheWeek)
         {
             var events =await (from x in workEventRepo.GetAll()
                           where x.EstimatedStartDate.DayOfYear >= firstDayOfTheWeek.DayOfYear && x.EstimatedStartDate.DayOfYear <= lastDayOfTheWeek.DayOfYear
                           select x).ToListAsync();
-            return events;
+            var eventDTOs = Converter.CalendarWorkEventConverter(events);
+            return eventDTOs.ToList();
         }
     }
 }
