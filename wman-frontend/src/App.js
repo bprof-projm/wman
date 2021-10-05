@@ -6,6 +6,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import { NormalLoginForm } from "./components/login.component.jsx"
+import { Logout } from "./components/logout.component.jsx";
 import Cookies from "js-cookie";
 
 const axios = require("axios").default;
@@ -18,16 +19,18 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
       <Route {...rest} render={(props) => <Component {...rest} {...props} />} />
     );
   }
-  return <Redirect to="/login" />;
+  return <Redirect to="/" />;
 };
 
 function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/">
+        <Route path="/login">
           <NormalLoginForm />
-        </Route>
+        </Route>        
+          <ProtectedRoute path="/" component={Logout} />
+
 
       </Switch>
     </Router>
