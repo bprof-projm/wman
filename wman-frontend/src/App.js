@@ -30,8 +30,6 @@ function App() {
           <NormalLoginForm />
         </Route>        
           <ProtectedRoute path="/" component={Logout} />
-
-
       </Switch>
     </Router>
   );
