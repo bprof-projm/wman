@@ -7,7 +7,6 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import Cookies from "js-cookie";
 import axios from "axios";
 
-const { Footer } = Layout;
 var inFifteenMinutes = new Date(new Date().getTime() + 60 * 60 * 1000);
 
 export const NormalLoginForm = () => {
@@ -17,14 +16,15 @@ export const NormalLoginForm = () => {
 
   const onFinish = (values) => {
     axios
-      .post("/auth/login", {
-        userName: values.username,
-        passWord: values.password,
+      .put("/Auth/login", {
+        loginName: values.username,
+        password: values.password,
       })
       .then((response) => {
         Cookies.set("auth", response.data.token, {
           expires: inFifteenMinutes,
         });
+        console.log(response.data.token);
         history.push("/");
       })
       .catch(function (error) {
