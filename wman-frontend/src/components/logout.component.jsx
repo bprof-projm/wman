@@ -10,9 +10,6 @@ export const Logout = () => {
     function logOut() {
         Cookies.remove("auth");
         history.push("/login")
-        //location.href = './login.component.jsx';
-        //history.push("/login");
-        // return (<Redirect to='/login' />)
     }
 
     return (
