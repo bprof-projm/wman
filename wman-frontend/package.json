@@ -2,7 +2,7 @@
   "name": "wman-frontend",
   "version": "0.1.0",
   "private": true,  
-  "proxy": "https://localhost:44371",
+  "proxy": "https://localhost:5001",
   "dependencies": {
     "antd": "^4.16.13",
     "axios": "^0.22.0",
