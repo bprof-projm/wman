@@ -20,6 +20,7 @@ namespace Wman.Test
         private Mock<IConfiguration> config;
 
         private List<WmanUser> users;
+        private List<IdentityRole> roles;
 
         [SetUp]
         public void Setup()
@@ -39,6 +40,7 @@ namespace Wman.Test
             
         }
 
+        //Getting an error for EF core operations such as SingleOrDefaultAsync, unable to test GetOneUser for now
         [Test]
         public async Task GetOneUser()
         {
@@ -163,8 +165,10 @@ namespace Wman.Test
         {
             var roleStore = new Mock<IRoleStore<IdentityRole>>();
 
-            return new Mock<RoleManager<IdentityRole>>(
+            var role = new Mock<RoleManager<IdentityRole>>(
                          roleStore.Object, null, null, null, null);
+
+            return role;
         }
     }
 }
