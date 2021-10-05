@@ -2,18 +2,17 @@ import Cookies from 'js-cookie';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { useState } from 'react';
-
-
-
+import {useHistory} from "react-router-dom";
 
 export const Logout = () => {
+    const history=useHistory()
 
     function logOut() {
         Cookies.remove("auth");
-
+        history.push("/login")
         //location.href = './login.component.jsx';
         //history.push("/login");
-        return (<Redirect to='/./src/components/login.component.jsx' />)
+        // return (<Redirect to='/login' />)
     }
 
     return (
