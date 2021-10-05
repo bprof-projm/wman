@@ -36,8 +36,28 @@ namespace Wman.Test
             userManager = GetUserManager(users);
             roleManager = GetMockRoleManager();
             config = new Mock<IConfiguration>();
+            
+        }
 
-            this.userManager.Setup(y => y.Users).Returns(users.AsQueryable());
+        [Test]
+        public async Task GetOneUser()
+        {
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config.Object);
+
+            var result = await authLogic.GetOneUser(users[0].UserName);
+
+            Assert.AreEqual(result.UserName, users[0].UserName);
+        }
+
+        [Test]
+        public async Task GetAllUsers_ReturnsRepoProperly()
+        {
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config.Object);
+
+            var result = await authLogic.GetAllUsers();
+
+            Assert.AreEqual(users.Count(), result.Count());
+            this.userManager.Verify(x => x.Users, Times.Once);
         }
 
         [Test]
@@ -52,6 +72,27 @@ namespace Wman.Test
 
             Assert.True(result.Succeeded);
             Assert.That(users.Count == 4);
+        }
+
+        [Test]
+        public async Task CreateUser_FailedCreation_EmailAlreadyInRepo()
+        {
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config.Object);
+
+            UserDTO user = new UserDTO()
+            {
+                Username = "fogvaratartottGyik",
+                Email = "sanyesz@gmail.com",
+                Password = "miAR3dV2Sf0s",
+                Firstname = "Kronikus",
+                Lastname = "VeszettMacska",
+                Picture = "Keka"
+            };
+
+            var result = await authLogic.CreateUser(user);
+
+            Assert.True(!result.Succeeded);
+            Assert.That(users.Count == 3);
         }
 
         [Test]
@@ -80,10 +121,32 @@ namespace Wman.Test
             Assert.AreEqual(2, users.Count);
         }
 
-        public static Mock<UserManager<WmanUser>> GetUserManager(List<WmanUser> ls)
+        [Test]
+        public async Task UpdateUser_SucceededUpdate_ExistingUser()
+        {
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config.Object);
+
+            UserDTO user = new UserDTO()
+            {
+                Username = "fogvaratartottGyik",
+                Email = "maszkosfutocsiga@gmail.com",
+                Password = "miAR3dV2Sf0s",
+                Firstname = "Kronikus",
+                Lastname = "VeszettMacska",
+                Picture = "Keka"
+            };
+
+            string helper = users[0].UserName;
+
+            var result = await authLogic.UpdateUser(helper, user);
+
+            Assert.That(result.Succeeded);
+        }
+
+        private Mock<UserManager<WmanUser>> GetUserManager(List<WmanUser> ls)
         {
             var store = new Mock<IUserStore<WmanUser>>();
-            var mgr = new Mock<UserManager<WmanUser>>(store.Object, null, null, null, null, null, null, null, null);
+            var mgr = new Mock<UserManager<WmanUser>>(store.Object, null, new PasswordHasher<WmanUser>(), null, null, null, null, null, null);
 
             mgr.Setup(x => x.DeleteAsync(It.IsAny<WmanUser>())).ReturnsAsync(IdentityResult.Success)
                 .Callback<WmanUser>((x) => ls.Remove(x));
@@ -91,10 +154,12 @@ namespace Wman.Test
                 .Callback<WmanUser, string>((x, y) => ls.Add(x));
             mgr.Setup(x => x.UpdateAsync(It.IsAny<WmanUser>())).ReturnsAsync(IdentityResult.Success);
 
+            mgr.Setup(x => x.Users).Returns(users.AsQueryable());
+
             return mgr;
         }
 
-        public static Mock<RoleManager<IdentityRole>> GetMockRoleManager()
+        private Mock<RoleManager<IdentityRole>> GetMockRoleManager()
         {
             var roleStore = new Mock<IRoleStore<IdentityRole>>();
 
