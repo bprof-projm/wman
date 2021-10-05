@@ -19,7 +19,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
       <Route {...rest} render={(props) => <Component {...rest} {...props} />} />
     );
   }
-  return <Redirect to="/" />;
+  return <Redirect to="/login" />;
 };
 
 function App() {
