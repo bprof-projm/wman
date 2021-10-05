@@ -34,7 +34,7 @@ export const NormalLoginForm = () => {
   };
 
   const onFinishFailed = (errorInfo) => {
-      console.log("Failed:", errorInfo);
+    console.log("Failed:", errorInfo);
   };
 
   return (
