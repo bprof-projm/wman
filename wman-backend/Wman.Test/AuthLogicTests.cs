@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using MockQueryable.Moq;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -156,7 +157,12 @@ namespace Wman.Test
                 .Callback<WmanUser, string>((x, y) => ls.Add(x));
             mgr.Setup(x => x.UpdateAsync(It.IsAny<WmanUser>())).ReturnsAsync(IdentityResult.Success);
 
-            mgr.Setup(x => x.Users).Returns(users.AsQueryable());
+            var mock = users.AsQueryable().BuildMock();
+            
+            
+            //userRepository.Setup(x => x.GetQueryable()).Returns(mock.Object);
+            //mgr.Setup(x => x.Users).Returns(users.AsQueryable());
+            mgr.Setup(x => x.Users).Returns(mock.Object);
 
             return mgr;
         }
