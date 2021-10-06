@@ -18,10 +18,9 @@ namespace Wman.Test
         
         private Mock<UserManager<WmanUser>> userManager;
         private Mock<RoleManager<IdentityRole>> roleManager;
-        private Mock<IConfiguration> config;
+        private IConfiguration config;
 
         private List<WmanUser> users;
-        private List<IdentityRole> roles;
 
         [SetUp]
         public void Setup()
@@ -37,15 +36,37 @@ namespace Wman.Test
 
             userManager = GetUserManager(users);
             roleManager = GetMockRoleManager();
-            config = new Mock<IConfiguration>();
-            
+            config = GetConfiguration();
         }
 
-        //Getting an error for EF core operations such as SingleOrDefaultAsync, unable to test GetOneUser for now
+        [Test]
+        public async Task LoginUser_TokenGranted_OnNewlyCreatedUser()
+        {
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
+
+            UserDTO user = new UserDTO()
+            {
+                Username = "fogvaratartottGyik",
+                Email = "maszkosfutocsiga@gmail.com",
+                Password = "miAR3dV2Sf0s",
+                Firstname = "Kronikus",
+                Lastname = "VeszettMacska",
+                Picture = "Keka"
+            };
+
+            var akarmi = await authLogic.CreateUser(user);
+
+            LoginDTO model = new LoginDTO() { LoginName=user.Email, Password=user.Password };
+
+            var result = await authLogic.LoginUser(model);
+
+            Assert.That(result.Token != null);
+        }
+
         [Test]
         public async Task GetOneUser()
         {
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config.Object);
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
             var result = await authLogic.GetOneUser(users[0].UserName);
 
@@ -55,7 +76,7 @@ namespace Wman.Test
         [Test]
         public async Task GetAllUsers_ReturnsRepoProperly()
         {
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config.Object);
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
             var result = await authLogic.GetAllUsers();
 
@@ -66,7 +87,7 @@ namespace Wman.Test
         [Test]
         public async Task CreateUser_SucceededCreation()
         {
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config.Object);
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
             UserDTO user = new UserDTO() { Username = "fogvaratartottGyik", Email = "maszkosfutocsiga@gmail.com",
                 Password = "miAR3dV2Sf0s", Firstname = "Kronikus", Lastname = "VeszettMacska", Picture = "Keka" };
@@ -80,7 +101,7 @@ namespace Wman.Test
         [Test]
         public async Task CreateUser_FailedCreation_EmailAlreadyInRepo()
         {
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config.Object);
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
             UserDTO user = new UserDTO()
             {
@@ -101,7 +122,7 @@ namespace Wman.Test
         [Test]
         public async Task DeleteUser_SucceededDeletion_OnRecentlyCreatedUserAndByName()
         {
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config.Object);
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
             UserDTO user = new UserDTO()
             {
@@ -127,7 +148,7 @@ namespace Wman.Test
         [Test]
         public async Task UpdateUser_SucceededUpdate_ExistingUser()
         {
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config.Object);
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
             UserDTO user = new UserDTO()
             {
@@ -159,11 +180,10 @@ namespace Wman.Test
 
             var mock = users.AsQueryable().BuildMock();
             
-            
-            //userRepository.Setup(x => x.GetQueryable()).Returns(mock.Object);
-            //mgr.Setup(x => x.Users).Returns(users.AsQueryable());
             mgr.Setup(x => x.Users).Returns(mock.Object);
-
+            mgr.Setup(x => x.CheckPasswordAsync(It.IsAny<WmanUser>(), It.IsAny<string>())).ReturnsAsync(true);
+            mgr.Setup(x => x.GetRolesAsync(It.IsAny<WmanUser>())).ReturnsAsync(new List<string> { "Admin", "Manager", "Worker"});
+            
             return mgr;
         }
 
@@ -175,6 +195,18 @@ namespace Wman.Test
                          roleStore.Object, null, null, null, null);
 
             return role;
+        }
+
+        private IConfiguration GetConfiguration()
+        {
+            var cfg = new Dictionary<string, string>
+            {
+                { "SigningKey", "TestValueAJKSJDJ2732636auhsdnh"}
+            };
+
+            IConfiguration cfgBuild = new ConfigurationBuilder().AddInMemoryCollection(cfg).Build();
+
+            return cfgBuild;
         }
     }
 }
