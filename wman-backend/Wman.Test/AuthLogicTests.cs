@@ -182,7 +182,7 @@ namespace Wman.Test
             
             mgr.Setup(x => x.Users).Returns(mock.Object);
             mgr.Setup(x => x.CheckPasswordAsync(It.IsAny<WmanUser>(), It.IsAny<string>())).ReturnsAsync(true);
-            mgr.Setup(x => x.GetRolesAsync(It.IsAny<WmanUser>())).ReturnsAsync(new List<string> { "Admin", "Manager", "Worker"});
+            mgr.Setup(x => x.GetRolesAsync(It.IsAny<WmanUser>())).ReturnsAsync(new List<string> { "Admin", "Debug", "Manager", "Worker"});
             
             return mgr;
         }
