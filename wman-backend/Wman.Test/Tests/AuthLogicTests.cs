@@ -151,7 +151,7 @@ namespace Wman.Test
             Assert.True(result.Succeeded);
             Assert.AreEqual(2, users.Count);
 
-            this.userManager.Verify(x => x.DeleteAsync(It.IsAny<WmanUser>()), Times.AtLeastOnce);
+            this.userManager.Verify(x => x.DeleteAsync(It.IsAny<WmanUser>()), Times.Exactly(2));
             this.userManager.Verify(x => x.CreateAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
             this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
         }
@@ -203,7 +203,7 @@ namespace Wman.Test
             Assert.That(result && resultByName);
 
             this.userManager.Verify(x => x.FindByNameAsync(It.IsAny<string>()), Times.Once);
-            this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.AtLeastOnce);
+            this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Exactly(2));
         }
 
         [Test]
