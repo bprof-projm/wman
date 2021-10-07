@@ -5,8 +5,8 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
-import { NormalLoginForm } from "./components/login.component.jsx"
-import { Logout } from "./components/logout.component.jsx";
+import { NormalLoginForm } from "./components/login/login.component.jsx"
+import { Logout } from "./components/login/logout.component.jsx";
 import Cookies from "js-cookie";
 
 const axios = require("axios").default;
