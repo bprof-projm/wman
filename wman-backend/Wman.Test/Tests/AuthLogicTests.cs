@@ -250,5 +250,19 @@ namespace Wman.Test
             this.userManager.Verify(x => x.UpdateAsync(It.IsAny<WmanUser>()), Times.Once);
             this.userManager.Verify(x => x.Users, Times.Once);
         }
+
+        [Test]
+        public async Task SwitchRoleOfUser()
+        {
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
+
+            var result = await authLogic.SwitchRoleOfUser(users[2].UserName, "Debug");
+
+            Assert.True(result);
+
+            this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(),It.IsAny<string>()), Times.Once);
+            this.userManager.Verify(x => x.RemoveFromRoleAsync(It.IsAny<WmanUser>(),It.IsAny<string>()), Times.AtLeastOnce);
+            this.userManager.Verify(x => x.FindByNameAsync(It.IsAny<string>()), Times.AtLeastOnce);
+        }
     }
 }
