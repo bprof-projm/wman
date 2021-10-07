@@ -22,7 +22,7 @@ namespace Wman.Logic.Classes
         public async Task<List<CalendarWorkEventDTO>> GetCurrentDayEvents()
         {
             var events = await (from x in workEventRepo.GetAll()
-                         where x.EstimatedStartDate.DayOfYear == DateTime.Now.DayOfYear
+                         where x.EstimatedStartDate.DayOfYear == DateTime.UtcNow.DayOfYear
                          select x).ToListAsync();
             var eventDTOs = Converter.CalendarWorkEventConverter(events);
             return eventDTOs.ToList();
