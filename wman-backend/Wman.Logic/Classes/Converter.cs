@@ -29,7 +29,7 @@ namespace Wman.Logic.Classes
             output.Lastname = user.LastName;
             output.Password = user.PasswordHash;
             output.Username = user.UserName;
-            output.Picture = user.Picture;
+            output.Picture = user.ProfilePicture;
 
             return output;
 

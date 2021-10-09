@@ -87,7 +87,7 @@ namespace Wman.WebAPI
            
             services.AddDbContext<wmanDb>(options => options.UseSqlServer(appsettingsConnectionString, b => b.MigrationsAssembly("Wman.WebAPI")));
 
-            services.AddIdentity<WmanUser, IdentityRole>(
+            services.AddIdentityCore<WmanUser>(
                      option =>
                      {
                          option.Password.RequireDigit = false;
@@ -96,7 +96,11 @@ namespace Wman.WebAPI
                          option.Password.RequireUppercase = false;
                          option.Password.RequireLowercase = false;
                      }
-                 ).AddEntityFrameworkStores<wmanDb>()
+                 ).AddRoles<WmanRole>()
+                 .AddRoleManager<RoleManager<WmanRole>>()
+                 .AddSignInManager<SignInManager<WmanUser>>()
+                 .AddRoleValidator<RoleValidator<WmanRole>>()
+                 .AddEntityFrameworkStores<wmanDb>()
                  .AddDefaultTokenProviders();
 
 

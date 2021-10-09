@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Wman.Data.DB_Models;
 
 namespace Wman.Logic.DTO_Models
 {
@@ -37,8 +40,8 @@ namespace Wman.Logic.DTO_Models
         public string Lastname { get; set; }
 
         //[DataType(DataType.ImageUrl)]
-        [StringLength(200)]
-        public string Picture { get; set; }
+        [JsonIgnore]
+        public Pictures Picture { get; set; }
 
 
     }

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,10 +19,9 @@ namespace Wman.Logic.Classes
     public class AuthLogic : IAuthLogic
     {
         UserManager<WmanUser> userManager;
-        RoleManager<IdentityRole> roleManager;
+        RoleManager<WmanRole> roleManager;
         private IConfiguration Configuration;
-
-        public AuthLogic(UserManager<WmanUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AuthLogic(UserManager<WmanUser> userManager, RoleManager<WmanRole> roleManager, IConfiguration configuration)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
@@ -51,7 +51,7 @@ namespace Wman.Logic.Classes
             user.Email = newUser.Email;
             user.FirstName = newUser.Firstname;
             user.LastName = newUser.Lastname;
-            user.Picture = newUser.Picture;
+            user.ProfilePicture = newUser.Picture;
             user.PasswordHash = userManager.PasswordHasher.HashPassword(user, newUser.Password);
 
             result = await userManager.UpdateAsync(user);
@@ -96,7 +96,6 @@ namespace Wman.Logic.Classes
             {
                 Email = model.Email,
                 UserName = model.Username,
-                Picture = model.Picture,
                 FirstName = model.Firstname,
                 LastName = model.Lastname,
                 SecurityStamp = Guid.NewGuid().ToString()
@@ -197,7 +196,7 @@ namespace Wman.Logic.Classes
             {
                 return false;
             }
-            roleManager.CreateAsync(new IdentityRole { Id = Guid.NewGuid().ToString(), Name = name, NormalizedName = name.ToUpper() }).Wait();
+            roleManager.CreateAsync(new WmanRole { Name = name, NormalizedName = name.ToUpper() }).Wait();
             return true;
         }
 
