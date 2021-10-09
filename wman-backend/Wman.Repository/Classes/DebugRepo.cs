@@ -16,13 +16,13 @@ namespace Wman.Repository
         {
             this.db = inDb;
         }
-        public void Add(WorkEvent element)
+        public async Task Add(WorkEvent element)
         {
-            db.Add(element);
-            db.SaveChanges();
+            await db.AddAsync(element);
+            await db.SaveChangesAsync();
         }
 
-        public void Delete(int element)
+        public Task Delete(int element)
         {
             throw new NotImplementedException();
         }
@@ -32,12 +32,12 @@ namespace Wman.Repository
             return this.db.WorkEvent;
         }
 
-        public WorkEvent GetOne(int key)
+        public Task<WorkEvent> GetOne(int key)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(int oldKey, WorkEvent element)
+        public Task Update(int oldKey, WorkEvent element)
         {
             throw new NotImplementedException();
         }

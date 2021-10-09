@@ -10,14 +10,14 @@ using Wman.Repository.Interfaces;
 
 namespace Wman.Repository.Classes
 {
-    public class WorkEventRepo : IWorkEventRepo
+    public class LabelRepo : ILabelRepo
     {
         private wmanDb db;
-        public WorkEventRepo(wmanDb inDb)
+        public LabelRepo(wmanDb inDb)
         {
             this.db = inDb;
         }
-        public async Task Add(WorkEvent element)
+        public async Task Add(Label element)
         {
             await this.db.AddAsync(element);
             await this.db.SaveChangesAsync();
@@ -30,25 +30,24 @@ namespace Wman.Repository.Classes
             await this.db.SaveChangesAsync();
         }
 
-        public IQueryable<WorkEvent> GetAll()
+        public IQueryable<Label> GetAll()
         {
-            return this.db.WorkEvent;
+            return this.db.Label;
         }
 
-        public async Task<WorkEvent> GetOne(int key)
+        public async Task<Label> GetOne(int key)
         {
-            var entity = await (from x in db.WorkEvent
+            var entity = await (from x in db.Label
                           where x.Id == key
                           select x).FirstOrDefaultAsync();
             return entity;
         }
 
-        public async Task Update(int oldKey, WorkEvent element)
+        public async Task Update(int oldKey, Label element)
         {
-            var oldWorkEvent = await GetOne(oldKey);
-            oldWorkEvent.JobDescription = element.JobDescription;
-            oldWorkEvent.EstimatedStartDate = element.EstimatedStartDate;
-            oldWorkEvent.EstimatedFinishDate = element.EstimatedFinishDate;
+            var oldLabel =await GetOne(oldKey);
+            oldLabel.Color = element.Color;
+            oldLabel.Content = element.Content;
             await this.db.SaveChangesAsync();
         }
     }

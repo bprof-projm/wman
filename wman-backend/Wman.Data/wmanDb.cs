@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -47,8 +47,31 @@ namespace Wman.Data
               .HasForeignKey(ur => ur.RoleId)
               .IsRequired();
 
+            modelBuilder.Entity<WorkEventLabel>()
+                .HasKey(x => new { x.WorkEventId, x.LabelId });
+            modelBuilder.Entity<WorkEventLabel>()
+                .HasOne(x => x.WorkEvent)
+                .WithMany(y => y.Labels)
+                .HasForeignKey(z => z.LabelId)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<WorkEventLabel>()
+                .HasOne(x => x.Label)
+                .WithMany(y => y.WorkEvents)
+                .HasForeignKey(z => z.WorkEventId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-
+            modelBuilder.Entity<WmanUserWorkEvent>()
+                .HasKey(x => new { x.WorkEventId, x.WmanUserId });
+            modelBuilder.Entity<WmanUserWorkEvent>()
+                .HasOne(x => x.WorkEvent)
+                .WithMany(y => y.AssignedUsers)
+                .HasForeignKey(z => z.WmanUserId)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<WmanUserWorkEvent>()
+                .HasOne(x => x.WmanUser)
+                .WithMany(y => y.WorkEvents)
+                .HasForeignKey(z => z.WorkEventId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<WorkEventPicture>()
                 .HasKey(x => new { x.WorkEventId, x.PictureId });
@@ -62,11 +85,19 @@ namespace Wman.Data
                 .WithMany(y => y.WorkEvents)
                 .HasForeignKey(z => z.WorkEventId)
                 .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<WorkEvent>()
+                .HasOne(x => x.Address)
+                .WithMany(y => y.WorkEvents)
+                .HasForeignKey(z => z.AddressId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<WmanRole>().HasData(
                 new {Id= 1, Name = "Debug", NormalizedName = "DEBUG" }
             );
         }
         public virtual DbSet<DB_Models.WorkEvent> WorkEvent { get; set; }
-
+        public virtual DbSet<DB_Models.Label> Label { get; set; }
+        public virtual DbSet<DB_Models.AddressHUN> Address { get; set; }
+        public virtual DbSet<DB_Models.Pictures> Picture { get; set; }
     }
 }

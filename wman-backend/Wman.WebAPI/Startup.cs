@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using Wman.Data;
 using Wman.Data.DB_Models;
 using Wman.Logic.Classes;
+using Wman.Logic.Helpers;
 using Wman.Logic.Interfaces;
 using Wman.Repository.Classes;
 using Wman.Repository.Interfaces;
@@ -47,14 +48,18 @@ namespace Wman.WebAPI
             services.AddControllers();
             services.AddTransient<IAuthLogic, AuthLogic>();
             services.AddTransient<ICalendarEventLogic, CalendarEventLogic>();
+            services.AddTransient<IEventLogic, EventLogic>();
 
-            
+
             //TODO: Use transients
             //services.AddSingleton(Configuration);
-            
-            
-            
+
+
+
             services.AddTransient<IWorkEventRepo, WorkEventRepo>();
+            services.AddTransient<IPicturesRepo, PicturesRepo>();
+            services.AddTransient<ILabelRepo, LabelRepo>();
+            services.AddTransient<IAddressRepo, AddressRepo>();
 
             services.AddSwaggerGen(c =>
             {
@@ -139,6 +144,7 @@ namespace Wman.WebAPI
                                   });
             });
 
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
 
         }

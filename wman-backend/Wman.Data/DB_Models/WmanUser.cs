@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,5 +17,8 @@ namespace Wman.Data.DB_Models
         public Pictures ProfilePicture { get; set; }
         [NotMapped]
         public ICollection<WmanUserRole> UserRoles { get; set; }
+        [NotMapped]
+        public virtual ICollection<WmanUserWorkEvent> WorkEvents { get; set; }
+
     }
 }

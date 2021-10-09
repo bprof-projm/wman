@@ -113,5 +113,37 @@
             </summary>
             <returns>OK</returns>
         </member>
+        <member name="T:Wman.WebAPI.Controllers.EventController">
+            <summary>
+            EventController
+            </summary>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.EventController.#ctor(Wman.Logic.Interfaces.IEventLogic)">
+            <summary>
+            ctor
+            </summary>
+            <param name="eventLogic"></param>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.EventController.CreateEvent(Wman.Logic.DTO_Models.CreateEventDTO)">
+            <summary>
+            Creats an event from body
+            </summary>
+            <param name="workEvent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.EventController.GetEvent(System.Int32)">
+            <summary>
+            Getting a custom event back
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.EventController.DeleteEvent(System.Int32)">
+            <summary>
+            deletes an event
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>
