@@ -47,8 +47,9 @@ namespace Wman.Data
               .HasForeignKey(ur => ur.RoleId)
               .IsRequired();
 
-            modelBuilder.Entity<IdentityRole>().HasData(
-                new { Id = "0d301757-99d2-4253-aac2-39e298dd0ab7", Name = "Debug", NormalizedName = "DEBUG" }
+
+
+
             modelBuilder.Entity<WorkEventPicture>()
                 .HasKey(x => new { x.WorkEventId, x.PictureId });
             modelBuilder.Entity<WorkEventPicture>()
