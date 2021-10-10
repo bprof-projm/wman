@@ -16,7 +16,7 @@ namespace Wman.WebAPI.Controllers
     /// </summary>
     [Route("[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class EventController : ControllerBase
     {
         IEventLogic eventLogic;
