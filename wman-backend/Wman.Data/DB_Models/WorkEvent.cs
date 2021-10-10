@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,6 +11,10 @@ using Wman.Data.DB_Connection_Tables;
 
 namespace Wman.Data.DB_Models
 {
+    public enum Status
+    {
+        awaiting, started, finished
+    }
     public class WorkEvent
     {
         [Key]
@@ -34,6 +39,7 @@ namespace Wman.Data.DB_Models
         public DateTime WorkStartDate { get; set; }
         public DateTime WorkFinishDate { get; set; }
         public TimeSpan WorkTime { get; set; }
-        public string Status { get; set; }
+        [JsonConverter(typeof(StringToEnumConverter<Status>))]
+        public Status Status { get; set; }
     }
 }

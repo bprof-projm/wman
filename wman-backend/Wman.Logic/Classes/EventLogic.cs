@@ -26,16 +26,24 @@ namespace Wman.Logic.Classes
 
         public async Task CreateEvent(CreateEventDTO workEvent)
         {
-            var result = mapper.Map<WorkEvent>(workEvent);
-            var find = await (from x in address.GetAll()
-                       where x.Street == result.Address.Street && x.ZIPCode == result.Address.ZIPCode && x.City == result.Address.City
-                              select x).FirstOrDefaultAsync();
-            if (find != null)
+            if (workEvent.EstimatedStartDate < workEvent.EstimatedFinishDate && workEvent.EstimatedStartDate.Day == workEvent.EstimatedFinishDate.Day)
             {
-                result.AddressId = find.Id;
-                result.Address = null;
+                var result = mapper.Map<WorkEvent>(workEvent);
+                var find = await (from x in address.GetAll()
+                                  where x.Street == result.Address.Street && x.ZIPCode == result.Address.ZIPCode && x.City == result.Address.City
+                                  select x).FirstOrDefaultAsync();
+                if (find != null)
+                {
+                    result.AddressId = find.Id;
+                    result.Address = null;
+                }
+                await eventRepo.Add(result);
             }
-            await eventRepo.Add(result);
+            else
+            {
+                throw new ArgumentException("Events are not at the same day or ");
+            }
+            
         }
 
         public async Task DeleteEvent(int Id)

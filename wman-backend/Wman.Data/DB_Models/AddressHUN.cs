@@ -16,7 +16,9 @@ namespace Wman.Data.DB_Models
         public int Id { get; set; }
         public string City { get; set; }
         public string Street { get; set; }
-        public int ZIPCode { get; set; }
+        public string ZIPCode { get; set; }
+        public string BuildingNumber { get; set; }
+        public string Floordoor { get; set; }
         [NotMapped]
         [JsonIgnore]
         public virtual ICollection<WorkEvent> WorkEvents { get; set; }
