@@ -66,6 +66,27 @@ namespace Wman.WebAPI.Controllers
                 return StatusCode(500, $"Internal server error : {ex}");
             }
         }
+
+        /// <summary>
+        /// Get all the events
+        /// </summary>
+        /// <returns>A collection of all the events</returns>
+        [HttpGet]
+        [Route("all")]
+        public async Task<ActionResult<IEnumerable<CreateEventDTO>>> GetAll()
+        {
+            try
+            {
+                var output = eventLogic.GetAllEvents();
+                return Ok(output);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex);
+            }
+        }
+
         /// <summary>
         /// deletes an event
         /// </summary>
