@@ -37,7 +37,7 @@ namespace Wman.Logic.Classes
             return await userManager.Users.Where(x => x.UserName == username).SingleOrDefaultAsync();
         }
 
-        public async Task<IdentityResult> UpdateUser(string oldUsername, UserDTO newUser)
+        public async Task<IdentityResult> UpdateUser(string oldUsername, string pwd, UserDTO newUser)
         {
 
             var result = new IdentityResult();
@@ -52,7 +52,7 @@ namespace Wman.Logic.Classes
             user.FirstName = newUser.Firstname;
             user.LastName = newUser.Lastname;
             user.ProfilePicture = newUser.Picture;
-            user.PasswordHash = userManager.PasswordHasher.HashPassword(user, newUser.Password);
+            user.PasswordHash = userManager.PasswordHasher.HashPassword(user, pwd);
 
             result = await userManager.UpdateAsync(user);
             return result;
@@ -74,7 +74,7 @@ namespace Wman.Logic.Classes
 
         }
 
-        public async Task<IdentityResult> CreateUser(UserDTO model)
+        public async Task<IdentityResult> CreateUser(RegisterDTO model)
         {
             var result = new IdentityResult();
             var user = new WmanUser();

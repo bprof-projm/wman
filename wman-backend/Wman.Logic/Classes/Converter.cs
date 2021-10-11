@@ -27,7 +27,7 @@ namespace Wman.Logic.Classes
             output.Email = user.Email;
             output.Firstname = user.FirstName;
             output.Lastname = user.LastName;
-            output.Password = user.PasswordHash;
+            //output.Password = user.PasswordHash;
             output.Username = user.UserName;
             output.Picture = user.ProfilePicture;
 

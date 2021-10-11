@@ -15,7 +15,7 @@
             </summary>
             <param name="authLogic"></param>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.CreateUser(Wman.Logic.DTO_Models.UserDTO)">
+        <member name="M:Wman.WebAPI.Controllers.AuthController.CreateUser(Wman.Logic.DTO_Models.RegisterDTO)">
             <summary>
             Create a new user
             </summary>
@@ -39,9 +39,9 @@
             <summary>
             Delete a user
             </summary>
-            <param name="username">Id of the user to be deleted</param>
+            <param name="username">Username of the user to be deleted</param>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.UpdateUser(System.String,Wman.Logic.DTO_Models.UserDTO)">
+        <member name="M:Wman.WebAPI.Controllers.AuthController.UpdateUser(System.String,System.String,Wman.Logic.DTO_Models.UserDTO)">
             <summary>
             Update a user
             </summary>

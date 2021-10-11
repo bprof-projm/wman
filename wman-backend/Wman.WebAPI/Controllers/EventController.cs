@@ -29,7 +29,7 @@ namespace Wman.WebAPI.Controllers
             this.eventLogic = eventLogic;
         }
         /// <summary>
-        /// Creats an event from body
+        /// Creates an event from body
         /// </summary>
         /// <param name="workEvent"></param>
         /// <returns></returns>

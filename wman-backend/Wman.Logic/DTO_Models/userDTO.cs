@@ -25,10 +25,10 @@ namespace Wman.Logic.DTO_Models
 
         public string Email { get; set; }
 
-        [DataType(DataType.Password)]
-        [StringLength(20, MinimumLength = 5)]
-        [Required(AllowEmptyStrings = false)]
-        public string Password { get; set; }
+        //[DataType(DataType.Password)]
+        //[StringLength(20, MinimumLength = 5)]
+        //[Required(AllowEmptyStrings = false)]
+        //public string Password { get; set; }
 
         [DataType(DataType.Text)]
 
