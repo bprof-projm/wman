@@ -11,12 +11,12 @@ namespace Wman.Logic.DTO_Models
     {
         [Required]
         [StringLength(20)]
-        [RegularExpression(@"^[a-zA-Z]+$")]
+        [RegularExpression(@"^[\d \p{L} \s]+$")]
         [DataType(DataType.Text)]
         public string City { get; set; }
         [Required]
         [StringLength(30)]
-        [RegularExpression(@"^[a-zA-Z]+$")]
+        [RegularExpression(@"^[\d \p{L} \s]+$")]
         [DataType(DataType.Text)]
         public string Street { get; set; }
         [Required(AllowEmptyStrings = false)]

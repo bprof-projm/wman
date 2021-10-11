@@ -102,7 +102,6 @@ namespace Wman.WebAPI.Controllers
             }
             catch (Exception ex)
             {
-
                 return StatusCode(500, $"Internal server error : {ex}");
             }
         }

@@ -138,6 +138,12 @@
             <param name="Id"></param>
             <returns></returns>
         </member>
+        <member name="M:Wman.WebAPI.Controllers.EventController.GetAll">
+            <summary>
+            Get all the events
+            </summary>
+            <returns>A collection of all the events</returns>
+        </member>
         <member name="M:Wman.WebAPI.Controllers.EventController.DeleteEvent(System.Int32)">
             <summary>
             deletes an event
