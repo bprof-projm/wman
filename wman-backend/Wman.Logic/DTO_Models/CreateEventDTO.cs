@@ -28,7 +28,7 @@ namespace Wman.Logic.DTO_Models
         [Required]
         public AddressHUNDTO Address { get; set; }
         [Required]
-        [JsonConverter(typeof(StringToEnumConverter<Status>))]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public Status Status { get; set; }
     }
 }
