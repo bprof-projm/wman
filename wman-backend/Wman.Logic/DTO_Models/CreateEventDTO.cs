@@ -12,7 +12,6 @@ using Wman.Data.DB_Models;
 
 namespace Wman.Logic.DTO_Models
 {
-    
     public class CreateEventDTO
     {
         [Required]
@@ -28,7 +27,7 @@ namespace Wman.Logic.DTO_Models
         [Required]
         public AddressHUNDTO Address { get; set; }
         [Required]
-        [JsonConverter(typeof(JsonStringEnumConverter))]
+        //[JsonConverter(typeof(JsonStringEnumConverter))]
         public Status Status { get; set; }
     }
 }

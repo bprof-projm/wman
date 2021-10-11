@@ -39,7 +39,7 @@ namespace Wman.Data.DB_Models
         public DateTime WorkStartDate { get; set; }
         public DateTime WorkFinishDate { get; set; }
         public TimeSpan WorkTime { get; set; }
-        [JsonConverter(typeof(JsonStringEnumConverter))]
+        //[JsonConverter(typeof(JsonStringEnumConverter))]
         public Status Status { get; set; }
     }
 }

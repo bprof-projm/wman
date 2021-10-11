@@ -19,6 +19,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Wman.Data;
 using Wman.Data.DB_Models;
@@ -49,7 +50,8 @@ namespace Wman.WebAPI
             services.AddTransient<IAuthLogic, AuthLogic>();
             services.AddTransient<ICalendarEventLogic, CalendarEventLogic>();
             services.AddTransient<IEventLogic, EventLogic>();
-
+            services.AddControllers().AddJsonOptions(options =>
+          options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
             //TODO: Use transients
             //services.AddSingleton(Configuration);
@@ -63,6 +65,7 @@ namespace Wman.WebAPI
 
             services.AddSwaggerGen(c =>
             {
+                //c.DescribeAllEnumsAsStrings();
                 // configure SwaggerDoc and others
                 //c.SwaggerDoc("v1", new OpenApiInfo { Title = "Wman.WebAPI", Version = "v1" });
                 // add JWT Authentication
