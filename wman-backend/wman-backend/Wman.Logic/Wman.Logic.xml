@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Wman.Logic</name>
+    </assembly>
+    <members>
+        <member name="T:Wman.Logic.DTO_Models.CreateEventDTO">
+            <summary>
+            bezony
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -10,14 +10,14 @@ using Wman.Repository.Interfaces;
 
 namespace Wman.Repository.Classes
 {
-    public class WorkEventRepo : IWorkEventRepo
+    public class PicturesRepo : IPicturesRepo
     {
         private wmanDb db;
-        public WorkEventRepo(wmanDb inDb)
+        public PicturesRepo(wmanDb inDb)
         {
             this.db = inDb;
         }
-        public async Task Add(WorkEvent element)
+        public async Task Add(Pictures element)
         {
             await this.db.AddAsync(element);
             await this.db.SaveChangesAsync();
@@ -30,26 +30,26 @@ namespace Wman.Repository.Classes
             await this.db.SaveChangesAsync();
         }
 
-        public IQueryable<WorkEvent> GetAll()
+        public IQueryable<Pictures> GetAll()
         {
-            return this.db.WorkEvent;
+            return this.db.Picture;
         }
 
-        public async Task<WorkEvent> GetOne(int key)
+        public async Task<Pictures> GetOne(int key)
         {
-            var entity = await (from x in db.WorkEvent
+            var entity =await (from x in db.Picture
                           where x.Id == key
                           select x).FirstOrDefaultAsync();
             return entity;
         }
 
-        public async Task Update(int oldKey, WorkEvent element)
+        public async Task Update(int oldKey, Pictures element)
         {
-            var oldWorkEvent = await GetOne(oldKey);
-            oldWorkEvent.JobDescription = element.JobDescription;
-            oldWorkEvent.EstimatedStartDate = element.EstimatedStartDate;
-            oldWorkEvent.EstimatedFinishDate = element.EstimatedFinishDate;
-            await this.db.SaveChangesAsync();
+            var oldPicture =await GetOne(oldKey);
+            oldPicture.Name = element.Name;
+            oldPicture.Url = element.Url;
+            oldPicture.PicturesType = element.PicturesType;
+            await db.SaveChangesAsync();
         }
     }
 }

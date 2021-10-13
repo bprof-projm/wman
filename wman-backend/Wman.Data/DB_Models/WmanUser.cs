@@ -6,16 +6,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Wman.Data.DB_Connection_Tables;
 
 namespace Wman.Data.DB_Models
 {
-    public class WmanUser : IdentityUser
+    public class WmanUser : IdentityUser<int>
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Picture { get; set; }
+        public Pictures ProfilePicture { get; set; }
+        [NotMapped]
+        public ICollection<WmanUserRole> UserRoles { get; set; }
+        [NotMapped]
+        public virtual ICollection<WmanUserWorkEvent> WorkEvents { get; set; }
+
     }
 }

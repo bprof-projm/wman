@@ -19,10 +19,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Wman.Data;
 using Wman.Data.DB_Models;
 using Wman.Logic.Classes;
+using Wman.Logic.Helpers;
 using Wman.Logic.Interfaces;
 using Wman.Repository.Classes;
 using Wman.Repository.Interfaces;
@@ -47,17 +49,23 @@ namespace Wman.WebAPI
             services.AddControllers();
             services.AddTransient<IAuthLogic, AuthLogic>();
             services.AddTransient<ICalendarEventLogic, CalendarEventLogic>();
+            services.AddTransient<IEventLogic, EventLogic>();
+            services.AddControllers().AddJsonOptions(options =>
+          options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
-            
             //TODO: Use transients
             //services.AddSingleton(Configuration);
-            
-            
-            
+
+
+
             services.AddTransient<IWorkEventRepo, WorkEventRepo>();
+            services.AddTransient<IPicturesRepo, PicturesRepo>();
+            services.AddTransient<ILabelRepo, LabelRepo>();
+            services.AddTransient<IAddressRepo, AddressRepo>();
 
             services.AddSwaggerGen(c =>
             {
+                //c.DescribeAllEnumsAsStrings();
                 // configure SwaggerDoc and others
                 //c.SwaggerDoc("v1", new OpenApiInfo { Title = "Wman.WebAPI", Version = "v1" });
                 // add JWT Authentication
@@ -87,7 +95,7 @@ namespace Wman.WebAPI
            
             services.AddDbContext<wmanDb>(options => options.UseSqlServer(appsettingsConnectionString, b => b.MigrationsAssembly("Wman.WebAPI")));
 
-            services.AddIdentity<WmanUser, IdentityRole>(
+            services.AddIdentityCore<WmanUser>(
                      option =>
                      {
                          option.Password.RequireDigit = false;
@@ -96,7 +104,11 @@ namespace Wman.WebAPI
                          option.Password.RequireUppercase = false;
                          option.Password.RequireLowercase = false;
                      }
-                 ).AddEntityFrameworkStores<wmanDb>()
+                 ).AddRoles<WmanRole>()
+                 .AddRoleManager<RoleManager<WmanRole>>()
+                 .AddSignInManager<SignInManager<WmanUser>>()
+                 .AddRoleValidator<RoleValidator<WmanRole>>()
+                 .AddEntityFrameworkStores<wmanDb>()
                  .AddDefaultTokenProviders();
 
 
@@ -135,6 +147,7 @@ namespace Wman.WebAPI
                                   });
             });
 
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
 
         }

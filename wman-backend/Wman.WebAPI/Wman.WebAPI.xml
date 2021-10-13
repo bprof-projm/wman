@@ -15,7 +15,7 @@
             </summary>
             <param name="authLogic"></param>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.CreateUser(Wman.Logic.DTO_Models.UserDTO)">
+        <member name="M:Wman.WebAPI.Controllers.AuthController.CreateUser(Wman.Logic.DTO_Models.RegisterDTO)">
             <summary>
             Create a new user
             </summary>
@@ -39,9 +39,9 @@
             <summary>
             Delete a user
             </summary>
-            <param name="username">Id of the user to be deleted</param>
+            <param name="username">Username of the user to be deleted</param>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.UpdateUser(System.String,Wman.Logic.DTO_Models.UserDTO)">
+        <member name="M:Wman.WebAPI.Controllers.AuthController.UpdateUser(System.String,System.String,Wman.Logic.DTO_Models.UserDTO)">
             <summary>
             Update a user
             </summary>
@@ -112,6 +112,44 @@
             HTTPPost test method
             </summary>
             <returns>OK</returns>
+        </member>
+        <member name="T:Wman.WebAPI.Controllers.EventController">
+            <summary>
+            EventController
+            </summary>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.EventController.#ctor(Wman.Logic.Interfaces.IEventLogic)">
+            <summary>
+            ctor
+            </summary>
+            <param name="eventLogic"></param>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.EventController.CreateEvent(Wman.Logic.DTO_Models.CreateEventDTO)">
+            <summary>
+            Creates an event from body
+            </summary>
+            <param name="workEvent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.EventController.GetEvent(System.Int32)">
+            <summary>
+            Getting a custom event back
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.EventController.GetAll">
+            <summary>
+            Get all the events
+            </summary>
+            <returns>A collection of all the events</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.EventController.DeleteEvent(System.Int32)">
+            <summary>
+            deletes an event
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
         </member>
     </members>
 </doc>

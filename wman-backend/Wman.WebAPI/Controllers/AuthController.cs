@@ -37,7 +37,7 @@ namespace Wman.WebAPI.Controllers
         /// <returns>ActionResult</returns>
         [HttpPost]
 
-        public async Task<ActionResult> CreateUser([FromBody] UserDTO model)
+        public async Task<ActionResult> CreateUser([FromBody] RegisterDTO model)
         {
             if (!ModelState.IsValid)
             {
@@ -97,7 +97,7 @@ namespace Wman.WebAPI.Controllers
         /// <summary>
         /// Delete a user
         /// </summary>
-        /// <param name="username">Id of the user to be deleted</param>
+        /// <param name="username">Username of the user to be deleted</param>
         [HttpDelete("{username}")]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteUser(string username)
@@ -124,7 +124,7 @@ namespace Wman.WebAPI.Controllers
         /// <param name="user">User to be updated</param>
         [HttpPut("{oldUsername}")]
         //[Authorize(Roles = "Admin")]
-        public async Task<ActionResult> UpdateUser(string oldUsername, [FromBody] UserDTO user)
+        public async Task<ActionResult> UpdateUser(string oldUsername, string pwd, [FromBody] UserDTO user)
         {
             if (!ModelState.IsValid)
             {
@@ -133,7 +133,7 @@ namespace Wman.WebAPI.Controllers
             IdentityResult result;
             try
             {
-                result = await this.authLogic.UpdateUser(oldUsername, user);
+                result = await this.authLogic.UpdateUser(oldUsername, pwd, user);
                 if (result.Succeeded)
                     return Ok("User updated successfully");
             }

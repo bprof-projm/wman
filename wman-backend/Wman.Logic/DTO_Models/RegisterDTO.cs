@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Wman.Data.DB_Models;
 
 namespace Wman.Logic.DTO_Models
 {
-    public class UserDTO
+    public class RegisterDTO
     {
         [DataType(DataType.Text)]
         [Required(AllowEmptyStrings = false)]
@@ -25,10 +22,10 @@ namespace Wman.Logic.DTO_Models
 
         public string Email { get; set; }
 
-        //[DataType(DataType.Password)]
-        //[StringLength(20, MinimumLength = 5)]
-        //[Required(AllowEmptyStrings = false)]
-        //public string Password { get; set; }
+        [DataType(DataType.Password)]
+        [StringLength(20, MinimumLength = 5)]
+        [Required(AllowEmptyStrings = false)]
+        public string Password { get; set; }
 
         [DataType(DataType.Text)]
 
@@ -38,11 +35,5 @@ namespace Wman.Logic.DTO_Models
         [DataType(DataType.Text)]
         [StringLength(30)]
         public string Lastname { get; set; }
-
-        //[DataType(DataType.ImageUrl)]
-        [JsonIgnore]
-        public Pictures Picture { get; set; }
-
-
     }
 }
