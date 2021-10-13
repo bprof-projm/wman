@@ -47,7 +47,7 @@ namespace Wman.Logic.Classes
                     result.AddressId = find.Id;
                     result.Address = null;
                 }
-                result.AssignedUsers = new List<WmanUserWorkEvent>();
+                
                 await eventRepo.Add(result);
             }
             else

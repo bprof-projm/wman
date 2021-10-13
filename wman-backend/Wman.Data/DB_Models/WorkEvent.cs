@@ -41,5 +41,9 @@ namespace Wman.Data.DB_Models
         public TimeSpan WorkTime { get; set; }
         //[JsonConverter(typeof(JsonStringEnumConverter))]
         public Status Status { get; set; }
+        public WorkEvent()
+        {
+            AssignedUsers = new List<WmanUserWorkEvent>();
+        }
     }
 }

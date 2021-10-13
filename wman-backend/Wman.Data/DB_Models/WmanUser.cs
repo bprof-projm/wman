@@ -20,5 +20,9 @@ namespace Wman.Data.DB_Models
         [NotMapped]
         public virtual ICollection<WmanUserWorkEvent> WorkEvents { get; set; }
 
+        public WmanUser()
+        {
+            WorkEvents = new List<WmanUserWorkEvent>();
+        }
     }
 }

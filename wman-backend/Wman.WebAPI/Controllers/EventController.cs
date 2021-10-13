@@ -122,6 +122,7 @@ namespace Wman.WebAPI.Controllers
         public async Task<ActionResult<ICollection<WmanUser>>> GetAllAssignedUsers(int eventid)
         {
             var selectedEvent = await eventLogic.GetEvent(eventid);
+            ;
             return Ok(selectedEvent.AssignedUsers);
             throw new NotImplementedException();
         }
