@@ -18,7 +18,7 @@ namespace Wman.Test
     {
         
         private Mock<UserManager<WmanUser>> userManager;
-        private Mock<RoleManager<IdentityRole>> roleManager;
+        private Mock<RoleManager<WmanRole>> roleManager;
         private IConfiguration config;
 
         private List<WmanUser> users;
@@ -38,14 +38,13 @@ namespace Wman.Test
         {
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
-            UserDTO user = new UserDTO()
+            RegisterDTO user = new RegisterDTO()
             {
                 Username = "fogvaratartottGyik",
                 Email = "maszkosfutocsiga@gmail.com",
                 Password = "miAR3dV2Sf0s",
                 Firstname = "Kronikus",
                 Lastname = "VeszettMacska",
-                Picture = "Keka"
             };
 
             var akarmi = await authLogic.CreateUser(user);
@@ -90,8 +89,14 @@ namespace Wman.Test
         {
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
-            UserDTO user = new UserDTO() { Username = "fogvaratartottGyik", Email = "maszkosfutocsiga@gmail.com",
-                Password = "miAR3dV2Sf0s", Firstname = "Kronikus", Lastname = "VeszettMacska", Picture = "Keka" };
+            RegisterDTO user = new RegisterDTO()
+            {
+                Username = "fogvaratartottGyik",
+                Email = "maszkosfutocsiga@gmail.com",
+                Password = "miAR3dV2Sf0s",
+                Firstname = "Kronikus",
+                Lastname = "VeszettMacska",
+            };
 
             var result = await authLogic.CreateUser(user);
 
@@ -107,14 +112,13 @@ namespace Wman.Test
         {
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
-            UserDTO user = new UserDTO()
+            RegisterDTO user = new RegisterDTO()
             {
                 Username = "fogvaratartottGyik",
                 Email = "sanyesz@gmail.com",
                 Password = "miAR3dV2Sf0s",
                 Firstname = "Kronikus",
                 Lastname = "VeszettMacska",
-                Picture = "Keka"
             };
 
             var result = await authLogic.CreateUser(user);
@@ -131,14 +135,13 @@ namespace Wman.Test
         {
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
-            UserDTO user = new UserDTO()
+            RegisterDTO user = new RegisterDTO()
             {
                 Username = "fogvaratartottGyik",
                 Email = "maszkosfutocsiga@gmail.com",
                 Password = "miAR3dV2Sf0s",
                 Firstname = "Kronikus",
                 Lastname = "VeszettMacska",
-                Picture = "Keka"
             };
 
             await authLogic.CreateUser(user);
@@ -219,7 +222,7 @@ namespace Wman.Test
             Assert.That(createdRole);
             Assert.That(addRole);
 
-            this.roleManager.Verify(x => x.CreateAsync(It.IsAny<IdentityRole>()), Times.Once);
+            this.roleManager.Verify(x => x.CreateAsync(It.IsAny<WmanRole>()), Times.Once);
             this.roleManager.Verify(x => x.FindByNameAsync(It.IsAny<string>()), Times.Once);
 
             this.userManager.Verify(x => x.AddToRolesAsync(It.IsAny<WmanUser>(),
@@ -235,15 +238,13 @@ namespace Wman.Test
             {
                 Username = "fogvaratartottGyik",
                 Email = "maszkosfutocsiga@gmail.com",
-                Password = "miAR3dV2Sf0s",
                 Firstname = "Kronikus",
                 Lastname = "VeszettMacska",
-                Picture = "Keka"
             };
 
             string helper = users[0].UserName;
 
-            var result = await authLogic.UpdateUser(helper, user);
+            var result = await authLogic.UpdateUser(helper, "miAR3dV2Sf0s", user);
 
             Assert.That(result.Succeeded);
 
