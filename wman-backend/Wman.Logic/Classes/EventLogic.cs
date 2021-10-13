@@ -41,7 +41,7 @@ namespace Wman.Logic.Classes
             }
             else
             {
-                throw new ArgumentException("Events are not at the same day or ");
+                throw new ArgumentException("Events are not at the same day or start is after the finishing date");
             }
             
         }
