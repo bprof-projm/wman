@@ -16,17 +16,19 @@ namespace Wman.WebAPI.Controllers
     /// </summary>
     [Route("[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class EventController : ControllerBase
     {
         IEventLogic eventLogic;
+        IAuthLogic authLogic;
         /// <summary>
         /// ctor
         /// </summary>
         /// <param name="eventLogic"></param>
-        public EventController(IEventLogic eventLogic)
+        public EventController(IEventLogic eventLogic, IAuthLogic authLogic)
         {
             this.eventLogic = eventLogic;
+            this.authLogic = authLogic;
         }
         /// <summary>
         /// Creates an event from body
@@ -110,7 +112,8 @@ namespace Wman.WebAPI.Controllers
         [Route("assign")]
         public async Task<ActionResult> AssignUser(int eventid, string userName)
         {
-            
+            var selectedUser = await authLogic.GetOneUser(userName);
+            await eventLogic.AssignUser(eventid, selectedUser);
             return Ok();
         }
 
@@ -118,7 +121,8 @@ namespace Wman.WebAPI.Controllers
         [Route("users")]
         public async Task<ActionResult<ICollection<WmanUser>>> GetAllAssignedUsers(int eventid)
         {
-
+            var selectedEvent = await eventLogic.GetEvent(eventid);
+            return Ok(selectedEvent.AssignedUsers);
             throw new NotImplementedException();
         }
     }

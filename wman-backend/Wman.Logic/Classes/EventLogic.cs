@@ -25,6 +25,15 @@ namespace Wman.Logic.Classes
             this.address = address;
         }
 
+        public async Task AssignUser(int id, WmanUser user)
+        {
+            var selectedEvent = await this.GetEvent(id);
+            var link = new WmanUserWorkEvent { WmanUser = user, WmanUserId = user.Id, WorkEvent = selectedEvent, WorkEventId = selectedEvent.Id };
+            selectedEvent.AssignedUsers.Add(link);
+            ;
+           await this.eventRepo.Update(id, selectedEvent);
+        }
+
         public async Task CreateEvent(CreateEventDTO workEvent)
         {
             if (workEvent.EstimatedStartDate < workEvent.EstimatedFinishDate && workEvent.EstimatedStartDate.Day == workEvent.EstimatedFinishDate.Day)

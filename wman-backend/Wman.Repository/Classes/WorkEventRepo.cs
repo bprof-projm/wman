@@ -49,6 +49,7 @@ namespace Wman.Repository.Classes
             oldWorkEvent.JobDescription = element.JobDescription;
             oldWorkEvent.EstimatedStartDate = element.EstimatedStartDate;
             oldWorkEvent.EstimatedFinishDate = element.EstimatedFinishDate;
+            oldWorkEvent.AssignedUsers = element.AssignedUsers;
             await this.db.SaveChangesAsync();
         }
     }

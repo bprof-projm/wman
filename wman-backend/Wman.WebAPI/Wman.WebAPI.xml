@@ -118,7 +118,7 @@
             EventController
             </summary>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.EventController.#ctor(Wman.Logic.Interfaces.IEventLogic)">
+        <member name="M:Wman.WebAPI.Controllers.EventController.#ctor(Wman.Logic.Interfaces.IEventLogic,Wman.Logic.Interfaces.IAuthLogic)">
             <summary>
             ctor
             </summary>
