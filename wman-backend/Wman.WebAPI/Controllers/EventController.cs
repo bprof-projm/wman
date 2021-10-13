@@ -105,5 +105,19 @@ namespace Wman.WebAPI.Controllers
                 return StatusCode(500, $"Internal server error : {ex}");
             }
         }
+
+        [HttpPut("/DnDEvent/{id}")]
+        public async Task<ActionResult> DnDEvent(int id,[FromBody] DnDEventDTO workEvent)
+        {
+            try
+            {
+                await eventLogic.DnDEvent(id, workEvent);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error : {ex}");
+            }
+        }
     }
 }
