@@ -168,5 +168,18 @@ namespace Wman.Logic.Classes
             }
             return false;
         }
+
+        public async Task DnDEvent(int Id, DnDEventDTO newWorkEvent)
+        {
+            if (newWorkEvent.EstimatedStartDate < newWorkEvent.EstimatedFinishDate && newWorkEvent.EstimatedStartDate.Day == newWorkEvent.EstimatedFinishDate.Day)
+            {
+                var result = mapper.Map<WorkEvent>(newWorkEvent);
+                await eventRepo.Update(Id, result);
+            }
+            else
+            {
+                throw new ArgumentException("Events are not at the same day or start is after the finishing date");
+            }
+        }
     }
 }
