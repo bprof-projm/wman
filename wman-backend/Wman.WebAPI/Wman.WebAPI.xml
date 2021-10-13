@@ -151,5 +151,20 @@
             <param name="Id"></param>
             <returns></returns>
         </member>
+        <member name="M:Wman.WebAPI.Controllers.EventController.AssignUser(System.Int32,System.String)">
+            <summary>
+            Assign a user to a specific event
+            </summary>
+            <param name="eventid">The id of the event</param>
+            <param name="userName">username of the user</param>
+            <returns>HTTP response code</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.EventController.GetAllAssignedUsers(System.Int32)">
+            <summary>
+            Lists all the users assigned to a selected event
+            </summary>
+            <param name="eventid">The ID of the event</param>
+            <returns>HTTP response code</returns>
+        </member>
     </members>
 </doc>

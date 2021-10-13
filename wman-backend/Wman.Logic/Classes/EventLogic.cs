@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Wman.Data.DB_Connection_Tables;
 using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
 using Wman.Logic.Interfaces;
@@ -28,8 +27,8 @@ namespace Wman.Logic.Classes
         public async Task AssignUser(int id, WmanUser user)
         {
             var selectedEvent = await this.GetEvent(id);
-            var link = new WmanUserWorkEvent { WmanUser = user, WmanUserId = user.Id, WorkEvent = selectedEvent, WorkEventId = selectedEvent.Id };
-            selectedEvent.AssignedUsers.Add(link);
+
+            selectedEvent.AssignedUsers.Add(user);
             ;
            await this.eventRepo.Update(id, selectedEvent);
         }

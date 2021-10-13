@@ -19,7 +19,6 @@ namespace Wman.Data.DB_Models
         public string ZIPCode { get; set; }
         public string BuildingNumber { get; set; }
         public string Floordoor { get; set; }
-        [NotMapped]
         [JsonIgnore]
         public virtual ICollection<WorkEvent> WorkEvents { get; set; }
         public override bool Equals(object obj)

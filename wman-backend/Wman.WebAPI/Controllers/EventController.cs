@@ -108,6 +108,12 @@ namespace Wman.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Assign a user to a specific event
+        /// </summary>
+        /// <param name="eventid">The id of the event</param>
+        /// <param name="userName">username of the user</param>
+        /// <returns>HTTP response code</returns>
         [HttpPost]
         [Route("assign")]
         public async Task<ActionResult> AssignUser(int eventid, string userName)
@@ -117,6 +123,11 @@ namespace Wman.WebAPI.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Lists all the users assigned to a selected event
+        /// </summary>
+        /// <param name="eventid">The ID of the event</param>
+        /// <returns>HTTP response code</returns>
         [HttpGet]
         [Route("users")]
         public async Task<ActionResult<ICollection<WmanUser>>> GetAllAssignedUsers(int eventid)
@@ -124,7 +135,6 @@ namespace Wman.WebAPI.Controllers
             var selectedEvent = await eventLogic.GetEvent(eventid);
             ;
             return Ok(selectedEvent.AssignedUsers);
-            throw new NotImplementedException();
         }
     }
 }
