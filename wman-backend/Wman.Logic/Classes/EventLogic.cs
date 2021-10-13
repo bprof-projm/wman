@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Wman.Data.DB_Connection_Tables;
 using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
 using Wman.Logic.Interfaces;
@@ -72,6 +73,38 @@ namespace Wman.Logic.Classes
             {
                 var result = mapper.Map<WorkEvent>(newWorkEvent);
                 var workEventInDb = await eventRepo.GetOne(Id);
+                if (workEventInDb.AssignedUsers != null)
+                {
+                    var eventssAtDnDTime =await (from x in eventRepo.GetAll()
+                                         where x.EstimatedStartDate >= workEventInDb.EstimatedStartDate && x.EstimatedStartDate <= workEventInDb.EstimatedFinishDate && x.EstimatedFinishDate >= workEventInDb.EstimatedStartDate && x.EstimatedFinishDate <= workEventInDb.EstimatedFinishDate
+                                         select x).ToListAsync();
+                    
+                    List<int> dnDUserIds = new List<int>();
+                    foreach (var item in workEventInDb.AssignedUsers)
+                    {
+                        dnDUserIds.Add(item.WmanUser.Id);
+                    }
+                    List<int> eventUserIdsAtDnDTime = new List<int>();
+
+                    foreach (var item in eventssAtDnDTime)
+                    {
+                        foreach (var item2 in item.AssignedUsers)
+                        {
+                            eventUserIdsAtDnDTime.Add(item2.WmanUser.Id);
+                        }
+                    }
+                    if(dnDUserIds.Any(x => eventUserIdsAtDnDTime.Any(y => y != x)))
+                    {
+                        result.JobDescription = workEventInDb.JobDescription;
+                        await eventRepo.Update(Id, result);
+                    }
+                    else
+                    {
+                        throw new ArgumentException("Assigned user conflict(user already assigned to an event at this time)");
+                    }
+
+
+                }
                 result.JobDescription = workEventInDb.JobDescription;
                 await eventRepo.Update(Id, result);
             }
