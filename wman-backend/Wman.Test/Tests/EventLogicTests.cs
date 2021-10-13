@@ -18,7 +18,6 @@ namespace Wman.Test.Tests
         private Mock<IWorkEventRepo> eventRepo;
         private Mock<IAddressRepo> addressRepo;
 
-
         private IMapper mapper;
 
         private List<WorkEvent> eventList;
@@ -33,6 +32,30 @@ namespace Wman.Test.Tests
 
             this.eventRepo = EventLogicBuilder.GetEventRepo(eventList);
             this.addressRepo = EventLogicBuilder.GetAddressRepo(addressList);
+        }
+
+        [Test]
+        public async Task UpdateEvent_UpdateExisitingEvent_SuccessfulOperation()
+        {
+            //Arrange
+            EventLogic eventLogic = new EventLogic(eventRepo.Object, mapper, addressRepo.Object);
+
+            WorkEvent workEvent = new WorkEvent
+            {
+                JobDescription = "MocskosLucsok",
+                EstimatedStartDate = new DateTime(2021, 10, 16),
+                EstimatedFinishDate = new DateTime(2021, 10, 16),
+                AddressId = 1,
+                WorkStartDate = new DateTime(2021, 10, 16),
+                WorkFinishDate = new DateTime(2021, 10, 16),
+                Status = Status.started
+            };
+
+            //Act
+            var result = eventLogic.UpdateEvent(eventList[0].Id, workEvent);
+
+            //Assert
+            this.eventRepo.Verify(x => x.Update(It.IsAny<int>(), It.IsAny<WorkEvent>()), Times.Once);
         }
 
         [Test]
@@ -69,10 +92,10 @@ namespace Wman.Test.Tests
             EventLogic eventLogic = new EventLogic(eventRepo.Object, mapper, addressRepo.Object);
 
             //Act
-            var result = eventLogic.GetEvent(eventList[0].Id);
+            var result = await eventLogic.GetEvent(eventList[0].Id);
 
             //Assert
-            Assert.That(result.Result.Id == eventList[0].Id);
+            Assert.That(result.Id == eventList[0].Id);
             this.eventRepo.Verify(x => x.GetOne(It.IsAny<int>()), Times.Once);
         }
 
