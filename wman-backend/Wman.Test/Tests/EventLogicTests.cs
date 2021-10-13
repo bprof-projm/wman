@@ -4,6 +4,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using Wman.Data.DB_Models;
 using Wman.Repository.Interfaces;
+using Wman.Test.Builders;
 
 namespace Wman.Test.Tests
 {
@@ -11,7 +12,7 @@ namespace Wman.Test.Tests
     {
         private Mock<IWorkEventRepo> eventRepo;
         private Mock<IAddressRepo> addressRepo;
-        private IMapper mapper;
+        private Mock<IMapper> mapper;
 
         private List<WorkEvent> eventList;
         private List<AddressHUN> addressList;
@@ -19,6 +20,9 @@ namespace Wman.Test.Tests
         [SetUp]
         public void SetUp()
         {
+            eventList = EventLogicBuilder.GetWorkEvents();
+            addressList = EventLogicBuilder.GetAddresses();
+            mapper = EventLogicBuilder.GetMapper();
 
         }
     }
