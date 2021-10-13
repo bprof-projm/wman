@@ -71,6 +71,8 @@ namespace Wman.Logic.Classes
             if (newWorkEvent.EstimatedStartDate < newWorkEvent.EstimatedFinishDate && newWorkEvent.EstimatedStartDate.Day == newWorkEvent.EstimatedFinishDate.Day)
             {
                 var result = mapper.Map<WorkEvent>(newWorkEvent);
+                var workEventInDb = await eventRepo.GetOne(Id);
+                result.JobDescription = workEventInDb.JobDescription;
                 await eventRepo.Update(Id, result);
             }
             else
