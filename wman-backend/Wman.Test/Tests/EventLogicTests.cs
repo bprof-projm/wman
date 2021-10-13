@@ -1,8 +1,13 @@
 ﻿using AutoMapper;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Wman.Data.DB_Models;
+using Wman.Logic.Classes;
+using Wman.Logic.DTO_Models;
 using Wman.Repository.Interfaces;
 using Wman.Test.Builders;
 
@@ -12,7 +17,9 @@ namespace Wman.Test.Tests
     {
         private Mock<IWorkEventRepo> eventRepo;
         private Mock<IAddressRepo> addressRepo;
-        private Mock<IMapper> mapper;
+
+
+        private IMapper mapper;
 
         private List<WorkEvent> eventList;
         private List<AddressHUN> addressList;
@@ -26,7 +33,51 @@ namespace Wman.Test.Tests
 
             this.eventRepo = EventLogicBuilder.GetEventRepo(eventList);
             this.addressRepo = EventLogicBuilder.GetAddressRepo(addressList);
+        }
 
+        [Test]
+        public async Task GetAllEvents_ReturnsRepoCorrectly()
+        {
+            //Arrange
+            EventLogic eventLogic = new EventLogic(eventRepo.Object, mapper, addressRepo.Object);
+
+            //Act
+            var result = eventLogic.GetAllEvents();
+
+            //Assert
+            Assert.That(result.Count() == eventList.Count());
+            this.eventRepo.Verify(x => x.GetAll(), Times.Once);
+        }
+
+        [Test]
+        public async Task CreateEvent_SuccessfulCreation()
+        {
+            //Arrange
+            EventLogic eventLogic = new EventLogic(eventRepo.Object, mapper, addressRepo.Object);
+
+            var helper = new AddressHUNDTO()
+            {
+                City = addressList[0].City,
+                BuildingNumber = addressList[0].BuildingNumber,
+                FloorDoor = addressList[0].Floordoor,
+                Street = addressList[0].Street,
+                ZIPCode = addressList[0].ZIPCode,
+            };
+
+            CreateEventDTO eventDTO = new CreateEventDTO()
+            {
+                JobDescription = "ValmiTestXDLOLNI",
+                EstimatedStartDate = new DateTime(2021,10,12,8,10,15),
+                EstimatedFinishDate = new DateTime(2021,10,12,9,0,0),
+                Address = helper,
+                Status = Status.awaiting
+            };
+
+            //Act
+            await eventLogic.CreateEvent(eventDTO);
+
+            //Assert
+            this.eventRepo.Verify(x => x.Add(It.IsAny<WorkEvent>()), Times.Once);
         }
     }
 }

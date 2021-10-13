@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MockQueryable.Moq;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -17,8 +18,9 @@ namespace Wman.Test.Builders
         public static Mock<IAddressRepo> GetAddressRepo(List<AddressHUN> addressList)
         {
             var addressRepo = new Mock<IAddressRepo>();
+            var mock = addressList.AsQueryable().BuildMock();
 
-            addressRepo.Setup(x => x.GetAll()).Returns(addressList.AsQueryable());
+            addressRepo.Setup(x => x.GetAll()).Returns(mock.Object);
             addressRepo.Setup(x => x.GetOne(It.IsAny<int>())).ReturnsAsync(addressList[0]);
 
             return addressRepo;
@@ -27,20 +29,20 @@ namespace Wman.Test.Builders
         public static Mock<IWorkEventRepo> GetEventRepo(List<WorkEvent> eventList)
         {
             var eventRepo = new Mock<IWorkEventRepo>();
+            var mock = eventList.AsQueryable().BuildMock();
 
-            eventRepo.Setup(x => x.GetAll()).Returns(eventList.AsQueryable());
+            eventRepo.Setup(x => x.GetAll()).Returns(mock.Object);
             eventRepo.Setup(x => x.GetOne(It.IsAny<int>())).ReturnsAsync(eventList[0]);
 
             return eventRepo;
         }
 
-
-        public static Mock<IMapper> GetMapper()
+        public static IMapper GetMapper()
         {
             var mapperconf = new MapperConfiguration(x => { x.AddProfile(new AutoMapperProfiles()); });
 
-            Mock<IMapper> mapper = new Mock<IMapper>(mapperconf.CreateMapper());
-
+            IMapper mapper = mapperconf.CreateMapper();
+            
             return mapper;
         }
         public static List<AddressHUN> GetAddresses()
@@ -87,10 +89,10 @@ namespace Wman.Test.Builders
             eventList.Add(new WorkEvent
             {
                 JobDescription = "PizzaDobálóKretén",
-                EstimatedStartDate = new DateTime(2021, 10, 10),
+                EstimatedStartDate = new DateTime(2021, 10, 16),
                 EstimatedFinishDate = new DateTime(2021, 10, 16),
                 AddressId = 1,
-                WorkStartDate = new DateTime(2021, 10, 10),
+                WorkStartDate = new DateTime(2021, 10, 16),
                 WorkFinishDate= new DateTime(2021, 10, 16),
                 Status = Status.started
             });
@@ -131,6 +133,5 @@ namespace Wman.Test.Builders
 
             return eventList;
         }
-
     }
 }
