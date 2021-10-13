@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using MockQueryable.Moq;
 using Moq;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +10,7 @@ using Wman.Logic.Classes;
 using Wman.Logic.DTO_Models;
 using Wman.Test.Builders;
 
-namespace Wman.Test
+namespace Wman.Test.Tests
 {
     public class AuthLogicTests
     {
