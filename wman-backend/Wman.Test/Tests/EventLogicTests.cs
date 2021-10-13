@@ -36,6 +36,19 @@ namespace Wman.Test.Tests
         }
 
         [Test]
+        public async Task DeleteEvent_SuccessfullyDeletesElement()
+        {
+            //Arrange
+            EventLogic eventLogic = new EventLogic(eventRepo.Object, mapper, addressRepo.Object);
+
+            //Act
+            var result = eventLogic.DeleteEvent(eventList[0].Id);
+
+            //Assert
+            this.eventRepo.Verify(x => x.Delete(It.IsAny<int>()), Times.Once);
+        }
+
+        [Test]
         public async Task GetAllEvents_ReturnsRepoCorrectly()
         {
             //Arrange
@@ -47,6 +60,20 @@ namespace Wman.Test.Tests
             //Assert
             Assert.That(result.Count() == eventList.Count());
             this.eventRepo.Verify(x => x.GetAll(), Times.Once);
+        }
+
+        [Test]
+        public async Task GetEvent_ReturnsWorkEvent_CompareToEventInList_Successful()
+        {
+            //Arrange
+            EventLogic eventLogic = new EventLogic(eventRepo.Object, mapper, addressRepo.Object);
+
+            //Act
+            var result = eventLogic.GetEvent(eventList[0].Id);
+
+            //Assert
+            Assert.That(result.Result.Id == eventList[0].Id);
+            this.eventRepo.Verify(x => x.GetOne(It.IsAny<int>()), Times.Once);
         }
 
         [Test]
