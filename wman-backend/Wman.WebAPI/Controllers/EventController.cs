@@ -105,5 +105,21 @@ namespace Wman.WebAPI.Controllers
                 return StatusCode(500, $"Internal server error : {ex}");
             }
         }
+
+        [HttpPost]
+        [Route("assign")]
+        public async Task<ActionResult> AssignUser(int eventid, string userName)
+        {
+            
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("users")]
+        public async Task<ActionResult<ICollection<WmanUser>>> GetAllAssignedUsers(int eventid)
+        {
+
+            throw new NotImplementedException();
+        }
     }
 }

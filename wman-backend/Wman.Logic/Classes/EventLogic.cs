@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Wman.Data.DB_Connection_Tables;
 using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
 using Wman.Logic.Interfaces;
@@ -37,6 +38,7 @@ namespace Wman.Logic.Classes
                     result.AddressId = find.Id;
                     result.Address = null;
                 }
+                result.AssignedUsers = new List<WmanUserWorkEvent>();
                 await eventRepo.Add(result);
             }
             else
