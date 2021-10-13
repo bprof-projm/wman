@@ -61,14 +61,25 @@ namespace Wman.Logic.Classes
             await eventRepo.Delete(Id);
         }
 
-        public IQueryable<WorkEvent> GetAllEvents()
+        public async Task<IQueryable<WorkEvent>> GetAllEvents()
         {
-            return eventRepo.GetAll();
+            var output = eventRepo.GetAll();
+            ;
+            foreach (var item in output)
+            {
+                if (item.Address.Id == 0)
+                {
+                    item.Address = await address.GetOne(item.AddressId);
+                }
+            }
+            return output;
         }
 
         public async Task<WorkEvent> GetEvent(int id)
         {
-            return await eventRepo.GetOne(id);
+            var output = await eventRepo.GetOne(id);
+            output.Address = await address.GetOne(output.AddressId);
+            return output;
         }
 
         public async Task UpdateEvent(int Id, WorkEvent newWorkEvent)

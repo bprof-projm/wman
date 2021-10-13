@@ -41,6 +41,7 @@ namespace Wman.Data.DB_Models
         public WorkEvent()
         {
             AssignedUsers = new List<WmanUser>();
+            this.Address = new AddressHUN();
         }
     }
 }

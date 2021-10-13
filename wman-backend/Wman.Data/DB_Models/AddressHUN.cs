@@ -34,6 +34,9 @@ namespace Wman.Data.DB_Models
         {
             return address1.City == address2.City && address1.Street == address2.Street && address1.ZIPCode == address2.ZIPCode;
         }
-
+        public AddressHUN()
+        {
+            this.WorkEvents = new List<WorkEvent>();
+        }
     }
 }
