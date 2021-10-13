@@ -20,12 +20,10 @@ namespace Wman.Test.Tests
         [SetUp]
         public void SetUp()
         {
-            this.eventList = EventLogicBuilder.GetWorkEvents();
-            this.addressList = EventLogicBuilder.GetAddresses();
-            this.mapper = EventLogicBuilder.GetMapper();
+            eventList = EventLogicBuilder.GetWorkEvents();
+            addressList = EventLogicBuilder.GetAddresses();
+            mapper = EventLogicBuilder.GetMapper();
 
-            this.eventRepo = EventLogicBuilder.GetEventRepo(eventList);
-            this.addressRepo = EventLogicBuilder.GetAddressRepo(addressList);
         }
     }
 }

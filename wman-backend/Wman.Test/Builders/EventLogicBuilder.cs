@@ -15,26 +15,6 @@ namespace Wman.Test.Builders
     public class EventLogicBuilder
     {
 
-        public static Mock<IAddressRepo> GetAddressRepo(List<AddressHUN> addressList)
-        {
-            var addressRepo = new Mock<IAddressRepo>();
-
-            addressRepo.Setup(x => x.GetAll()).Returns(addressList.AsQueryable());
-            addressRepo.Setup(x => x.GetOne(It.IsAny<int>())).ReturnsAsync(addressList[0]);
-
-            return addressRepo;
-        }
-
-        public static Mock<IWorkEventRepo> GetEventRepo(List<WorkEvent> eventList)
-        {
-            var eventRepo = new Mock<IWorkEventRepo>();
-
-            eventRepo.Setup(x => x.GetAll()).Returns(eventList.AsQueryable());
-            eventRepo.Setup(x => x.GetOne(It.IsAny<int>())).ReturnsAsync(eventList[0]);
-
-            return eventRepo;
-        }
-
         public static Mock<IMapper> GetMapper()
         {
             var mapperconf = new MapperConfiguration(x => { x.AddProfile(new AutoMapperProfiles()); });
