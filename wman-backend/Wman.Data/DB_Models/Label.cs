@@ -17,6 +17,6 @@ namespace Wman.Data.DB_Models
         public string Color { get; set; }
         public string Content { get; set; }
         [JsonIgnore]
-        public virtual ICollection<Label> WorkEvents { get; set; }
+        public virtual ICollection<WorkEvent> WorkEvents { get; set; }
     }
 }
