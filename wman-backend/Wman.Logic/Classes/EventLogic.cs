@@ -64,14 +64,13 @@ namespace Wman.Logic.Classes
         public async Task<IQueryable<WorkEvent>> GetAllEvents()
         {
             var output = eventRepo.GetAll();
-            ;
-            foreach (var item in output)
-            {
-                if (item.Address.Id == 0)
-                {
-                    item.Address = await address.GetOne(item.AddressId);
-                }
-            }
+            //foreach (var item in output)
+            //{
+            //    if (item.Address.Id == 0)
+            //    {
+            //        item.Address = await address.GetOne(item.AddressId);
+            //    }
+            //}
             return output;
         }
 
