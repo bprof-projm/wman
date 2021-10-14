@@ -108,18 +108,6 @@
             <param name="finishEventDate"></param>
             <returns>CalendarWorkEventDTO</returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.DemoController.HelloWorld">
-            <summary>
-            HTTPGET test method
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Wman.WebAPI.Controllers.DemoController.test">
-            <summary>
-            HTTPPost test method
-            </summary>
-            <returns>OK</returns>
-        </member>
         <member name="T:Wman.WebAPI.Controllers.EventController">
             <summary>
             EventController

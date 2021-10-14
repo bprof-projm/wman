@@ -19,7 +19,7 @@ namespace Wman.Logic.Classes
         IMapper mapper;
         IAddressRepo address;
         IWmanUserRepo wmanUserRepo;
-        public EventLogic(IWorkEventRepo eventRepo, IMapper mapper , IAddressRepo address, IWmanUserRepo wmanUserRepo)
+        public EventLogic(IWorkEventRepo eventRepo, IMapper mapper, IAddressRepo address, IWmanUserRepo wmanUserRepo)
         {
             this.eventRepo = eventRepo;
             this.mapper = mapper;
@@ -35,7 +35,7 @@ namespace Wman.Logic.Classes
             bool testResult = await this.DoTasksOverlap(selectedUser.WorkEvents, selectedEvent);
             ;
             selectedEvent.AssignedUsers.Add(selectedUser);
-           await this.eventRepo.Update(id, selectedEvent);
+            await this.eventRepo.Update(id, selectedEvent);
         }
 
         public async Task CreateEvent(CreateEventDTO workEvent)
@@ -51,14 +51,14 @@ namespace Wman.Logic.Classes
                     result.AddressId = find.Id;
                     result.Address = null;
                 }
-                
+
                 await eventRepo.Add(result);
             }
             else
             {
                 throw new ArgumentException("Events are not at the same day or ");
             }
-            
+
         }
 
         public async Task DeleteEvent(int Id)
@@ -91,7 +91,7 @@ namespace Wman.Logic.Classes
             await eventRepo.Update(Id, newWorkEvent);
         }
 
-      
+
 
         public async Task<ICollection<UserDTO>> GetAllAssignedUsers(int id)
         {
