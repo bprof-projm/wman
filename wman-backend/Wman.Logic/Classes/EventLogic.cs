@@ -59,7 +59,8 @@ namespace Wman.Logic.Classes
             {
                 throw new ArgumentException("Event not found! ");
             }
-            var selectedUser = new WmanUser();
+            var okUsers = new List<WmanUser>();
+            WmanUser selectedUser;
             bool testresult;
             foreach (var item in usernames)
             {
@@ -68,12 +69,20 @@ namespace Wman.Logic.Classes
                 {
                     throw new ArgumentException($"User: {0} not found", item);
                 }
+
                 testresult = await this.DoTasksOverlap(selectedUser.WorkEvents, selectedEvent);
                 if (testresult)
                 {
                     throw new InvalidOperationException(String.Format("User: {0} is busy during this event", selectedUser.UserName));
                 }
-                selectedEvent.AssignedUsers.Add(selectedUser);
+                else
+                {
+                    okUsers.Add(selectedUser);
+                }
+            }
+            foreach (var item in okUsers)
+            {
+                selectedEvent.AssignedUsers.Add(item);
                 await this.eventRepo.Update(eventID, selectedEvent);
             }
         }
