@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import { Col, Row } from "reactstrap";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -11,34 +10,52 @@ import "@fullcalendar/daygrid/main.css";
 import "@fullcalendar/timegrid/main.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./calendar.styles.css";
+import axios from "axios";
+import { Logout } from "../logout/logout.component";
+import { MyEvent } from "../event/event.component";
 
 class MyCalendar extends Component {
   state = {
     calendarEvents: [
       {
-        title: "Atlanta Monster",
+        description: "Atlanta Monster2",
         start: new Date("2021-10-04 00:00"),
+        title:'asd',
         end:new Date("2021-10-06 00:00"),
-        id: "99999998"
-      },
-      {
-        title: "My Favorite Murder",
-        start: new Date("2021-10-05 00:00"),
-        id: "99999999"
+        id: "99999998",
+        
       }
     ],
     events: [
-      { title: "Event 1", id: "1" },
-      { title: "Event 2", id: "2" },
-      { title: "Event 3", id: "3" },
-      { title: "Event 4", id: "4" },
-      { title: "Event 5", id: "5" }
-    ]
+      {
+        description: "Atlanta Monster2",
+        title:'asd',
+        start: new Date("2021-10-04 00:00"),
+        end:new Date("2021-10-06 00:00"),
+        id: "99999998"
+        
+      },
+      { description: "Event 2",title:'asd', id: "2" },
+      { description: "Event 3",title:'asd', id: "3" }
+    ],
+    key:"",
+    eventTitle:""
   };
 
   /**
    * adding dragable properties to external events through javascript
    */
+  getEvents = () =>{
+    const minTime = new Promise((resolve) => setTimeout(resolve, 200));
+    const req = axios.get(`https://mocki.io/v1/910b86b5-c17d-4b7f-a010-ef68461de47e`);
+    
+    Promise.all([minTime, req]).then((values) => {
+        const reqData = values[1];
+        console.log(reqData.data);
+        this.setState({ events: reqData.data.events });
+    }
+    );
+  }
   componentDidMount() {
     let draggableEl = document.getElementById("external-events");
     new Draggable(draggableEl, {
@@ -46,53 +63,28 @@ class MyCalendar extends Component {
       eventData: function(eventEl) {
         let title = eventEl.getAttribute("title");
         let id = eventEl.getAttribute("data");
+    
+    console.log(eventEl)
         return {
           title: title,
-          id: id
+          Id: id
         };
       }
     });
+    this.getEvents();    
   }
 
   /**
    * when we click on event we are displaying event details
    */
-  eventClick = eventClick => {
-    Alert.fire({
-      title: eventClick.event.title,
-      html:
-        `<div class="table-responsive">
-      <table class="table">
-      <tbody>
-      <tr >
-      <td>Title</td>
-      <td><strong>` +
-        eventClick.event.title +
-        `</strong></td>
-      </tr>
-      <tr >
-      <td>Start Time</td>
-      <td><strong>
-      ` +
-        eventClick.event.start +
-        `
-      </strong></td>
-      </tr>
-      </tbody>
-      </table>
-      </div>`,
-
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Remove Event",
-      cancelButtonText: "Close"
-    }).then(result => {
-      if (result.value) {
-        eventClick.event.remove(); // It will remove event from the calendar
-        Alert.fire("Deleted!", "Your Event has been deleted.", "success");
-      }
-    });
+  eventClick = eventClick => {    
+    console.log(eventClick);
+    /*return(
+      <MyEvent
+      key={eventClick.event.Id}
+      object={eventClick.event}
+    />)      */
+    
   };
 
   render() {
@@ -110,16 +102,16 @@ class MyCalendar extends Component {
               }}
             >
               <p align="center">
-                <strong> Events</strong>
+                <strong>Events</strong>
               </p>
               {this.state.events.map(event => (
                 <div
                   className="fc-event"
-                  title={event.title}
-                  data={event.id}
-                  key={event.id}
+                  title={event.JobDescription}
+                  data={event.Id}
+                  key={event.Id}
                 >
-                  {event.title}
+                  {event.JobDescription}
                 </div>
               ))}
             </div>
