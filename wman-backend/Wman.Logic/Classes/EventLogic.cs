@@ -27,15 +27,41 @@ namespace Wman.Logic.Classes
             this.wmanUserRepo = wmanUserRepo;
         }
 
-        public async Task AssignUser(int id, string username)
+        public async Task AssignUser(int eventID, string username)
         {
-
-            var selectedEvent = await this.GetEvent(id);
+            var selectedEvent = await this.GetEvent(eventID);
             var selectedUser = await wmanUserRepo.getUser(username);
             bool testResult = await this.DoTasksOverlap(selectedUser.WorkEvents, selectedEvent);
             ;
-            selectedEvent.AssignedUsers.Add(selectedUser);
-            await this.eventRepo.Update(id, selectedEvent);
+            if (testResult) //TODO: Teljesen blokkoljuk az ütközést, vagy csak figyelmeztessük a frontendet?
+            {
+                throw new InvalidOperationException();
+            }
+            else
+            {
+                selectedEvent.AssignedUsers.Add(selectedUser);
+                await this.eventRepo.Update(eventID, selectedEvent);
+            }
+        }
+
+        public async Task<ICollection<UserDTO>> MassAssignUser(int eventID, ICollection<string> usernames)
+        {
+            var successList = new List<UserDTO>();
+            var selectedEvent = await this.GetEvent(eventID);
+            var selectedUser = new WmanUser();
+            bool testresult;
+            foreach (var item in usernames)
+            {
+                selectedUser = await wmanUserRepo.getUser(item);
+                testresult = await this.DoTasksOverlap(selectedUser.WorkEvents, selectedEvent);
+                if (!testresult)
+                {
+                    selectedEvent.AssignedUsers.Add(selectedUser);
+                    await this.eventRepo.Update(eventID, selectedEvent);
+                    successList.Add(mapper.Map<UserDTO>(selectedUser));
+                }
+            }
+            return successList;
         }
 
         public async Task CreateEvent(CreateEventDTO workEvent)

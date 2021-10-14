@@ -124,6 +124,19 @@ namespace Wman.WebAPI.Controllers
         }
 
         /// <summary>
+        /// Assign multiple users at a time to a selected event.
+        /// </summary>
+        /// <param name="eventid">The ID of the event we'd like to add to</param>
+        /// <param name="usernames">A list of string string usernames, of which we'd like to assign to the event</param>
+        /// <returns>A list of userDTOs, where the users could be assigned without date collision</returns>
+        [HttpPost]
+        [Route("massAssing")]
+        public async Task<ActionResult<ICollection<UserDTO>>> MassAssignUsers(int eventid, [FromBody] ICollection<string> usernames)
+        {
+            return Ok(await eventLogic.MassAssignUser(eventid, usernames));
+        }
+
+        /// <summary>
         /// Lists all the users assigned to a selected event
         /// </summary>
         /// <param name="eventid">The ID of the event</param>
