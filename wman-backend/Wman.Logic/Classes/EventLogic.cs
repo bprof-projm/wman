@@ -176,7 +176,7 @@ namespace Wman.Logic.Classes
             {
                 var result = mapper.Map<WorkEvent>(newWorkEvent);
                 var workEventInDb = await eventRepo.GetOne(Id);
-                if (workEventInDb.AssignedUsers != null)
+                if (workEventInDb.AssignedUsers.Count > 0)
                 {
                     var eventssAtDnDTime =await (from x in eventRepo.GetAll()
                                          where x.EstimatedStartDate >= workEventInDb.EstimatedStartDate && x.EstimatedStartDate <= workEventInDb.EstimatedFinishDate && x.EstimatedFinishDate >= workEventInDb.EstimatedStartDate && x.EstimatedFinishDate <= workEventInDb.EstimatedFinishDate
