@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Wman.Test.Builders
 {
-    class CalendarEventLogicBuilder
+    public class CalendarEventLogicBuilder
     {
     }
 }
