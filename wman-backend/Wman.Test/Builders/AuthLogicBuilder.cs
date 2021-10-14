@@ -2,14 +2,10 @@
 using Microsoft.Extensions.Configuration;
 using MockQueryable.Moq;
 using Moq;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Wman.Data.DB_Models;
-using Wman.Logic.Classes;
-using Wman.Logic.DTO_Models;
 
 namespace Wman.Test.Builders
 {
@@ -42,17 +38,17 @@ namespace Wman.Test.Builders
             return mgr;
         }
 
-        public static Mock<RoleManager<IdentityRole>> GetMockRoleManager()
+        public static Mock<RoleManager<WmanRole>> GetMockRoleManager()
         {
-            var roleStore = new Mock<IRoleStore<IdentityRole>>();
+            var roleStore = new Mock<IRoleStore<WmanRole>>();
 
-            var role = new Mock<RoleManager<IdentityRole>>(
+            var role = new Mock<RoleManager<WmanRole>>(
                          roleStore.Object, null, null, null, null);
 
-            role.Setup(x => x.CreateAsync(It.IsAny<IdentityRole>())).ReturnsAsync(IdentityResult.Success);
-            role.Setup(s => s.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(new IdentityRole
+            role.Setup(x => x.CreateAsync(It.IsAny<WmanRole>())).ReturnsAsync(IdentityResult.Success);
+            role.Setup(s => s.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(new WmanRole
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = 0,
                 Name = "Test03",
                 NormalizedName = "TEST03"
             });
@@ -82,7 +78,6 @@ namespace Wman.Test.Builders
                 Email = "sanyesz@gmail.com",
                 FirstName = "Sanyi",
                 LastName = "Hurutos",
-                Picture = "asd",
                 SecurityStamp = Guid.NewGuid().ToString()
             });
             users.Add(new WmanUser
@@ -92,7 +87,6 @@ namespace Wman.Test.Builders
                 Email = "foksok@gmail.com",
                 FirstName = "Hamis",
                 LastName = "Süni",
-                Picture = "asd",
                 SecurityStamp = Guid.NewGuid().ToString()
             });
             users.Add(new WmanUser
@@ -102,7 +96,6 @@ namespace Wman.Test.Builders
                 Email = "zsoltas@gmail.com",
                 FirstName = "Medve",
                 LastName = "Obudai",
-                Picture = "asd",
                 SecurityStamp = Guid.NewGuid().ToString()
             });
 
