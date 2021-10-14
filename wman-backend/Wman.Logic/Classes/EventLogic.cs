@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,19 +18,20 @@ namespace Wman.Logic.Classes
         IWorkEventRepo eventRepo;
         IMapper mapper;
         IAddressRepo address;
-        public EventLogic(IWorkEventRepo eventRepo, IMapper mapper , IAddressRepo address)
+        UserManager<WmanUser> userManager;
+        public EventLogic(IWorkEventRepo eventRepo, IMapper mapper , IAddressRepo address, UserManager<WmanUser> userManager)
         {
             this.eventRepo = eventRepo;
             this.mapper = mapper;
+            this.userManager = userManager;
             this.address = address;
         }
 
-        public async Task AssignUser(int id, WmanUser user)
+        public async Task AssignUser(int id, string username)
         {
             var selectedEvent = await this.GetEvent(id);
-
-            selectedEvent.AssignedUsers.Add(user);
-            ;
+            var selectedUser =  await userManager.Users.Where(x => x.UserName == username).SingleOrDefaultAsync();
+            selectedEvent.AssignedUsers.Add(selectedUser);
            await this.eventRepo.Update(id, selectedEvent);
         }
 
@@ -84,6 +86,21 @@ namespace Wman.Logic.Classes
         public async Task UpdateEvent(int Id, WorkEvent newWorkEvent)
         {
             await eventRepo.Update(Id, newWorkEvent);
+        }
+
+      
+
+        public async Task<ICollection<UserDTO>> GetAllAssignedUsers(int id)
+        {
+            var selectedEvent = await GetEvent(id);
+            return mapper.Map<List<UserDTO>>(selectedEvent.AssignedUsers);
+        }
+        public async Task<ICollection<WorkEvent>> JobsOfUser(string username)
+        {
+            var selectedUser = await eventRepo.getUser(username);
+            var output = selectedUser.WorkEvents;
+            ;
+            return output;
         }
     }
 }

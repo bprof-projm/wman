@@ -16,6 +16,10 @@ namespace Wman.Logic.Interfaces
         Task<WorkEvent> GetEvent(int id);
         Task<IQueryable<WorkEvent>> GetAllEvents();
 
-        Task AssignUser(int id, WmanUser iser);
+        Task AssignUser(int id, string username);
+
+        Task<ICollection<UserDTO>> GetAllAssignedUsers(int id);
+
+        Task<ICollection<WorkEvent>> JobsOfUser(string username);
     }
 }

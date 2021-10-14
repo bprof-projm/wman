@@ -79,7 +79,7 @@ namespace Wman.WebAPI.Controllers
         {
             try
             {
-                var output = eventLogic.GetAllEvents();
+                var output = await eventLogic.GetAllEvents();
                 return Ok(output);
             }
             catch (Exception ex)
@@ -119,7 +119,7 @@ namespace Wman.WebAPI.Controllers
         public async Task<ActionResult> AssignUser(int eventid, string userName)
         {
             var selectedUser = await authLogic.GetOneUser(userName);
-            await eventLogic.AssignUser(eventid, selectedUser);
+            await eventLogic.AssignUser(eventid, userName);
             return Ok();
         }
 
@@ -130,11 +130,17 @@ namespace Wman.WebAPI.Controllers
         /// <returns>HTTP response code</returns>
         [HttpGet]
         [Route("users")]
-        public async Task<ActionResult<ICollection<WmanUser>>> GetAllAssignedUsers(int eventid)
+        public async Task<ActionResult<ICollection<UserDTO>>> GetAllAssignedUsers(int eventid)
         {
-            var selectedEvent = await eventLogic.GetEvent(eventid);
-            ;
-            return Ok(selectedEvent.AssignedUsers);
+            return Ok(await eventLogic.GetAllAssignedUsers(eventid));
+        }
+
+        [HttpGet]
+        [Route("jobs")]
+        public async Task<ActionResult<ICollection<WorkEvent>>> getAssignedJobsOfUser(string username)
+        {
+            var result = await eventLogic.JobsOfUser(username);
+            return Ok(result);
         }
     }
 }

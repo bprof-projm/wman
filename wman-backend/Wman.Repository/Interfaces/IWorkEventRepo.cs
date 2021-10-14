@@ -9,5 +9,6 @@ namespace Wman.Repository.Interfaces
 {
     public interface IWorkEventRepo : IRepository<WorkEvent,int>
     {
+        Task<WmanUser> getUser(string username);
     }
 }

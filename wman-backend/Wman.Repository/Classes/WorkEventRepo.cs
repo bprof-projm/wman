@@ -42,7 +42,14 @@ namespace Wman.Repository.Classes
                           select x).Include(x => x.AssignedUsers).FirstOrDefaultAsync();
             return entity;
         }
-
+        public async Task<WmanUser> getUser(string username)
+        {
+            var entity = await db.Users
+                .Where(x => x.UserName == username)
+                .Include(x => x.WorkEvents)
+                .SingleOrDefaultAsync();
+            return entity;
+        }
         public async Task Update(int oldKey, WorkEvent element)
         {
             var oldWorkEvent = await GetOne(oldKey);

@@ -17,6 +17,7 @@ namespace Wman.Logic.Helpers
             CreateMap<IdentityResult, UserDTO>();
             CreateMap<CreateEventDTO, AddressHUNDTO>();
             CreateMap<AddressHUNDTO, AddressHUN>();
+            CreateMap<WmanUser, UserDTO>().ReverseMap();
             CreateMap<CreateEventDTO, WorkEvent>()
     // chose the destination-property and map the source itself
             .ForMember(dest => dest.Address, x => x.MapFrom(src => src.Address));
