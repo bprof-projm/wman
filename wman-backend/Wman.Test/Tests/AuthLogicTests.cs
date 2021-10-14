@@ -14,7 +14,6 @@ namespace Wman.Test.Tests
 {
     public class AuthLogicTests
     {
-        
         private Mock<UserManager<WmanUser>> userManager;
         private Mock<RoleManager<WmanRole>> roleManager;
         private IConfiguration config;
@@ -34,6 +33,7 @@ namespace Wman.Test.Tests
         [Test]
         public async Task LoginUser_TokenGranted_OnNewlyCreatedUser()
         {
+            //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
             RegisterDTO user = new RegisterDTO()
@@ -45,12 +45,13 @@ namespace Wman.Test.Tests
                 Lastname = "VeszettMacska",
             };
 
+            LoginDTO model = new LoginDTO() { LoginName = user.Email, Password = user.Password };
+
+            //Act
             var akarmi = await authLogic.CreateUser(user);
-
-            LoginDTO model = new LoginDTO() { LoginName=user.Email, Password=user.Password };
-
             var result = await authLogic.LoginUser(model);
 
+            //Assert
             Assert.That(result.Token != null);
 
             this.userManager.Verify(x => x.FindByNameAsync(model.LoginName), Times.Never);
@@ -61,10 +62,13 @@ namespace Wman.Test.Tests
         [Test]
         public async Task GetOneUser()
         {
+            //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
+            //Act
             var result = await authLogic.GetOneUser(users[0].UserName);
 
+            //Assert
             Assert.AreEqual(result.UserName, users[0].UserName);
 
             this.userManager.Verify(x => x.Users, Times.Once);
@@ -73,10 +77,13 @@ namespace Wman.Test.Tests
         [Test]
         public async Task GetAllUsers_ReturnsRepoProperly()
         {
+            //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
+            //Act
             var result = await authLogic.GetAllUsers();
 
+            //Assert
             Assert.AreEqual(users.Count(), result.Count());
 
             this.userManager.Verify(x => x.Users, Times.Once);
@@ -85,6 +92,7 @@ namespace Wman.Test.Tests
         [Test]
         public async Task CreateUser_SucceededCreation()
         {
+            //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
             RegisterDTO user = new RegisterDTO()
@@ -96,8 +104,10 @@ namespace Wman.Test.Tests
                 Lastname = "VeszettMacska",
             };
 
+            //Act
             var result = await authLogic.CreateUser(user);
 
+            //Assert
             Assert.True(result.Succeeded);
             Assert.That(users.Count == 4);
 
@@ -108,6 +118,7 @@ namespace Wman.Test.Tests
         [Test]
         public async Task CreateUser_FailedCreation_EmailAlreadyInRepo()
         {
+            //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
             RegisterDTO user = new RegisterDTO()
@@ -119,8 +130,10 @@ namespace Wman.Test.Tests
                 Lastname = "VeszettMacska",
             };
 
+            //Act
             var result = await authLogic.CreateUser(user);
 
+            //Assert
             Assert.True(!result.Succeeded);
             Assert.That(users.Count == 3);
 
@@ -131,6 +144,7 @@ namespace Wman.Test.Tests
         [Test]
         public async Task DeleteUser_SucceededDeletion_OnRecentlyCreatedUserAndByName()
         {
+            //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
             RegisterDTO user = new RegisterDTO()
@@ -142,12 +156,14 @@ namespace Wman.Test.Tests
                 Lastname = "VeszettMacska",
             };
 
+            //Act
             await authLogic.CreateUser(user);
 
             //we have 4 users in the repo right now
             var result = await authLogic.DeleteUser(user.Username);
             var result2 = await authLogic.DeleteUser("ArnoldBalValla");
-
+            
+            //Assert
             //Should be 2 users in the repo after 2 deletions
             Assert.True(result.Succeeded);
             Assert.AreEqual(2, users.Count);
@@ -160,10 +176,13 @@ namespace Wman.Test.Tests
         [Test]
         public async Task RemoveUserFromRole_RemovesSuccessfully()
         {
+            //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
+            //Act
             var result = await authLogic.RemoveUserFromRole(users[2].UserName, "Debug");
 
+            //Assert
             Assert.That(result == "Success");
 
             this.userManager.Verify(x => x.FindByNameAsync(users[2].UserName), Times.Once);
@@ -173,10 +192,13 @@ namespace Wman.Test.Tests
         [Test]
         public async Task GetAllRolesOfUser_Returns4Roles()
         {
+            //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
+            //Act
             var result = await authLogic.GetAllRolesOfUser(users[2]);
 
+            //Assert
             Assert.AreEqual(4, result.Count());
 
             this.userManager.Verify(x => x.GetRolesAsync(It.IsAny<WmanUser>()), Times.Once);
@@ -185,10 +207,13 @@ namespace Wman.Test.Tests
         [Test]
         public async Task GetAllUsersOfRole_Returns3Users()
         {
+            //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
+            //Act
             var result = await authLogic.GetAllUsersOfRole("Test");
 
+            //Assert
             Assert.AreEqual(3, result.Count());
             this.userManager.Verify(x => x.GetUsersInRoleAsync(It.IsAny<string>()), Times.Once);
         }
@@ -196,11 +221,14 @@ namespace Wman.Test.Tests
         [Test]
         public async Task HasRole_And_HasRoleByName_ReturnsSuccessful()
         {
+            //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
+            //Act
             var result = await authLogic.HasRole(users[2], "Debug");
             var resultByName = await authLogic.HasRoleByName(users[2].UserName, "Debug");
 
+            //Assert
             Assert.That(result && resultByName);
 
             this.userManager.Verify(x => x.FindByNameAsync(It.IsAny<string>()), Times.Once);
@@ -210,13 +238,15 @@ namespace Wman.Test.Tests
         [Test]
         public async Task RoleCreationAndAssignment_Successful()
         {
+            //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
-
-            var createdRole = await authLogic.CreateRole("Test01");
-
             List<string> roleTest = new List<string>() { "Test01" };
+
+            //Act
+            var createdRole = await authLogic.CreateRole("Test01");
             var addRole = await authLogic.AssignRolesToUser(users[2], roleTest);
 
+            //Assert
             Assert.That(createdRole);
             Assert.That(addRole);
 
@@ -230,6 +260,7 @@ namespace Wman.Test.Tests
         [Test]
         public async Task UpdateUser_SucceededUpdate_ExistingUser()
         {
+            //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
             UserDTO user = new UserDTO()
@@ -242,8 +273,10 @@ namespace Wman.Test.Tests
 
             string helper = users[0].UserName;
 
+            //Act
             var result = await authLogic.UpdateUser(helper, "miAR3dV2Sf0s", user);
 
+            //Assert
             Assert.That(result.Succeeded);
 
             this.userManager.Verify(x => x.UpdateAsync(It.IsAny<WmanUser>()), Times.Once);
@@ -251,12 +284,15 @@ namespace Wman.Test.Tests
         }
 
         [Test]
-        public async Task SwitchRoleOfUser()
+        public async Task SwitchRoleOfUser_ExistingUser_SuccessfulOperation()
         {
+            //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
 
+            //Act
             var result = await authLogic.SwitchRoleOfUser(users[2].UserName, "Debug");
 
+            //Assert
             Assert.True(result);
 
             this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(),It.IsAny<string>()), Times.Once);
