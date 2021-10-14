@@ -177,8 +177,20 @@ namespace Wman.WebAPI.Controllers
         [Route("jobs")]
         public async Task<ActionResult<ICollection<WorkEvent>>> getAssignedJobsOfUser(string username)
         {
-            var result = await authLogic.JobsOfUser(username);
-            return Ok(result);
+            try
+            {
+                var result = await authLogic.JobsOfUser(username);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                if (ex is InvalidOperationException || ex is ArgumentException)
+                {
+                    return StatusCode(400, $"Error: {ex}");
+
+                }
+                return StatusCode(500, $"Internal server error : {ex}");
+            }  
         }
 
     }

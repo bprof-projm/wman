@@ -30,12 +30,20 @@ namespace Wman.Logic.Classes
         public async Task AssignUser(int eventID, string username)
         {
             var selectedEvent = await this.GetEvent(eventID);
+            if (selectedEvent == null)
+            {
+                throw new ArgumentException("Event not found! ");
+            }
             var selectedUser = await wmanUserRepo.getUser(username);
+            if (selectedUser == null)
+            {
+                throw new ArgumentException("User not found! ");
+            }
             bool testResult = await this.DoTasksOverlap(selectedUser.WorkEvents, selectedEvent);
             ;
             if (testResult) //TODO: Teljesen blokkoljuk az ütközést, vagy csak figyelmeztessük a frontendet?
             {
-                throw new InvalidOperationException();
+                throw new ArgumentException("User is already busy during this event's estimated timeframe! ");
             }
             else
             {
@@ -48,11 +56,19 @@ namespace Wman.Logic.Classes
         {
             var successList = new List<UserDTO>();
             var selectedEvent = await this.GetEvent(eventID);
+            if (selectedEvent == null)
+            {
+                throw new ArgumentException("Event not found! ");
+            }
             var selectedUser = new WmanUser();
             bool testresult;
             foreach (var item in usernames)
             {
                 selectedUser = await wmanUserRepo.getUser(item);
+                if (selectedUser == null)
+                {
+                    throw new ArgumentException($"User: {0} not found", item);
+                }
                 testresult = await this.DoTasksOverlap(selectedUser.WorkEvents, selectedEvent);
                 if (!testresult)
                 {

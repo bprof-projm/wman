@@ -59,7 +59,7 @@ namespace Wman.WebAPI.Controllers
         {
             try
             {
-                var entity =await eventLogic.GetEvent(Id);
+                var entity = await eventLogic.GetEvent(Id);
                 return Ok(entity);
             }
             catch (Exception ex)
@@ -118,22 +118,44 @@ namespace Wman.WebAPI.Controllers
         [Route("assign")]
         public async Task<ActionResult> AssignUser(int eventid, string userName)
         {
-            var selectedUser = await authLogic.GetOneUser(userName);
-            await eventLogic.AssignUser(eventid, userName);
-            return Ok();
+            try
+            {
+                await eventLogic.AssignUser(eventid, userName);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                if (ex is ArgumentException)
+                {
+                    return StatusCode(400, $"Error : {ex}");
+                }
+                return StatusCode(500, $"Internal server error : {ex}");
+            }
+
         }
 
         /// <summary>
         /// Assign multiple users at a time to a selected event.
         /// </summary>
         /// <param name="eventid">The ID of the event we'd like to add to</param>
-        /// <param name="usernames">A list of string string usernames, of which we'd like to assign to the event</param>
+        /// <param name="usernames">A list of string string usernames, which we'd like to assign to the event</param>
         /// <returns>A list of userDTOs, where the users could be assigned without date collision</returns>
         [HttpPost]
-        [Route("massAssing")]
+        [Route("massAssign")]
         public async Task<ActionResult<ICollection<UserDTO>>> MassAssignUsers(int eventid, [FromBody] ICollection<string> usernames)
         {
-            return Ok(await eventLogic.MassAssignUser(eventid, usernames));
+            try
+            {
+                return Ok(await eventLogic.MassAssignUser(eventid, usernames));
+            }
+            catch (Exception ex)
+            {
+                if (ex is ArgumentException)
+                {
+                    return StatusCode(400, $"Error : {ex}");
+                }
+                return StatusCode(500, $"Internal server error : {ex}");
+            }
         }
 
         /// <summary>

@@ -244,8 +244,15 @@ namespace Wman.Logic.Classes
         public async Task<ICollection<WorkEvent>> JobsOfUser(string username)
         {
             var selectedUser = await wmanUserRepo.getUser(username);
+            if (selectedUser == null)
+            {
+                throw new ArgumentException("User not found!");
+            }
             var output = selectedUser.WorkEvents;
-            ;
+            if (output.Count() == 0)
+            {
+                throw new InvalidOperationException("User has no assigned jobs! ");
+            }
             return output;
         }
     }
