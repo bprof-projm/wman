@@ -163,7 +163,7 @@ namespace Wman.Logic.Classes
 
         public async Task<bool> HasRole(WmanUser user, string role)
         {
-            if ( await userManager.IsInRoleAsync(user, role))
+            if (await userManager.IsInRoleAsync(user, role))
             {
                 return true;
             }
@@ -241,14 +241,15 @@ namespace Wman.Logic.Classes
             var users = await this.userManager.GetUsersInRoleAsync(roleId);
             return users.ToList();
         }
-        public async Task<ICollection<WorkEvent>> JobsOfUser(string username)
+
+        public async Task<IEnumerable<int>> JobsOfUser(string username)
         {
             var selectedUser = await wmanUserRepo.getUser(username);
             if (selectedUser == null)
             {
                 throw new ArgumentException("User not found!");
             }
-            var output = selectedUser.WorkEvents;
+            var output = selectedUser.WorkEvents.Select(x => x.Id);
             if (output.Count() == 0)
             {
                 throw new InvalidOperationException("User has no assigned jobs! ");

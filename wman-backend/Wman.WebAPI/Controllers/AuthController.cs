@@ -18,7 +18,7 @@ namespace Wman.WebAPI.Controllers
     [ApiController]
 
     [Route("[controller]")]
-    
+
     public class AuthController : Controller
     {
         IAuthLogic authLogic;
@@ -121,6 +121,7 @@ namespace Wman.WebAPI.Controllers
         /// Update a user
         /// </summary>
         /// <param name="oldUsername">Prev. id</param>
+        /// <param name="pwd">Password of the user to be updated</param>
         /// <param name="user">User to be updated</param>
         [HttpPut("{oldUsername}")]
         //[Authorize(Roles = "Admin")]
@@ -169,13 +170,13 @@ namespace Wman.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Get all the jobs assigned to the specified user
+        /// Get all the ids of the jobs assigned to the specified user
         /// </summary>
-        /// <param name="username"></param>
-        /// <returns></returns>
+        /// <param name="username">Username of the searched user</param>
+        /// <returns>A collection of ids that are assigned to the specified user</returns>
         [HttpGet]
         [Route("jobs")]
-        public async Task<ActionResult<ICollection<WorkEvent>>> getAssignedJobsOfUser(string username)
+        public async Task<ActionResult<ICollection<int>>> getAssignedJobsOfUser(string username)
         {
             try
             {
@@ -190,7 +191,7 @@ namespace Wman.WebAPI.Controllers
 
                 }
                 return StatusCode(500, $"Internal server error : {ex}");
-            }  
+            }
         }
 
     }

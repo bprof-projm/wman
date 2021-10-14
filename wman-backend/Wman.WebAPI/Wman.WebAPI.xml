@@ -46,6 +46,7 @@
             Update a user
             </summary>
             <param name="oldUsername">Prev. id</param>
+            <param name="pwd">Password of the user to be updated</param>
             <param name="user">User to be updated</param>
         </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.Login(Wman.Logic.DTO_Models.LoginDTO)">
@@ -159,7 +160,7 @@
             Assign multiple users at a time to a selected event.
             </summary>
             <param name="eventid">The ID of the event we'd like to add to</param>
-            <param name="usernames">A list of string string usernames, of which we'd like to assign to the event</param>
+            <param name="usernames">A list of string string usernames, which we'd like to assign to the event</param>
             <returns>A list of userDTOs, where the users could be assigned without date collision</returns>
         </member>
         <member name="M:Wman.WebAPI.Controllers.EventController.GetAllAssignedUsers(System.Int32)">
