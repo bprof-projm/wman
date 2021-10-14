@@ -95,12 +95,6 @@ namespace Wman.Logic.Classes
             var selectedEvent = await GetEvent(id);
             return mapper.Map<List<UserDTO>>(selectedEvent.AssignedUsers);
         }
-        public async Task<ICollection<WorkEvent>> JobsOfUser(string username)
-        {
-            var selectedUser = await eventRepo.getUser(username);
-            var output = selectedUser.WorkEvents;
-            ;
-            return output;
-        }
+
     }
 }

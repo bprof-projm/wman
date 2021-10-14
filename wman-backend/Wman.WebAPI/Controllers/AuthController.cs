@@ -167,6 +167,19 @@ namespace Wman.WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        
+
+        /// <summary>
+        /// Get all the jobs assigned to the specified user
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("jobs")]
+        public async Task<ActionResult<ICollection<WorkEvent>>> getAssignedJobsOfUser(string username)
+        {
+            var result = await authLogic.JobsOfUser(username);
+            return Ok(result);
+        }
+
     }
 }

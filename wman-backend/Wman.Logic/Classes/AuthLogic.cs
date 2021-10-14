@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
 using Wman.Logic.Interfaces;
+using Wman.Repository.Interfaces;
 
 namespace Wman.Logic.Classes
 {
@@ -20,12 +21,14 @@ namespace Wman.Logic.Classes
     {
         UserManager<WmanUser> userManager;
         RoleManager<WmanRole> roleManager;
+        IWmanUserRepo wmanUserRepo;
         private IConfiguration Configuration;
-        public AuthLogic(UserManager<WmanUser> userManager, RoleManager<WmanRole> roleManager, IConfiguration configuration)
+        public AuthLogic(UserManager<WmanUser> userManager, RoleManager<WmanRole> roleManager, IConfiguration configuration, IWmanUserRepo wmanUserRepo)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.Configuration = configuration;
+            this.wmanUserRepo = wmanUserRepo;
         }
         public async Task<IQueryable<WmanUser>> GetAllUsers()
         {
@@ -237,6 +240,13 @@ namespace Wman.Logic.Classes
         {
             var users = await this.userManager.GetUsersInRoleAsync(roleId);
             return users.ToList();
+        }
+        public async Task<ICollection<WorkEvent>> JobsOfUser(string username)
+        {
+            var selectedUser = await wmanUserRepo.getUser(username);
+            var output = selectedUser.WorkEvents;
+            ;
+            return output;
         }
     }
 }

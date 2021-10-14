@@ -7,8 +7,8 @@ using Wman.Data.DB_Models;
 
 namespace Wman.Repository.Interfaces
 {
-    public interface IWorkEventRepo : IRepository<WorkEvent,int>
+    public interface IWmanUserRepo
     {
-        
+        Task<WmanUser> getUser(string username);
     }
 }

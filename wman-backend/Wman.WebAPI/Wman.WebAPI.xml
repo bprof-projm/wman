@@ -55,6 +55,13 @@
             <param name="model">Login details</param>
             <returns>Hopefully a jwt token</returns>
         </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.getAssignedJobsOfUser(System.String)">
+            <summary>
+            Get all the jobs assigned to the specified user
+            </summary>
+            <param name="username"></param>
+            <returns></returns>
+        </member>
         <member name="T:Wman.WebAPI.Controllers.CalendarEventController">
             <summary>
             CalendarEvent controller

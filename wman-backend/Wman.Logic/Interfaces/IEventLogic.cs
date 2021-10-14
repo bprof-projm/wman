@@ -20,6 +20,6 @@ namespace Wman.Logic.Interfaces
 
         Task<ICollection<UserDTO>> GetAllAssignedUsers(int id);
 
-        Task<ICollection<WorkEvent>> JobsOfUser(string username);
+
     }
 }

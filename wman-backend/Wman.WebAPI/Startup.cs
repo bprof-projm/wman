@@ -61,6 +61,7 @@ namespace Wman.WebAPI
             services.AddTransient<IWorkEventRepo, WorkEventRepo>();
             services.AddTransient<IPicturesRepo, PicturesRepo>();
             services.AddTransient<ILabelRepo, LabelRepo>();
+            services.AddTransient<IWmanUserRepo, WmanUserRepo>();
             services.AddTransient<IAddressRepo, AddressRepo>();
 
             services.AddSwaggerGen(c =>

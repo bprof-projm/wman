@@ -135,12 +135,6 @@ namespace Wman.WebAPI.Controllers
             return Ok(await eventLogic.GetAllAssignedUsers(eventid));
         }
 
-        [HttpGet]
-        [Route("jobs")]
-        public async Task<ActionResult<ICollection<WorkEvent>>> getAssignedJobsOfUser(string username)
-        {
-            var result = await eventLogic.JobsOfUser(username);
-            return Ok(result);
-        }
+
     }
 }
