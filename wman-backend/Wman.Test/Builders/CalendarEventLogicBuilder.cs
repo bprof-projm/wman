@@ -52,8 +52,8 @@ namespace Wman.Test.Builders
             eventList.Add(new WorkEvent
             {
                 JobDescription = "Allahmashhallah",
-                EstimatedStartDate = DateTime.UtcNow.AddDays(1),
-                EstimatedFinishDate = DateTime.UtcNow.AddDays(1).AddMinutes(40),
+                EstimatedStartDate = DateTime.UtcNow.AddDays(7),
+                EstimatedFinishDate = DateTime.UtcNow.AddDays(7).AddMinutes(40),
                 AddressId = 3,
                 WorkStartDate = new DateTime(2021, 10, 15),
                 WorkFinishDate = new DateTime(2021, 10, 18),
@@ -63,8 +63,19 @@ namespace Wman.Test.Builders
             eventList.Add(new WorkEvent
             {
                 JobDescription = "Boombliallahkutarvashmir",
+                EstimatedStartDate = DateTime.UtcNow.AddDays(20),
+                EstimatedFinishDate = DateTime.UtcNow.AddDays(20).AddMinutes(40),
+                AddressId = 3,
+                WorkStartDate = new DateTime(2021, 10, 10),
+                WorkFinishDate = new DateTime(2021, 10, 12),
+                Status = Status.finished
+            });
+
+            eventList.Add(new WorkEvent
+            {
+                JobDescription = "Boombliallahkutarvashmir",
                 EstimatedStartDate = new DateTime(2021, 10, 10),
-                EstimatedFinishDate = new DateTime(2021, 10, 12),
+                EstimatedFinishDate = new DateTime(2021, 10, 10),
                 AddressId = 3,
                 WorkStartDate = new DateTime(2021, 10, 10),
                 WorkFinishDate = new DateTime(2021, 10, 12),
