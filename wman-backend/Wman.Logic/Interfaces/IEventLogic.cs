@@ -20,6 +20,6 @@ namespace Wman.Logic.Interfaces
 
         Task<ICollection<UserDTO>> GetAllAssignedUsers(int eventID);
 
-        Task<ICollection<UserDTO>> MassAssignUser(int eventID, ICollection<string> usernames);
+        Task MassAssignUser(int eventID, ICollection<string> usernames);
     }
 }

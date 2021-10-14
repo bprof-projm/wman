@@ -58,10 +58,10 @@
         </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.getAssignedJobsOfUser(System.String)">
             <summary>
-            Get all the jobs assigned to the specified user
+            Get all the ids of the jobs assigned to the specified user
             </summary>
-            <param name="username"></param>
-            <returns></returns>
+            <param name="username">Username of the searched user</param>
+            <returns>A collection of ids that are assigned to the specified user</returns>
         </member>
         <member name="T:Wman.WebAPI.Controllers.CalendarEventController">
             <summary>

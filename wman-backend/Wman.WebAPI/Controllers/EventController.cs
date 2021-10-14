@@ -16,7 +16,7 @@ namespace Wman.WebAPI.Controllers
     /// </summary>
     [Route("[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class EventController : ControllerBase
     {
         IEventLogic eventLogic;
@@ -142,17 +142,22 @@ namespace Wman.WebAPI.Controllers
         /// <returns>A list of userDTOs, where the users could be assigned without date collision</returns>
         [HttpPost]
         [Route("massAssign")]
-        public async Task<ActionResult<ICollection<UserDTO>>> MassAssignUsers(int eventid, [FromBody] ICollection<string> usernames)
+        public async Task<ActionResult> MassAssignUsers(int eventid, [FromBody] ICollection<string> usernames)
         {
             try
             {
-                return Ok(await eventLogic.MassAssignUser(eventid, usernames));
+                await eventLogic.MassAssignUser(eventid, usernames);
+                return Ok();
             }
             catch (Exception ex)
             {
                 if (ex is ArgumentException)
                 {
                     return StatusCode(400, $"Error : {ex}");
+                }
+                else if (ex is InvalidOperationException)
+                {
+                    return StatusCode(405, $"Error: {ex}");
                 }
                 return StatusCode(500, $"Internal server error : {ex}");
             }

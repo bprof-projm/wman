@@ -52,9 +52,8 @@ namespace Wman.Logic.Classes
             }
         }
 
-        public async Task<ICollection<UserDTO>> MassAssignUser(int eventID, ICollection<string> usernames)
+        public async Task MassAssignUser(int eventID, ICollection<string> usernames)
         {
-            var successList = new List<UserDTO>();
             var selectedEvent = await this.GetEvent(eventID);
             if (selectedEvent == null)
             {
@@ -70,14 +69,13 @@ namespace Wman.Logic.Classes
                     throw new ArgumentException($"User: {0} not found", item);
                 }
                 testresult = await this.DoTasksOverlap(selectedUser.WorkEvents, selectedEvent);
-                if (!testresult)
+                if (testresult)
                 {
-                    selectedEvent.AssignedUsers.Add(selectedUser);
-                    await this.eventRepo.Update(eventID, selectedEvent);
-                    successList.Add(mapper.Map<UserDTO>(selectedUser));
+                    throw new InvalidOperationException(String.Format("User: {0} is busy during this event", selectedUser.UserName));
                 }
+                selectedEvent.AssignedUsers.Add(selectedUser);
+                await this.eventRepo.Update(eventID, selectedEvent);
             }
-            return successList;
         }
 
         public async Task CreateEvent(CreateEventDTO workEvent)
