@@ -18,19 +18,22 @@ namespace Wman.Logic.Classes
         IWorkEventRepo eventRepo;
         IMapper mapper;
         IAddressRepo address;
-        UserManager<WmanUser> userManager;
-        public EventLogic(IWorkEventRepo eventRepo, IMapper mapper , IAddressRepo address, UserManager<WmanUser> userManager)
+        IWmanUserRepo wmanUserRepo;
+        public EventLogic(IWorkEventRepo eventRepo, IMapper mapper , IAddressRepo address, IWmanUserRepo wmanUserRepo)
         {
             this.eventRepo = eventRepo;
             this.mapper = mapper;
-            this.userManager = userManager;
             this.address = address;
+            this.wmanUserRepo = wmanUserRepo;
         }
 
         public async Task AssignUser(int id, string username)
         {
+
             var selectedEvent = await this.GetEvent(id);
-            var selectedUser =  await userManager.Users.Where(x => x.UserName == username).SingleOrDefaultAsync();
+            var selectedUser = await wmanUserRepo.getUser(username);
+            bool testResult = await this.DoTasksOverlap(selectedUser.WorkEvents, selectedEvent);
+            ;
             selectedEvent.AssignedUsers.Add(selectedUser);
            await this.eventRepo.Update(id, selectedEvent);
         }
@@ -96,5 +99,22 @@ namespace Wman.Logic.Classes
             return mapper.Map<List<UserDTO>>(selectedEvent.AssignedUsers);
         }
 
+        /// <summary>
+        /// Decides if a new job overlaps with any of the provided ones
+        /// </summary>
+        /// <param name="preExistingEvents">A collection of all the jobs to be checked against</param>
+        /// <param name="newEvent">The new job we'd like to check</param>
+        /// <returns>False, if the <paramref name="newEvent"/> doesn't overlap with any of the ones provided in <paramref name="preExistingEvents"/>, true if it does collide</returns>
+        private async Task<bool> DoTasksOverlap(ICollection<WorkEvent> preExistingEvents, WorkEvent newEvent)
+        {
+            foreach (var item in preExistingEvents)
+            {
+                if (item.EstimatedStartDate < newEvent.EstimatedFinishDate && item.EstimatedFinishDate > newEvent.EstimatedStartDate)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
