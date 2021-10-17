@@ -5,9 +5,10 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
-import { NormalLoginForm } from "./components/login.component.jsx"
-import { Logout } from "./components/logout.component.jsx";
+import { NormalLoginForm } from "./components/login/login.component.jsx";
+import { Logout } from "./components/login/logout.component.jsx";
 import Cookies from "js-cookie";
+import EventDetails from "./components/eventDetails/eventDetails.jsx";
 
 const axios = require("axios").default;
 
@@ -26,10 +27,14 @@ function App() {
   return (
     <Router>
       <Switch>
+        <Route path="/test">
+          <EventDetails />
+        </Route>
         <Route path="/login">
           <NormalLoginForm />
-        </Route>        
-          <ProtectedRoute path="/" component={Logout} />
+        </Route>
+
+        <ProtectedRoute path="/" component={Logout} />
       </Switch>
     </Router>
   );
