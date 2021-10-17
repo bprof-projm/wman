@@ -29,7 +29,8 @@ namespace Wman.Test.Tests
         [TestCase(-1)]
         [TestCase(54)]
         [TestCase(140)]
-        public async Task GetWeekEvents_InvalidParametersGiven_ExceptionExpected(int testInput)
+        [TestCase(null)]
+        public async Task GetWeekEvents_IntParameter_InvalidParametersGiven_ExceptionExpected(int testInput)
         {
             //Arrange
             CalendarEventLogic calendarLogic = new CalendarEventLogic(eventRepo.Object);
@@ -47,7 +48,8 @@ namespace Wman.Test.Tests
         [TestCase(-200)]
         [TestCase(-1)]
         [TestCase(368)]
-        public async Task GetDayEvents_InvalidParametersGiven_ExceptionExpected(int testInput)
+        [TestCase(null)]
+        public async Task GetDayEvents_IntParameter_InvalidParametersGiven_ExceptionExpected(int testInput)
         {
             //Arrange
             CalendarEventLogic calendarLogic = new CalendarEventLogic(eventRepo.Object);
