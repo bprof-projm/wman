@@ -27,6 +27,25 @@ namespace Wman.Test.Tests
 
         [Test]
         [TestCase(-1)]
+        [TestCase(54)]
+        [TestCase(140)]
+        public async Task GetWeekEvents_InvalidParametersGiven_ExceptionExpected(int testInput)
+        {
+            //Arrange
+            CalendarEventLogic calendarLogic = new CalendarEventLogic(eventRepo.Object);
+
+            //Act
+            AsyncTestDelegate testDelegate = async () => calendarLogic.GetWeekEvents(testInput); // GetWeekEvents isnt a Task for whatever reason
+
+            //Assert
+            Assert.ThrowsAsync<ArgumentException>(testDelegate);
+
+            this.eventRepo.Verify(x => x.GetAll(), Times.Never);
+        }
+
+        [Test]
+        [TestCase(-200)]
+        [TestCase(-1)]
         [TestCase(368)]
         public async Task GetDayEvents_InvalidParametersGiven_ExceptionExpected(int testInput)
         {
