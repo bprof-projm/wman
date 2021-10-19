@@ -9,6 +9,7 @@ import { NormalLoginForm } from "./components/login/login.component.jsx"
 import { Logout } from "./components/logout/logout.component.jsx";
 import Cookies from "js-cookie";
 import MyCalendar from "./components/manager/calendar.component.jsx";
+import { NewCalendar } from "./components/manager/new-calendar.component.jsx";
 
 const axios = require("axios").default;
 
@@ -32,9 +33,12 @@ function App() {
         </Route>
         <Route path="/teszt">
           <MyCalendar />
-        </Route>         
-          <ProtectedRoute path="/" component={Logout} />
-          <ProtectedRoute path="/Calendar" component={MyCalendar} />
+        </Route>
+        <Route path="/teszt2">
+          <NewCalendar />
+        </Route>
+        <ProtectedRoute path="/" component={Logout} />
+        <ProtectedRoute path="/Calendar" component={MyCalendar} />
       </Switch>
     </Router>
   );
