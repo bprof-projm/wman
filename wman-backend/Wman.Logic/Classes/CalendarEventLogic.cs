@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -15,17 +16,19 @@ namespace Wman.Logic.Classes
     public class CalendarEventLogic : ICalendarEventLogic
     {
         private IWorkEventRepo workEventRepo;
-        public CalendarEventLogic(IWorkEventRepo workEventRepo)
+        private IMapper mapper;
+        public CalendarEventLogic(IWorkEventRepo workEventRepo, IMapper mapper)
         {
             this.workEventRepo = workEventRepo;
+            this.mapper = mapper;
         }
         public async Task<List<CalendarWorkEventDTO>> GetCurrentDayEvents()
         {
             var events = await (from x in workEventRepo.GetAll()
                          where x.EstimatedStartDate.DayOfYear == DateTime.UtcNow.DayOfYear
                          select x).ToListAsync();
-            var eventDTOs = Converter.CalendarWorkEventConverter(events);
-            return eventDTOs.ToList();
+            ;
+            return mapper.Map<List<CalendarWorkEventDTO>>(events);
         }
 
         public async Task<List<CalendarWorkEventDTO>> GetCurrentWeekEvents()

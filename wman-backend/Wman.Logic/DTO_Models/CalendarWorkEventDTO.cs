@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Wman.Data.DB_Models;
 
 namespace Wman.Logic.DTO_Models
 {
@@ -17,5 +18,6 @@ namespace Wman.Logic.DTO_Models
         public DateTime EstimatedStartDate { get; set; }
         [DataType(DataType.DateTime)]
         public DateTime EstimatedFinishDate { get; set; }
+        public AddressHUNDTO Address { get; set; }
     }
 }
