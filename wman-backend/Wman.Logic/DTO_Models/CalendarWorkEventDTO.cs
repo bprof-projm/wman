@@ -18,6 +18,7 @@ namespace Wman.Logic.DTO_Models
         public DateTime EstimatedStartDate { get; set; }
         [DataType(DataType.DateTime)]
         public DateTime EstimatedFinishDate { get; set; }
+        public Status Status { get; set; }
         public AddressHUNDTO Address { get; set; }
     }
 }
