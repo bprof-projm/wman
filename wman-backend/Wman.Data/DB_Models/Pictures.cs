@@ -24,5 +24,9 @@ namespace Wman.Data.DB_Models
         public int WManUserID { get; set; }
         public int WorkEventID { get; set; }
         public virtual ICollection<WorkEvent> WorkEvents { get; set; }
+        public Pictures()
+        {
+            this.WorkEvents = new List<WorkEvent>();
+        }
     }
 }

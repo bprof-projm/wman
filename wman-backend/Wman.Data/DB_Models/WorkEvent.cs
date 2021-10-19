@@ -42,6 +42,8 @@ namespace Wman.Data.DB_Models
         {
             AssignedUsers = new List<WmanUser>();
             this.Address = new AddressHUN();
+            this.Labels = new List<Label>();
+            this.ProofOfWorkPic = new List<Pictures>();
         }
     }
 }

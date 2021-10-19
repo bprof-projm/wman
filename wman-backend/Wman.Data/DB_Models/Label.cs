@@ -18,5 +18,10 @@ namespace Wman.Data.DB_Models
         public string Content { get; set; }
         [JsonIgnore]
         public virtual ICollection<WorkEvent> WorkEvents { get; set; }
+
+        public Label()
+        {
+            this.WorkEvents = new List<WorkEvent>();
+        }
     }
 }
