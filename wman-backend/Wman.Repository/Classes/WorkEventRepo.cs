@@ -32,14 +32,14 @@ namespace Wman.Repository.Classes
 
         public IQueryable<WorkEvent> GetAll()
         {
-            return this.db.WorkEvent;
+            return this.db.WorkEvent.AsNoTracking().Include(x => x.Address);
         }
 
         public async Task<WorkEvent> GetOne(int key)
         {
             var entity = await (from x in db.WorkEvent
                           where x.Id == key
-                          select x).Include(x => x.AssignedUsers).FirstOrDefaultAsync();
+                          select x).Include(x => x.AssignedUsers).AsNoTracking().Include(x => x.Address).FirstOrDefaultAsync();
             return entity;
         }
         public async Task Update(int oldKey, WorkEvent element)

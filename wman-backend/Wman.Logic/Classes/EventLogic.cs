@@ -131,7 +131,6 @@ namespace Wman.Logic.Classes
         public async Task<WorkEvent> GetEvent(int id)
         {
             var output = await eventRepo.GetOne(id);
-            output.Address = await address.GetOne(output.AddressId);
             return output;
         }
 
