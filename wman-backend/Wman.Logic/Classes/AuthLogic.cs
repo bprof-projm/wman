@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -22,13 +23,15 @@ namespace Wman.Logic.Classes
         UserManager<WmanUser> userManager;
         RoleManager<WmanRole> roleManager;
         IWmanUserRepo wmanUserRepo;
+        IMapper mapper;
         private IConfiguration Configuration;
-        public AuthLogic(UserManager<WmanUser> userManager, RoleManager<WmanRole> roleManager, IConfiguration configuration, IWmanUserRepo wmanUserRepo)
+        public AuthLogic(UserManager<WmanUser> userManager, RoleManager<WmanRole> roleManager, IConfiguration configuration, IWmanUserRepo wmanUserRepo, IMapper mapper)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.Configuration = configuration;
             this.wmanUserRepo = wmanUserRepo;
+            this.mapper = mapper;
         }
         public async Task<IQueryable<WmanUser>> GetAllUsers()
         {
@@ -242,19 +245,22 @@ namespace Wman.Logic.Classes
             return users.ToList();
         }
 
-        public async Task<IEnumerable<int>> JobsOfUser(string username)
+        public async Task<IEnumerable<AssignedEventDTO>> JobsOfUser(string username)
         {
             var selectedUser = await wmanUserRepo.getUser(username);
             if (selectedUser == null)
             {
                 throw new ArgumentException("User not found!");
             }
-            var output = selectedUser.WorkEvents.Select(x => x.Id);
+            var output = selectedUser.WorkEvents;
             if (output.Count() == 0)
             {
                 throw new InvalidOperationException("User has no assigned jobs! ");
             }
-            return output;
+            ;
+            var testResult = mapper.Map<IEnumerable<AssignedEventDTO>>(output);
+
+            return testResult;
         }
     }
 }

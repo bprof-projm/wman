@@ -176,7 +176,7 @@ namespace Wman.WebAPI.Controllers
         /// <returns>A collection of ids that are assigned to the specified user</returns>
         [HttpGet]
         [Route("jobs")]
-        public async Task<ActionResult<ICollection<int>>> getAssignedJobsOfUser(string username)
+        public async Task<ActionResult<ICollection<AssignedEventDTO>>> getAssignedJobsOfUser(string username)
         {
             try
             {
