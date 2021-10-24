@@ -34,15 +34,15 @@ namespace Wman.Repository.Classes
         {
             return this.db.WorkEvent.AsNoTracking().Include(x => x.Address);
         }
-
-        public async Task<WorkEvent> GetOne(int key)
+        /// <inheritdoc />
+        public async Task<WorkEvent> GetOne(int key) 
         {
             var entity = await (from x in db.WorkEvent
                           where x.Id == key
                           select x).Include(x => x.AssignedUsers).AsNoTracking().Include(x => x.Address).FirstOrDefaultAsync();
             return entity;
         }
-
+        /// <inheritdoc />
         public async Task<WorkEvent> GetOneWithTracking(int key)
         {
             var entity = await (from x in db.WorkEvent

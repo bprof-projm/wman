@@ -18,13 +18,13 @@ namespace Wman.Logic.Classes
         IWorkEventRepo eventRepo;
         IMapper mapper;
         IAddressRepo address;
-        IWmanUserRepo wmanUserRepo;
-        public EventLogic(IWorkEventRepo eventRepo, IMapper mapper, IAddressRepo address, IWmanUserRepo wmanUserRepo)
+        UserManager<WmanUser> userManager;
+        public EventLogic(IWorkEventRepo eventRepo, IMapper mapper, IAddressRepo address, UserManager<WmanUser> userManager)
         {
             this.eventRepo = eventRepo;
             this.mapper = mapper;
             this.address = address;
-            this.wmanUserRepo = wmanUserRepo;
+            this.userManager = userManager;
         }
 
         public async Task AssignUser(int eventID, string username)
@@ -34,7 +34,7 @@ namespace Wman.Logic.Classes
             {
                 throw new ArgumentException("Event not found! ");
             }
-            var selectedUser = await wmanUserRepo.getUserWithTracking(username);
+            var selectedUser = await userManager.Users.Where(x => x.UserName == username).Include(y => y.WorkEvents).SingleOrDefaultAsync();
             if (selectedUser == null)
             {
                 throw new ArgumentException("User not found! ");
@@ -64,7 +64,7 @@ namespace Wman.Logic.Classes
             bool testresult;
             foreach (var item in usernames)
             {
-                selectedUser = await wmanUserRepo.getUserWithTracking(item);
+                selectedUser = await userManager.Users.Where(x => x.UserName == item).Include(y => y.WorkEvents).SingleOrDefaultAsync();
                 if (selectedUser == null)
                 {
                     throw new ArgumentException($"User: {0} not found", item);

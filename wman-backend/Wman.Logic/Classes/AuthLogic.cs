@@ -22,15 +22,13 @@ namespace Wman.Logic.Classes
     {
         UserManager<WmanUser> userManager;
         RoleManager<WmanRole> roleManager;
-        IWmanUserRepo wmanUserRepo;
         IMapper mapper;
         private IConfiguration Configuration;
-        public AuthLogic(UserManager<WmanUser> userManager, RoleManager<WmanRole> roleManager, IConfiguration configuration, IWmanUserRepo wmanUserRepo, IMapper mapper)
+        public AuthLogic(UserManager<WmanUser> userManager, RoleManager<WmanRole> roleManager, IConfiguration configuration, IMapper mapper)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.Configuration = configuration;
-            this.wmanUserRepo = wmanUserRepo;
             this.mapper = mapper;
         }
         public async Task<IQueryable<WmanUser>> GetAllUsers()
@@ -247,7 +245,12 @@ namespace Wman.Logic.Classes
 
         public async Task<IEnumerable<AssignedEventDTO>> JobsOfUser(string username)
         {
-            var selectedUser = await wmanUserRepo.getUser(username);
+            var selectedUser = await userManager.Users
+                .Where(x => x.UserName == username)
+                .Include(y => y.WorkEvents)
+                .ThenInclude(z => z.Address)
+                .AsNoTracking()
+                .SingleOrDefaultAsync();
             if (selectedUser == null)
             {
                 throw new ArgumentException("User not found!");
