@@ -9,6 +9,6 @@ namespace Wman.Repository.Interfaces
 {
     public interface IWorkEventRepo : IRepository<WorkEvent,int>
     {
-        
+        public Task<WorkEvent> GetOneWithTracking(int key);
     }
 }

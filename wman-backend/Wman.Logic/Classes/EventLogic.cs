@@ -29,7 +29,7 @@ namespace Wman.Logic.Classes
 
         public async Task AssignUser(int eventID, string username)
         {
-            var selectedEvent = await this.GetEvent(eventID);
+            var selectedEvent = await eventRepo.GetOneWithTracking(eventID);
             if (selectedEvent == null)
             {
                 throw new ArgumentException("Event not found! ");
@@ -54,7 +54,7 @@ namespace Wman.Logic.Classes
 
         public async Task MassAssignUser(int eventID, ICollection<string> usernames)
         {
-            var selectedEvent = await this.GetEvent(eventID);
+            var selectedEvent = await eventRepo.GetOneWithTracking(eventID);
             if (selectedEvent == null)
             {
                 throw new ArgumentException("Event not found! ");

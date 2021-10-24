@@ -42,6 +42,15 @@ namespace Wman.Repository.Classes
                           select x).Include(x => x.AssignedUsers).AsNoTracking().Include(x => x.Address).FirstOrDefaultAsync();
             return entity;
         }
+
+        public async Task<WorkEvent> GetOneWithTracking(int key)
+        {
+            var entity = await (from x in db.WorkEvent
+                                where x.Id == key
+                                select x).Include(x => x.AssignedUsers).FirstOrDefaultAsync();
+            return entity;
+        }
+
         public async Task Update(int oldKey, WorkEvent element)
         {
             var oldWorkEvent = await GetOne(oldKey);
