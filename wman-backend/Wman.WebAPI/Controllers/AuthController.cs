@@ -170,10 +170,10 @@ namespace Wman.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Get all the ids of the jobs assigned to the specified user
+        /// Get all the events/jobs to which a selected user is assigned to
         /// </summary>
         /// <param name="username">Username of the searched user</param>
-        /// <returns>A collection of ids that are assigned to the specified user</returns>
+        /// <returns>A collection of events/jobs that are assigned to the specified user</returns>
         [HttpGet]
         [Route("jobs")]
         public async Task<ActionResult<ICollection<AssignedEventDTO>>> getAssignedJobsOfUser(string username)
