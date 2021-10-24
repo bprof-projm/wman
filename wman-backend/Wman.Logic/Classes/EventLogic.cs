@@ -34,7 +34,7 @@ namespace Wman.Logic.Classes
             {
                 throw new ArgumentException("Event not found! ");
             }
-            var selectedUser = await wmanUserRepo.getUser(username);
+            var selectedUser = await wmanUserRepo.getUserWithTracking(username);
             if (selectedUser == null)
             {
                 throw new ArgumentException("User not found! ");
@@ -64,7 +64,7 @@ namespace Wman.Logic.Classes
             bool testresult;
             foreach (var item in usernames)
             {
-                selectedUser = await wmanUserRepo.getUser(item);
+                selectedUser = await wmanUserRepo.getUserWithTracking(item);
                 if (selectedUser == null)
                 {
                     throw new ArgumentException($"User: {0} not found", item);

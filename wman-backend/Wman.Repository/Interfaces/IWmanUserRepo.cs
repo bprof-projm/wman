@@ -9,6 +9,7 @@ namespace Wman.Repository.Interfaces
 {
     public interface IWmanUserRepo
     {
-        Task<WmanUser> getUser(string username);
+        Task<WmanUser> getUserWithTracking(string username);
+        public Task<WmanUser> getUser(string username);
     }
 }

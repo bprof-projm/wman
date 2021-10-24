@@ -18,11 +18,22 @@ namespace Wman.Repository.Classes
             this.db = inDb;
         }
 
+        public async Task<WmanUser> getUserWithTracking(string username)
+        {
+            var entity = await db.Users
+                .Where(x => x.UserName == username)
+                .Include(x => x.WorkEvents)
+                .SingleOrDefaultAsync();
+            return entity;
+        }
+
         public async Task<WmanUser> getUser(string username)
         {
             var entity = await db.Users
                 .Where(x => x.UserName == username)
                 .Include(x => x.WorkEvents)
+                .ThenInclude(y => y.Address)
+                .AsNoTracking()
                 .SingleOrDefaultAsync();
             return entity;
         }
