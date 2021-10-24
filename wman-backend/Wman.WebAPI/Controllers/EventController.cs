@@ -16,7 +16,7 @@ namespace Wman.WebAPI.Controllers
     /// </summary>
     [Route("[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class EventController : ControllerBase
     {
         IEventLogic eventLogic;
@@ -172,7 +172,19 @@ namespace Wman.WebAPI.Controllers
         [Route("users")]
         public async Task<ActionResult<ICollection<UserDTO>>> GetAllAssignedUsers(int eventid)
         {
-            return Ok(await eventLogic.GetAllAssignedUsers(eventid));
+            try
+            {
+                return Ok(await eventLogic.GetAllAssignedUsers(eventid));
+            }
+            catch (Exception ex)
+            {
+                if (ex is ArgumentException)
+                {
+                    return StatusCode(400, $"Error : {ex}");
+                }
+                return StatusCode(500, $"Internal server error : {ex}");
+            }
+            
         }
 
 

@@ -144,6 +144,10 @@ namespace Wman.Logic.Classes
         public async Task<ICollection<UserDTO>> GetAllAssignedUsers(int id)
         {
             var selectedEvent = await GetEvent(id);
+            if (selectedEvent == null)
+            {
+                throw new ArgumentException("Event not found! ");
+            }
             return mapper.Map<List<UserDTO>>(selectedEvent.AssignedUsers);
         }
 
