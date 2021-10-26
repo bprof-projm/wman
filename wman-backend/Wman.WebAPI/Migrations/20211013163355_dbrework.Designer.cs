@@ -3,36 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wman.Data;
 
 namespace Wman.WebAPI.Migrations
 {
     [DbContext(typeof(wmanDb))]
-    partial class wmanDbModelSnapshot : ModelSnapshot
+    [Migration("20211013163355_dbrework")]
+    partial class dbrework
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.10")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("LabelWorkEvent", b =>
-                {
-                    b.Property<int>("LabelsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WorkEventsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("LabelsId", "WorkEventsId");
-
-                    b.HasIndex("WorkEventsId");
-
-                    b.ToTable("LabelWorkEvent");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
@@ -175,7 +162,17 @@ namespace Wman.WebAPI.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("LabelId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("WorkEventId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("LabelId");
+
+                    b.HasIndex("WorkEventId");
 
                     b.ToTable("Label");
                 });
@@ -388,21 +385,6 @@ namespace Wman.WebAPI.Migrations
                     b.ToTable("WmanUserWorkEvent");
                 });
 
-            modelBuilder.Entity("LabelWorkEvent", b =>
-                {
-                    b.HasOne("Wman.Data.DB_Models.Label", null)
-                        .WithMany()
-                        .HasForeignKey("LabelsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Wman.Data.DB_Models.WorkEvent", null)
-                        .WithMany()
-                        .HasForeignKey("WorkEventsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("Wman.Data.DB_Models.WmanRole", null)
@@ -452,6 +434,17 @@ namespace Wman.WebAPI.Migrations
                         .HasForeignKey("WorkEventsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Wman.Data.DB_Models.Label", b =>
+                {
+                    b.HasOne("Wman.Data.DB_Models.Label", null)
+                        .WithMany("WorkEvents")
+                        .HasForeignKey("LabelId");
+
+                    b.HasOne("Wman.Data.DB_Models.WorkEvent", null)
+                        .WithMany("Labels")
+                        .HasForeignKey("WorkEventId");
                 });
 
             modelBuilder.Entity("Wman.Data.DB_Models.Pictures", b =>
@@ -513,6 +506,11 @@ namespace Wman.WebAPI.Migrations
                     b.Navigation("WorkEvents");
                 });
 
+            modelBuilder.Entity("Wman.Data.DB_Models.Label", b =>
+                {
+                    b.Navigation("WorkEvents");
+                });
+
             modelBuilder.Entity("Wman.Data.DB_Models.WmanRole", b =>
                 {
                     b.Navigation("UserRoles");
@@ -523,6 +521,11 @@ namespace Wman.WebAPI.Migrations
                     b.Navigation("ProfilePicture");
 
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("Wman.Data.DB_Models.WorkEvent", b =>
+                {
+                    b.Navigation("Labels");
                 });
 #pragma warning restore 612, 618
         }

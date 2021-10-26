@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -15,17 +16,19 @@ namespace Wman.Logic.Classes
     public class CalendarEventLogic : ICalendarEventLogic
     {
         private IWorkEventRepo workEventRepo;
-        public CalendarEventLogic(IWorkEventRepo workEventRepo)
+        private IMapper mapper;
+        public CalendarEventLogic(IWorkEventRepo workEventRepo, IMapper mapper)
         {
             this.workEventRepo = workEventRepo;
+            this.mapper = mapper;
         }
         public async Task<List<CalendarWorkEventDTO>> GetCurrentDayEvents()
         {
             var events = await (from x in workEventRepo.GetAll()
                          where x.EstimatedStartDate.DayOfYear == DateTime.UtcNow.DayOfYear
                          select x).ToListAsync();
-            var eventDTOs = Converter.CalendarWorkEventConverter(events);
-            return eventDTOs.ToList();
+            ;
+            return mapper.Map<List<CalendarWorkEventDTO>>(events);
         }
 
         public async Task<List<CalendarWorkEventDTO>> GetCurrentWeekEvents()
@@ -74,8 +77,8 @@ namespace Wman.Logic.Classes
             var events = await(from x in workEventRepo.GetAll()
                           where x.EstimatedStartDate.DayOfYear >= firstDayOfTheWeek.DayOfYear && x.EstimatedStartDate.DayOfYear <=lastDayOfTheWeek.DayOfYear
                           select x).ToListAsync();
-            var eventDTOs = Converter.CalendarWorkEventConverter(events);
-            return eventDTOs.ToList();
+            return mapper.Map<List<CalendarWorkEventDTO>>(events);
+
         }
 
         public async Task<List<CalendarWorkEventDTO>> GetDayEvents(int day)
@@ -85,8 +88,7 @@ namespace Wman.Logic.Classes
                 var events = await (from x in workEventRepo.GetAll()
                                     where x.EstimatedStartDate.DayOfYear == day
                                     select x).ToListAsync();
-                var eventDTOs = Converter.CalendarWorkEventConverter(events);
-                return eventDTOs.ToList();
+                return mapper.Map<List<CalendarWorkEventDTO>>(events);
             }
             else
             {
@@ -111,8 +113,7 @@ namespace Wman.Logic.Classes
 
                 });
 
-                var eventDTOs = Converter.CalendarWorkEventConverter(find);
-                return eventDTOs.ToList();
+                return mapper.Map<List<CalendarWorkEventDTO>>(find);
             }
             else
             {
@@ -126,8 +127,7 @@ namespace Wman.Logic.Classes
             var events = await (from x in workEventRepo.GetAll()
                           where x.EstimatedStartDate.DayOfYear == day.DayOfYear
                           select x).ToListAsync();
-            var eventDTOs = Converter.CalendarWorkEventConverter(events);
-            return eventDTOs.ToList();
+            return mapper.Map<List<CalendarWorkEventDTO>>(events);
         }
 
         public async Task<List<CalendarWorkEventDTO>> GetWeekEvents(DateTime firstDayOfTheWeek, DateTime lastDayOfTheWeek)
@@ -135,8 +135,7 @@ namespace Wman.Logic.Classes
             var events =await (from x in workEventRepo.GetAll()
                           where x.EstimatedStartDate.DayOfYear >= firstDayOfTheWeek.DayOfYear && x.EstimatedStartDate.DayOfYear <= lastDayOfTheWeek.DayOfYear
                           select x).ToListAsync();
-            var eventDTOs = Converter.CalendarWorkEventConverter(events);
-            return eventDTOs.ToList();
+            return mapper.Map<List<CalendarWorkEventDTO>>(events);
         }
     }
 }

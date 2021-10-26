@@ -5,8 +5,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Wman.Data.DB_Connection_Tables;
 
 namespace Wman.Data.DB_Models
 {
@@ -17,8 +17,12 @@ namespace Wman.Data.DB_Models
         public Pictures ProfilePicture { get; set; }
         [NotMapped]
         public ICollection<WmanUserRole> UserRoles { get; set; }
-        [NotMapped]
-        public virtual ICollection<WmanUserWorkEvent> WorkEvents { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<WorkEvent> WorkEvents { get; set; }
 
+        public WmanUser()
+        {
+            WorkEvents = new List<WorkEvent>();
+        }
     }
 }

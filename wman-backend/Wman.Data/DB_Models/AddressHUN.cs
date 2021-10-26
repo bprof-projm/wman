@@ -19,7 +19,6 @@ namespace Wman.Data.DB_Models
         public string ZIPCode { get; set; }
         public string BuildingNumber { get; set; }
         public string Floordoor { get; set; }
-        [NotMapped]
         [JsonIgnore]
         public virtual ICollection<WorkEvent> WorkEvents { get; set; }
         public override bool Equals(object obj)
@@ -35,6 +34,9 @@ namespace Wman.Data.DB_Models
         {
             return address1.City == address2.City && address1.Street == address2.Street && address1.ZIPCode == address2.ZIPCode;
         }
-
+        public AddressHUN()
+        {
+            this.WorkEvents = new List<WorkEvent>();
+        }
     }
 }

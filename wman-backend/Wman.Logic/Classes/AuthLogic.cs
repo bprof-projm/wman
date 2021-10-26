@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
 using Wman.Logic.Interfaces;
+using Wman.Repository.Interfaces;
 
 namespace Wman.Logic.Classes
 {
@@ -20,12 +22,14 @@ namespace Wman.Logic.Classes
     {
         UserManager<WmanUser> userManager;
         RoleManager<WmanRole> roleManager;
+        IMapper mapper;
         private IConfiguration Configuration;
-        public AuthLogic(UserManager<WmanUser> userManager, RoleManager<WmanRole> roleManager, IConfiguration configuration)
+        public AuthLogic(UserManager<WmanUser> userManager, RoleManager<WmanRole> roleManager, IConfiguration configuration, IMapper mapper)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.Configuration = configuration;
+            this.mapper = mapper;
         }
         public async Task<IQueryable<WmanUser>> GetAllUsers()
         {
@@ -160,7 +164,7 @@ namespace Wman.Logic.Classes
 
         public async Task<bool> HasRole(WmanUser user, string role)
         {
-            if ( await userManager.IsInRoleAsync(user, role))
+            if (await userManager.IsInRoleAsync(user, role))
             {
                 return true;
             }
@@ -237,6 +241,29 @@ namespace Wman.Logic.Classes
         {
             var users = await this.userManager.GetUsersInRoleAsync(roleId);
             return users.ToList();
+        }
+
+        public async Task<IEnumerable<AssignedEventDTO>> JobsOfUser(string username)
+        {
+            var selectedUser = await userManager.Users
+                .Where(x => x.UserName == username)
+                .Include(y => y.WorkEvents)
+                .ThenInclude(z => z.Address)
+                .AsNoTracking()
+                .SingleOrDefaultAsync();
+            if (selectedUser == null)
+            {
+                throw new ArgumentException("User not found!");
+            }
+            var output = selectedUser.WorkEvents;
+            if (output.Count() == 0)
+            {
+                throw new InvalidOperationException("User has no assigned jobs! ");
+            }
+            ;
+            var testResult = mapper.Map<IEnumerable<AssignedEventDTO>>(output);
+
+            return testResult;
         }
     }
 }

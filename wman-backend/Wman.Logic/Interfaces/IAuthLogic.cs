@@ -42,5 +42,7 @@ namespace Wman.Logic.Interfaces
 
         Task<bool> HasRoleByName(string userName, string role);
 
+        Task<IEnumerable<AssignedEventDTO>> JobsOfUser(string username);
+
     }
 }

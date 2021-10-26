@@ -46,6 +46,7 @@
             Update a user
             </summary>
             <param name="oldUsername">Prev. id</param>
+            <param name="pwd">Password of the user to be updated</param>
             <param name="user">User to be updated</param>
         </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.Login(Wman.Logic.DTO_Models.LoginDTO)">
@@ -54,6 +55,13 @@
             </summary>
             <param name="model">Login details</param>
             <returns>Hopefully a jwt token</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.getAssignedJobsOfUser(System.String)">
+            <summary>
+            Get all the events/jobs to which a selected user is assigned to
+            </summary>
+            <param name="username">Username of the searched user</param>
+            <returns>A collection of events/jobs that are assigned to the specified user</returns>
         </member>
         <member name="T:Wman.WebAPI.Controllers.CalendarEventController">
             <summary>
@@ -101,24 +109,12 @@
             <param name="finishEventDate"></param>
             <returns>CalendarWorkEventDTO</returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.DemoController.HelloWorld">
-            <summary>
-            HTTPGET test method
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Wman.WebAPI.Controllers.DemoController.test">
-            <summary>
-            HTTPPost test method
-            </summary>
-            <returns>OK</returns>
-        </member>
         <member name="T:Wman.WebAPI.Controllers.EventController">
             <summary>
             EventController
             </summary>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.EventController.#ctor(Wman.Logic.Interfaces.IEventLogic)">
+        <member name="M:Wman.WebAPI.Controllers.EventController.#ctor(Wman.Logic.Interfaces.IEventLogic,Wman.Logic.Interfaces.IAuthLogic)">
             <summary>
             ctor
             </summary>
@@ -150,6 +146,29 @@
             </summary>
             <param name="Id"></param>
             <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.EventController.AssignUser(System.Int32,System.String)">
+            <summary>
+            Assign a user to a specific event
+            </summary>
+            <param name="eventid">The id of the event</param>
+            <param name="userName">username of the user</param>
+            <returns>HTTP response code</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.EventController.MassAssignUsers(System.Int32,System.Collections.Generic.ICollection{System.String})">
+            <summary>
+            Assign multiple users at a time to a selected event.
+            </summary>
+            <param name="eventid">The ID of the event we'd like to add to</param>
+            <param name="usernames">A list of string string usernames, which we'd like to assign to the event</param>
+            <returns>A list of userDTOs, where the users could be assigned without date collision</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.EventController.GetAllAssignedUsers(System.Int32)">
+            <summary>
+            Lists all the users assigned to a selected event
+            </summary>
+            <param name="eventid">The ID of the event</param>
+            <returns>HTTP response code</returns>
         </member>
     </members>
 </doc>

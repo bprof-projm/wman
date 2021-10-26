@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Wman.Data.DB_Connection_Tables;
 
 namespace Wman.Data.DB_Models
 {
@@ -24,22 +23,27 @@ namespace Wman.Data.DB_Models
         public string JobDescription { get; set; }
         public DateTime EstimatedStartDate { get; set; }
         public DateTime EstimatedFinishDate { get; set; }
-        [NotMapped]
         [JsonIgnore]
-        public ICollection<WmanUserWorkEvent> AssignedUsers { get; set; }
-        [NotMapped]
+        public virtual ICollection<WmanUser> AssignedUsers { get; set; }
+        
         [JsonIgnore]
-        public ICollection<WorkEventLabel> Labels { get; set; }
-        [NotMapped]
+        public ICollection<Label> Labels { get; set; }
+        
         [JsonIgnore]
-        public ICollection<WorkEventPicture> ProofOfWorkPic { get; set; }
+        public ICollection<Pictures> ProofOfWorkPic { get; set; }
         public int AddressId { get; set; }
-        [NotMapped]
         public virtual AddressHUN Address { get; set; }
         public DateTime WorkStartDate { get; set; }
         public DateTime WorkFinishDate { get; set; }
         public TimeSpan WorkTime { get; set; }
         //[JsonConverter(typeof(JsonStringEnumConverter))]
         public Status Status { get; set; }
+        public WorkEvent()
+        {
+            AssignedUsers = new List<WmanUser>();
+            this.Address = new AddressHUN();
+            this.Labels = new List<Label>();
+            this.ProofOfWorkPic = new List<Pictures>();
+        }
     }
 }

@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Wman.Data.DB_Connection_Tables;
 
 namespace Wman.Data.DB_Models
 {
@@ -24,7 +23,10 @@ namespace Wman.Data.DB_Models
         public PicturesType PicturesType { get; set; }
         public int WManUserID { get; set; }
         public int WorkEventID { get; set; }
-        [NotMapped]
-        public virtual ICollection<WorkEventPicture> WorkEvents { get; set; }
+        public virtual ICollection<WorkEvent> WorkEvents { get; set; }
+        public Pictures()
+        {
+            this.WorkEvents = new List<WorkEvent>();
+        }
     }
 }
