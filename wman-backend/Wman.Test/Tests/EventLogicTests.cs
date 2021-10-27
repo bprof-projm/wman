@@ -44,6 +44,42 @@ namespace Wman.Test.Tests
         }
 
         [Test]
+        [TestCase(4,"NonexistentUser")]
+        [TestCase(0,"12ö934öüakíyxkl")]
+        [TestCase(0,null)]
+        [TestCase(null,null)]
+        public async Task AssignUser_AssignBadValues_ExceptionCaught(int idInput, string userInput)
+        {
+            //Arrange
+            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
+
+            //Act
+            AsyncTestDelegate testDelegate = async () => await eventLogic.AssignUser(idInput, userInput);
+
+            //Assert
+            Assert.ThrowsAsync<ArgumentException>(testDelegate);
+
+            this.eventRepo.Verify(x => x.Update(It.IsAny<int>(), It.IsAny<WorkEvent>()), Times.Never);
+        }
+
+        [Test]
+        public async Task AssignUser_AssignToExistingUser_Successful()
+        {
+            //Arrange
+            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
+
+            //Act
+            var call = eventLogic.AssignUser(eventList[0].Id, users[0].UserName);
+
+            //Assert
+            Assert.That(call.IsCompleted);
+
+            this.eventRepo.Verify(x => x.GetOneWithTracking(It.IsAny<int>()), Times.Once);
+            this.userManager.Verify(x => x.Users, Times.Once);
+            this.eventRepo.Verify(x => x.Update(It.IsAny<int>(), It.IsAny<WorkEvent>()), Times.Once);
+        }
+
+        [Test]
         public async Task UpdateEvent_UpdateExisitingEvent_SuccessfulOperation()
         {
             //Arrange

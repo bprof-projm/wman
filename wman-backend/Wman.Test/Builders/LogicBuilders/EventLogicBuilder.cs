@@ -28,15 +28,16 @@ namespace Wman.Test.Builders.LogicBuilders
 
             eventRepo.Setup(x => x.GetAll()).Returns(mock.Object);
             eventRepo.Setup(x => x.GetOne(It.IsAny<int>())).ReturnsAsync(eventList[0]);
+            eventRepo.Setup(x => x.GetOneWithTracking(It.IsAny<int>())).ReturnsAsync(eventList[0]);
                 
             return eventRepo;
         }
 
         public static List<AddressHUN> GetAddresses()
         {
-            List<AddressHUN> eventList = new List<AddressHUN>();
+            List<AddressHUN> addressList = new List<AddressHUN>();
 
-            eventList.Add(new AddressHUN
+            addressList.Add(new AddressHUN
             {
                 Id = 1,
                 City = "Anyadba",
@@ -46,7 +47,7 @@ namespace Wman.Test.Builders.LogicBuilders
                 Floordoor = "0"
             });
 
-            eventList.Add(new AddressHUN
+            addressList.Add(new AddressHUN
             {
                 Id = 2,
                 City = "Feshestetthely",
@@ -56,7 +57,7 @@ namespace Wman.Test.Builders.LogicBuilders
                 Floordoor = "0"
             });
 
-            eventList.Add(new AddressHUN
+            addressList.Add(new AddressHUN
             {
                 Id = 3,
                 City = "Feshestetthely",
@@ -66,7 +67,7 @@ namespace Wman.Test.Builders.LogicBuilders
                 Floordoor = "0"
             });
 
-            return eventList;
+            return addressList;
         }
 
         public static List<WorkEvent> GetWorkEvents()
@@ -75,6 +76,7 @@ namespace Wman.Test.Builders.LogicBuilders
 
             eventList.Add(new WorkEvent
             {
+                Id = 0,
                 JobDescription = "PizzaDobálóKretén",
                 EstimatedStartDate = new DateTime(2021, 10, 16),
                 EstimatedFinishDate = new DateTime(2021, 10, 16),
@@ -86,6 +88,7 @@ namespace Wman.Test.Builders.LogicBuilders
 
             eventList.Add(new WorkEvent
             {
+                Id = 1,
                 JobDescription = "NoggerFagyi",
                 EstimatedStartDate = new DateTime(2021, 10, 12),
                 EstimatedFinishDate = new DateTime(2021, 10, 14),
@@ -98,6 +101,7 @@ namespace Wman.Test.Builders.LogicBuilders
 
             eventList.Add(new WorkEvent
             {
+                Id = 2,
                 JobDescription = "Allahmashhallah",
                 EstimatedStartDate = new DateTime(2021, 10, 15),
                 EstimatedFinishDate = new DateTime(2021, 10, 18),
@@ -109,6 +113,7 @@ namespace Wman.Test.Builders.LogicBuilders
 
             eventList.Add(new WorkEvent
             {
+                Id = 3,
                 JobDescription = "Boombliallahkutarvashmir",
                 EstimatedStartDate = new DateTime(2021, 10, 10),
                 EstimatedFinishDate = new DateTime(2021, 10, 12),
