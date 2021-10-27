@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using AutoMapper;
+using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -14,15 +15,17 @@ namespace Wman.Test.Tests
     public class CalendarEventLogicTests
     {
         private Mock<IWorkEventRepo> eventRepo;
-
         private List<WorkEvent> eventList;
+
+        private IMapper mapper;
 
         [SetUp]
         public void SetUp()
         {
             this.eventList = CalendarEventLogicBuilder.GetWorkEvents();
-
             this.eventRepo = CalendarEventLogicBuilder.GetEventRepo(eventList);
+
+            this.mapper = CalendarEventLogicBuilder.GetMapper();
         }
 
         [Test]
@@ -33,7 +36,7 @@ namespace Wman.Test.Tests
         public async Task GetWeekEvents_IntParameter_InvalidParametersGiven_ExceptionExpected(int testInput)
         {
             //Arrange
-            CalendarEventLogic calendarLogic = new CalendarEventLogic(eventRepo.Object);
+            CalendarEventLogic calendarLogic = new CalendarEventLogic(this.eventRepo.Object, this.mapper);
 
             //Act
             AsyncTestDelegate testDelegate = async () => calendarLogic.GetWeekEvents(testInput); // GetWeekEvents isnt a Task for whatever reason
@@ -52,7 +55,7 @@ namespace Wman.Test.Tests
         public async Task GetDayEvents_IntParameter_InvalidParametersGiven_ExceptionExpected(int testInput)
         {
             //Arrange
-            CalendarEventLogic calendarLogic = new CalendarEventLogic(eventRepo.Object);
+            CalendarEventLogic calendarLogic = new CalendarEventLogic(this.eventRepo.Object, this.mapper);
 
             //Act
             AsyncTestDelegate testDelegate = async () => await calendarLogic.GetDayEvents(testInput);
@@ -67,7 +70,7 @@ namespace Wman.Test.Tests
         public async Task GetCurrentDayEvents_ReturnedEventsNotNull_GetAllCalledOnce()
         {
             //Arrange
-            CalendarEventLogic calendarLogic = new CalendarEventLogic(eventRepo.Object);
+            CalendarEventLogic calendarLogic = new CalendarEventLogic(this.eventRepo.Object, this.mapper);
 
             //Act
             var result = await calendarLogic.GetCurrentDayEvents();
@@ -83,7 +86,7 @@ namespace Wman.Test.Tests
         public async Task GetCurrentWeekEvents_ReturnedEventsNotNull_GetAllCalledOnce()
         {
             //Arrange
-            CalendarEventLogic calendarLogic = new CalendarEventLogic(eventRepo.Object);
+            CalendarEventLogic calendarLogic = new CalendarEventLogic(this.eventRepo.Object, this.mapper);
 
             //Act
             var result = await calendarLogic.GetCurrentWeekEvents();
@@ -99,7 +102,7 @@ namespace Wman.Test.Tests
         public async Task GetDayEvents_ReturnsOneEvent_GetAllCalledOnce()
         {
             //Arrange
-            CalendarEventLogic calendarLogic = new CalendarEventLogic(eventRepo.Object);
+            CalendarEventLogic calendarLogic = new CalendarEventLogic(this.eventRepo.Object, this.mapper);
             DateTime dateTime = new DateTime(2021, 10, 10);
 
             //Act
@@ -117,7 +120,7 @@ namespace Wman.Test.Tests
         public async Task GetWeekEvents_ReturnsOneEvent_GetAllCalledOnce()
         {
             //Arrange
-            CalendarEventLogic calendarLogic = new CalendarEventLogic(eventRepo.Object);
+            CalendarEventLogic calendarLogic = new CalendarEventLogic(this.eventRepo.Object, this.mapper);
 
             DateTime firstDayOfWeek = new DateTime(2021, 10, 4); // last day of the week
             DateTime lastDayOfTheWeek = new DateTime(2021, 10, 10); // last day of the week

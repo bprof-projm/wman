@@ -45,6 +45,7 @@ namespace Wman.Test.Builders
             
             return mapper;
         }
+
         public static List<AddressHUN> GetAddresses()
         {
             List<AddressHUN> eventList = new List<AddressHUN>();
