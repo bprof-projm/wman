@@ -47,7 +47,7 @@ namespace Wman.Test.Tests
         public async Task UpdateEvent_UpdateExisitingEvent_SuccessfulOperation()
         {
             //Arrange
-            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object,);
+            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
 
             WorkEvent workEvent = new WorkEvent
             {
@@ -71,7 +71,7 @@ namespace Wman.Test.Tests
         public async Task DeleteEvent_SuccessfullyDeletesElement()
         {
             //Arrange
-            EventLogic eventLogic = new EventLogic(eventRepo.Object, mapper, addressRepo.Object);
+            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
 
             //Act
             var result = eventLogic.DeleteEvent(eventList[0].Id);
@@ -84,10 +84,10 @@ namespace Wman.Test.Tests
         public async Task GetAllEvents_ReturnsRepoCorrectly()
         {
             //Arrange
-            EventLogic eventLogic = new EventLogic(eventRepo.Object, mapper, addressRepo.Object);
+            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
 
             //Act
-            var result = eventLogic.GetAllEvents();
+            var result = await eventLogic.GetAllEvents();
 
             //Assert
             Assert.That(result.Count() == eventList.Count());
@@ -98,7 +98,7 @@ namespace Wman.Test.Tests
         public async Task GetEvent_ReturnsWorkEvent_CompareToEventInList_Successful()
         {
             //Arrange
-            EventLogic eventLogic = new EventLogic(eventRepo.Object, mapper, addressRepo.Object);
+            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
 
             //Act
             var result = await eventLogic.GetEvent(eventList[0].Id);
@@ -112,7 +112,7 @@ namespace Wman.Test.Tests
         public async Task CreateEvent_SuccessfulCreation()
         {
             //Arrange
-            EventLogic eventLogic = new EventLogic(eventRepo.Object, mapper, addressRepo.Object);
+            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
 
             var helper = new AddressHUNDTO()
             {
@@ -120,7 +120,7 @@ namespace Wman.Test.Tests
                 BuildingNumber = addressList[0].BuildingNumber,
                 FloorDoor = addressList[0].Floordoor,
                 Street = addressList[0].Street,
-                ZIPCode = addressList[0].ZIPCode,
+                ZIPCode = int.Parse(addressList[0].ZIPCode),
             };
 
             CreateEventDTO eventDTO = new CreateEventDTO()
