@@ -10,6 +10,7 @@ using Wman.Data.DB_Models;
 using Wman.Logic.Classes;
 using Wman.Logic.DTO_Models;
 using Wman.Test.Builders;
+using Wman.Test.Builders.LogicBuilders;
 
 namespace Wman.Test.Tests
 {
@@ -26,13 +27,12 @@ namespace Wman.Test.Tests
         [SetUp]
         public void Setup()
         {
-            this.users = AuthLogicBuilder.GetWmanUsers();
+            this.users = UserManagerBuilder.GetWmanUsers();
+            this.userManager = UserManagerBuilder.GetUserManager(users);
 
-            this.userManager = AuthLogicBuilder.GetUserManager(users);
             this.roleManager = AuthLogicBuilder.GetMockRoleManager();
-
             this.config = AuthLogicBuilder.GetConfiguration();
-            this.mapper = AuthLogicBuilder.GetMapper();
+            this.mapper = MapperBuilder.GetMapper();
         }
 
         [Test]

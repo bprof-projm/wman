@@ -9,6 +9,7 @@ using Wman.Data.DB_Models;
 using Wman.Logic.Classes;
 using Wman.Repository.Interfaces;
 using Wman.Test.Builders;
+using Wman.Test.Builders.LogicBuilders;
 
 namespace Wman.Test.Tests
 {
@@ -25,7 +26,7 @@ namespace Wman.Test.Tests
             this.eventList = CalendarEventLogicBuilder.GetWorkEvents();
             this.eventRepo = CalendarEventLogicBuilder.GetEventRepo(eventList);
 
-            this.mapper = CalendarEventLogicBuilder.GetMapper();
+            this.mapper = MapperBuilder.GetMapper();
         }
 
         [Test]

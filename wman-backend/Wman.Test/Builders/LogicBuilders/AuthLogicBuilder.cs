@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using MockQueryable.Moq;
 using Moq;
@@ -7,9 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Wman.Data.DB_Models;
-using Wman.Logic.Helpers;
 
-namespace Wman.Test.Builders
+namespace Wman.Test.Builders.LogicBuilders
 {
     public class AuthLogicBuilder
     {
@@ -38,15 +36,6 @@ namespace Wman.Test.Builders
             mgr.Setup(x => x.GetUsersInRoleAsync(It.IsAny<string>())).ReturnsAsync(userList);
 
             return mgr;
-        }
-
-        public static IMapper GetMapper()
-        {
-            var mapperconf = new MapperConfiguration(x => { x.AddProfile(new AutoMapperProfiles()); });
-
-            IMapper mapper = mapperconf.CreateMapper();
-
-            return mapper;
         }
 
         public static Mock<RoleManager<WmanRole>> GetMockRoleManager()

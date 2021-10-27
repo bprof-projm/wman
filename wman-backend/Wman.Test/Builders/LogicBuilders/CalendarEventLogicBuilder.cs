@@ -8,7 +8,7 @@ using Wman.Data.DB_Models;
 using Wman.Logic.Helpers;
 using Wman.Repository.Interfaces;
 
-namespace Wman.Test.Builders
+namespace Wman.Test.Builders.LogicBuilders
 {
     //This builder class implements similar functions to EventLogicBuilder,
     //but the required test cases are a bit different than the one need for EventLogicTests, so this was a necessity
@@ -23,15 +23,6 @@ namespace Wman.Test.Builders
             eventRepo.Setup(x => x.GetOne(It.IsAny<int>())).ReturnsAsync(eventList[0]);
 
             return eventRepo;
-        }
-
-        public static IMapper GetMapper()
-        {
-            var mapperconf = new MapperConfiguration(x => { x.AddProfile(new AutoMapperProfiles()); });
-
-            IMapper mapper = mapperconf.CreateMapper();
-
-            return mapper;
         }
 
         public static List<WorkEvent> GetWorkEvents()

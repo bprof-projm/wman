@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -10,6 +11,7 @@ using Wman.Logic.Classes;
 using Wman.Logic.DTO_Models;
 using Wman.Repository.Interfaces;
 using Wman.Test.Builders;
+using Wman.Test.Builders.LogicBuilders;
 
 namespace Wman.Test.Tests
 {
@@ -23,12 +25,19 @@ namespace Wman.Test.Tests
         private List<WorkEvent> eventList;
         private List<AddressHUN> addressList;
 
+        private Mock<UserManager<WmanUser>> userManager;
+        private List<WmanUser> users;
+
         [SetUp]
         public void SetUp()
         {
+            this.users = UserManagerBuilder.GetWmanUsers();
+            this.userManager = UserManagerBuilder.GetUserManager(users);
+
+            this.mapper = MapperBuilder.GetMapper();
+
             this.eventList = EventLogicBuilder.GetWorkEvents();
             this.addressList = EventLogicBuilder.GetAddresses();
-            this.mapper = EventLogicBuilder.GetMapper();
 
             this.eventRepo = EventLogicBuilder.GetEventRepo(eventList);
             this.addressRepo = EventLogicBuilder.GetAddressRepo(addressList);
@@ -38,7 +47,7 @@ namespace Wman.Test.Tests
         public async Task UpdateEvent_UpdateExisitingEvent_SuccessfulOperation()
         {
             //Arrange
-            EventLogic eventLogic = new EventLogic(eventRepo.Object, mapper, addressRepo.Object);
+            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object,);
 
             WorkEvent workEvent = new WorkEvent
             {

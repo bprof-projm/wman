@@ -1,17 +1,12 @@
-﻿using AutoMapper;
-using MockQueryable.Moq;
+﻿using MockQueryable.Moq;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Wman.Data.DB_Models;
-using Wman.Logic.DTO_Models;
-using Wman.Logic.Helpers;
 using Wman.Repository.Interfaces;
 
-namespace Wman.Test.Builders
+namespace Wman.Test.Builders.LogicBuilders
 {
     public class EventLogicBuilder
     {
@@ -35,15 +30,6 @@ namespace Wman.Test.Builders
             eventRepo.Setup(x => x.GetOne(It.IsAny<int>())).ReturnsAsync(eventList[0]);
                 
             return eventRepo;
-        }
-
-        public static IMapper GetMapper()
-        {
-            var mapperconf = new MapperConfiguration(x => { x.AddProfile(new AutoMapperProfiles()); });
-
-            IMapper mapper = mapperconf.CreateMapper();
-            
-            return mapper;
         }
 
         public static List<AddressHUN> GetAddresses()
