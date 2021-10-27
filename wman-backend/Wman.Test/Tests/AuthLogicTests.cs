@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using NUnit.Framework;
@@ -16,7 +17,9 @@ namespace Wman.Test.Tests
     {
         private Mock<UserManager<WmanUser>> userManager;
         private Mock<RoleManager<WmanRole>> roleManager;
+        
         private IConfiguration config;
+        private IMapper mapper;
 
         private List<WmanUser> users;
 
@@ -27,14 +30,16 @@ namespace Wman.Test.Tests
 
             this.userManager = AuthLogicBuilder.GetUserManager(users);
             this.roleManager = AuthLogicBuilder.GetMockRoleManager();
+
             this.config = AuthLogicBuilder.GetConfiguration();
+            this.mapper = AuthLogicBuilder.GetMapper();
         }
 
         [Test]
         public async Task LoginUser_TokenGranted_OnNewlyCreatedUser()
         {
             //Arrange
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
 
             RegisterDTO user = new RegisterDTO()
             {
@@ -63,7 +68,7 @@ namespace Wman.Test.Tests
         public async Task GetOneUser()
         {
             //Arrange
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
 
             //Act
             var result = await authLogic.GetOneUser(users[0].UserName);
@@ -78,7 +83,7 @@ namespace Wman.Test.Tests
         public async Task GetAllUsers_ReturnsRepoProperly()
         {
             //Arrange
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
 
             //Act
             var result = await authLogic.GetAllUsers();
@@ -93,7 +98,7 @@ namespace Wman.Test.Tests
         public async Task CreateUser_SucceededCreation()
         {
             //Arrange
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
 
             RegisterDTO user = new RegisterDTO()
             {
@@ -119,7 +124,7 @@ namespace Wman.Test.Tests
         public async Task CreateUser_FailedCreation_EmailAlreadyInRepo()
         {
             //Arrange
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
 
             RegisterDTO user = new RegisterDTO()
             {
@@ -145,7 +150,7 @@ namespace Wman.Test.Tests
         public async Task DeleteUser_SucceededDeletion_OnRecentlyCreatedUserAndByName()
         {
             //Arrange
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
 
             RegisterDTO user = new RegisterDTO()
             {
@@ -177,7 +182,7 @@ namespace Wman.Test.Tests
         public async Task RemoveUserFromRole_RemovesSuccessfully()
         {
             //Arrange
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
 
             //Act
             var result = await authLogic.RemoveUserFromRole(users[2].UserName, "Debug");
@@ -193,7 +198,7 @@ namespace Wman.Test.Tests
         public async Task GetAllRolesOfUser_Returns4Roles()
         {
             //Arrange
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
 
             //Act
             var result = await authLogic.GetAllRolesOfUser(users[2]);
@@ -208,7 +213,7 @@ namespace Wman.Test.Tests
         public async Task GetAllUsersOfRole_Returns3Users()
         {
             //Arrange
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
 
             //Act
             var result = await authLogic.GetAllUsersOfRole("Test");
@@ -222,7 +227,7 @@ namespace Wman.Test.Tests
         public async Task HasRole_And_HasRoleByName_ReturnsSuccessful()
         {
             //Arrange
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
 
             //Act
             var result = await authLogic.HasRole(users[2], "Debug");
@@ -239,7 +244,7 @@ namespace Wman.Test.Tests
         public async Task RoleCreationAndAssignment_Successful()
         {
             //Arrange
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
             List<string> roleTest = new List<string>() { "Test01" };
 
             //Act
@@ -261,7 +266,7 @@ namespace Wman.Test.Tests
         public async Task UpdateUser_SucceededUpdate_ExistingUser()
         {
             //Arrange
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
 
             UserDTO user = new UserDTO()
             {
@@ -287,7 +292,7 @@ namespace Wman.Test.Tests
         public async Task SwitchRoleOfUser_ExistingUser_SuccessfulOperation()
         {
             //Arrange
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config);
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
 
             //Act
             var result = await authLogic.SwitchRoleOfUser(users[2].UserName, "Debug");
