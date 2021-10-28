@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
+using Wman.Logic.DTO_Models;
 using Wman.Logic.Interfaces;
 
 namespace Wman.Logic.Classes
@@ -17,7 +19,32 @@ namespace Wman.Logic.Classes
         {
             this.userManager = userManager;
         }
+        public async Task<IEnumerable<WorkloadDTO>> getWorkLoads(IEnumerable<string> usernames)
+        {
+            var output = new List<WorkloadDTO>();
+            var allUsers = userManager.Users
+                .Include(y => y.WorkEvents)
+                .ThenInclude(z => z.Address)
+                .AsNoTracking();
+            WmanUser selectedUser;
+            foreach (var username in usernames)
+            {
+                selectedUser = allUsers.Where(x => x.UserName == username).SingleOrDefault();
+                if (selectedUser == null)
+                {
+                    throw new ArgumentException("User: {0} doesn't exist!", username);
+                }
+                output.Add(new WorkloadDTO
+                {
+                    Username = username,
+                    Percent = calculate(selectedUser),
+                    ProfilePic = selectedUser.ProfilePicture
+                });
+            }
 
+
+            return output;
+        }
         private int calculate(WmanUser user)
         {
             var beforeToday = WorksBeforeToday(user.WorkEvents);
@@ -32,10 +59,12 @@ namespace Wman.Logic.Classes
             {
                 tsFromToday += (item.WorkFinishDate - item.WorkStartDate);
             }
+            ;
             foreach (var item in fromToday)
             {
                 tsFromToday += (item.EstimatedFinishDate - item.EstimatedStartDate);
             }
+            ;
 
             TimeSpan tsSUM = tsBeforeToday + tsFromToday;
             return tsSUM.Hours / 168;
