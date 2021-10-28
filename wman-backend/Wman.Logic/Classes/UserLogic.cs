@@ -37,7 +37,7 @@ namespace Wman.Logic.Classes
                 output.Add(new WorkloadDTO
                 {
                     Username = username,
-                    Percent = calculate(selectedUser),
+                    Percent = Convert.ToInt32(calculate(selectedUser)),
                     ProfilePic = selectedUser.ProfilePicture
                 });
             }
@@ -45,7 +45,7 @@ namespace Wman.Logic.Classes
 
             return output;
         }
-        private int calculate(WmanUser user)
+        private double calculate(WmanUser user)
         {
             var beforeToday = WorksBeforeToday(user.WorkEvents);
             var fromToday = RemainingWorks(user.WorkEvents);
@@ -57,17 +57,16 @@ namespace Wman.Logic.Classes
             
             foreach (var item in beforeToday)
             {
-                tsFromToday += (item.WorkFinishDate - item.WorkStartDate);
+                tsBeforeToday += (item.WorkFinishDate - item.WorkStartDate);
             }
-            ;
             foreach (var item in fromToday)
             {
                 tsFromToday += (item.EstimatedFinishDate - item.EstimatedStartDate);
             }
-            ;
 
             TimeSpan tsSUM = tsBeforeToday + tsFromToday;
-            return tsSUM.Hours / 168;
+            ;
+            return (tsSUM.TotalHours / 168) * 100;
         }
         private IEnumerable<WorkEvent> WorksBeforeToday(IEnumerable<WorkEvent> works)
         {

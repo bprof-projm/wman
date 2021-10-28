@@ -108,6 +108,22 @@ namespace Wman.Logic.Helpers
                 WorkFinishDate = DateTime.Now.AddDays(-3).AddHours(2).AddMinutes(30),
                 Status = Status.finished
             }).Wait();
+
+            //eventRepo.Add(new WorkEvent
+            //{
+            //    /* This workevent violates the rule, that a job must start and finish on the same day.
+            //        Therefore, it might cause unexpected behaviour in various parts of the code.
+            //        However, it could be useful for debugging workload calculation.
+            //     */
+            //    JobDescription = "!!! 2+ day long workevent", 
+            //    EstimatedStartDate = DateTime.Now.AddDays(-3),
+            //    EstimatedFinishDate = DateTime.Now.AddDays(-1).AddHours(2),
+            //    WorkStartDate = DateTime.Now.AddDays(-3).AddMinutes(10),
+            //    WorkFinishDate = DateTime.Now.AddDays(-1).AddHours(2).AddMinutes(30),
+            //    Address = addressRepo.GetAll().ToList()[1],
+            //    AddressId = addressRepo.GetAll().ToList()[1].Id,
+            //    Status = Status.finished
+            //}).Wait();
         }
         private void AddAddress()
         {
