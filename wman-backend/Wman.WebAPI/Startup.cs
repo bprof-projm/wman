@@ -50,6 +50,7 @@ namespace Wman.WebAPI
             services.AddTransient<IAuthLogic, AuthLogic>();
             services.AddTransient<ICalendarEventLogic, CalendarEventLogic>();
             services.AddTransient<IEventLogic, EventLogic>();
+            services.AddTransient<IUserLogic, UserLogic>();
             services.AddTransient<DBSeed, DBSeed>();
             services.AddControllers().AddJsonOptions(options =>
           options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));

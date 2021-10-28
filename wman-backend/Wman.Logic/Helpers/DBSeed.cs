@@ -80,7 +80,7 @@ namespace Wman.Logic.Helpers
             {
                 JobDescription = "Example event #1",
                 EstimatedStartDate = DateTime.Now.AddDays(-1),
-                EstimatedFinishDate = DateTime.Now.AddDays(-1).AddHours(1),
+                EstimatedFinishDate = DateTime.Now.AddDays(-1).AddHours(1), //If you decide to populate the db around midnight, don't :)
                 Address = addressRepo.GetAll().First(),
                 AddressId = addressRepo.GetAll().First().Id,
                 Status = Status.awaiting
@@ -90,7 +90,7 @@ namespace Wman.Logic.Helpers
             {
                 JobDescription = "Example event #2",
                 EstimatedStartDate = DateTime.Now.AddDays(-2),
-                EstimatedFinishDate = DateTime.Now.AddDays(-2).AddHours(2),
+                EstimatedFinishDate = DateTime.Now.AddDays(-2).AddHours(1).AddMinutes(30),
                 WorkStartDate = DateTime.Now.AddDays(-2).AddMinutes(10),
                 Address = addressRepo.GetAll().ToList()[1],
                 AddressId = addressRepo.GetAll().ToList()[1].Id,
@@ -101,11 +101,11 @@ namespace Wman.Logic.Helpers
             {
                 JobDescription = "Example event #3",
                 EstimatedStartDate = DateTime.Now.AddDays(-3),
-                EstimatedFinishDate = DateTime.Now.AddDays(-3).AddHours(3),
+                EstimatedFinishDate = DateTime.Now.AddDays(-3).AddHours(2),
                 WorkStartDate = DateTime.Now.AddDays(-3).AddMinutes(10),
                 Address = addressRepo.GetAll().ToList()[1],
                 AddressId = addressRepo.GetAll().ToList()[1].Id,
-                WorkFinishDate = DateTime.Now.AddDays(-3).AddHours(4),
+                WorkFinishDate = DateTime.Now.AddDays(-3).AddHours(2).AddMinutes(30),
                 Status = Status.finished
             }).Wait();
         }

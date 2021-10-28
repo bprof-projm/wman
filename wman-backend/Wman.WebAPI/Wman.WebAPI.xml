@@ -182,5 +182,12 @@
             UserController
             </summary>
         </member>
+        <member name="M:Wman.WebAPI.Controllers.UserController.workloadRange(System.Collections.Generic.ICollection{System.String})">
+            <summary>
+            Calculate the workload of the users with the usernames provided in post
+            </summary>
+            <param name="usernames">A collection of usernames</param>
+            <returns>WorkLoadDTO</returns>
+        </member>
     </members>
 </doc>
