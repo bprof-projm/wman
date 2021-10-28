@@ -170,5 +170,10 @@
             <param name="eventid">The ID of the event</param>
             <returns>HTTP response code</returns>
         </member>
+        <member name="T:Wman.WebAPI.Controllers.UserController">
+            <summary>
+            UserController
+            </summary>
+        </member>
     </members>
 </doc>
