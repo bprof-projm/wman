@@ -24,7 +24,6 @@ namespace Wman.Logic.Classes
             var output = new List<WorkloadDTO>();
             var allUsers = userManager.Users
                 .Include(y => y.WorkEvents)
-                .ThenInclude(z => z.Address)
                 .AsNoTracking();
             WmanUser selectedUser;
             foreach (var username in usernames)
@@ -50,7 +49,6 @@ namespace Wman.Logic.Classes
             var output = new List<WorkloadDTO>();
             var allUsers = userManager.Users
                 .Include(y => y.WorkEvents)
-                .ThenInclude(z => z.Address)
                 .AsNoTracking();
             foreach (var user in allUsers)
             {
