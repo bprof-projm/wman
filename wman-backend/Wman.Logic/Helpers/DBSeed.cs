@@ -30,29 +30,17 @@ namespace Wman.Logic.Helpers
         /// </summary>
         public void PopulateDB()
         {
-            if (IsDebug())
-            {
-                AddUsers();
-                AddAddress();
-                AddEvents();
-            }
-            else
-            {
-                throw new InvalidOperationException();
-            }
-            
+#if DEBUG
+            AddUsers();
+            AddAddress();
+            AddEvents();
+#else
+        throw new InvalidOperationException("API is not running in debug mode!");
+#endif    
         }
         public void clearDB()
         {
             throw new NotImplementedException();
-        }
-        private bool IsDebug()
-        {
-#if DEBUG
-            return true;
-#else
-        return false;
-#endif
         }
         private void AddUsers()
         {

@@ -92,9 +92,15 @@ namespace Wman.WebAPI
                 });
             });
             string appsettingsConnectionString = Configuration.GetConnectionString("wmandb");
-            ;
-           
-            services.AddDbContext<wmanDb>(options => options.UseSqlServer(appsettingsConnectionString, b => b.MigrationsAssembly("Wman.WebAPI")));
+
+            services.AddDbContext<wmanDb>(options => options
+#if DEBUG
+            .EnableSensitiveDataLogging()
+            .EnableDetailedErrors()
+#else
+
+#endif
+            .UseSqlServer(appsettingsConnectionString, b => b.MigrationsAssembly("Wman.WebAPI")));
 
             services.AddIdentityCore<WmanUser>(
                      option =>
