@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.Classes;
 using Wman.Logic.DTO_Models;
+using Wman.Logic.Helpers;
 using Wman.Logic.Interfaces;
 
 namespace Wman.WebAPI.Controllers
@@ -22,13 +23,16 @@ namespace Wman.WebAPI.Controllers
     public class AuthController : Controller
     {
         IAuthLogic authLogic;
+        DBSeed dBSeed;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="authLogic"></param>
-        public AuthController(IAuthLogic authLogic)
+        /// /// <param name="dBSeed"></param>
+        public AuthController(IAuthLogic authLogic, DBSeed dBSeed)
         {
             this.authLogic = authLogic;
+            this.dBSeed = dBSeed;
         }
         /// <summary>
         /// Create a new user
@@ -167,6 +171,25 @@ namespace Wman.WebAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        /// <summary>
+        /// Endpoint used to fill database with testing data. Used only for development purposes.
+        /// </summary>
+        /// <returns>200</returns>
+        [HttpGet]
+        [Route("db")]
+        public async Task<ActionResult> PopulateDB()
+        {
+            try
+            {
+                dBSeed.PopulateDB();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error : {ex}");
+            }
+            return Ok();
         }
 
         /// <summary>
