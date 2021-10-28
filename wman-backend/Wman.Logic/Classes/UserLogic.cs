@@ -42,9 +42,29 @@ namespace Wman.Logic.Classes
                 });
             }
 
+            return output;
+        }
+
+        public async Task<IEnumerable<WorkloadDTO>> getWorkLoads()
+        {
+            var output = new List<WorkloadDTO>();
+            var allUsers = userManager.Users
+                .Include(y => y.WorkEvents)
+                .ThenInclude(z => z.Address)
+                .AsNoTracking();
+            foreach (var user in allUsers)
+            {
+                output.Add(new WorkloadDTO
+                {
+                    Username = user.UserName,
+                    Percent = Convert.ToInt32(calculate(user)),
+                    ProfilePic = user.ProfilePicture
+                });
+            }
 
             return output;
         }
+
         private double calculate(WmanUser user)
         {
             var beforeToday = WorksBeforeToday(user.WorkEvents);

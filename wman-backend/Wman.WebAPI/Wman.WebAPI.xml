@@ -189,5 +189,11 @@
             <param name="usernames">A collection of usernames</param>
             <returns>WorkLoadDTO</returns>
         </member>
+        <member name="M:Wman.WebAPI.Controllers.UserController.allWorkloads">
+            <summary>
+            Calculate the workload of every single user
+            </summary>
+            <returns>WorkLoadDTO</returns>
+        </member>
     </members>
 </doc>

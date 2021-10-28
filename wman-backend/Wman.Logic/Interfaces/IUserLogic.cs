@@ -10,5 +10,6 @@ namespace Wman.Logic.Interfaces
     public interface IUserLogic
     {
         public Task<IEnumerable<WorkloadDTO>> getWorkLoads(IEnumerable<string> usernames);
+        public Task<IEnumerable<WorkloadDTO>> getWorkLoads();
     }
 }

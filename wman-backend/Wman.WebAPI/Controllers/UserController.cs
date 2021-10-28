@@ -41,5 +41,23 @@ namespace Wman.WebAPI.Controllers
                 return StatusCode(500, $"Internal server error : {ex}");
             }
         }
+
+        /// <summary>
+        /// Calculate the workload of every single user
+        /// </summary>
+        /// <returns>WorkLoadDTO</returns>
+        [HttpGet]
+        [Route("workload")]
+        public async Task<ActionResult<IEnumerable<WorkloadDTO>>> allWorkloads()
+        {
+            try
+            {
+                return Ok(await userLogic.getWorkLoads());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error : {ex}");
+            }
+        }
     }
 }
