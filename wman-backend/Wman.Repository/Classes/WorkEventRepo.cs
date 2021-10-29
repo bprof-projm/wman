@@ -32,7 +32,7 @@ namespace Wman.Repository.Classes
 
         public IQueryable<WorkEvent> GetAll()
         {
-            return this.db.WorkEvent.AsNoTracking().Include(x => x.Address);
+            return this.db.WorkEvent.AsNoTracking().Include(x => x.Address).Include(x => x.AssignedUsers);
         }
         /// <inheritdoc />
         public async Task<WorkEvent> GetOne(int key) 

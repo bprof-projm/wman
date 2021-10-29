@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Wman.Data.DB_Connection_Tables;
 using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
 using Wman.Logic.Interfaces;
@@ -175,17 +174,21 @@ namespace Wman.Logic.Classes
             if (newWorkEvent.EstimatedStartDate < newWorkEvent.EstimatedFinishDate && newWorkEvent.EstimatedStartDate.Day == newWorkEvent.EstimatedFinishDate.Day)
             {
                 var result = mapper.Map<WorkEvent>(newWorkEvent);
-                var workEventInDb = await eventRepo.GetOne(Id);
+                var workEventInDb = await eventRepo.GetOneWithTracking(Id);
+
+                workEventInDb.EstimatedStartDate = result.EstimatedStartDate;
+                workEventInDb.EstimatedFinishDate = result.EstimatedFinishDate;
+                
                 if (workEventInDb.AssignedUsers.Count > 0)
                 {
                     var eventssAtDnDTime =await (from x in eventRepo.GetAll()
-                                         where x.EstimatedStartDate >= workEventInDb.EstimatedStartDate && x.EstimatedStartDate <= workEventInDb.EstimatedFinishDate && x.EstimatedFinishDate >= workEventInDb.EstimatedStartDate && x.EstimatedFinishDate <= workEventInDb.EstimatedFinishDate
+                                         where x.EstimatedStartDate >= result.EstimatedStartDate && x.EstimatedStartDate <= result.EstimatedFinishDate && x.EstimatedFinishDate >= result.EstimatedStartDate && x.EstimatedFinishDate <= result.EstimatedFinishDate
                                          select x).ToListAsync();
                     
                     List<int> dnDUserIds = new List<int>();
                     foreach (var item in workEventInDb.AssignedUsers)
                     {
-                        dnDUserIds.Add(item.WmanUser.Id);
+                        dnDUserIds.Add(item.Id);
                     }
                     List<int> eventUserIdsAtDnDTime = new List<int>();
 
@@ -193,13 +196,12 @@ namespace Wman.Logic.Classes
                     {
                         foreach (var item2 in item.AssignedUsers)
                         {
-                            eventUserIdsAtDnDTime.Add(item2.WmanUser.Id);
+                            eventUserIdsAtDnDTime.Add(item2.Id);
                         }
                     }
-                    if(dnDUserIds.Any(x => eventUserIdsAtDnDTime.Any(y => y != x)))
+                    if (eventUserIdsAtDnDTime.Count == 0 || !dnDUserIds.Any(x => eventUserIdsAtDnDTime.Any(y => y == x)))
                     {
-                        result.JobDescription = workEventInDb.JobDescription;
-                        await eventRepo.Update(Id, result);
+                        await eventRepo.Update(Id, workEventInDb);
                     }
                     else
                     {
@@ -208,8 +210,7 @@ namespace Wman.Logic.Classes
 
 
                 }
-                result.JobDescription = workEventInDb.JobDescription;
-                await eventRepo.Update(Id, result);
+                await eventRepo.Update(Id, workEventInDb);
             }
             else
             {
