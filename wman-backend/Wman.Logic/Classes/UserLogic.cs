@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,11 @@ namespace Wman.Logic.Classes
     public class UserLogic : IUserLogic
     {
         UserManager<WmanUser> userManager;
-
-        public UserLogic(UserManager<WmanUser> userManager)
+        IMapper mapper;
+        public UserLogic(UserManager<WmanUser> userManager, IMapper mapper)
         {
             this.userManager = userManager;
+            this.mapper = mapper;
         }
         public async Task<IEnumerable<WorkloadDTO>> getWorkLoads(IEnumerable<string> usernames)
         {
@@ -65,6 +67,29 @@ namespace Wman.Logic.Classes
             }
 
             return output;
+        }
+
+        public async Task<IEnumerable<AssignedEventDTO>> JobsOfUser(string username)
+        {
+            var selectedUser = await userManager.Users
+                .Where(x => x.UserName == username)
+                .Include(y => y.WorkEvents)
+                .ThenInclude(z => z.Address)
+                .AsNoTracking()
+                .SingleOrDefaultAsync();
+            if (selectedUser == null)
+            {
+                throw new ArgumentException("User not found!");
+            }
+            var output = selectedUser.WorkEvents;
+            if (output.Count() == 0)
+            {
+                throw new InvalidOperationException("User has no assigned jobs! ");
+            }
+    ;
+            var testResult = mapper.Map<IEnumerable<AssignedEventDTO>>(output);
+
+            return testResult;
         }
 
         private double calculateLoad(WmanUser user)

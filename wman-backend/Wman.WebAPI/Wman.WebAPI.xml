@@ -63,13 +63,6 @@
             </summary>
             <returns>200</returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.getAssignedJobsOfUser(System.String)">
-            <summary>
-            Get all the events/jobs to which a selected user is assigned to
-            </summary>
-            <param name="username">Username of the searched user</param>
-            <returns>A collection of events/jobs that are assigned to the specified user</returns>
-        </member>
         <member name="T:Wman.WebAPI.Controllers.CalendarEventController">
             <summary>
             CalendarEvent controller
@@ -126,6 +119,7 @@
             ctor
             </summary>
             <param name="eventLogic"></param>
+            <param name="authLogic"></param>
         </member>
         <member name="M:Wman.WebAPI.Controllers.EventController.CreateEvent(Wman.Logic.DTO_Models.CreateEventDTO)">
             <summary>
@@ -182,6 +176,12 @@
             UserController
             </summary>
         </member>
+        <member name="M:Wman.WebAPI.Controllers.UserController.#ctor(Wman.Logic.Interfaces.IUserLogic)">
+            <summary>
+            Ctor
+            </summary>
+            <param name="userLogic"></param>
+        </member>
         <member name="M:Wman.WebAPI.Controllers.UserController.workloadRange(System.Collections.Generic.ICollection{System.String})">
             <summary>
             Calculate the workload of the users with the usernames provided in post
@@ -194,6 +194,13 @@
             Calculate the workload of every single user
             </summary>
             <returns>WorkLoadDTO</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.UserController.getAssignedJobsOfUser(System.String)">
+            <summary>
+            Get all the events/jobs to which a selected user is assigned to
+            </summary>
+            <param name="username">Username of the searched user</param>
+            <returns>A collection of events/jobs that are assigned to the specified user</returns>
         </member>
     </members>
 </doc>

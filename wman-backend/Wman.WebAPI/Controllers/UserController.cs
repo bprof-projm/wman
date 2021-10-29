@@ -69,5 +69,31 @@ namespace Wman.WebAPI.Controllers
                 return StatusCode(500, $"Internal server error : {ex}");
             }
         }
+
+
+        /// <summary>
+        /// Get all the events/jobs to which a selected user is assigned to
+        /// </summary>
+        /// <param name="username">Username of the searched user</param>
+        /// <returns>A collection of events/jobs that are assigned to the specified user</returns>
+        [HttpGet]
+        [Route("jobs")]
+        public async Task<ActionResult<ICollection<AssignedEventDTO>>> getAssignedJobsOfUser(string username)
+        {
+            try
+            {
+                var result = await userLogic.JobsOfUser(username);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                if (ex is InvalidOperationException || ex is ArgumentException)
+                {
+                    return StatusCode(400, $"Error: {ex}");
+
+                }
+                return StatusCode(500, $"Internal server error : {ex}");
+            }
+        }
     }
 }
