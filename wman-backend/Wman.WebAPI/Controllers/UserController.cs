@@ -38,6 +38,10 @@ namespace Wman.WebAPI.Controllers
             }
             catch (Exception ex)
             {
+                if (ex is ArgumentException)
+                {
+                    return StatusCode(400, $"Error: {ex}");
+                }
                 return StatusCode(500, $"Internal server error : {ex}");
             }
         }

@@ -31,12 +31,12 @@ namespace Wman.Logic.Classes
                 selectedUser = allUsers.Where(x => x.UserName == username).SingleOrDefault();
                 if (selectedUser == null)
                 {
-                    throw new ArgumentException("User: {0} doesn't exist!", username);
+                    throw new ArgumentException(String.Format("User: {0} doesn't exists!", username));
                 }
                 output.Add(new WorkloadDTO
                 {
                     Username = username,
-                    Percent = Convert.ToInt32(calculate(selectedUser)),
+                    Percent = Convert.ToInt32(calculateLoad(selectedUser)),
                     ProfilePic = selectedUser.ProfilePicture
                 });
             }
@@ -52,10 +52,14 @@ namespace Wman.Logic.Classes
                 .AsNoTracking();
             foreach (var user in allUsers)
             {
+                if (await userManager.IsInRoleAsync(user, "Worker"))
+                {
+                    //TODO: Move output.add inside this when role management is working.
+                }
                 output.Add(new WorkloadDTO
                 {
                     Username = user.UserName,
-                    Percent = Convert.ToInt32(calculate(user)),
+                    Percent = Convert.ToInt32(calculateLoad(user)),
                     ProfilePic = user.ProfilePicture
                 });
             }
@@ -63,16 +67,14 @@ namespace Wman.Logic.Classes
             return output;
         }
 
-        private double calculate(WmanUser user)
+        private double calculateLoad(WmanUser user)
         {
             var beforeToday = WorksBeforeToday(user.WorkEvents);
             var fromToday = RemainingWorks(user.WorkEvents);
-            //List<TimeSpan> tsBeforeToday = new List<TimeSpan>();
-            //List<TimeSpan> tsFromToday = new List<TimeSpan>();
 
             TimeSpan tsBeforeToday = TimeSpan.Zero;
             TimeSpan tsFromToday = TimeSpan.Zero;
-            
+
             foreach (var item in beforeToday)
             {
                 tsBeforeToday += (item.WorkFinishDate - item.WorkStartDate);

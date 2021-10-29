@@ -79,8 +79,8 @@ namespace Wman.Logic.Helpers
             eventRepo.Add(new WorkEvent
             {
                 JobDescription = "Example event #1",
-                EstimatedStartDate = DateTime.Now.AddDays(-1),
-                EstimatedFinishDate = DateTime.Now.AddDays(-1).AddHours(1), //If you decide to populate the db around midnight, don't :)
+                EstimatedStartDate = DateTime.Today.AddDays(-1).AddHours(3),
+                EstimatedFinishDate = DateTime.Today.AddDays(-1).AddHours(4),
                 Address = addressRepo.GetAll().First(),
                 AddressId = addressRepo.GetAll().First().Id,
                 Status = Status.awaiting
@@ -89,9 +89,9 @@ namespace Wman.Logic.Helpers
             eventRepo.Add(new WorkEvent
             {
                 JobDescription = "Example event #2",
-                EstimatedStartDate = DateTime.Now.AddDays(-2),
-                EstimatedFinishDate = DateTime.Now.AddDays(-2).AddHours(1).AddMinutes(30),
-                WorkStartDate = DateTime.Now.AddDays(-2).AddMinutes(10),
+                EstimatedStartDate = DateTime.Today.AddDays(-2).AddHours(5),
+                EstimatedFinishDate = DateTime.Today.AddDays(-2).AddHours(6).AddMinutes(30),
+                WorkStartDate = DateTime.Today.AddDays(-2).AddHours(5).AddMinutes(7),
                 Address = addressRepo.GetAll().ToList()[1],
                 AddressId = addressRepo.GetAll().ToList()[1].Id,
                 Status = Status.started
@@ -100,14 +100,27 @@ namespace Wman.Logic.Helpers
             eventRepo.Add(new WorkEvent
             {
                 JobDescription = "Example event #3",
-                EstimatedStartDate = DateTime.Now.AddDays(-3),
-                EstimatedFinishDate = DateTime.Now.AddDays(-3).AddHours(2),
-                WorkStartDate = DateTime.Now.AddDays(-3).AddMinutes(10),
+                EstimatedStartDate = DateTime.Today.AddDays(-3).AddHours(5),
+                EstimatedFinishDate = DateTime.Today.AddDays(-3).AddHours(7),
+                WorkStartDate = DateTime.Today.AddDays(-3).AddHours(5).AddMinutes(10),
+                WorkFinishDate = DateTime.Today.AddDays(-3).AddHours(8).AddMinutes(30),
                 Address = addressRepo.GetAll().ToList()[1],
                 AddressId = addressRepo.GetAll().ToList()[1].Id,
-                WorkFinishDate = DateTime.Now.AddDays(-3).AddHours(2).AddMinutes(30),
+
                 Status = Status.finished
             }).Wait();
+
+            eventRepo.Add(new WorkEvent
+            {
+                JobDescription = "Example event #4",
+                EstimatedStartDate = DateTime.Today.AddDays(2).AddHours(5),
+                EstimatedFinishDate = DateTime.Today.AddDays(2).AddHours(9),
+                Address = addressRepo.GetAll().ToList()[1],
+                AddressId = addressRepo.GetAll().ToList()[1].Id,
+
+                Status = Status.awaiting
+            }).Wait();
+
 
             //eventRepo.Add(new WorkEvent
             //{
@@ -115,15 +128,16 @@ namespace Wman.Logic.Helpers
             //        Therefore, it might cause unexpected behaviour in various parts of the code.
             //        However, it could be useful for debugging workload calculation.
             //     */
-            //    JobDescription = "!!! 2+ day long workevent", 
-            //    EstimatedStartDate = DateTime.Now.AddDays(-3),
-            //    EstimatedFinishDate = DateTime.Now.AddDays(-1).AddHours(2),
-            //    WorkStartDate = DateTime.Now.AddDays(-3).AddMinutes(10),
-            //    WorkFinishDate = DateTime.Now.AddDays(-1).AddHours(2).AddMinutes(30),
+            //    JobDescription = "!!! 3+ day long workevent",
+            //    EstimatedStartDate = DateTime.Today.AddDays(-3).AddHours(5),
+            //    EstimatedFinishDate = DateTime.Today.AddHours(2),
+            //    WorkStartDate = DateTime.Today.AddDays(-3).AddHours(5).AddMinutes(10),
+            //    WorkFinishDate = DateTime.Today.AddHours(5).AddMinutes(10),
             //    Address = addressRepo.GetAll().ToList()[1],
             //    AddressId = addressRepo.GetAll().ToList()[1].Id,
             //    Status = Status.finished
             //}).Wait();
+
         }
         private void AddAddress()
         {
@@ -133,7 +147,7 @@ namespace Wman.Logic.Helpers
                 City = "Budapest",
                 Street = "Bécsi út",
                 BuildingNumber = "104-108."
-                
+
             }).Wait();
 
             addressRepo.Add(new AddressHUN
@@ -147,4 +161,4 @@ namespace Wman.Logic.Helpers
         }
     }
 
-    }
+}
