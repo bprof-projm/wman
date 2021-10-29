@@ -95,10 +95,13 @@ namespace Wman.Logic.Classes
                 var find = await (from x in address.GetAll()
                                   where x.Street == result.Address.Street && x.ZIPCode == result.Address.ZIPCode && x.City == result.Address.City
                                   select x).FirstOrDefaultAsync();
-                if (find != null)
+                if (find == null)
                 {
-                    result.AddressId = find.Id;
-                    result.Address = null;
+                    await address.Add(result.Address);
+                }
+                else
+                {
+                    result.Address = find;
                 }
 
                 await eventRepo.Add(result);
