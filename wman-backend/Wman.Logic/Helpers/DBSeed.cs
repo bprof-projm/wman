@@ -82,7 +82,7 @@ namespace Wman.Logic.Helpers
                 EstimatedStartDate = DateTime.Today.AddDays(-1).AddHours(3),
                 EstimatedFinishDate = DateTime.Today.AddDays(-1).AddHours(4),
                 Address = addressRepo.GetAll().First(),
-                AddressId = addressRepo.GetAll().First().Id,
+                //AddressId = addressRepo.GetAll().First().Id,
                 Status = Status.awaiting
             }).Wait();
 
@@ -93,7 +93,7 @@ namespace Wman.Logic.Helpers
                 EstimatedFinishDate = DateTime.Today.AddDays(-2).AddHours(6).AddMinutes(30),
                 WorkStartDate = DateTime.Today.AddDays(-2).AddHours(5).AddMinutes(7),
                 Address = addressRepo.GetAll().ToList()[1],
-                AddressId = addressRepo.GetAll().ToList()[1].Id,
+               // AddressId = addressRepo.GetAll().ToList()[1].Id,
                 Status = Status.started
             }).Wait();
 
@@ -105,7 +105,7 @@ namespace Wman.Logic.Helpers
                 WorkStartDate = DateTime.Today.AddDays(-3).AddHours(5).AddMinutes(10),
                 WorkFinishDate = DateTime.Today.AddDays(-3).AddHours(8).AddMinutes(30),
                 Address = addressRepo.GetAll().ToList()[1],
-                AddressId = addressRepo.GetAll().ToList()[1].Id,
+                //AddressId = addressRepo.GetAll().ToList()[1].Id,
 
                 Status = Status.finished
             }).Wait();
@@ -116,7 +116,7 @@ namespace Wman.Logic.Helpers
                 EstimatedStartDate = DateTime.Today.AddDays(2).AddHours(5),
                 EstimatedFinishDate = DateTime.Today.AddDays(2).AddHours(9),
                 Address = addressRepo.GetAll().ToList()[1],
-                AddressId = addressRepo.GetAll().ToList()[1].Id,
+                //AddressId = addressRepo.GetAll().ToList()[1].Id,
 
                 Status = Status.awaiting
             }).Wait();

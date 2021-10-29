@@ -89,7 +89,7 @@ namespace Wman.WebAPI.Controllers
             {
                 if (ex is InvalidOperationException || ex is ArgumentException)
                 {
-                    return StatusCode(400, $"Error: {ex}");
+                    return StatusCode(400, $"Error: {ex.Message}");
 
                 }
                 return StatusCode(500, $"Internal server error : {ex}");
