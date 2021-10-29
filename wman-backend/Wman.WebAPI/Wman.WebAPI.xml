@@ -195,12 +195,12 @@
             </summary>
             <returns>WorkLoadDTO</returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.UserController.getAssignedJobsOfUser(System.String)">
+        <member name="M:Wman.WebAPI.Controllers.UserController.getAssignedEventsOfUser(System.String)">
             <summary>
-            Get all the events/jobs to which a selected user is assigned to
+            Get all the events to which a selected user is assigned to
             </summary>
             <param name="username">Username of the searched user</param>
-            <returns>A collection of events/jobs that are assigned to the specified user</returns>
+            <returns>A collection of events that are assigned to the specified user</returns>
         </member>
     </members>
 </doc>

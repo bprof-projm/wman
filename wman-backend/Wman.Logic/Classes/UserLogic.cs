@@ -69,7 +69,7 @@ namespace Wman.Logic.Classes
             return output;
         }
 
-        public async Task<IEnumerable<AssignedEventDTO>> JobsOfUser(string username)
+        public async Task<IEnumerable<AssignedEventDTO>> workEventsOfUser(string username)
         {
             var selectedUser = await userManager.Users
                 .Where(x => x.UserName == username)
@@ -84,9 +84,8 @@ namespace Wman.Logic.Classes
             var output = selectedUser.WorkEvents;
             if (output.Count() == 0)
             {
-                throw new InvalidOperationException("User has no assigned jobs! ");
+                throw new InvalidOperationException("User has no assigned workEvents! ");
             }
-    ;
             var testResult = mapper.Map<IEnumerable<AssignedEventDTO>>(output);
 
             return testResult;

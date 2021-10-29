@@ -12,6 +12,6 @@ namespace Wman.Logic.Interfaces
         public Task<IEnumerable<WorkloadDTO>> getWorkLoads(IEnumerable<string> usernames);
         public Task<IEnumerable<WorkloadDTO>> getWorkLoads();
 
-        Task<IEnumerable<AssignedEventDTO>> JobsOfUser(string username);
+        Task<IEnumerable<AssignedEventDTO>> workEventsOfUser(string username);
     }
 }

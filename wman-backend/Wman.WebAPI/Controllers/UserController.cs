@@ -46,7 +46,7 @@ namespace Wman.WebAPI.Controllers
             {
                 if (ex is ArgumentException)
                 {
-                    return StatusCode(400, $"Error: {ex}");
+                    return StatusCode(400, $"Error: {ex.Message}");
                 }
                 return StatusCode(500, $"Internal server error : {ex}");
             }
@@ -72,17 +72,17 @@ namespace Wman.WebAPI.Controllers
 
 
         /// <summary>
-        /// Get all the events/jobs to which a selected user is assigned to
+        /// Get all the events to which a selected user is assigned to
         /// </summary>
         /// <param name="username">Username of the searched user</param>
-        /// <returns>A collection of events/jobs that are assigned to the specified user</returns>
+        /// <returns>A collection of events that are assigned to the specified user</returns>
         [HttpGet]
-        [Route("jobs")]
-        public async Task<ActionResult<ICollection<AssignedEventDTO>>> getAssignedJobsOfUser(string username)
+        [Route("workEvents")]
+        public async Task<ActionResult<ICollection<AssignedEventDTO>>> getAssignedEventsOfUser(string username)
         {
             try
             {
-                var result = await userLogic.JobsOfUser(username);
+                var result = await userLogic.workEventsOfUser(username);
                 return Ok(result);
             }
             catch (Exception ex)
