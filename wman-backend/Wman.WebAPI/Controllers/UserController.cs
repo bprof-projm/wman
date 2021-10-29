@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,15 @@ namespace Wman.WebAPI.Controllers
     /// </summary>
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         IUserLogic userLogic;
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="userLogic"></param>
         public UserController(IUserLogic userLogic)
         {
             this.userLogic = userLogic;
