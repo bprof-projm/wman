@@ -101,15 +101,24 @@ namespace Wman.Logic.Classes
 
             foreach (var item in beforeToday)
             {
-                tsBeforeToday += (item.WorkFinishDate - item.WorkStartDate);
+                if (item.WorkFinishDate != DateTime.MinValue && item.WorkStartDate != DateTime.MinValue)
+                {
+                    tsBeforeToday += (item.WorkFinishDate - item.WorkStartDate);
+                }
+                else
+                {
+                    tsFromToday += (item.EstimatedFinishDate - item.EstimatedStartDate); //Work finish/start date is not valid, but it should already be. Assuming still in progress, and adding it to the remaining work pool
+                }
             }
             foreach (var item in fromToday)
             {
-                tsFromToday += (item.EstimatedFinishDate - item.EstimatedStartDate);
+                if (item.EstimatedFinishDate != DateTime.MinValue && item.EstimatedStartDate != DateTime.MinValue)
+                {
+                    tsFromToday += (item.EstimatedFinishDate - item.EstimatedStartDate);
+                }
             }
 
             TimeSpan tsSUM = tsBeforeToday + tsFromToday;
-            ;
             return (tsSUM.TotalHours / 168) * 100;
         }
         private IEnumerable<WorkEvent> WorksBeforeToday(IEnumerable<WorkEvent> works)
