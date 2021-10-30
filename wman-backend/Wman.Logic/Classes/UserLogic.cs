@@ -93,8 +93,8 @@ namespace Wman.Logic.Classes
 
         private double calculateLoad(WmanUser user)
         {
-            var beforeToday = WorksBeforeToday(user.WorkEvents);
-            var fromToday = RemainingWorks(user.WorkEvents);
+            var beforeToday = WorksBeforeToday(user.WorkEvents, DateTime.Now);
+            var fromToday = RemainingWorks(user.WorkEvents, DateTime.Now);
 
             TimeSpan tsBeforeToday = TimeSpan.Zero;
             TimeSpan tsFromToday = TimeSpan.Zero;
@@ -121,14 +121,14 @@ namespace Wman.Logic.Classes
             TimeSpan tsSUM = tsBeforeToday + tsFromToday;
             return (tsSUM.TotalHours / 168) * 100;
         }
-        private IEnumerable<WorkEvent> WorksBeforeToday(IEnumerable<WorkEvent> works)
+        private IEnumerable<WorkEvent> WorksBeforeToday(IEnumerable<WorkEvent> works, DateTime selectedMonth)
         {
-            return works.Where(x => x.WorkStartDate.DayOfYear < DateTime.Now.DayOfYear && x.WorkStartDate.Year == DateTime.Now.Year);
+            return works.Where(x => x.WorkStartDate.Day < selectedMonth.Day && x.WorkStartDate.Year == selectedMonth.Year && x.WorkStartDate.Month == selectedMonth.Month);
         }
 
-        private IEnumerable<WorkEvent> RemainingWorks(IEnumerable<WorkEvent> works)
+        private IEnumerable<WorkEvent> RemainingWorks(IEnumerable<WorkEvent> works, DateTime selectedMonth)
         {
-            return works.Where(x => x.EstimatedStartDate.DayOfYear <= DateTime.Now.DayOfYear && x.EstimatedStartDate.Year == DateTime.Now.Year);
+            return works.Where(x => x.EstimatedStartDate.Day >= selectedMonth.Day && x.EstimatedStartDate.Year == selectedMonth.Year && x.EstimatedStartDate.Month == selectedMonth.Month && x.WorkStartDate == DateTime.MinValue);
         }
 
     }
