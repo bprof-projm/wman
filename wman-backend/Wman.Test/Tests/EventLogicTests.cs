@@ -80,6 +80,26 @@ namespace Wman.Test.Tests
         }
 
         [Test]
+        public async Task GetAllAssignedUsers_AssignExistingUser_ReturnsSuccessfully()
+        {
+            //Arrange
+            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
+
+            //Act
+            await eventLogic.AssignUser(eventList[0].Id, users[0].UserName);
+            var call = await eventLogic.GetAllAssignedUsers(eventList[0].Id);
+
+            //Assert
+            Assert.AreEqual(1, call.Count());
+
+            this.eventRepo.Verify(x => x.GetOneWithTracking(It.IsAny<int>()), Times.Once);
+            this.userManager.Verify(x => x.Users, Times.Once);
+            this.eventRepo.Verify(x => x.Update(It.IsAny<int>(), It.IsAny<WorkEvent>()), Times.Once);
+            this.eventRepo.Verify(x => x.GetOne(It.IsAny<int>()), Times.Once);
+        }
+
+
+        [Test]
         public async Task UpdateEvent_UpdateExisitingEvent_SuccessfulOperation()
         {
             //Arrange
