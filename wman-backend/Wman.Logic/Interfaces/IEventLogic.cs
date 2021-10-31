@@ -15,7 +15,7 @@ namespace Wman.Logic.Interfaces
         Task UpdateEvent(int Id, WorkEvent newWorkEvent);
         Task<WorkEvent> GetEvent(int id);
         Task<IQueryable<WorkEvent>> GetAllEvents();
-
+        Task DnDEvent(int Id, DnDEventDTO newWorkEvent);
         Task AssignUser(int eventID, string username);
 
         Task<ICollection<UserDTO>> GetAllAssignedUsers(int eventID);
