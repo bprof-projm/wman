@@ -16,9 +16,10 @@ namespace Wman.Logic.Classes
         ILabelRepo labelRepo;
         IMapper mapper;
 
-        public LabelLogic(ILabelRepo labelRepo)
+        public LabelLogic(ILabelRepo labelRepo, IMapper mapper)
         {
             this.labelRepo = labelRepo;
+            this.mapper = mapper;
         }
 
         public async Task CreateLabel(CreateLabelDTO label)
@@ -34,7 +35,7 @@ namespace Wman.Logic.Classes
             }
             else
             {
-                result = find;
+                throw new ArgumentException("This Label already exists");
             }
 
         }
