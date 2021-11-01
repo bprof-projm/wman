@@ -46,5 +46,32 @@ namespace Wman.WebAPI.Controllers
                 return StatusCode(500, $"Internal server error : {ex}");
             }
         }
+
+        [HttpPut("/UpdateLabel/{Id}")]
+        public async Task<ActionResult> UpdateLabel(int Id, [FromBody] CreateLabelDTO newLabel)
+        {
+            try
+            {
+                await labelLogic.UpdateLabel(Id, newLabel);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error : {ex}");
+            }
+        }
+        [HttpPost("/AssignLabelToWorkEvent")]
+        public async Task<ActionResult> AssignLabelToWorkEvent(int eventId, int labelId)
+        {
+            try
+            {
+                await labelLogic.AssignLabelToWorkEvent(eventId, labelId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error : {ex}");
+            }
+        }
     }
 }

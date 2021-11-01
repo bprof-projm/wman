@@ -50,5 +50,9 @@ namespace Wman.Repository.Classes
             oldLabel.Content = element.Content;
             await this.db.SaveChangesAsync();
         }
+        public async Task SaveDatabase()
+        {
+            await this.db.SaveChangesAsync();
+        }
     }
 }

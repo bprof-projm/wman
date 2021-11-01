@@ -14,12 +14,14 @@ namespace Wman.Logic.Classes
     public class LabelLogic : ILabelLogic
     {
         ILabelRepo labelRepo;
+        IWorkEventRepo eventRepo;
         IMapper mapper;
 
-        public LabelLogic(ILabelRepo labelRepo, IMapper mapper)
+        public LabelLogic(ILabelRepo labelRepo, IMapper mapper, IWorkEventRepo eventRepo)
         {
             this.labelRepo = labelRepo;
             this.mapper = mapper;
+            this.eventRepo = eventRepo;
         }
 
         public async Task CreateLabel(CreateLabelDTO label)
@@ -49,12 +51,34 @@ namespace Wman.Logic.Classes
             {
                 labelsDTOs.Add(new ListLabelsDTO()
                 {
+                    Id = item.Id,
                     TextColor = InverseColor(item.Color),
                     BackgroundColor = item.Color,
                     Content = item.Content
                 });
             }
             return labelsDTOs;
+        }
+        public async Task UpdateLabel(int Id, CreateLabelDTO NewLabel)
+        {
+            var result = mapper.Map<Label>(NewLabel);
+            await labelRepo.Update(Id, result);
+        }
+
+        public async Task AssignLabelToWorkEvent(int eventId, int labelId)
+        {
+            var selectedEvent = await eventRepo.GetOneWithTracking(eventId);
+            if (selectedEvent == null)
+            {
+                throw new ArgumentException("Bad event Id");
+            }
+            var selectedLabel = await labelRepo.GetOne(labelId);
+            if (selectedLabel == null)
+            {
+                throw new ArgumentException("Bad Label Id");
+            }
+            selectedLabel.WorkEvents.Add(selectedEvent);
+            await labelRepo.SaveDatabase();
         }
 
         private string InverseColor(string color)
