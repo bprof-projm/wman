@@ -81,6 +81,18 @@ namespace Wman.Logic.Classes
             await labelRepo.SaveDatabase();
         }
 
+        public async Task DeleteLabel(int Id)
+        {
+            if (await labelRepo.GetOne(Id) != null)
+            {
+                await labelRepo.Delete(Id);
+            }
+            else
+            {
+                throw new ArgumentException("Bad Label Id");
+            }
+        }
+
         private string InverseColor(string color)
         {
             string redstring = 255 - Convert.ToInt32(color.Substring(1, 2), 16) <= 15 ? "0"

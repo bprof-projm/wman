@@ -73,5 +73,18 @@ namespace Wman.WebAPI.Controllers
                 return StatusCode(500, $"Internal server error : {ex}");
             }
         }
+        [HttpDelete("/DeleteLabel/{Id}")]
+        public async Task<ActionResult> DeleteLabel(int Id)
+        {
+            try
+            {
+                await labelLogic.DeleteLabel(Id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error : {ex}");
+            }
+        }
     }
 }
