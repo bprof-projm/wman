@@ -57,12 +57,28 @@ namespace Wman.Logic.Classes
                     Content = item.Content
                 });
             }
-            return labelsDTOs;
+            if (labelsDTOs !=null)
+            {
+                return labelsDTOs;
+            }
+            else
+            {
+                throw new ArgumentException("Currently there are no labels added");
+            }
+            
         }
         public async Task UpdateLabel(int Id, CreateLabelDTO NewLabel)
         {
-            var result = mapper.Map<Label>(NewLabel);
-            await labelRepo.Update(Id, result);
+            if (await labelRepo.GetOne(Id) != null)
+            {
+                var result = mapper.Map<Label>(NewLabel);
+                await labelRepo.Update(Id, result);
+            }
+            else
+            {
+                throw new ArgumentException("Not found");
+            }
+            
         }
 
         public async Task AssignLabelToWorkEvent(int eventId, int labelId)
