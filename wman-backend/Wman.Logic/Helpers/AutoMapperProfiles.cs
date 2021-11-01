@@ -25,6 +25,7 @@ namespace Wman.Logic.Helpers
     // chose the destination-property and map the source itself
             .ForMember(dest => dest.Address, x => x.MapFrom(src => src.Address));
             CreateMap<DnDEventDTO, WorkEvent>();
+            CreateMap<CreateLabelDTO, Label>();
         }
     }
 }
