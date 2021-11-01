@@ -10,5 +10,6 @@ namespace Wman.Logic.Interfaces
     public interface ILabelLogic
     {
         Task CreateLabel(CreateLabelDTO label);
+        List<ListLabelsDTO> GetAllLabels();
     }
 }

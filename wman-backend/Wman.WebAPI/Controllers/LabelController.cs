@@ -32,5 +32,19 @@ namespace Wman.WebAPI.Controllers
                 return StatusCode(500, $"Internal server error : {ex}");
             }
         }
+
+        [HttpGet("/GetAllLabel")]
+        public ActionResult<ListLabelsDTO> GetAllLabel()
+        {
+            try
+            {
+                
+                return Ok(labelLogic.GetAllLabels());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error : {ex}");
+            }
+        }
     }
 }
