@@ -6,11 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
+using Wman.Logic.Interfaces;
 using Wman.Repository.Interfaces;
 
 namespace Wman.Logic.Classes
 {
-    public class LabelLogic
+    public class LabelLogic : ILabelLogic
     {
         ILabelRepo labelRepo;
         IMapper mapper;
