@@ -9,5 +9,6 @@ namespace Wman.Repository.Interfaces
 {
     public interface ILabelRepo : IRepository<Label,int>
     {
+        Task SaveDatabase();
     }
 }
