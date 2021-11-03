@@ -182,20 +182,20 @@
             </summary>
             <param name="userLogic"></param>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.UserController.workloadRange(System.Collections.Generic.ICollection{System.String})">
+        <member name="M:Wman.WebAPI.Controllers.UserController.WorkloadRange(System.Collections.Generic.ICollection{System.String})">
             <summary>
             Calculate the workload of the users with the usernames provided in post
             </summary>
             <param name="usernames">A collection of usernames</param>
             <returns>WorkLoadDTO</returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.UserController.allWorkloads">
+        <member name="M:Wman.WebAPI.Controllers.UserController.AllWorkloads">
             <summary>
             Calculate the workload of every single user
             </summary>
             <returns>WorkLoadDTO</returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.UserController.getAssignedEventsOfUser(System.String)">
+        <member name="M:Wman.WebAPI.Controllers.UserController.GetAssignedEventsOfUser(System.String)">
             <summary>
             Get all the events to which a selected user is assigned to
             </summary>

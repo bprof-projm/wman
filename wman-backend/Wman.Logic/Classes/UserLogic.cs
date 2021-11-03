@@ -21,7 +21,7 @@ namespace Wman.Logic.Classes
             this.userManager = userManager;
             this.mapper = mapper;
         }
-        public async Task<IEnumerable<WorkloadDTO>> getWorkLoads(IEnumerable<string> usernames)
+        public async Task<IEnumerable<WorkloadDTO>> GetWorkLoads(IEnumerable<string> usernames)
         {
             var output = new List<WorkloadDTO>();
             var allUsers = userManager.Users
@@ -47,7 +47,7 @@ namespace Wman.Logic.Classes
                 output.Add(new WorkloadDTO
                 {
                     Username = username,
-                    Percent = Convert.ToInt32(calculateLoad(selectedUser)),
+                    Percent = Convert.ToInt32(CalculateLoad(selectedUser)),
                     ProfilePicUrl = profileUrl
                 }); ;
             }
@@ -55,7 +55,7 @@ namespace Wman.Logic.Classes
             return output;
         }
 
-        public async Task<IEnumerable<WorkloadDTO>> getWorkLoads()
+        public async Task<IEnumerable<WorkloadDTO>> GetWorkLoads()
         {
             var output = new List<WorkloadDTO>();
             var allUsers = userManager.Users
@@ -79,7 +79,7 @@ namespace Wman.Logic.Classes
                 output.Add(new WorkloadDTO
                 {
                     Username = user.UserName,
-                    Percent = Convert.ToInt32(calculateLoad(user)),
+                    Percent = Convert.ToInt32(CalculateLoad(user)),
                     ProfilePicUrl = profileUrl
                 });
             }
@@ -87,7 +87,7 @@ namespace Wman.Logic.Classes
             return output;
         }
 
-        public async Task<IEnumerable<AssignedEventDTO>> workEventsOfUser(string username)
+        public async Task<IEnumerable<AssignedEventDTO>> WorkEventsOfUser(string username)
         {
             var selectedUser = await userManager.Users
                 .Where(x => x.UserName == username)
@@ -109,7 +109,7 @@ namespace Wman.Logic.Classes
             return testResult;
         }
 
-        private double calculateLoad(WmanUser user)
+        private double CalculateLoad(WmanUser user)
         {
             var beforeToday = WorksBeforeToday(user.WorkEvents, DateTime.Now);
             var fromToday = RemainingWorks(user.WorkEvents, DateTime.Now);

@@ -9,9 +9,9 @@ namespace Wman.Logic.Interfaces
 {
     public interface IUserLogic
     {
-        public Task<IEnumerable<WorkloadDTO>> getWorkLoads(IEnumerable<string> usernames);
-        public Task<IEnumerable<WorkloadDTO>> getWorkLoads();
+        public Task<IEnumerable<WorkloadDTO>> GetWorkLoads(IEnumerable<string> usernames);
+        public Task<IEnumerable<WorkloadDTO>> GetWorkLoads();
 
-        Task<IEnumerable<AssignedEventDTO>> workEventsOfUser(string username);
+        Task<IEnumerable<AssignedEventDTO>> WorkEventsOfUser(string username);
     }
 }

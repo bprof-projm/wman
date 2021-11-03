@@ -36,11 +36,11 @@ namespace Wman.WebAPI.Controllers
         /// <returns>WorkLoadDTO</returns>
         [HttpPost]
         [Route("workload/range")]
-        public async Task<ActionResult<IEnumerable<WorkloadDTO>>> workloadRange([FromBody] ICollection<string> usernames)
+        public async Task<ActionResult<IEnumerable<WorkloadDTO>>> WorkloadRange([FromBody] ICollection<string> usernames)
         {
             try
             {
-                return Ok(await userLogic.getWorkLoads(usernames));
+                return Ok(await userLogic.GetWorkLoads(usernames));
             }
             catch (Exception ex)
             {
@@ -58,11 +58,11 @@ namespace Wman.WebAPI.Controllers
         /// <returns>WorkLoadDTO</returns>
         [HttpGet]
         [Route("workload")]
-        public async Task<ActionResult<IEnumerable<WorkloadDTO>>> allWorkloads()
+        public async Task<ActionResult<IEnumerable<WorkloadDTO>>> AllWorkloads()
         {
             try
             {
-                return Ok(await userLogic.getWorkLoads());
+                return Ok(await userLogic.GetWorkLoads());
             }
             catch (Exception ex)
             {
@@ -78,11 +78,11 @@ namespace Wman.WebAPI.Controllers
         /// <returns>A collection of events that are assigned to the specified user</returns>
         [HttpGet]
         [Route("workEvents")]
-        public async Task<ActionResult<ICollection<AssignedEventDTO>>> getAssignedEventsOfUser(string username)
+        public async Task<ActionResult<ICollection<AssignedEventDTO>>> GetAssignedEventsOfUser(string username)
         {
             try
             {
-                var result = await userLogic.workEventsOfUser(username);
+                var result = await userLogic.WorkEventsOfUser(username);
                 return Ok(result);
             }
             catch (Exception ex)
