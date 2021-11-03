@@ -68,7 +68,7 @@
             CalendarEvent controller
             </summary>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.CalendarEventController.#ctor(Wman.Logic.Interfaces.ICalendarEventLogic)">
+        <member name="M:Wman.WebAPI.Controllers.CalendarEventController.#ctor(Wman.Logic.Interfaces.ICalendarEventLogic,Wman.Logic.Interfaces.IAllInWorkEventLogic)">
             <summary>
             ctor
             </summary>

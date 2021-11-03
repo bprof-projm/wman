@@ -20,13 +20,15 @@ namespace Wman.WebAPI.Controllers
     public class CalendarEventController : ControllerBase
     {
         ICalendarEventLogic calendarEvent;
+        IAllInWorkEventLogic workCardEvent;
         /// <summary>
         /// ctor
         /// </summary>
         /// <param name="calendarEvent"></param>
-        public CalendarEventController(ICalendarEventLogic calendarEvent)
+        public CalendarEventController(ICalendarEventLogic calendarEvent, IAllInWorkEventLogic workCardEvent)
         {
             this.calendarEvent = calendarEvent;
+            this.workCardEvent = workCardEvent;
         }
         /// <summary>
         /// gets events of today
@@ -135,6 +137,21 @@ namespace Wman.WebAPI.Controllers
             {
                 var events = await calendarEvent.GetWeekEvents(startEventDate, finishEventDate);
                 return Ok(events);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, $"Internal server error : {ex}");
+            }
+        }
+
+        [HttpGet("WorcCard/{Id}")]
+        public async Task<ActionResult<WorkEventForWorkCardDTO>> ForWorkCard(int Id)
+        {
+            try
+            {
+                var workCard = await workCardEvent.ForWorkCard(Id);
+                return Ok(workCard);
             }
             catch (Exception ex)
             {

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Wman.Data.DB_Models
@@ -23,6 +24,7 @@ namespace Wman.Data.DB_Models
         public PicturesType PicturesType { get; set; }
         public int WManUserID { get; set; }
         public int WorkEventID { get; set; }
+        [JsonIgnore]
         public virtual ICollection<WorkEvent> WorkEvents { get; set; }
         public Pictures()
         {

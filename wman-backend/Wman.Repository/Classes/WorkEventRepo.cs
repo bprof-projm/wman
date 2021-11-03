@@ -39,7 +39,7 @@ namespace Wman.Repository.Classes
         {
             var entity = await (from x in db.WorkEvent
                           where x.Id == key
-                          select x).Include(x => x.AssignedUsers).AsNoTracking().Include(x => x.Address).FirstOrDefaultAsync();
+                          select x).Include(x => x.AssignedUsers).AsNoTracking().Include(x => x.Address).Include(x => x.Labels).FirstOrDefaultAsync();
             return entity;
         }
         /// <inheritdoc />
