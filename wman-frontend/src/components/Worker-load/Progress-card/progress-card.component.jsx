@@ -1,12 +1,26 @@
+import { Avatar, Progress } from "antd";
 import React from "react";
 import './progress-card.styles.css'
 
 const ProgressCard = () => {
-    return(
+    return (
         <div className="progress-card-container">
-            <div>Pic</div>
-            <div>Name</div>
-            <div>Load</div>       
+            <div>
+                <Avatar src="https://joeschmoe.io/api/v1/random" />
+            </div>
+
+            <div>
+                John Doe
+            </div>
+
+            <div>
+                <Progress
+                    strokeColor={{ '0%': '#108ee9', '100%': '#87d068', }}
+                    type="circle"
+                    percent={70}
+                    width={50}
+                     />
+            </div>
         </div>
     )
 }
