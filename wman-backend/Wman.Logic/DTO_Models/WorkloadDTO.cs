@@ -10,7 +10,7 @@ namespace Wman.Logic.DTO_Models
    public class WorkloadDTO
     {
         public string Username { get; set; }
-        public Pictures ProfilePic { get; set; }
+        public string ProfilePicUrl { get; set; }
         public int Percent { get; set; }
     }
 }

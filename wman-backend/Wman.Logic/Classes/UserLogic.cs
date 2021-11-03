@@ -28,6 +28,7 @@ namespace Wman.Logic.Classes
                 .Include(y => y.WorkEvents)
                 .AsNoTracking();
             WmanUser selectedUser;
+            var profileUrl = string.Empty;
             foreach (var username in usernames)
             {
                 selectedUser = allUsers.Where(x => x.UserName == username).SingleOrDefault();
@@ -35,12 +36,20 @@ namespace Wman.Logic.Classes
                 {
                     throw new ArgumentException(String.Format("User: {0} doesn't exists!", username));
                 }
+                if (selectedUser.ProfilePicture != null)
+                {
+                    profileUrl = selectedUser.ProfilePicture.Url;
+                }
+                else
+                {
+                    profileUrl = string.Empty;
+                }
                 output.Add(new WorkloadDTO
                 {
                     Username = username,
                     Percent = Convert.ToInt32(calculateLoad(selectedUser)),
-                    ProfilePic = selectedUser.ProfilePicture
-                });
+                    ProfilePicUrl = profileUrl
+                }); ;
             }
 
             return output;
@@ -52,17 +61,26 @@ namespace Wman.Logic.Classes
             var allUsers = userManager.Users
                 .Include(y => y.WorkEvents)
                 .AsNoTracking();
+            var profileUrl = string.Empty;
             foreach (var user in allUsers)
             {
                 if (await userManager.IsInRoleAsync(user, "Worker"))
                 {
                     //TODO: Move output.add inside this when role management is working.
                 }
+                if (user.ProfilePicture != null)
+                {
+                    profileUrl = user.ProfilePicture.Url;
+                }
+                else
+                {
+                    profileUrl = string.Empty;
+                }
                 output.Add(new WorkloadDTO
                 {
                     Username = user.UserName,
                     Percent = Convert.ToInt32(calculateLoad(user)),
-                    ProfilePic = user.ProfilePicture
+                    ProfilePicUrl = profileUrl
                 });
             }
 
