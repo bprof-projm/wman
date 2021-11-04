@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,11 @@ namespace Wman.Repository.Classes
     public class WorkEventRepo : IWorkEventRepo
     {
         private wmanDb db;
-        public WorkEventRepo(wmanDb inDb)
+        UserManager<WmanUser> userManager;
+        public WorkEventRepo(wmanDb inDb, UserManager<WmanUser> userManager)
         {
             this.db = inDb;
+            this.userManager = userManager;
         }
         public async Task Add(WorkEvent element)
         {
@@ -39,7 +42,7 @@ namespace Wman.Repository.Classes
         {
             var entity = await (from x in db.WorkEvent
                           where x.Id == key
-                          select x).Include(x => x.AssignedUsers).AsNoTracking().Include(x => x.Address).Include(x => x.Labels).FirstOrDefaultAsync();
+                          select x).AsNoTracking().Include(x => x.AssignedUsers).ThenInclude(x => x.ProfilePicture).Include(x => x.Address).Include(x => x.Labels).FirstOrDefaultAsync();
             return entity;
         }
         /// <inheritdoc />

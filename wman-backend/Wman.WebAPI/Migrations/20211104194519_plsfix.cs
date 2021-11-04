@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Wman.WebAPI.Migrations
 {
-    public partial class a : Migration
+    public partial class plsfix : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -219,6 +219,7 @@ namespace Wman.WebAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CloudPhotoID = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PicturesType = table.Column<int>(type: "int", nullable: false),
@@ -237,72 +238,72 @@ namespace Wman.WebAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "WmanUserWorkEvent",
+                name: "LabelWorkEvent",
                 columns: table => new
                 {
-                    WmanUserId = table.Column<int>(type: "int", nullable: false),
-                    WorkEventId = table.Column<int>(type: "int", nullable: false)
+                    LabelsId = table.Column<int>(type: "int", nullable: false),
+                    WorkEventsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WmanUserWorkEvent", x => new { x.WorkEventId, x.WmanUserId });
+                    table.PrimaryKey("PK_LabelWorkEvent", x => new { x.LabelsId, x.WorkEventsId });
                     table.ForeignKey(
-                        name: "FK_WmanUserWorkEvent_AspNetUsers_WorkEventId",
-                        column: x => x.WorkEventId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_WmanUserWorkEvent_WorkEvent_WmanUserId",
-                        column: x => x.WmanUserId,
-                        principalTable: "WorkEvent",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "WorkEventLabel",
-                columns: table => new
-                {
-                    WorkEventId = table.Column<int>(type: "int", nullable: false),
-                    LabelId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WorkEventLabel", x => new { x.WorkEventId, x.LabelId });
-                    table.ForeignKey(
-                        name: "FK_WorkEventLabel_Label_WorkEventId",
-                        column: x => x.WorkEventId,
+                        name: "FK_LabelWorkEvent_Label_LabelsId",
+                        column: x => x.LabelsId,
                         principalTable: "Label",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_WorkEventLabel_WorkEvent_LabelId",
-                        column: x => x.LabelId,
+                        name: "FK_LabelWorkEvent_WorkEvent_WorkEventsId",
+                        column: x => x.WorkEventsId,
                         principalTable: "WorkEvent",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "WorkEventPicture",
+                name: "WmanUserWorkEvent",
                 columns: table => new
                 {
-                    WorkEventId = table.Column<int>(type: "int", nullable: false),
-                    PictureId = table.Column<int>(type: "int", nullable: false)
+                    AssignedUsersId = table.Column<int>(type: "int", nullable: false),
+                    WorkEventsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WorkEventPicture", x => new { x.WorkEventId, x.PictureId });
+                    table.PrimaryKey("PK_WmanUserWorkEvent", x => new { x.AssignedUsersId, x.WorkEventsId });
                     table.ForeignKey(
-                        name: "FK_WorkEventPicture_Picture_WorkEventId",
-                        column: x => x.WorkEventId,
+                        name: "FK_WmanUserWorkEvent_AspNetUsers_AssignedUsersId",
+                        column: x => x.AssignedUsersId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WmanUserWorkEvent_WorkEvent_WorkEventsId",
+                        column: x => x.WorkEventsId,
+                        principalTable: "WorkEvent",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PicturesWorkEvent",
+                columns: table => new
+                {
+                    ProofOfWorkPicId = table.Column<int>(type: "int", nullable: false),
+                    WorkEventsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PicturesWorkEvent", x => new { x.ProofOfWorkPicId, x.WorkEventsId });
+                    table.ForeignKey(
+                        name: "FK_PicturesWorkEvent_Picture_ProofOfWorkPicId",
+                        column: x => x.ProofOfWorkPicId,
                         principalTable: "Picture",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_WorkEventPicture_WorkEvent_PictureId",
-                        column: x => x.PictureId,
+                        name: "FK_PicturesWorkEvent_WorkEvent_WorkEventsId",
+                        column: x => x.WorkEventsId,
                         principalTable: "WorkEvent",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -353,30 +354,30 @@ namespace Wman.WebAPI.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_LabelWorkEvent_WorkEventsId",
+                table: "LabelWorkEvent",
+                column: "WorkEventsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Picture_WManUserID",
                 table: "Picture",
                 column: "WManUserID",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_WmanUserWorkEvent_WmanUserId",
+                name: "IX_PicturesWorkEvent_WorkEventsId",
+                table: "PicturesWorkEvent",
+                column: "WorkEventsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WmanUserWorkEvent_WorkEventsId",
                 table: "WmanUserWorkEvent",
-                column: "WmanUserId");
+                column: "WorkEventsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WorkEvent_AddressId",
                 table: "WorkEvent",
                 column: "AddressId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_WorkEventLabel_LabelId",
-                table: "WorkEventLabel",
-                column: "LabelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_WorkEventPicture_PictureId",
-                table: "WorkEventPicture",
-                column: "PictureId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -397,13 +398,13 @@ namespace Wman.WebAPI.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "LabelWorkEvent");
+
+            migrationBuilder.DropTable(
+                name: "PicturesWorkEvent");
+
+            migrationBuilder.DropTable(
                 name: "WmanUserWorkEvent");
-
-            migrationBuilder.DropTable(
-                name: "WorkEventLabel");
-
-            migrationBuilder.DropTable(
-                name: "WorkEventPicture");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

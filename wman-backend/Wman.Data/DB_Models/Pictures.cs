@@ -28,6 +28,8 @@ namespace Wman.Data.DB_Models
         public int WorkEventID { get; set; }
         [JsonIgnore]
         public virtual ICollection<WorkEvent> WorkEvents { get; set; }
+        [JsonIgnore]
+        public virtual WmanUser WmanUser  { get; set; }
         public Pictures()
         {
             this.WorkEvents = new List<WorkEvent>();

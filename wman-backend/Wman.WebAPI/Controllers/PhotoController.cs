@@ -1,11 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
+using Wman.Logic.DTO_Models;
 using Wman.Logic.Services;
+using Wman.Repository.Interfaces;
 
 namespace Wman.WebAPI.Controllers
 {
@@ -14,35 +19,43 @@ namespace Wman.WebAPI.Controllers
     public class PhotoController : ControllerBase
     {
         IPhotoService _photoService;
+        UserManager<WmanUser> userManager;
+        IPicturesRepo picturesRepo;
+        IMapper mapper;
 
-        public PhotoController(IPhotoService photoService)
+        public PhotoController(IPhotoService photoService, UserManager<WmanUser> userManager, IPicturesRepo picturesRepo, IMapper mapper)
         {
             _photoService = photoService;
+            this.userManager = userManager;
+            this.picturesRepo = picturesRepo;
+            this.mapper = mapper;
         }
 
-        [HttpPost("AddPhoto")]
-        public async Task<ActionResult<Pictures>> AddProfilePhoto(IFormFile file)
+        [HttpPost("AddPhoto/{userName}")]
+        public async Task<ActionResult<PhotoDTO>> AddProfilePhoto(string userName,IFormFile file)
         {
-            
+            var selectedUser = await (from x in userManager.Users
+                               where x.UserName == userName
+                               select x).Include(x => x.ProfilePicture).FirstOrDefaultAsync();
+
             var result = await _photoService.AddProfilePhotoAsync(file);
             if (result.Error != null)
             {
                 return BadRequest(result.Error.Message);
             }
-            var pictures = new Pictures
+            var UploadedPicture = new Pictures
             {
                 Url = result.SecureUrl.AbsoluteUri,
-                CloudPhotoID = result.PublicId
+                CloudPhotoID = result.PublicId,
+                PicturesType = PicturesType.ProfilePic,
+                WmanUser = selectedUser
+                
             };
+            selectedUser.ProfilePicture = UploadedPicture;
+            await picturesRepo.Add(UploadedPicture);
 
-            //user.Photos.Add(photo);
-            //if (await _unitOfWork.Complete())
-            //{
-            //    // return _mapper.Map<PhotoDto>(photo);
-            //    return CreatedAtRoute("GetUser", new { Username = user.UserName }, _mapper.Map<PhotoDto>(photo));
-            //}
-            //return BadRequest("Problem adding photo");
-            return Ok();
+            var photoResult = mapper.Map<PhotoDTO>(selectedUser.ProfilePicture);
+            return Ok(photoResult);
         }
     }
 }

@@ -187,6 +187,9 @@ namespace Wman.WebAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CloudPhotoID")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -456,11 +459,13 @@ namespace Wman.WebAPI.Migrations
 
             modelBuilder.Entity("Wman.Data.DB_Models.Pictures", b =>
                 {
-                    b.HasOne("Wman.Data.DB_Models.WmanUser", null)
+                    b.HasOne("Wman.Data.DB_Models.WmanUser", "WmanUser")
                         .WithOne("ProfilePicture")
                         .HasForeignKey("Wman.Data.DB_Models.Pictures", "WManUserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("WmanUser");
                 });
 
             modelBuilder.Entity("Wman.Data.DB_Models.WmanUserRole", b =>

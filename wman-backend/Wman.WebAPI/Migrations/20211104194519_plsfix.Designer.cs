@@ -10,8 +10,8 @@ using Wman.Data;
 namespace Wman.WebAPI.Migrations
 {
     [DbContext(typeof(wmanDb))]
-    [Migration("20211013165301_dbfix")]
-    partial class dbfix
+    [Migration("20211104194519_plsfix")]
+    partial class plsfix
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -188,6 +188,9 @@ namespace Wman.WebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CloudPhotoID")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -458,11 +461,13 @@ namespace Wman.WebAPI.Migrations
 
             modelBuilder.Entity("Wman.Data.DB_Models.Pictures", b =>
                 {
-                    b.HasOne("Wman.Data.DB_Models.WmanUser", null)
+                    b.HasOne("Wman.Data.DB_Models.WmanUser", "WmanUser")
                         .WithOne("ProfilePicture")
                         .HasForeignKey("Wman.Data.DB_Models.Pictures", "WManUserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("WmanUser");
                 });
 
             modelBuilder.Entity("Wman.Data.DB_Models.WmanUserRole", b =>

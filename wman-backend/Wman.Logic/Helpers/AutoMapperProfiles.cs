@@ -19,6 +19,7 @@ namespace Wman.Logic.Helpers
             CreateMap<CreateEventDTO, AddressHUNDTO>();
             CreateMap<AddressHUNDTO, AddressHUN>().ReverseMap();
             CreateMap<WmanUser, UserDTO>().ReverseMap();
+            CreateMap<WmanUser, WorkerDTO>().ReverseMap();
             CreateMap<WorkEvent, AssignedEventDTO>();
             //.ForMember(dest => dest.Address, x => x.MapFrom(src => src.Address));
             CreateMap<WorkEvent, CalendarWorkEventDTO>();
@@ -31,6 +32,7 @@ namespace Wman.Logic.Helpers
             CreateMap<Label, ListLabelsDTO>()
                 .ForMember(dest => dest.BackgroundColor, x => x.MapFrom(src => src.Color))
                 .ForMember(dest => dest.TextColor, x => x.MapFrom(src => LabelLogic.InverseColor(src.Color)));
+            CreateMap<Pictures, PhotoDTO>();
         }
     }
 }

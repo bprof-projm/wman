@@ -12,7 +12,7 @@ namespace Wman.Logic.DTO_Models
         public string JobDescription { get; set; }
         public DateTime EstimatedStartDate { get; set; }
         public DateTime EstimatedFinishDate { get; set; }      
-        public List<UserDTO> AssignedUsers { get; set; }
+        public List<WorkerDTO> AssignedUsers { get; set; }
         public List<ListLabelsDTO> Labels { get; set; }
         public AddressHUNDTO Address { get; set; }
         public DateTime WorkStartDate { get; set; }
