@@ -25,13 +25,9 @@ const ProgressMenu = () => {
     /*Get elements*/
     const [users, setUsers] = useState([]);
     useEffect(() => {
-        axios.get(`https://mocki.io/v1/ca25535f-fd74-491a-950c-70588a93f392`)
+        axios.get(`https://mocki.io/v1/c6f3f270-21ea-450c-9428-715ec0babc6d`)
             .then(response => setUsers(response.data));
-    });
-
-    const logit = () => {
-        console.log(users)
-    }
+    },[axios]);
 
     return (
         <div>

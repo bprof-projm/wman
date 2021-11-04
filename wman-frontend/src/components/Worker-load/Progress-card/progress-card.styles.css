@@ -4,11 +4,23 @@
   background-color:rgb(235, 234, 255);
   border: 1px solid rgb(240, 220, 220);
   border-radius:20px;
-  padding: 10%;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 5%;
+  padding-bottom: 5%;
   cursor:pointer;
   transform: translateZ(0);
-  transition: transform 0.25s ease-out;  }
+  transition: transform 0.25s ease-out;
+  
+}
   
   .progress-card-container:hover {
     transform: scale(1.05);
   }
+  .card-name{
+    text-align: center;
+    vertical-align:middle;
+  }
+  .progress-card-container img{
+    border-radius: 50%;
+}

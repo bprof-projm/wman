@@ -1,27 +1,26 @@
 import { Avatar, Progress } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import './progress-card.styles.css'
 
 //props needed: src, name, percent (workload)
 const ProgressCard = (props) => {
     return (
         <div className="progress-card-container">
-            <div>
-                {/*<Avatar src="https://joeschmoe.io/api/v1/random" size="large"/>*/}
-                <Avatar src={props.src} size="large"/>
+            <div className="card-avatar">
+                <img src={props.src} />
             </div>
 
-            <div>
-                {props.name}
+            <div className="card-name" >
+                <h4>{props.name}</h4>
             </div>
 
-            <div>
+            <div className="card-progress-circle">
                 <Progress
                     strokeColor={{ '0%': '#108ee9', '100%': '#87d068', }}
                     type="circle"
                     percent={props.percent}
-                    width={50}
-                     />
+                    width={68}
+                />
             </div>
         </div>
     )
