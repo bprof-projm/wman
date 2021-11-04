@@ -15,13 +15,15 @@ namespace Wman.Logic.Helpers
         IWorkEventRepo eventRepo;
         IMapper mapper;
         IAddressRepo addressRepo;
+        IPicturesRepo picRepo;
         UserManager<WmanUser> userManager;
-        public DBSeed(IWorkEventRepo eventRepo, IMapper mapper, IAddressRepo addressRepo, UserManager<WmanUser> userManager)
+        public DBSeed(IWorkEventRepo eventRepo, IMapper mapper, IAddressRepo addressRepo, UserManager<WmanUser> userManager, IPicturesRepo picRepo)
         {
             this.eventRepo = eventRepo;
             this.mapper = mapper;
             this.addressRepo = addressRepo;
             this.userManager = userManager;
+            this.picRepo = picRepo;
 
         }
 
@@ -34,6 +36,7 @@ namespace Wman.Logic.Helpers
             AddUsers();
             AddAddress();
             AddEvents();
+            AddPicture();
 #else
         throw new InvalidOperationException("API is not running in debug mode!");
 #endif    
@@ -151,6 +154,24 @@ namespace Wman.Logic.Helpers
                 Street = "Doberdó út",
                 BuildingNumber = "6/A."
 
+            }).Wait();
+        }
+        private void AddPicture()
+        {
+            picRepo.Add(new Pictures()
+            {
+                Name = "Test pic",
+                Url = "https://upload.wikimedia.org/wikipedia/commons/c/c5/Number-One.JPG",
+                WmanUser = userManager.Users.ToList()[0],
+                PicturesType = PicturesType.ProfilePic
+            }).Wait();
+
+            picRepo.Add(new Pictures()
+            {
+                Name = "Test pic2",
+                Url = "https://upload.wikimedia.org/wikipedia/commons/d/d5/Number-two.JPG",
+                WmanUser = userManager.Users.ToList()[1],
+                PicturesType = PicturesType.ProfilePic
             }).Wait();
         }
     }

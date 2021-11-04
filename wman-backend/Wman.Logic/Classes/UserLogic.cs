@@ -26,6 +26,7 @@ namespace Wman.Logic.Classes
             var output = new List<WorkloadDTO>();
             var allUsers = userManager.Users
                 .Include(y => y.WorkEvents)
+                .Include(z=>z.ProfilePicture)
                 .AsNoTracking();
             WmanUser selectedUser;
             var profileUrl = string.Empty;
@@ -61,6 +62,7 @@ namespace Wman.Logic.Classes
             var output = new List<WorkloadDTO>();
             var allUsers = userManager.Users
                 .Include(y => y.WorkEvents)
+                .Include(z => z.ProfilePicture)
                 .AsNoTracking();
             var profileUrl = string.Empty;
             foreach (var user in allUsers)
