@@ -11,15 +11,17 @@
   cursor:pointer;
   transform: translateZ(0);
   transition: transform 0.25s ease-out;
-  
-}
+  align-content: center;
+  }
   
   .progress-card-container:hover {
     transform: scale(1.05);
   }
-  .card-name{
+  .card-name{ 
+    display: flex;
     text-align: center;
     vertical-align:middle;
+    align-items: center;
   }
   .progress-card-container img{
     border-radius: 50%;

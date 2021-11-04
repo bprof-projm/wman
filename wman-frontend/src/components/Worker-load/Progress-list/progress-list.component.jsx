@@ -9,10 +9,10 @@ const ProgressList = (props) => {
                 props.objects.map(object => 
                     //props needed: src, name, percent (workload)
                     <ProgressCard
-                        key={object.name}
-                        src={object.picture.src} 
-                        name={object.name}
-                        percent={object.workload}/>
+                        key={object.userID}
+                        src={object.profilePicUrl} 
+                        name={object.username}
+                        percent={object.percent}/>
                 )}
         </div>
     )

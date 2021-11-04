@@ -6,8 +6,8 @@ import axios from "axios";
 import { SearchBox } from "../../SearchBox/search-box.component";
 import './progress-menu.styles.css';
 
-
 const ProgressMenu = () => {
+    
     /*Visibility*/
     const [visible, setVisible] = useState(false);
 
@@ -18,18 +18,20 @@ const ProgressMenu = () => {
     const closeMenu = () => {
         setVisible(false);
     }
+
     /*Placement*/
     const [placement, setPlacement] = useState('right')
 
     const changePlacement = e => {
         setPlacement(e.target.value);
     };
+
     /*Get elements*/
     const [users, setUsers] = useState([]);
     useEffect(() => {
-        axios.get(`https://mocki.io/v1/c6f3f270-21ea-450c-9428-715ec0babc6d`)
+        axios.get(`/User/workload`)
             .then(response => setUsers(response.data));
-    }, [axios]);
+    }, [axios]);git st
 
     /*Search user by name*/
     const [searchField, setSearchField] = useState("");
@@ -42,7 +44,6 @@ const ProgressMenu = () => {
         users.filter(
             user => user.name.toLowerCase().includes(searchField.toLowerCase())
         );
-
 
     return (
         <div>
