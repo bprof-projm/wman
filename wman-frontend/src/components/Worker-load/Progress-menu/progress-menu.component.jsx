@@ -5,7 +5,6 @@ import ProgressList from "../Progress-list/progress-list.component";
 import axios from "axios";
 import { SearchBox } from "../../SearchBox/search-box.component";
 import './progress-menu.styles.css';
-
 const ProgressMenu = () => {
     
     /*Visibility*/
@@ -31,7 +30,7 @@ const ProgressMenu = () => {
     useEffect(() => {
         axios.get(`/User/workload`)
             .then(response => setUsers(response.data));
-    }, [axios]);git st
+    }, [axios]);
 
     /*Search user by name*/
     const [searchField, setSearchField] = useState("");
@@ -42,7 +41,7 @@ const ProgressMenu = () => {
 
     const filteredUsers =
         users.filter(
-            user => user.name.toLowerCase().includes(searchField.toLowerCase())
+            user => user.username.toLowerCase().includes(searchField.toLowerCase())
         );
 
     return (
