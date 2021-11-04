@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wman.Data;
 
 namespace Wman.WebAPI.Migrations
 {
     [DbContext(typeof(wmanDb))]
-    partial class wmanDbModelSnapshot : ModelSnapshot
+    [Migration("20211104163025_pictureFix")]
+    partial class pictureFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
