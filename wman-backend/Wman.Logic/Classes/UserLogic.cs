@@ -46,6 +46,7 @@ namespace Wman.Logic.Classes
                 }
                 output.Add(new WorkloadDTO
                 {
+                    userID = selectedUser.Id,
                     Username = username,
                     Percent = Convert.ToInt32(CalculateLoad(selectedUser)),
                     ProfilePicUrl = profileUrl
@@ -78,6 +79,7 @@ namespace Wman.Logic.Classes
                 }
                 output.Add(new WorkloadDTO
                 {
+                    userID = user.Id,
                     Username = user.UserName,
                     Percent = Convert.ToInt32(CalculateLoad(user)),
                     ProfilePicUrl = profileUrl
