@@ -32,7 +32,7 @@ namespace Wman.Logic.Services
                 var uploadParams = new ImageUploadParams
                 {
                     File = new FileDescription(file.FileName, stream),
-                    Transformation = new Transformation().Height(250).Width(250).Crop("fill").Gravity("face").Radius("max").FetchFormat("png")
+                    Transformation = new Transformation().Height(250).Width(250).Crop("fill").Gravity("face").FetchFormat("png")
                 };
                 uploadResult = await _cloudinary.UploadAsync(uploadParams);
             }
