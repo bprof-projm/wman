@@ -4,11 +4,9 @@
     grid-gap: 30%;
     background-color: ghostwhite;
     border: 1px solid grey;
-    border-radius: 5px;
-    padding: 25px;
-    cursor: pointer;
-    -moz-osx-font-smoothing: grayscale;
-    backface-visibility: hidden;
+    border-radius: 15px;
+    margin:auto;
+    padding: 3%;
     transform: translateZ(0);
     transition: transform 0.25s ease-out;
   }

@@ -2,22 +2,24 @@ import { Avatar, Progress } from "antd";
 import React from "react";
 import './progress-card.styles.css'
 
-const ProgressCard = () => {
+//props needed: src, name, percent (workload)
+const ProgressCard = (props) => {
     return (
         <div className="progress-card-container">
             <div>
-                <Avatar src="https://joeschmoe.io/api/v1/random" />
+                {/*<Avatar src="https://joeschmoe.io/api/v1/random" size="large"/>*/}
+                <Avatar src={props.src} size="large"/>
             </div>
 
             <div>
-                John Doe
+                {props.name}
             </div>
 
             <div>
                 <Progress
                     strokeColor={{ '0%': '#108ee9', '100%': '#87d068', }}
                     type="circle"
-                    percent={70}
+                    percent={props.percent}
                     width={50}
                      />
             </div>
