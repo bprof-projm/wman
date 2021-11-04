@@ -44,6 +44,24 @@ namespace Wman.Test.Tests
         }
 
         [Test]
+        public async Task MassAssignUser_AssignMultipleUsers_Successfull()
+        {
+            //Arrange
+            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
+            List<string> userNames = new List<string>() { users[0].UserName, users[1].UserName };
+
+            //Act
+            var call = eventLogic.MassAssignUser(eventList[0].Id, userNames);
+
+            //Assert
+            Assert.That(call.IsCompleted);
+
+            this.eventRepo.Verify(x => x.GetOneWithTracking(It.IsAny<int>()), Times.Once);
+            this.userManager.Verify(x => x.Users, Times.Exactly(2));
+            this.eventRepo.Verify(x => x.Update(It.IsAny<int>(), It.IsAny<WorkEvent>()), Times.Exactly(2));
+        }
+
+        [Test]
         [TestCase(4,"NonexistentUser")]
         [TestCase(0,"12ö934öüakíyxkl")]
         [TestCase(0,null)]
@@ -97,7 +115,6 @@ namespace Wman.Test.Tests
             this.eventRepo.Verify(x => x.Update(It.IsAny<int>(), It.IsAny<WorkEvent>()), Times.Once);
             this.eventRepo.Verify(x => x.GetOne(It.IsAny<int>()), Times.Once);
         }
-
 
         [Test]
         public async Task UpdateEvent_UpdateExisitingEvent_SuccessfulOperation()
