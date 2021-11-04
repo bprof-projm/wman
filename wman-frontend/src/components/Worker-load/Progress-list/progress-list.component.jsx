@@ -1,6 +1,7 @@
 import React from 'react';
 import ProgressCard from '../Progress-card/progress-card.component';
-
+import './progress-list.styles.css'
+//props needed objects(list)
 const ProgressList = (props) => {
     return (
         <div className="progress-card-list">
@@ -8,10 +9,10 @@ const ProgressList = (props) => {
                 props.objects.map(object => 
                     //props needed: src, name, percent (workload)
                     <ProgressCard
-                        key={props.object.name}
-                        src={props.object.picture.src} 
-                        name={props.object.name}
-                        percent={props.object.workload}/>
+                        key={object.name}
+                        src={object.picture.src} 
+                        name={object.name}
+                        percent={object.workload}/>
                 )}
         </div>
     )
