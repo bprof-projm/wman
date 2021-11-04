@@ -5,7 +5,7 @@ import "./temp.styles.css";
 export const TempPage = () => {
     
     return (
-        <div>
+        <div className="temp">
             <h1>Ideiglenes oldal bemutatáshoz</h1>
             <div className="small">
             <ProgressCard/></div>
