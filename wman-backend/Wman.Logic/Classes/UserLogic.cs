@@ -113,8 +113,9 @@ namespace Wman.Logic.Classes
 
         private double CalculateLoad(WmanUser user)
         {
-            var beforeToday = WorksBeforeToday(user.WorkEvents, DateTime.Now);
-            var fromToday = RemainingWorks(user.WorkEvents, DateTime.Now);
+            var selectedDate = DateTime.Now;
+            var beforeToday = WorksBeforeToday(user.WorkEvents, selectedDate);
+            var fromToday = RemainingWorks(user.WorkEvents, selectedDate);
 
             TimeSpan tsBeforeToday = TimeSpan.Zero;
             TimeSpan tsFromToday = TimeSpan.Zero;
@@ -139,7 +140,8 @@ namespace Wman.Logic.Classes
             }
 
             TimeSpan tsSUM = tsBeforeToday + tsFromToday;
-            return (tsSUM.TotalHours / 168) * 100;
+            var hoursInMonth = DateTime.DaysInMonth(selectedDate.Year, selectedDate.Month) * 8;
+            return (tsSUM.TotalHours / hoursInMonth) * 100;
         }
         private IEnumerable<WorkEvent> WorksBeforeToday(IEnumerable<WorkEvent> works, DateTime selectedMonth)
         {
