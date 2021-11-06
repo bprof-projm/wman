@@ -30,13 +30,13 @@ namespace Wman.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Calculate the workload of the users with the usernames provided in post
+        /// Calculate the workload of the users with the usernames provided in query
         /// </summary>
         /// <param name="usernames">A collection of usernames</param>
         /// <returns>WorkLoadDTO</returns>
-        [HttpPost]
+        [HttpGet]
         [Route("workload/range")]
-        public async Task<ActionResult<IEnumerable<WorkloadDTO>>> WorkloadRange([FromBody] ICollection<string> usernames)
+        public async Task<ActionResult<IEnumerable<WorkloadDTO>>> WorkloadRange([FromQuery] ICollection<string> usernames)
         {
             try
             {
