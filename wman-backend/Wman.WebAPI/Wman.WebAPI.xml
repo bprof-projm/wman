@@ -9,11 +9,12 @@
             Auth controller
             </summary>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.#ctor(Wman.Logic.Interfaces.IAuthLogic)">
+        <member name="M:Wman.WebAPI.Controllers.AuthController.#ctor(Wman.Logic.Interfaces.IAuthLogic,Wman.Logic.Helpers.DBSeed)">
             <summary>
             
             </summary>
             <param name="authLogic"></param>
+            /// <param name="dBSeed"></param>
         </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.CreateUser(Wman.Logic.DTO_Models.RegisterDTO)">
             <summary>
@@ -56,12 +57,11 @@
             <param name="model">Login details</param>
             <returns>Hopefully a jwt token</returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.getAssignedJobsOfUser(System.String)">
+        <member name="M:Wman.WebAPI.Controllers.AuthController.PopulateDB">
             <summary>
-            Get all the events/jobs to which a selected user is assigned to
+            Endpoint used to fill database with testing data. Used only for development purposes.
             </summary>
-            <param name="username">Username of the searched user</param>
-            <returns>A collection of events/jobs that are assigned to the specified user</returns>
+            <returns>200</returns>
         </member>
         <member name="T:Wman.WebAPI.Controllers.CalendarEventController">
             <summary>
@@ -119,6 +119,7 @@
             ctor
             </summary>
             <param name="eventLogic"></param>
+            <param name="authLogic"></param>
         </member>
         <member name="M:Wman.WebAPI.Controllers.EventController.CreateEvent(Wman.Logic.DTO_Models.CreateEventDTO)">
             <summary>
@@ -169,6 +170,37 @@
             </summary>
             <param name="eventid">The ID of the event</param>
             <returns>HTTP response code</returns>
+        </member>
+        <member name="T:Wman.WebAPI.Controllers.UserController">
+            <summary>
+            UserController
+            </summary>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.UserController.#ctor(Wman.Logic.Interfaces.IUserLogic)">
+            <summary>
+            Ctor
+            </summary>
+            <param name="userLogic"></param>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.UserController.WorkloadRange(System.Collections.Generic.ICollection{System.String})">
+            <summary>
+            Calculate the workload of the users with the usernames provided in query
+            </summary>
+            <param name="usernames">A collection of usernames</param>
+            <returns>WorkLoadDTO</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.UserController.AllWorkloads">
+            <summary>
+            Calculate the workload of every single user
+            </summary>
+            <returns>WorkLoadDTO</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.UserController.GetAssignedEventsOfUser(System.String)">
+            <summary>
+            Get all the events to which a selected user is assigned to
+            </summary>
+            <param name="username">Username of the searched user</param>
+            <returns>A collection of events that are assigned to the specified user</returns>
         </member>
     </members>
 </doc>

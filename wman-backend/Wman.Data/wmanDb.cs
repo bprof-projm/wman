@@ -46,12 +46,6 @@ namespace Wman.Data
               .HasForeignKey(ur => ur.RoleId)
               .IsRequired();
 
-            modelBuilder.Entity<WorkEvent>()
-                .HasOne(x => x.Address)
-                .WithMany(y => y.WorkEvents)
-                .HasForeignKey(z => z.AddressId)
-                .OnDelete(DeleteBehavior.Cascade);
-
             modelBuilder.Entity<WmanRole>().HasData(
                 new {Id= 1, Name = "Debug", NormalizedName = "DEBUG" }
             );

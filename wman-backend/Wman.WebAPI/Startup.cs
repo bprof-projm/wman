@@ -50,6 +50,8 @@ namespace Wman.WebAPI
             services.AddTransient<IAuthLogic, AuthLogic>();
             services.AddTransient<ICalendarEventLogic, CalendarEventLogic>();
             services.AddTransient<IEventLogic, EventLogic>();
+            services.AddTransient<IUserLogic, UserLogic>();
+            services.AddTransient<DBSeed, DBSeed>();
             services.AddTransient<ILabelLogic, LabelLogic>();
             services.AddControllers().AddJsonOptions(options =>
           options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
@@ -92,9 +94,15 @@ namespace Wman.WebAPI
                 });
             });
             string appsettingsConnectionString = Configuration.GetConnectionString("wmandb");
-            ;
-           
-            services.AddDbContext<wmanDb>(options => options.UseSqlServer(appsettingsConnectionString, b => b.MigrationsAssembly("Wman.WebAPI")));
+
+            services.AddDbContext<wmanDb>(options => options
+#if DEBUG
+            .EnableSensitiveDataLogging()
+            .EnableDetailedErrors()
+#else
+
+#endif
+            .UseSqlServer(appsettingsConnectionString, b => b.MigrationsAssembly("Wman.WebAPI")));
 
             services.AddIdentityCore<WmanUser>(
                      option =>

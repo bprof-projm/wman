@@ -25,6 +25,7 @@ namespace Wman.WebAPI.Controllers
         /// ctor
         /// </summary>
         /// <param name="eventLogic"></param>
+        /// <param name="authLogic"></param>
         public EventController(IEventLogic eventLogic, IAuthLogic authLogic)
         {
             this.eventLogic = eventLogic;
