@@ -26,8 +26,7 @@ namespace Wman.Logic.Classes
             var output = new List<WorkloadDTO>();
             var allUsers = userManager.Users
                 .Include(y => y.WorkEvents)
-                .Include(z=>z.ProfilePicture)
-                .AsNoTracking();
+                .Include(z => z.ProfilePicture);
             WmanUser selectedUser;
             var profileUrl = string.Empty;
             foreach (var username in usernames)
@@ -51,7 +50,7 @@ namespace Wman.Logic.Classes
                     Username = username,
                     Percent = Convert.ToInt32(CalculateLoad(selectedUser)),
                     ProfilePicUrl = profileUrl
-                }); ;
+                });
             }
 
             return output;
@@ -62,8 +61,7 @@ namespace Wman.Logic.Classes
             var output = new List<WorkloadDTO>();
             var allUsers = userManager.Users
                 .Include(y => y.WorkEvents)
-                .Include(z => z.ProfilePicture)
-                .AsNoTracking();
+                .Include(z => z.ProfilePicture);
             var profileUrl = string.Empty;
             foreach (var user in allUsers)
             {
