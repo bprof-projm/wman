@@ -108,7 +108,7 @@ namespace Wman.Logic.Classes
             }
             else
             {
-                throw new ArgumentException("Events are not at the same day or ");
+                throw new ArgumentException("Events are not at the same day or start is after the finishing date");
             }
 
         }
@@ -168,6 +168,55 @@ namespace Wman.Logic.Classes
                 }
             }
             return false;
+        }
+
+        public async Task DnDEvent(int Id, DnDEventDTO newWorkEvent)
+        {
+            if (newWorkEvent.EstimatedStartDate < newWorkEvent.EstimatedFinishDate && newWorkEvent.EstimatedStartDate.Day == newWorkEvent.EstimatedFinishDate.Day)
+            {
+                var result = mapper.Map<WorkEvent>(newWorkEvent);
+                var workEventInDb = await eventRepo.GetOneWithTracking(Id);
+
+                workEventInDb.EstimatedStartDate = result.EstimatedStartDate;
+                workEventInDb.EstimatedFinishDate = result.EstimatedFinishDate;
+                
+                if (workEventInDb.AssignedUsers.Count > 0)
+                {
+                    var eventssAtDnDTime =await (from x in eventRepo.GetAll()
+                                         where x.EstimatedStartDate >= result.EstimatedStartDate && x.EstimatedStartDate <= result.EstimatedFinishDate && x.EstimatedFinishDate >= result.EstimatedStartDate && x.EstimatedFinishDate <= result.EstimatedFinishDate
+                                         select x).ToListAsync();
+                    
+                    List<int> dnDUserIds = new List<int>();
+                    foreach (var item in workEventInDb.AssignedUsers)
+                    {
+                        dnDUserIds.Add(item.Id);
+                    }
+                    List<int> eventUserIdsAtDnDTime = new List<int>();
+
+                    foreach (var item in eventssAtDnDTime)
+                    {
+                        foreach (var item2 in item.AssignedUsers)
+                        {
+                            eventUserIdsAtDnDTime.Add(item2.Id);
+                        }
+                    }
+                    if (eventUserIdsAtDnDTime.Count == 0 || !dnDUserIds.Any(x => eventUserIdsAtDnDTime.Any(y => y == x)))
+                    {
+                        await eventRepo.Update(Id, workEventInDb);
+                    }
+                    else
+                    {
+                        throw new ArgumentException("Assigned user conflict(user already assigned to an event at this time)");
+                    }
+
+
+                }
+                await eventRepo.Update(Id, workEventInDb);
+            }
+            else
+            {
+                throw new ArgumentException("Events are not at the same day or start is after the finishing date");
+            }
         }
     }
 }
