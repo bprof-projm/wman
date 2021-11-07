@@ -171,7 +171,7 @@ namespace Wman.Logic.Classes
             }
 
             roleName = await ValidateRolename(roleName);
-            
+
             if (await userManager.IsInRoleAsync(user, roleName)/* || await userManager.IsInRoleAsync(user, "Admin")*/)
             {
                 return true;
@@ -179,19 +179,18 @@ namespace Wman.Logic.Classes
             return false;
         }
 
-        
-
         public async Task AssignRoleToUser(string username, string roleName)
         {
             WmanUser selectedUser = await userManager.FindByNameAsync(username);
-            
+
             if (selectedUser == null)
             {
                 throw new ArgumentException("User doesn't exists");
             }
-            
+
             roleName = await ValidateRolename(roleName);
             await this.RemovePrevRoles(selectedUser);
+            ;
             await userManager.AddToRoleAsync(selectedUser, roleName);
         }
 

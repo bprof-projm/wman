@@ -34,6 +34,31 @@ namespace Wman.WebAPI.Controllers
             this.authLogic = authLogic;
             this.dBSeed = dBSeed;
         }
+
+        /// <summary>
+        /// Login/generate jwt token
+        /// </summary>
+        /// <param name="model">Login details</param>
+        /// <returns>Hopefully a jwt token</returns>
+        [HttpPut]
+        [Route("login")]
+
+        public async Task<ActionResult> Login([FromBody] LoginDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                return Ok(await authLogic.LoginUser(model));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         /// <summary>
         /// Create a new user
         /// </summary>
@@ -149,30 +174,52 @@ namespace Wman.WebAPI.Controllers
             return BadRequest(result.Errors);
         }
 
-        /// <summary>
-        /// Login/generate jwt token
-        /// </summary>
-        /// <param name="model">Login details</param>
-        /// <returns>Hopefully a jwt token</returns>
-        [HttpPut]
-        [Route("login")]
 
-        public async Task<ActionResult> Login([FromBody] LoginDTO model)
+        [HttpGet]
+        [Route("role/assign")]
+        public async Task<ActionResult> AssignRole(string username, string rolename)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             try
             {
-                return Ok(await authLogic.LoginUser(model));
+                await this.authLogic.AssignRoleToUser(username, rolename);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+
+                return StatusCode(500, $"Internal server error : {ex}");
+            }
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("role/userroles")]
+        public async Task<ActionResult<IEnumerable<string>>> RolesofUsers(string username)
+        {
+            try
+            {
+                return Ok(await this.authLogic.GetAllRolesOfUser(username));
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, $"Internal server error : {ex}");
             }
         }
 
+        [HttpGet]
+        [Route("role/members")]
+        public async Task<ActionResult<IEnumerable<WmanUser>>> UsersofRole(string rolename)
+        {
+            try
+            {
+                return Ok(await this.authLogic.GetAllUsersOfRole(rolename));
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, $"Internal server error : {ex}");
+            }
+        }
         /// <summary>
         /// Endpoint used to fill database with testing data. Used only for development purposes.
         /// </summary>

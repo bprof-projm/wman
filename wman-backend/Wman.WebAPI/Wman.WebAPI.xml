@@ -16,6 +16,13 @@
             <param name="authLogic"></param>
             /// <param name="dBSeed"></param>
         </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.Login(Wman.Logic.DTO_Models.LoginDTO)">
+            <summary>
+            Login/generate jwt token
+            </summary>
+            <param name="model">Login details</param>
+            <returns>Hopefully a jwt token</returns>
+        </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.CreateUser(Wman.Logic.DTO_Models.RegisterDTO)">
             <summary>
             Create a new user
@@ -49,13 +56,6 @@
             <param name="oldUsername">Prev. id</param>
             <param name="pwd">Password of the user to be updated</param>
             <param name="user">User to be updated</param>
-        </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.Login(Wman.Logic.DTO_Models.LoginDTO)">
-            <summary>
-            Login/generate jwt token
-            </summary>
-            <param name="model">Login details</param>
-            <returns>Hopefully a jwt token</returns>
         </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.PopulateDB">
             <summary>
