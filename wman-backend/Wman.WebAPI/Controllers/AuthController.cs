@@ -90,7 +90,7 @@ namespace Wman.WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        //[Authorize(Roles = "Admin, Manager")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUsers()
         {
             try
