@@ -180,9 +180,9 @@ namespace Wman.WebAPI.Controllers
         /// <param name="rolename">Name of the role(Admin/Manager/Worker)</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("role/assign")]
+        [Route("role/set")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> AssignRole(string username, string rolename)
+        public async Task<ActionResult> SetRole(string username, string rolename)
         {
             try
             {
