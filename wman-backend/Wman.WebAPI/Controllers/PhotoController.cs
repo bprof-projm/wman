@@ -57,5 +57,27 @@ namespace Wman.WebAPI.Controllers
             var photoResult = mapper.Map<PhotoDTO>(selectedUser.ProfilePicture);
             return Ok(photoResult);
         }
+        [HttpDelete("RemovePhoto/{publicId}")]
+        public async Task<ActionResult<PhotoDTO>> RemoveProfilePhoto(string publicId)
+        {
+            var selectedPhoto = await (from x in picturesRepo.GetAll()
+                                 where x.CloudPhotoID == publicId
+                                 select x).FirstOrDefaultAsync();
+            if (selectedPhoto == null)
+            {
+                return BadRequest("User Not found");
+            }
+            var selectedUser = await (from x in userManager.Users
+                                      where x.Id == selectedPhoto.WManUserID
+                                      select x).FirstOrDefaultAsync();
+
+            // Remove Photo from the cloud
+            await _photoService.DeleteProfilePhotoAsync(publicId);
+
+            // remove picture data from db
+            await picturesRepo.Delete(selectedPhoto.Id);
+
+            return Ok();
+        }
     }
 }

@@ -145,7 +145,7 @@ namespace Wman.WebAPI.Controllers
             }
         }
 
-        [HttpGet("WorcCard/{Id}")]
+        [HttpGet("WorkCard/{Id}")]
         public async Task<ActionResult<WorkEventForWorkCardDTO>> ForWorkCard(int Id)
         {
             try
