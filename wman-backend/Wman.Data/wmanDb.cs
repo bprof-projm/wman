@@ -34,17 +34,6 @@ namespace Wman.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<WmanUser>()
-            .HasMany(ur => ur.UserRoles)
-            .WithOne(u => u.User)
-            .HasForeignKey(ur => ur.UserId)
-            .IsRequired();
-
-            modelBuilder.Entity<WmanRole>()
-              .HasMany(ur => ur.UserRoles)
-              .WithOne(u => u.Role)
-              .HasForeignKey(ur => ur.RoleId)
-              .IsRequired();
 
             modelBuilder.Entity<WmanRole>().HasData(
                 new {Id= 1, Name = "Debug", NormalizedName = "DEBUG" }
