@@ -32,11 +32,11 @@ namespace Wman.WebAPI.Controllers
         }
 
         [HttpPost("AddPhoto/{userName}")]
-        public async Task<ActionResult<PhotoDTO>> AddProfilePhoto(string userName,IFormFile file)
+        public async Task<ActionResult<PhotoDTO>> AddProfilePhoto(string userName, IFormFile file)
         {
             var selectedUser = await (from x in userManager.Users
-                               where x.UserName == userName
-                               select x).Include(x => x.ProfilePicture).FirstOrDefaultAsync();
+                                      where x.UserName == userName
+                                      select x).Include(x => x.ProfilePicture).FirstOrDefaultAsync();
 
             var result = await _photoService.AddProfilePhotoAsync(file);
             if (result.Error != null)
@@ -49,7 +49,7 @@ namespace Wman.WebAPI.Controllers
                 CloudPhotoID = result.PublicId,
                 PicturesType = PicturesType.ProfilePic,
                 WmanUser = selectedUser
-                
+
             };
             selectedUser.ProfilePicture = UploadedPicture;
             await picturesRepo.Add(UploadedPicture);
@@ -58,18 +58,16 @@ namespace Wman.WebAPI.Controllers
             return Ok(photoResult);
         }
         [HttpDelete("RemovePhoto/{publicId}")]
-        public async Task<ActionResult<PhotoDTO>> RemoveProfilePhoto(string publicId)
+        public async Task<ActionResult> RemoveProfilePhoto(string publicId)
         {
             var selectedPhoto = await (from x in picturesRepo.GetAll()
-                                 where x.CloudPhotoID == publicId
-                                 select x).FirstOrDefaultAsync();
+                                       where x.CloudPhotoID == publicId
+                                       select x).FirstOrDefaultAsync();
             if (selectedPhoto == null)
             {
-                return BadRequest("User Not found");
+                return BadRequest("Photo Not found");
             }
-            var selectedUser = await (from x in userManager.Users
-                                      where x.Id == selectedPhoto.WManUserID
-                                      select x).FirstOrDefaultAsync();
+            
 
             // Remove Photo from the cloud
             await _photoService.DeleteProfilePhotoAsync(publicId);
@@ -78,6 +76,45 @@ namespace Wman.WebAPI.Controllers
             await picturesRepo.Delete(selectedPhoto.Id);
 
             return Ok();
+        }
+        [HttpPut("UpdatePhoto/{publicId}")]
+        public async Task<ActionResult<PhotoDTO>> UpdateProfilePhoto(string publicId, IFormFile file) 
+        {
+            var selectedPhoto = await (from x in picturesRepo.GetAll()
+                                       where x.CloudPhotoID == publicId
+                                       select x).FirstOrDefaultAsync();
+            if (selectedPhoto == null)
+            {
+                return BadRequest("Photo Not found");
+            }
+
+            // Remove Photo from the cloud
+            await _photoService.DeleteProfilePhotoAsync(publicId);
+
+            // remove picture data from db
+            await picturesRepo.Delete(selectedPhoto.Id);
+
+            var selectedUser = await (from x in userManager.Users
+                                      where x.Id == selectedPhoto.WManUserID
+                                      select x).Include(x => x.ProfilePicture).FirstOrDefaultAsync();
+
+            var result = await _photoService.AddProfilePhotoAsync(file);
+            if (result.Error != null)
+            {
+                return BadRequest(result.Error.Message);
+            }
+            var UploadedPicture = new Pictures
+            {
+                Url = result.SecureUrl.AbsoluteUri,
+                CloudPhotoID = result.PublicId,
+                PicturesType = PicturesType.ProfilePic,
+
+            };
+            selectedUser.ProfilePicture = UploadedPicture;
+            await picturesRepo.Add(UploadedPicture);
+
+            var photoResult = mapper.Map<PhotoDTO>(selectedUser.ProfilePicture);
+            return Ok(photoResult);
         }
     }
 }
