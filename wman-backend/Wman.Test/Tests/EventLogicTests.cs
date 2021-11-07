@@ -57,8 +57,8 @@ namespace Wman.Test.Tests
             Assert.That(call.IsCompleted);
 
             this.eventRepo.Verify(x => x.GetOneWithTracking(It.IsAny<int>()), Times.Once);
-            this.userManager.Verify(x => x.Users, Times.Exactly(2));
-            this.eventRepo.Verify(x => x.Update(It.IsAny<int>(), It.IsAny<WorkEvent>()), Times.Exactly(2));
+            this.userManager.Verify(x => x.Users, Times.Exactly(userNames.Count));
+            this.eventRepo.Verify(x => x.Update(It.IsAny<int>(), It.IsAny<WorkEvent>()), Times.Exactly(userNames.Count));
         }
 
         [Test]
