@@ -28,6 +28,7 @@ using Wman.Logic.Helpers;
 using Wman.Logic.Interfaces;
 using Wman.Repository.Classes;
 using Wman.Repository.Interfaces;
+using Wman.WebAPI.Helpers;
 //using System.Data.Entity.Database;
 
 namespace Wman.WebAPI
@@ -56,7 +57,9 @@ namespace Wman.WebAPI
             services.AddControllers().AddJsonOptions(options =>
           options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             //services.AddSingleton(Configuration);
-
+#if DEBUG
+            //services.AddSingleton<IAuthorizationHandler, AllowAnonymous>(); //Uncommenting this will disable auth, for debugging purposes.
+#endif
 
 
             services.AddTransient<IWorkEventRepo, WorkEventRepo>();

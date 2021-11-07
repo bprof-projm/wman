@@ -74,7 +74,7 @@
         </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.UsersofRole(System.String)">
             <summary>
-            Returns a list of users assigned to the selected role
+            Returns a list of users that have the provided role
             </summary>
             <param name="rolename">Name of the rule</param>
             <returns></returns>
@@ -223,6 +223,18 @@
             </summary>
             <param name="username">Username of the searched user</param>
             <returns>A collection of events that are assigned to the specified user</returns>
+        </member>
+        <member name="T:Wman.WebAPI.Helpers.AllowAnonymous">
+            <summary>
+            This authorisation handler will bypass all requirements
+            </summary>
+        </member>
+        <member name="M:Wman.WebAPI.Helpers.AllowAnonymous.HandleAsync(Microsoft.AspNetCore.Authorization.AuthorizationHandlerContext)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
         </member>
     </members>
 </doc>
