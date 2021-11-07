@@ -164,17 +164,28 @@ namespace Wman.Logic.Classes
 
         public async Task<bool> HasRole(WmanUser user, string role)
         {
-            if (await userManager.IsInRoleAsync(user, role))
-            {
-                return true;
-            }
-            return false;
+            return await checkRole(user, role);
         }
 
-        public async Task<bool> HasRoleByName(string userName, string role)
+        public async Task<bool> HasRole(string userName, string role)
         {
             var user = await this.userManager.FindByNameAsync(userName);
-            if (userManager.IsInRoleAsync(user, role).Result/* || userManager.IsInRoleAsync(user, "Admin").Result*/)
+            return await checkRole(user, role);
+        }
+
+        public async Task<bool> HasRole(int id, string role)
+        {
+            var user = await this.userManager.Users.Where(x => x.Id == id).SingleOrDefaultAsync();
+            return await checkRole(user, role);
+        }
+        private async Task<bool> checkRole(WmanUser user, string role)
+        {
+            role = ValidateRolename(role);
+            if (user == null)
+            {
+                throw new ArgumentException("User doesn't exists");
+            }
+            if (await userManager.IsInRoleAsync(user, role)/* || await userManager.IsInRoleAsync(user, "Admin")*/)
             {
                 return true;
             }
@@ -241,6 +252,20 @@ namespace Wman.Logic.Classes
         {
             var users = await this.userManager.GetUsersInRoleAsync(roleId);
             return users.ToList();
+        }
+        private string ValidateRolename(string input)
+        {
+            switch (input.ToUpper())
+            {
+                case "ADMIN":
+                    return "Admin";
+                case "MANAGER":
+                    return "Manager";
+                case "WORKER":
+                    return "Worker";
+                default:
+                    throw new ArgumentException("Specified role doesn't exists");
+            }
         }
     }
 }
