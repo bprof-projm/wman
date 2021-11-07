@@ -29,7 +29,7 @@ namespace Wman.WebAPI.Controllers
             this.photoLogic = photoLogic;
         }
 
-        [HttpPost("AddPhoto/{userName}")]
+        [HttpPost("AddProfilePhoto/{userName}")]
         public async Task<ActionResult<PhotoDTO>> AddProfilePhoto(string userName, IFormFile file)
         {
             try
@@ -42,12 +42,12 @@ namespace Wman.WebAPI.Controllers
                 return StatusCode(500, $"Internal server error : {ex}");
             }
         }
-        [HttpDelete("RemovePhoto/{publicId}")]
-        public async Task<ActionResult> RemoveProfilePhoto(string publicId)
+        [HttpDelete("RemoveProfilePhoto/{userName}")]
+        public async Task<ActionResult> RemoveProfilePhoto(string userName)
         {
             try
             {
-                 await photoLogic.RemoveProfilePhoto(publicId);
+                 await photoLogic.RemoveProfilePhoto(userName);
                 return Ok();
             }
             catch (Exception ex)
@@ -55,12 +55,12 @@ namespace Wman.WebAPI.Controllers
                 return StatusCode(500, $"Internal server error : {ex}");
             }
         }
-        [HttpPut("UpdatePhoto/{publicId}")]
-        public async Task<ActionResult<PhotoDTO>> UpdateProfilePhoto(string publicId, IFormFile file) 
+        [HttpPut("UpdateProfilePhoto/{userName}")]
+        public async Task<ActionResult<PhotoDTO>> UpdateProfilePhoto(string userName, IFormFile file) 
         {
             try
             {
-                var result = await photoLogic.UpdateProfilePhoto(publicId, file);
+                var result = await photoLogic.UpdateProfilePhoto(userName, file);
                 return Ok(result);
             }
             catch (Exception ex)

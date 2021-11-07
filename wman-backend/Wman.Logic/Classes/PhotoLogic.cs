@@ -55,11 +55,15 @@ namespace Wman.Logic.Classes
             return photoResult;
         }
 
-        public async Task RemoveProfilePhoto(string publicId)
+        public async Task RemoveProfilePhoto(string userName)
         {
-            var selectedPhoto = await(from x in picturesRepo.GetAll()
-                                      where x.CloudPhotoID == publicId
-                                      select x).FirstOrDefaultAsync();
+            var selectedUser = await (from x in userManager.Users
+                                      where x.UserName == userName
+                                      select x).Include(x => x.ProfilePicture).FirstOrDefaultAsync();
+
+            var selectedPhoto = await (from x in picturesRepo.GetAll()
+                                       where x.WManUserID == selectedUser.Id
+                                       select x).FirstOrDefaultAsync();
             if (selectedPhoto == null)
             {
                 throw new ArgumentException("Photo Not found");
@@ -67,31 +71,32 @@ namespace Wman.Logic.Classes
 
 
             // Remove Photo from the cloud
-            await _photoService.DeleteProfilePhotoAsync(publicId);
+            await _photoService.DeleteProfilePhotoAsync(selectedPhoto.CloudPhotoID);
 
             // remove picture data from db
             await picturesRepo.Delete(selectedPhoto.Id);
         }
 
-        public async Task<PhotoDTO> UpdateProfilePhoto(string publicId, IFormFile file)
+        public async Task<PhotoDTO> UpdateProfilePhoto(string userName, IFormFile file)
         {
-            var selectedPhoto = await(from x in picturesRepo.GetAll()
-                                      where x.CloudPhotoID == publicId
-                                      select x).FirstOrDefaultAsync();
+            var selectedUser = await (from x in userManager.Users
+                                      where x.UserName == userName
+                                      select x).Include(x => x.ProfilePicture).FirstOrDefaultAsync();
+
+            var selectedPhoto = await (from x in picturesRepo.GetAll()
+                                       where x.WManUserID == selectedUser.Id
+                                       select x).FirstOrDefaultAsync();
             if (selectedPhoto == null)
             {
                 throw new ArgumentException("Photo Not found");
             }
 
             // Remove Photo from the cloud
-            await _photoService.DeleteProfilePhotoAsync(publicId);
+            await _photoService.DeleteProfilePhotoAsync(selectedPhoto.CloudPhotoID);
 
             // remove picture data from db
             await picturesRepo.Delete(selectedPhoto.Id);
 
-            var selectedUser = await(from x in userManager.Users
-                                     where x.Id == selectedPhoto.WManUserID
-                                     select x).Include(x => x.ProfilePicture).FirstOrDefaultAsync();
 
             var result = await _photoService.AddProfilePhotoAsync(file);
             if (result.Error != null)

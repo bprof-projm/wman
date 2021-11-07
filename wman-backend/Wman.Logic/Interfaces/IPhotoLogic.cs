@@ -11,7 +11,7 @@ namespace Wman.Logic.Interfaces
     public interface IPhotoLogic
     {
         Task<PhotoDTO> AddProfilePhoto(string userName, IFormFile file);
-        Task RemoveProfilePhoto(string publicId);
-        Task<PhotoDTO> UpdateProfilePhoto(string publicId, IFormFile file);
+        Task RemoveProfilePhoto(string userName);
+        Task<PhotoDTO> UpdateProfilePhoto(string userName, IFormFile file);
     }
 }
