@@ -161,21 +161,6 @@ namespace Wman.Logic.Classes
             }
             throw new ArgumentException("Incorrect password");
         }
-
-        public async Task<bool> HasRole(string username, string roleName)
-        {
-            var user = await this.userManager.FindByNameAsync(username);
-            if (user == null)
-            {
-                throw new ArgumentException("User doesn't exists");
-            }
-            if (await userManager.IsInRoleAsync(user, roleName)/* || await userManager.IsInRoleAsync(user, "Admin")*/)
-            {
-                return true;
-            }
-            return false;
-        }
-
         public async Task AssignRoleToUser(string username, string roleName)
         {
             WmanUser selectedUser = await userManager.FindByNameAsync(username);

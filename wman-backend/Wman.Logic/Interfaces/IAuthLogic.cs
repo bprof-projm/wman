@@ -11,28 +11,19 @@ namespace Wman.Logic.Interfaces
 {
     public interface IAuthLogic
     {
-
         Task<WmanUser> GetOneUser(string username);
-
 
         Task<IQueryable<WmanUser>> GetAllUsers();
 
-
         Task<IdentityResult> CreateUser(RegisterDTO login);
 
-
         Task<IdentityResult> DeleteUser(string uname);
-
 
         Task<IdentityResult> UpdateUser(string oldUsername, string pwd, UserDTO newUser);
 
         Task<TokenModel> LoginUser(LoginDTO login);
 
-        Task<bool> HasRole(string username, string role);
- 
-
         Task<IEnumerable<string>> GetAllRolesOfUser(string username);
-
 
         Task AssignRoleToUser(string username, string role);
 
