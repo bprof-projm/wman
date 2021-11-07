@@ -57,22 +57,22 @@
             <param name="pwd">Password of the user to be updated</param>
             <param name="user">User to be updated</param>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.AssignRole(System.String,System.String)">
+        <member name="M:Wman.WebAPI.Controllers.AuthController.SetRole(System.String,System.String)">
             <summary>
-            Set the role of a user
+            Set the role of a user, while removing any previous roles he had before
             </summary>
             <param name="username">Username of the user</param>
             <param name="rolename">Name of the role(Admin/Manager/Worker)</param>
             <returns></returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.RolesofUser(System.String)">
+        <member name="M:Wman.WebAPI.Controllers.AuthController.RolesOfUser(System.String)">
             <summary>
             Returns a list of rolenames the selected user is assigned to.
             </summary>
             <param name="username">username of the user</param>
             <returns></returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.UsersofRole(System.String)">
+        <member name="M:Wman.WebAPI.Controllers.AuthController.UsersOfRole(System.String)">
             <summary>
             Returns a list of users that have the provided role
             </summary>
