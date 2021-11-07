@@ -55,8 +55,6 @@ namespace Wman.WebAPI
             services.AddTransient<ILabelLogic, LabelLogic>();
             services.AddControllers().AddJsonOptions(options =>
           options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-
-            //TODO: Use transients
             //services.AddSingleton(Configuration);
 
 

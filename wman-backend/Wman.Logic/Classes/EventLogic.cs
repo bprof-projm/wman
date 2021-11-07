@@ -41,7 +41,7 @@ namespace Wman.Logic.Classes
             }
             bool testResult = await this.DoTasksOverlap(selectedUser.WorkEvents, selectedEvent);
             ;
-            if (testResult) //TODO: Teljesen blokkoljuk az ütközést, vagy csak figyelmeztessük a frontendet?
+            if (testResult)
             {
                 throw new ArgumentException("User is already busy during this event's estimated timeframe! ");
             }

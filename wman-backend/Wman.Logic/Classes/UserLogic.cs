@@ -67,23 +67,23 @@ namespace Wman.Logic.Classes
             {
                 if (await userManager.IsInRoleAsync(user, "Worker"))
                 {
-                    //TODO: Move output.add inside this when role management is working.
+                    if (user.ProfilePicture != null)
+                    {
+                        profileUrl = user.ProfilePicture.Url;
+                    }
+                    else
+                    {
+                        profileUrl = string.Empty;
+                    }
+                    output.Add(new WorkloadDTO
+                    {
+                        userID = user.Id,
+                        Username = user.UserName,
+                        Percent = Convert.ToInt32(CalculateLoad(user)),
+                        ProfilePicUrl = profileUrl
+                    });
                 }
-                if (user.ProfilePicture != null)
-                {
-                    profileUrl = user.ProfilePicture.Url;
-                }
-                else
-                {
-                    profileUrl = string.Empty;
-                }
-                output.Add(new WorkloadDTO
-                {
-                    userID = user.Id,
-                    Username = user.UserName,
-                    Percent = Convert.ToInt32(CalculateLoad(user)),
-                    ProfilePicUrl = profileUrl
-                });
+                
             }
 
             return output;

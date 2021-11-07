@@ -135,7 +135,7 @@ namespace Wman.Logic.Classes
                 {
                   new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                   new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                  new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) //TODO: .tostring might break something, test.
+                  new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
                 };
 
 
