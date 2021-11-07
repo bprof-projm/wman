@@ -162,7 +162,7 @@ namespace Wman.Logic.Classes
             throw new ArgumentException("Incorrect password");
         }
 
-        public async Task<bool> HasRole(string username, string role)
+        public async Task<bool> HasRole(string username, string roleName)
         {
             var user = await this.userManager.FindByNameAsync(username);
             if (user == null)
@@ -170,9 +170,9 @@ namespace Wman.Logic.Classes
                 throw new ArgumentException("User doesn't exists");
             }
 
-            role = ValidateRolename(role);
+            roleName = ValidateRolename(roleName);
             
-            if (await userManager.IsInRoleAsync(user, role)/* || await userManager.IsInRoleAsync(user, "Admin")*/)
+            if (await userManager.IsInRoleAsync(user, roleName)/* || await userManager.IsInRoleAsync(user, "Admin")*/)
             {
                 return true;
             }
@@ -181,35 +181,32 @@ namespace Wman.Logic.Classes
 
         
 
-        public async Task<bool> AssignRolesToUser(WmanUser user, List<string> roles)
+        public async Task AssignRoleToUser(string username, string roleName)
         {
-            WmanUser selectedUser;
-            selectedUser = await GetOneUser(user.UserName);
-            userManager.AddToRolesAsync(selectedUser, roles).Wait();
-            return true;
+            WmanUser selectedUser = await userManager.FindByNameAsync(username);
+            
+            if (selectedUser == null)
+            {
+                throw new ArgumentException("User doesn't exists");
+            }
+            
+            roleName = ValidateRolename(roleName);
+            await this.RemovePrevRoles(selectedUser);
+            await userManager.AddToRoleAsync(selectedUser, roleName);
         }
 
-        public async Task<string> RemoveUserFromRole(string userName, string selectedRole)
+        public async Task<List<WmanUser>> GetAllUsersOfRole(string roleName)
         {
-            try
-            {
-                var user = await this.userManager.FindByNameAsync(userName);
-                await this.userManager.RemoveFromRoleAsync(user, selectedRole);
-                return "Success";
-            }
-            catch (Exception)
-            {
-                return "Fail";
-            }
-        }
-
-        public async Task<List<WmanUser>> GetAllUsersOfRole(string roleId)
-        {
-            var users = await this.userManager.GetUsersInRoleAsync(roleId);
+            var users = await this.userManager.GetUsersInRoleAsync(roleName);
             return users.ToList();
         }
-        public async Task<IEnumerable<string>> GetAllRolesOfUser(WmanUser user)
+        public async Task<IEnumerable<string>> GetAllRolesOfUser(string username)
         {
+            var user = await this.userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                throw new ArgumentException("User doesn't exists");
+            }
             return await userManager.GetRolesAsync(user);
         }
 
@@ -225,6 +222,14 @@ namespace Wman.Logic.Classes
                     return "Worker";
                 default:
                     throw new ArgumentException("Specified role doesn't exists");
+            }
+        }
+        private async Task RemovePrevRoles(WmanUser user)
+        {
+            var roles = await userManager.GetRolesAsync(user);
+            foreach (var item in roles)
+            {
+                await userManager.RemoveFromRolesAsync(user, roles);
             }
         }
     }

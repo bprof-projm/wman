@@ -31,11 +31,10 @@ namespace Wman.Logic.Interfaces
         Task<bool> HasRole(string username, string role);
  
 
-        Task<IEnumerable<string>> GetAllRolesOfUser(WmanUser user);
+        Task<IEnumerable<string>> GetAllRolesOfUser(string username);
 
 
-        Task<bool> AssignRolesToUser(WmanUser user, List<string> roles);
-
+        Task AssignRoleToUser(string username, string role);
 
         Task<List<WmanUser>> GetAllUsersOfRole(string roleId);
 
