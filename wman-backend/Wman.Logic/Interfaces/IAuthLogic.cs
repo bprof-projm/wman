@@ -28,11 +28,8 @@ namespace Wman.Logic.Interfaces
 
         Task<TokenModel> LoginUser(LoginDTO login);
 
-        Task<bool> HasRole(WmanUser user, string role);
         Task<bool> HasRole(string username, string role);
-        Task<bool> HasRole(int id, string role);
-
-
+ 
 
         Task<IEnumerable<string>> GetAllRolesOfUser(WmanUser user);
 

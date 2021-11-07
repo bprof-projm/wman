@@ -162,39 +162,24 @@ namespace Wman.Logic.Classes
             throw new ArgumentException("Incorrect password");
         }
 
-        public async Task<bool> HasRole(WmanUser user, string role)
+        public async Task<bool> HasRole(string username, string role)
         {
-            return await checkRole(user, role);
-        }
-
-        public async Task<bool> HasRole(string userName, string role)
-        {
-            var user = await this.userManager.FindByNameAsync(userName);
-            return await checkRole(user, role);
-        }
-
-        public async Task<bool> HasRole(int id, string role)
-        {
-            var user = await this.userManager.Users.Where(x => x.Id == id).SingleOrDefaultAsync();
-            return await checkRole(user, role);
-        }
-        private async Task<bool> checkRole(WmanUser user, string role)
-        {
-            role = ValidateRolename(role);
+            var user = await this.userManager.FindByNameAsync(username);
             if (user == null)
             {
                 throw new ArgumentException("User doesn't exists");
             }
+
+            role = ValidateRolename(role);
+            
             if (await userManager.IsInRoleAsync(user, role)/* || await userManager.IsInRoleAsync(user, "Admin")*/)
             {
                 return true;
             }
             return false;
         }
-        public async Task<IEnumerable<string>> GetAllRolesOfUser(WmanUser user)
-        {
-            return await userManager.GetRolesAsync(user);
-        }
+
+        
 
         public async Task<bool> AssignRolesToUser(WmanUser user, List<string> roles)
         {
@@ -204,23 +189,12 @@ namespace Wman.Logic.Classes
             return true;
         }
 
-        public async Task<bool> CreateRole(string name)
-        {
-            var query = await this.roleManager.FindByNameAsync(name);
-            if (query != null)
-            {
-                return false;
-            }
-            roleManager.CreateAsync(new WmanRole { Name = name, NormalizedName = name.ToUpper() }).Wait();
-            return true;
-        }
-
-        public async Task<string> RemoveUserFromRole(string userName, string requiredRole)
+        public async Task<string> RemoveUserFromRole(string userName, string selectedRole)
         {
             try
             {
                 var user = await this.userManager.FindByNameAsync(userName);
-                await this.userManager.RemoveFromRoleAsync(user, requiredRole);
+                await this.userManager.RemoveFromRoleAsync(user, selectedRole);
                 return "Success";
             }
             catch (Exception)
@@ -229,30 +203,16 @@ namespace Wman.Logic.Classes
             }
         }
 
-        public async Task<bool> SwitchRoleOfUser(string userName, string newRole)
-        {
-            try
-            {
-                var user = this.GetOneUser(userName).Result;
-                foreach (var role in this.GetAllRolesOfUser(user).Result)
-                {
-                    await this.RemoveUserFromRole(user.UserName, role);
-                }
-                await this.userManager.AddToRoleAsync(user, newRole);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-
-
-        }
         public async Task<List<WmanUser>> GetAllUsersOfRole(string roleId)
         {
             var users = await this.userManager.GetUsersInRoleAsync(roleId);
             return users.ToList();
         }
+        public async Task<IEnumerable<string>> GetAllRolesOfUser(WmanUser user)
+        {
+            return await userManager.GetRolesAsync(user);
+        }
+
         private string ValidateRolename(string input)
         {
             switch (input.ToUpper())
