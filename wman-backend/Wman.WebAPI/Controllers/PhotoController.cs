@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
+using Wman.Logic.Interfaces;
 using Wman.Logic.Services;
 using Wman.Repository.Interfaces;
 
@@ -16,105 +18,55 @@ namespace Wman.WebAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class PhotoController : ControllerBase
     {
-        IPhotoService _photoService;
-        UserManager<WmanUser> userManager;
-        IPicturesRepo picturesRepo;
-        IMapper mapper;
+        
+        IPhotoLogic photoLogic;
 
-        public PhotoController(IPhotoService photoService, UserManager<WmanUser> userManager, IPicturesRepo picturesRepo, IMapper mapper)
+        public PhotoController(IPhotoLogic photoLogic)
         {
-            _photoService = photoService;
-            this.userManager = userManager;
-            this.picturesRepo = picturesRepo;
-            this.mapper = mapper;
+            this.photoLogic = photoLogic;
         }
 
         [HttpPost("AddPhoto/{userName}")]
         public async Task<ActionResult<PhotoDTO>> AddProfilePhoto(string userName, IFormFile file)
         {
-            var selectedUser = await (from x in userManager.Users
-                                      where x.UserName == userName
-                                      select x).Include(x => x.ProfilePicture).FirstOrDefaultAsync();
-
-            var result = await _photoService.AddProfilePhotoAsync(file);
-            if (result.Error != null)
+            try
             {
-                return BadRequest(result.Error.Message);
+                var result = await photoLogic.AddProfilePhoto(userName, file);
+                return Ok(result);
             }
-            var UploadedPicture = new Pictures
+            catch (Exception ex)
             {
-                Url = result.SecureUrl.AbsoluteUri,
-                CloudPhotoID = result.PublicId,
-                PicturesType = PicturesType.ProfilePic,
-                WmanUser = selectedUser
-
-            };
-            selectedUser.ProfilePicture = UploadedPicture;
-            await picturesRepo.Add(UploadedPicture);
-
-            var photoResult = mapper.Map<PhotoDTO>(selectedUser.ProfilePicture);
-            return Ok(photoResult);
+                return StatusCode(500, $"Internal server error : {ex}");
+            }
         }
         [HttpDelete("RemovePhoto/{publicId}")]
         public async Task<ActionResult> RemoveProfilePhoto(string publicId)
         {
-            var selectedPhoto = await (from x in picturesRepo.GetAll()
-                                       where x.CloudPhotoID == publicId
-                                       select x).FirstOrDefaultAsync();
-            if (selectedPhoto == null)
+            try
             {
-                return BadRequest("Photo Not found");
+                 await photoLogic.RemoveProfilePhoto(publicId);
+                return Ok();
             }
-            
-
-            // Remove Photo from the cloud
-            await _photoService.DeleteProfilePhotoAsync(publicId);
-
-            // remove picture data from db
-            await picturesRepo.Delete(selectedPhoto.Id);
-
-            return Ok();
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error : {ex}");
+            }
         }
         [HttpPut("UpdatePhoto/{publicId}")]
         public async Task<ActionResult<PhotoDTO>> UpdateProfilePhoto(string publicId, IFormFile file) 
         {
-            var selectedPhoto = await (from x in picturesRepo.GetAll()
-                                       where x.CloudPhotoID == publicId
-                                       select x).FirstOrDefaultAsync();
-            if (selectedPhoto == null)
+            try
             {
-                return BadRequest("Photo Not found");
+                var result = await photoLogic.UpdateProfilePhoto(publicId, file);
+                return Ok(result);
             }
-
-            // Remove Photo from the cloud
-            await _photoService.DeleteProfilePhotoAsync(publicId);
-
-            // remove picture data from db
-            await picturesRepo.Delete(selectedPhoto.Id);
-
-            var selectedUser = await (from x in userManager.Users
-                                      where x.Id == selectedPhoto.WManUserID
-                                      select x).Include(x => x.ProfilePicture).FirstOrDefaultAsync();
-
-            var result = await _photoService.AddProfilePhotoAsync(file);
-            if (result.Error != null)
+            catch (Exception ex)
             {
-                return BadRequest(result.Error.Message);
+                return StatusCode(500, $"Internal server error : {ex}");
             }
-            var UploadedPicture = new Pictures
-            {
-                Url = result.SecureUrl.AbsoluteUri,
-                CloudPhotoID = result.PublicId,
-                PicturesType = PicturesType.ProfilePic,
-
-            };
-            selectedUser.ProfilePicture = UploadedPicture;
-            await picturesRepo.Add(UploadedPicture);
-
-            var photoResult = mapper.Map<PhotoDTO>(selectedUser.ProfilePicture);
-            return Ok(photoResult);
         }
     }
 }

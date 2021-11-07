@@ -53,6 +53,7 @@ namespace Wman.WebAPI
             services.AddTransient<IEventLogic, EventLogic>();
             services.AddTransient<ILabelLogic, LabelLogic>();
             services.AddTransient<IAllInWorkEventLogic, AllInWorkEventLogic>();
+            services.AddTransient<IPhotoLogic, PhotoLogic>();
             services.AddControllers().AddJsonOptions(options =>
           options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
