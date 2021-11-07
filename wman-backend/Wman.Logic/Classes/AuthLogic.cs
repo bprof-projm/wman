@@ -107,7 +107,7 @@ namespace Wman.Logic.Classes
             result = await userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                await userManager.AddToRoleAsync(user, "Debug");
+                await userManager.AddToRoleAsync(user, "Worker");
                 return result;
             }
 
@@ -170,7 +170,7 @@ namespace Wman.Logic.Classes
                 throw new ArgumentException("User doesn't exists");
             }
 
-            roleName = ValidateRolename(roleName);
+            roleName = await ValidateRolename(roleName);
             
             if (await userManager.IsInRoleAsync(user, roleName)/* || await userManager.IsInRoleAsync(user, "Admin")*/)
             {
@@ -190,7 +190,7 @@ namespace Wman.Logic.Classes
                 throw new ArgumentException("User doesn't exists");
             }
             
-            roleName = ValidateRolename(roleName);
+            roleName = await ValidateRolename(roleName);
             await this.RemovePrevRoles(selectedUser);
             await userManager.AddToRoleAsync(selectedUser, roleName);
         }
@@ -210,7 +210,7 @@ namespace Wman.Logic.Classes
             return await userManager.GetRolesAsync(user);
         }
 
-        private string ValidateRolename(string input)
+        private async Task<string> ValidateRolename(string input)
         {
             switch (input.ToUpper())
             {
@@ -223,6 +223,10 @@ namespace Wman.Logic.Classes
                 default:
                     throw new ArgumentException("Specified role doesn't exists");
             }
+
+            //Alternate, could be useful if we would plan to have more roles in the future.
+            return await roleManager.Roles.Where(x => x.NormalizedName == input.ToUpper()).Select(y => y.Name).SingleOrDefaultAsync();
+            throw new ArgumentException("Specified role doesn't exists");
         }
         private async Task RemovePrevRoles(WmanUser user)
         {
