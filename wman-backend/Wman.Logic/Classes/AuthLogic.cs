@@ -173,10 +173,10 @@ namespace Wman.Logic.Classes
             await userManager.AddToRoleAsync(selectedUser, roleName);
         }
 
-        public async Task<List<WmanUser>> GetAllUsersOfRole(string roleName)
+        public async Task<List<UserDTO>> GetAllUsersOfRole(string roleName)
         {
             var users = await this.userManager.GetUsersInRoleAsync(roleName);
-            return users.ToList();
+            return mapper.Map<List<UserDTO>>(users);
         }
         public async Task<IEnumerable<string>> GetAllRolesOfUser(string username)
         {

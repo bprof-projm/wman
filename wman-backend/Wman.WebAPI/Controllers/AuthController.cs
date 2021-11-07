@@ -218,14 +218,14 @@ namespace Wman.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Returns a list of users assigned to the selected role
+        /// Returns a list of users that have the provided role
         /// </summary>
         /// <param name="rolename">Name of the rule</param>
         /// <returns></returns>
         [HttpGet]
         [Route("role/members")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<IEnumerable<WmanUser>>> UsersofRole(string rolename)
+        public async Task<ActionResult<IEnumerable<UserDTO>>> UsersofRole(string rolename)
         {
             try
             {
