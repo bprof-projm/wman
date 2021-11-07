@@ -173,7 +173,12 @@ namespace Wman.WebAPI.Controllers
             return BadRequest(result.Errors);
         }
 
-
+        /// <summary>
+        /// Set the role of a user
+        /// </summary>
+        /// <param name="username">Username of the user</param>
+        /// <param name="rolename">Name of the role(Admin/Manager/Worker)</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("role/assign")]
         [Authorize(Roles = "Admin")]
@@ -191,6 +196,11 @@ namespace Wman.WebAPI.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Returns a list of rolenames the selected user is assigned to.
+        /// </summary>
+        /// <param name="username">username of the user</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("role/userroles")]
         [Authorize(Roles = "Admin")]
@@ -207,6 +217,11 @@ namespace Wman.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Returns a list of users assigned to the selected role
+        /// </summary>
+        /// <param name="rolename">Name of the rule</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("role/members")]
         [Authorize(Roles = "Admin")]

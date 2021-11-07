@@ -57,6 +57,28 @@
             <param name="pwd">Password of the user to be updated</param>
             <param name="user">User to be updated</param>
         </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.AssignRole(System.String,System.String)">
+            <summary>
+            Set the role of a user
+            </summary>
+            <param name="username">Username of the user</param>
+            <param name="rolename">Name of the role(Admin/Manager/Worker)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.RolesofUser(System.String)">
+            <summary>
+            Returns a list of rolenames the selected user is assigned to.
+            </summary>
+            <param name="username">username of the user</param>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.UsersofRole(System.String)">
+            <summary>
+            Returns a list of users assigned to the selected role
+            </summary>
+            <param name="rolename">Name of the rule</param>
+            <returns></returns>
+        </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.PopulateDB">
             <summary>
             Endpoint used to fill database with testing data. Used only for development purposes.
