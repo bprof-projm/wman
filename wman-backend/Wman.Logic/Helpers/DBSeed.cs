@@ -76,7 +76,7 @@ namespace Wman.Logic.Helpers
                 LastName = "User",
                 SecurityStamp = Guid.NewGuid().ToString()
             };
-            userManager.CreateAsync(user, "string1").Wait();
+            userManager.CreateAsync(user, "string").Wait();
             userManager.AddToRoleAsync(user, "Worker").Wait();
 
             user = new WmanUser
@@ -87,7 +87,7 @@ namespace Wman.Logic.Helpers
                 LastName = "User",
                 SecurityStamp = Guid.NewGuid().ToString()
             };
-            userManager.CreateAsync(user, "string2").Wait();
+            userManager.CreateAsync(user, "string").Wait();
             userManager.AddToRoleAsync(user, "Worker").Wait();
 
             user = new WmanUser
@@ -98,7 +98,7 @@ namespace Wman.Logic.Helpers
                 LastName = "User",
                 SecurityStamp = Guid.NewGuid().ToString()
             };
-            userManager.CreateAsync(user, "string3").Wait();
+            userManager.CreateAsync(user, "string").Wait();
             userManager.AddToRoleAsync(user, "Worker").Wait();
 
         }
