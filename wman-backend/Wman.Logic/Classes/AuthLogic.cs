@@ -161,7 +161,7 @@ namespace Wman.Logic.Classes
             }
             throw new ArgumentException("Incorrect password");
         }
-        public async Task AssignRoleToUser(string username, string roleName)
+        public async Task SetRoleOfUser(string username, string roleName)
         {
             WmanUser selectedUser = await userManager.FindByNameAsync(username);
 

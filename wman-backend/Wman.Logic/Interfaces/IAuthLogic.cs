@@ -25,7 +25,7 @@ namespace Wman.Logic.Interfaces
 
         Task<IEnumerable<string>> GetAllRolesOfUser(string username);
 
-        Task AssignRoleToUser(string username, string role);
+        Task SetRoleOfUser(string username, string role);
 
         Task<List<UserDTO>> GetAllUsersOfRole(string roleId);
 

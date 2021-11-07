@@ -174,7 +174,7 @@ namespace Wman.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Set the role of a user
+        /// Set the role of a user, while removing any previous roles he had before
         /// </summary>
         /// <param name="username">Username of the user</param>
         /// <param name="rolename">Name of the role(Admin/Manager/Worker)</param>
@@ -186,11 +186,10 @@ namespace Wman.WebAPI.Controllers
         {
             try
             {
-                await this.authLogic.AssignRoleToUser(username, rolename);
+                await this.authLogic.SetRoleOfUser(username, rolename);
             }
             catch (Exception ex)
             {
-
                 return StatusCode(500, $"Internal server error : {ex}");
             }
             return Ok();
@@ -204,7 +203,7 @@ namespace Wman.WebAPI.Controllers
         [HttpGet]
         [Route("role/userroles")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<IEnumerable<string>>> RolesofUser(string username)
+        public async Task<ActionResult<IEnumerable<string>>> RolesOfUser(string username)
         {
             try
             {
@@ -225,7 +224,7 @@ namespace Wman.WebAPI.Controllers
         [HttpGet]
         [Route("role/members")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<IEnumerable<UserDTO>>> UsersofRole(string rolename)
+        public async Task<ActionResult<IEnumerable<UserDTO>>> UsersOfRole(string rolename)
         {
             try
             {
