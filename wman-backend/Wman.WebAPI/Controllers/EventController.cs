@@ -37,6 +37,7 @@ namespace Wman.WebAPI.Controllers
         /// <param name="workEvent"></param>
         /// <returns></returns>
         [HttpPost("/CreateEvent")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult> CreateEvent([FromBody] CreateEventDTO workEvent)
         {
             try
@@ -56,6 +57,7 @@ namespace Wman.WebAPI.Controllers
         /// <param name="Id"></param>
         /// <returns></returns>
         [HttpGet("/GetEvent/{Id}")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<CreateEventDTO>> GetEvent(int Id)
         {
             try
@@ -76,6 +78,7 @@ namespace Wman.WebAPI.Controllers
         /// <returns>A collection of all the events</returns>
         [HttpGet]
         [Route("all")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<IEnumerable<CreateEventDTO>>> GetAll()
         {
             try
@@ -96,6 +99,7 @@ namespace Wman.WebAPI.Controllers
         /// <param name="Id"></param>
         /// <returns></returns>
         [HttpDelete("/DeleteEvent/{Id}")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult> DeleteEvent(int Id)
         {
             try
@@ -110,6 +114,7 @@ namespace Wman.WebAPI.Controllers
         }
 
         [HttpPut("/DnDEvent/{id}")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult> DnDEvent(int id,[FromBody] DnDEventDTO workEvent)
         {
             try
@@ -130,6 +135,7 @@ namespace Wman.WebAPI.Controllers
         /// <returns>HTTP response code</returns>
         [HttpPost]
         [Route("assign")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult> AssignUser(int eventid, string userName)
         {
             try
@@ -156,6 +162,7 @@ namespace Wman.WebAPI.Controllers
         /// <returns>A list of userDTOs, where the users could be assigned without date collision</returns>
         [HttpPost]
         [Route("massAssign")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult> MassAssignUsers(int eventid, [FromBody] ICollection<string> usernames)
         {
             try
@@ -184,6 +191,7 @@ namespace Wman.WebAPI.Controllers
         /// <returns>HTTP response code</returns>
         [HttpGet]
         [Route("users")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<ICollection<UserDTO>>> GetAllAssignedUsers(int eventid)
         {
             try
@@ -198,9 +206,6 @@ namespace Wman.WebAPI.Controllers
                 }
                 return StatusCode(500, $"Internal server error : {ex}");
             }
-            
         }
-
-
     }
 }

@@ -17,7 +17,6 @@ namespace Wman.WebAPI.Controllers
     /// Auth controller
     /// </summary>
     [ApiController]
-
     [Route("[controller]")]
 
     public class AuthController : Controller
@@ -65,7 +64,7 @@ namespace Wman.WebAPI.Controllers
         /// <param name="model">Login model</param>
         /// <returns>ActionResult</returns>
         [HttpPost]
-
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> CreateUser([FromBody] RegisterDTO model)
         {
             if (!ModelState.IsValid)
@@ -91,7 +90,7 @@ namespace Wman.WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        //[Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUsers()
         {
             try
@@ -112,7 +111,7 @@ namespace Wman.WebAPI.Controllers
         /// <returns></returns>
         [HttpGet("username")]
         //[Route("getOne")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<UserDTO>> GetUser(string username)
         {
             var output = Converter.Convert(await authLogic.GetOneUser(username));
@@ -128,7 +127,7 @@ namespace Wman.WebAPI.Controllers
         /// </summary>
         /// <param name="username">Username of the user to be deleted</param>
         [HttpDelete("{username}")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteUser(string username)
         {
             IdentityResult result;
@@ -153,7 +152,7 @@ namespace Wman.WebAPI.Controllers
         /// <param name="pwd">Password of the user to be updated</param>
         /// <param name="user">User to be updated</param>
         [HttpPut("{oldUsername}")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UpdateUser(string oldUsername, string pwd, [FromBody] UserDTO user)
         {
             if (!ModelState.IsValid)
@@ -177,6 +176,7 @@ namespace Wman.WebAPI.Controllers
 
         [HttpGet]
         [Route("role/assign")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> AssignRole(string username, string rolename)
         {
             try
@@ -193,7 +193,8 @@ namespace Wman.WebAPI.Controllers
 
         [HttpGet]
         [Route("role/userroles")]
-        public async Task<ActionResult<IEnumerable<string>>> RolesofUsers(string username)
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<IEnumerable<string>>> RolesofUser(string username)
         {
             try
             {
@@ -208,6 +209,7 @@ namespace Wman.WebAPI.Controllers
 
         [HttpGet]
         [Route("role/members")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<WmanUser>>> UsersofRole(string rolename)
         {
             try
@@ -226,6 +228,7 @@ namespace Wman.WebAPI.Controllers
         /// <returns>200</returns>
         [HttpGet]
         [Route("db")]
+
         public async Task<ActionResult> PopulateDB()
         {
             try
