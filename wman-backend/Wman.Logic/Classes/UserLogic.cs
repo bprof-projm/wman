@@ -36,6 +36,10 @@ namespace Wman.Logic.Classes
                 {
                     throw new ArgumentException(String.Format("User: {0} doesn't exists!", username));
                 }
+                if (await userManager.IsInRoleAsync(selectedUser, "Worker") == false)
+                {
+                    throw new InvalidOperationException(String.Format("User: {0} is not a worker! ", username));
+                }
                 if (selectedUser.ProfilePicture != null)
                 {
                     profileUrl = selectedUser.ProfilePicture.Url;
