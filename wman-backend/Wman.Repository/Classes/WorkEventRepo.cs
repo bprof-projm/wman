@@ -35,7 +35,7 @@ namespace Wman.Repository.Classes
 
         public IQueryable<WorkEvent> GetAll()
         {
-            return this.db.WorkEvent.AsNoTracking().Include(x => x.Address).Include(x => x.AssignedUsers);
+            return this.db.WorkEvent.AsNoTracking().Include(x => x.Address).Include(x => x.AssignedUsers).ThenInclude(x => x.ProfilePicture).Include(x => x.Labels);
         }
         /// <inheritdoc />
         public async Task<WorkEvent> GetOne(int key) 

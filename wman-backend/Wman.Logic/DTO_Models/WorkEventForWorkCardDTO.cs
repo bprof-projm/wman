@@ -9,6 +9,7 @@ namespace Wman.Logic.DTO_Models
 {
     public class WorkEventForWorkCardDTO
     {
+        public int Id { get; set; }
         public string JobDescription { get; set; }
         public DateTime EstimatedStartDate { get; set; }
         public DateTime EstimatedFinishDate { get; set; }      

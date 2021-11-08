@@ -35,7 +35,7 @@ namespace Wman.WebAPI.Controllers
         /// </summary>
         /// <returns>CalendarWorkEventDTO</returns>
         [HttpGet("GetCurrentDayEvents")]
-        public async Task<ActionResult<IEnumerable<CalendarWorkEventDTO>>> GetCurrentDayEvents()
+        public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetCurrentDayEvents()
         {
             try
             {
@@ -53,7 +53,7 @@ namespace Wman.WebAPI.Controllers
         /// </summary>
         /// <returns>CalendarWorkEventDTO</returns>
         [HttpGet("GetCurrentWeekEvents")]
-        public async Task<ActionResult<IEnumerable<CalendarWorkEventDTO>>> GetCurrentWeekEvents()
+        public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetCurrentWeekEvents()
         {
             try
             {
@@ -73,7 +73,7 @@ namespace Wman.WebAPI.Controllers
         /// <param name="day"></param>
         /// <returns>CalendarWorkEventDTO</returns>
         [HttpGet("GetDayEvents/{day}")]
-        public async Task<ActionResult<IEnumerable<CalendarWorkEventDTO>>> GetDayEvents(int day)
+        public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetDayEvents(int day)
         {
             try
             {
@@ -92,7 +92,7 @@ namespace Wman.WebAPI.Controllers
         /// <param name="week"></param>
         /// <returns>CalendarWorkEventDTO<returns>
         [HttpGet("GetWeekEvents/{week}")]
-        public ActionResult<IEnumerable<CalendarWorkEventDTO>> GetWeekEvents(int week)
+        public ActionResult<IEnumerable<WorkEventForWorkCardDTO>> GetWeekEvents(int week)
         {
             try
             {
@@ -111,7 +111,7 @@ namespace Wman.WebAPI.Controllers
         /// <param name="time"></param>
         /// <returns>CalendarWorkEventDTO</returns>
         [HttpGet("GetDayEvents")]
-        public async Task<ActionResult<IEnumerable<CalendarWorkEventDTO>>> GetDayEvents(DateTime time)
+        public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetDayEvents(DateTime time)
         {
             try
             {
@@ -131,7 +131,7 @@ namespace Wman.WebAPI.Controllers
         /// <param name="finishEventDate"></param>
         /// <returns>CalendarWorkEventDTO</returns>
         [HttpGet("GetWeekEvents")]
-        public async Task<ActionResult<IEnumerable<CalendarWorkEventDTO>>> GetWeekEvents(DateTime startEventDate, DateTime finishEventDate)
+        public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetWeekEvents(DateTime startEventDate, DateTime finishEventDate)
         {
             try
             {
