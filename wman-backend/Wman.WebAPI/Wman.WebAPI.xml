@@ -65,13 +65,6 @@
             <param name="rolename">Name of the role(Admin/Manager/Worker)</param>
             <returns></returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.RolesOfUser(System.String)">
-            <summary>
-            Returns a list of rolenames the selected user is assigned to.
-            </summary>
-            <param name="username">username of the user</param>
-            <returns></returns>
-        </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.UsersOfRole(System.String)">
             <summary>
             Returns a list of users that have the provided role
