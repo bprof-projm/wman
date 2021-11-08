@@ -44,6 +44,31 @@ namespace Wman.Test.Tests
         }
 
         [Test]
+        [TestCase("2021-10-10", "2021-10-10")]
+        [TestCase("2021-10-10", null)]
+        [TestCase(null, "2021-10-10")]
+        [TestCase(null, null)]
+        public async Task DnDEvent_WrongInput_ThrowsException_FailedOperation(DateTime startDate, DateTime finishDate)
+        {
+            //Arrange
+            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
+            DnDEventDTO eventDTO = new DnDEventDTO()
+            {
+                EstimatedStartDate = startDate,
+                EstimatedFinishDate = finishDate
+            };
+            int desiredId = eventList[1].Id;
+
+            //Act
+            AsyncTestDelegate testDelegate = async () => await eventLogic.DnDEvent(desiredId, eventDTO);
+
+            //Assert
+            Assert.ThrowsAsync<ArgumentException>(testDelegate);
+
+            this.eventRepo.Verify(x => x.GetOneWithTracking(It.IsAny<int>()), Times.Exactly(0));
+        }
+
+        [Test]
         public async Task DnDEvent_AssignUser_NoConflictsDuringDnDEvent_SuccessfulOperation()
         {
             //Arrange
