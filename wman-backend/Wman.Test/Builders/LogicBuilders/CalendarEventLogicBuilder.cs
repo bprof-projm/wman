@@ -34,7 +34,6 @@ namespace Wman.Test.Builders.LogicBuilders
                 JobDescription = "PizzaDobálóKretén",
                 EstimatedStartDate = DateTime.UtcNow,
                 EstimatedFinishDate = DateTime.UtcNow.AddMinutes(20),
-                AddressId = 1,
                 WorkStartDate = new DateTime(2021, 10, 16),
                 WorkFinishDate = new DateTime(2021, 10, 16),
                 Status = Status.started
@@ -45,7 +44,6 @@ namespace Wman.Test.Builders.LogicBuilders
                 JobDescription = "NoggerFagyi",
                 EstimatedStartDate = DateTime.UtcNow.AddDays(-1),
                 EstimatedFinishDate = DateTime.UtcNow.AddDays(-1).AddMinutes(40),
-                AddressId = 2,
                 WorkStartDate = new DateTime(2021, 10, 12),
                 WorkFinishDate = new DateTime(2021, 10, 14),
                 Status = Status.started
@@ -56,7 +54,6 @@ namespace Wman.Test.Builders.LogicBuilders
                 JobDescription = "Allahmashhallah",
                 EstimatedStartDate = DateTime.UtcNow.AddDays(7),
                 EstimatedFinishDate = DateTime.UtcNow.AddDays(7).AddMinutes(40),
-                AddressId = 3,
                 WorkStartDate = new DateTime(2021, 10, 15),
                 WorkFinishDate = new DateTime(2021, 10, 18),
                 Status = Status.awaiting
@@ -67,7 +64,6 @@ namespace Wman.Test.Builders.LogicBuilders
                 JobDescription = "Boombliallahkutarvashmir",
                 EstimatedStartDate = DateTime.UtcNow.AddDays(20),
                 EstimatedFinishDate = DateTime.UtcNow.AddDays(20).AddMinutes(40),
-                AddressId = 3,
                 WorkStartDate = new DateTime(2021, 10, 10),
                 WorkFinishDate = new DateTime(2021, 10, 12),
                 Status = Status.finished
@@ -78,7 +74,6 @@ namespace Wman.Test.Builders.LogicBuilders
                 JobDescription = "Boombliallahkutarvashmir",
                 EstimatedStartDate = new DateTime(2021, 10, 10),
                 EstimatedFinishDate = new DateTime(2021, 10, 10),
-                AddressId = 3,
                 WorkStartDate = new DateTime(2021, 10, 10),
                 WorkFinishDate = new DateTime(2021, 10, 12),
                 Status = Status.finished

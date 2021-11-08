@@ -44,6 +44,31 @@ namespace Wman.Test.Tests
         }
 
         [Test]
+        public async Task DnDEvent_AssignUser_NoConflictsDuringDnDEvent_SuccessfulOperation()
+        {
+            //Arrange
+            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
+            DnDEventDTO eventDTO = new DnDEventDTO()
+            {
+                EstimatedStartDate = eventList[0].EstimatedStartDate,
+                EstimatedFinishDate = eventList[0].EstimatedFinishDate
+            };
+            int desiredId = eventList[1].Id;
+
+            //Act
+            var assignCall = eventLogic.AssignUser(desiredId, users[0].UserName);
+            var mainCall = eventLogic.DnDEvent(desiredId, eventDTO);
+
+            //Assert
+            Assert.That(assignCall.IsCompleted && mainCall.IsCompleted);
+
+            this.eventRepo.Verify(x => x.GetOneWithTracking(It.IsAny<int>()), Times.Exactly(2));
+            this.userManager.Verify(x => x.Users, Times.Once);
+            this.eventRepo.Verify(x => x.GetAll(), Times.Once);
+            this.eventRepo.Verify(x => x.Update(It.IsAny<int>(), It.IsAny<WorkEvent>()), Times.Once);
+        }
+
+        [Test]
         public async Task MassAssignUser_AssignMultipleUsers_Successfull()
         {
             //Arrange
@@ -127,7 +152,7 @@ namespace Wman.Test.Tests
                 JobDescription = "MocskosLucsok",
                 EstimatedStartDate = new DateTime(2021, 10, 16),
                 EstimatedFinishDate = new DateTime(2021, 10, 16),
-                AddressId = 1,
+                //AddressId = 1,
                 WorkStartDate = new DateTime(2021, 10, 16),
                 WorkFinishDate = new DateTime(2021, 10, 16),
                 Status = Status.started
