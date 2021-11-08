@@ -127,19 +127,6 @@
             <param name="workEvent"></param>
             <returns></returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.EventController.GetEvent(System.Int32)">
-            <summary>
-            Getting a custom event back
-            </summary>
-            <param name="Id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Wman.WebAPI.Controllers.EventController.GetAll">
-            <summary>
-            Get all the events
-            </summary>
-            <returns>A collection of all the events</returns>
-        </member>
         <member name="M:Wman.WebAPI.Controllers.EventController.DeleteEvent(System.Int32)">
             <summary>
             deletes an event
@@ -162,13 +149,6 @@
             <param name="eventid">The ID of the event we'd like to add to</param>
             <param name="usernames">A list of string string usernames, which we'd like to assign to the event</param>
             <returns>A list of userDTOs, where the users could be assigned without date collision</returns>
-        </member>
-        <member name="M:Wman.WebAPI.Controllers.EventController.GetAllAssignedUsers(System.Int32)">
-            <summary>
-            Lists all the users assigned to a selected event
-            </summary>
-            <param name="eventid">The ID of the event</param>
-            <returns>HTTP response code</returns>
         </member>
     </members>
 </doc>

@@ -26,7 +26,7 @@ namespace Wman.Logic.Classes
         {
             var events = await (from x in workEventRepo.GetAll()
                          where x.EstimatedStartDate.DayOfYear == DateTime.UtcNow.DayOfYear
-                         select x).OrderBy(x => x.EstimatedStartDate).ToListAsync();
+                         select x).ToListAsync();
             ;
             return mapper.Map<List<WorkEventForWorkCardDTO>>(events);
         }
@@ -76,7 +76,7 @@ namespace Wman.Logic.Classes
 
             var events = await(from x in workEventRepo.GetAll()
                           where x.EstimatedStartDate.DayOfYear >= firstDayOfTheWeek.DayOfYear && x.EstimatedStartDate.DayOfYear <=lastDayOfTheWeek.DayOfYear
-                          select x).OrderBy(x => x.EstimatedStartDate).ToListAsync();
+                          select x).ToListAsync();
             return mapper.Map<List<WorkEventForWorkCardDTO>>(events);
 
         }
@@ -87,7 +87,7 @@ namespace Wman.Logic.Classes
             {
                 var events = await (from x in workEventRepo.GetAll()
                                     where x.EstimatedStartDate.DayOfYear == day
-                                    select x).OrderBy(x => x.EstimatedStartDate).ToListAsync();
+                                    select x).ToListAsync();
                 return mapper.Map<List<WorkEventForWorkCardDTO>>(events);
             }
             else
@@ -111,7 +111,7 @@ namespace Wman.Logic.Classes
                     }
                     return week == CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(time, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
 
-                }).OrderBy(x => x.EstimatedStartDate);
+                });
 
                 return mapper.Map<List<WorkEventForWorkCardDTO>>(find);
             }
@@ -126,7 +126,7 @@ namespace Wman.Logic.Classes
 
             var events = await (from x in workEventRepo.GetAll()
                           where x.EstimatedStartDate.DayOfYear == day.DayOfYear
-                          select x).OrderBy(x => x.EstimatedStartDate).ToListAsync();
+                          select x).ToListAsync();
             return mapper.Map<List<WorkEventForWorkCardDTO>>(events);
         }
 
@@ -134,7 +134,7 @@ namespace Wman.Logic.Classes
         {
             var events =await (from x in workEventRepo.GetAll()
                           where x.EstimatedStartDate.DayOfYear >= firstDayOfTheWeek.DayOfYear && x.EstimatedStartDate.DayOfYear <= lastDayOfTheWeek.DayOfYear
-                          select x).OrderBy(x => x.EstimatedStartDate).ToListAsync();
+                          select x).ToListAsync();
             return mapper.Map<List<WorkEventForWorkCardDTO>>(events);
         }
     }
