@@ -5,6 +5,7 @@ import ProgressList from "../Progress-list/progress-list.component";
 import axios from "axios";
 import { SearchBox } from "../../SearchBox/search-box.component";
 import './progress-menu.styles.css';
+import Cookies from "js-cookie";
 const ProgressMenu = () => {
     
     /*Visibility*/
@@ -28,8 +29,9 @@ const ProgressMenu = () => {
     /*Get elements*/
     const [users, setUsers] = useState([]);
     useEffect(() => {
-        axios.get(`/User/workload`)
-            .then(response => setUsers(response.data));
+        axios.get(`/User/workload`,{headers:{'Authorization':`Bearer ${Cookies.get("auth")}`}})
+            .then(response => setUsers(response.data))
+            .catch(error => console.log(error));
     }, [axios]);
 
     /*Search user by name*/
