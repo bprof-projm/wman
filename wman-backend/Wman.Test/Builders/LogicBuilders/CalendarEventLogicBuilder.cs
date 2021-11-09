@@ -1,12 +1,14 @@
-﻿using MockQueryable.Moq;
+﻿using AutoMapper;
+using MockQueryable.Moq;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Wman.Data.DB_Models;
+using Wman.Logic.Helpers;
 using Wman.Repository.Interfaces;
 
-namespace Wman.Test.Builders
+namespace Wman.Test.Builders.LogicBuilders
 {
     //This builder class implements similar functions to EventLogicBuilder,
     //but the required test cases are a bit different than the one need for EventLogicTests, so this was a necessity

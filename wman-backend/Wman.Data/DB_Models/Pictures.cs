@@ -25,6 +25,7 @@ namespace Wman.Data.DB_Models
         public string Url { get; set; }
         public PicturesType PicturesType { get; set; }
         public int WManUserID { get; set; }
+        public WmanUser WmanUser { get; set; }
         public int WorkEventID { get; set; }
         [JsonIgnore]
         public virtual ICollection<WorkEvent> WorkEvents { get; set; }
