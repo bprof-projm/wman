@@ -43,6 +43,11 @@ namespace Wman.Repository.Classes
             return entity;
         }
 
+        public async Task SaveDatabase()
+        {
+            await this.db.SaveChangesAsync();
+        }
+
         public async Task Update(int oldKey, Pictures element)
         {
             var oldPicture =await GetOne(oldKey);

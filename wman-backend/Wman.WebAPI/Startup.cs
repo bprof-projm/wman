@@ -26,6 +26,7 @@ using Wman.Data.DB_Models;
 using Wman.Logic.Classes;
 using Wman.Logic.Helpers;
 using Wman.Logic.Interfaces;
+using Wman.Logic.Services;
 using Wman.Repository.Classes;
 using Wman.Repository.Interfaces;
 //using System.Data.Entity.Database;
@@ -45,7 +46,7 @@ namespace Wman.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             string signingKey = Configuration.GetValue<string>("SigningKey");
-            ;
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddControllers();
             services.AddTransient<IAuthLogic, AuthLogic>();
             services.AddTransient<ICalendarEventLogic, CalendarEventLogic>();
@@ -53,6 +54,8 @@ namespace Wman.WebAPI
             services.AddTransient<IUserLogic, UserLogic>();
             services.AddTransient<DBSeed, DBSeed>();
             services.AddTransient<ILabelLogic, LabelLogic>();
+            services.AddTransient<IAllInWorkEventLogic, AllInWorkEventLogic>();
+            services.AddTransient<IPhotoLogic, PhotoLogic>();
             services.AddControllers().AddJsonOptions(options =>
           options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
@@ -65,7 +68,7 @@ namespace Wman.WebAPI
             services.AddTransient<IPicturesRepo, PicturesRepo>();
             services.AddTransient<ILabelRepo, LabelRepo>();
             services.AddTransient<IAddressRepo, AddressRepo>();
-
+            services.AddTransient<IPhotoService, PhotoService>();
             services.AddSwaggerGen(c =>
             {
                 //c.DescribeAllEnumsAsStrings();

@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 
 namespace Wman.Logic.DTO_Models
 {
-    public class UserDTO
+    public class WorkerDTO
     {
         [DataType(DataType.Text)]
         [Required(AllowEmptyStrings = false)]
@@ -40,8 +38,6 @@ namespace Wman.Logic.DTO_Models
         public string Lastname { get; set; }
 
         //[DataType(DataType.ImageUrl)]
-        public Pictures Picture { get; set; }
-
-
+        public PhotoDTO ProfilePicture { get; set; }
     }
 }
