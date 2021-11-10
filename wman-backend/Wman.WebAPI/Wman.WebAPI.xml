@@ -23,7 +23,7 @@
             <param name="model">Login details</param>
             <returns>Hopefully a jwt token</returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.CreateUser(Wman.Logic.DTO_Models.RegisterDTO)">
+        <member name="M:Wman.WebAPI.Controllers.AuthController.CreateWorker(Wman.Logic.DTO_Models.RegisterDTO)">
             <summary>
             Create a new user
             </summary>

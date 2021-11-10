@@ -15,7 +15,7 @@ namespace Wman.Logic.Interfaces
 
         Task<IQueryable<WmanUser>> GetAllUsers();
 
-        Task<IdentityResult> CreateUser(RegisterDTO login);
+        Task<IdentityResult> CreateWorker(RegisterDTO login);
 
         Task<IdentityResult> DeleteUser(string uname);
 

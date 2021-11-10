@@ -65,7 +65,7 @@ namespace Wman.WebAPI.Controllers
         /// <returns>ActionResult</returns>
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> CreateUser([FromBody] RegisterDTO model)
+        public async Task<ActionResult> CreateWorker([FromBody] RegisterDTO model)
         {
             if (!ModelState.IsValid)
             {
@@ -74,7 +74,7 @@ namespace Wman.WebAPI.Controllers
             IdentityResult result;
             try
             {
-                result = await authLogic.CreateUser(model);
+                result = await authLogic.CreateWorker(model);
 
                 if (result.Succeeded) return Ok("User created successfully");
             }

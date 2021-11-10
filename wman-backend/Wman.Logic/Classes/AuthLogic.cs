@@ -78,18 +78,10 @@ namespace Wman.Logic.Classes
 
         }
 
-        public async Task<IdentityResult> CreateUser(RegisterDTO model)
+        public async Task<IdentityResult> CreateWorker(RegisterDTO model)
         {
             var result = new IdentityResult();
             var user = new WmanUser();
-            //Reinvented the wheel, it does this by itself :(
-
-            //user = userManager.Users.Where(x => x.UserName == model.Username).SingleOrDefault();
-            //if (user != null)
-            //{
-            //    var myerror = new IdentityError() { Code = "UsernameExists", Description = "Username already exists!" };
-            //    return IdentityResult.Failed(myerror);
-            //}
             user = userManager.Users.Where(x => x.Email == model.Email).SingleOrDefault();
             if (user != null)
             {
@@ -176,6 +168,10 @@ namespace Wman.Logic.Classes
         public async Task<List<UserDTO>> GetAllUsersOfRole(string roleName)
         {
             var users = await this.userManager.GetUsersInRoleAsync(roleName);
+            if (!await roleManager.RoleExistsAsync(roleName))
+            {
+                throw new ArgumentException("Specified role doesn't exists! ");
+            }
             return mapper.Map<List<UserDTO>>(users);
         }
         public async Task<IEnumerable<string>> GetAllRolesOfUser(string username)
