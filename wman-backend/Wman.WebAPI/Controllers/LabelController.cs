@@ -12,7 +12,7 @@ namespace Wman.WebAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Admin, Manager")]
     public class LabelController : ControllerBase
     {
         ILabelLogic labelLogic;
@@ -22,7 +22,6 @@ namespace Wman.WebAPI.Controllers
         }
 
         [HttpPost("/CreateLabel")]
-        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult> CreateLabel([FromBody] CreateLabelDTO label)
         {
             try
@@ -37,7 +36,6 @@ namespace Wman.WebAPI.Controllers
         }
 
         [HttpGet("/GetAllLabel")]
-        [Authorize(Roles = "Admin, Manager")]
         public ActionResult<ListLabelsDTO> GetAllLabel()
         {
             try
@@ -52,7 +50,6 @@ namespace Wman.WebAPI.Controllers
         }
 
         [HttpPut("/UpdateLabel/{Id}")]
-        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult> UpdateLabel(int Id, [FromBody] CreateLabelDTO newLabel)
         {
             try
@@ -66,7 +63,6 @@ namespace Wman.WebAPI.Controllers
             }
         }
         [HttpPost("/AssignLabelToWorkEvent")]
-        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult> AssignLabelToWorkEvent(int eventId, int labelId)
         {
             try
@@ -80,7 +76,6 @@ namespace Wman.WebAPI.Controllers
             }
         }
         [HttpDelete("/DeleteLabel/{Id}")]
-        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult> DeleteLabel(int Id)
         {
             try

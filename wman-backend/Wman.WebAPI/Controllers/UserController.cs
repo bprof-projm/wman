@@ -15,7 +15,7 @@ namespace Wman.WebAPI.Controllers
     /// </summary>
     [Route("[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Admin, Manager")]
     public class UserController : ControllerBase
     {
         IUserLogic userLogic;
@@ -36,7 +36,6 @@ namespace Wman.WebAPI.Controllers
         /// <returns>WorkLoadDTO</returns>
         [HttpGet]
         [Route("workload/range")]
-        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<IEnumerable<WorkloadDTO>>> WorkloadRange([FromQuery] ICollection<string> usernames)
         {
             try
@@ -59,7 +58,6 @@ namespace Wman.WebAPI.Controllers
         /// <returns>WorkLoadDTO</returns>
         [HttpGet]
         [Route("workload")]
-        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<IEnumerable<WorkloadDTO>>> AllWorkloads()
         {
             try
@@ -80,7 +78,6 @@ namespace Wman.WebAPI.Controllers
         /// <returns>A collection of events that are assigned to the specified user</returns>
         [HttpGet]
         [Route("workEvents")]
-        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<ICollection<AssignedEventDTO>>> GetAssignedEventsOfUser(string username)
         {
             try

@@ -16,7 +16,7 @@ namespace Wman.WebAPI.Controllers
     /// </summary>
     [Route("[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Admin, Manager, Worker")]
     public class CalendarEventController : ControllerBase
     {
         ICalendarEventLogic calendarEvent;
@@ -33,7 +33,6 @@ namespace Wman.WebAPI.Controllers
         /// </summary>
         /// <returns>CalendarWorkEventDTO</returns>
         [HttpGet("GetCurrentDayEvents")]
-        [Authorize(Roles = "Admin, Manager, Worker")]
         public async Task<ActionResult<IEnumerable<CalendarWorkEventDTO>>> GetCurrentDayEvents()
         {
             try
@@ -52,7 +51,6 @@ namespace Wman.WebAPI.Controllers
         /// </summary>
         /// <returns>CalendarWorkEventDTO</returns>
         [HttpGet("GetCurrentWeekEvents")]
-        [Authorize(Roles = "Admin, Manager, Worker")]
         public async Task<ActionResult<IEnumerable<CalendarWorkEventDTO>>> GetCurrentWeekEvents()
         {
             try
@@ -73,7 +71,6 @@ namespace Wman.WebAPI.Controllers
         /// <param name="day"></param>
         /// <returns>CalendarWorkEventDTO</returns>
         [HttpGet("GetDayEvents/{day}")]
-        [Authorize(Roles = "Admin, Manager, Worker")]
         public async Task<ActionResult<IEnumerable<CalendarWorkEventDTO>>> GetDayEvents(int day)
         {
             try
@@ -93,7 +90,6 @@ namespace Wman.WebAPI.Controllers
         /// <param name="week"></param>
         /// <returns>CalendarWorkEventDTO<returns>
         [HttpGet("GetWeekEvents/{week}")]
-        [Authorize(Roles = "Admin, Manager, Worker")]
         public ActionResult<IEnumerable<CalendarWorkEventDTO>> GetWeekEvents(int week)
         {
             try
@@ -113,7 +109,6 @@ namespace Wman.WebAPI.Controllers
         /// <param name="time"></param>
         /// <returns>CalendarWorkEventDTO</returns>
         [HttpGet("GetDayEvents")]
-        [Authorize(Roles = "Admin, Manager, Worker")]
         public async Task<ActionResult<IEnumerable<CalendarWorkEventDTO>>> GetDayEvents(DateTime time)
         {
             try
@@ -134,7 +129,6 @@ namespace Wman.WebAPI.Controllers
         /// <param name="finishEventDate"></param>
         /// <returns>CalendarWorkEventDTO</returns>
         [HttpGet("GetWeekEvents")]
-        [Authorize(Roles = "Admin, Manager, Worker")]
         public async Task<ActionResult<IEnumerable<CalendarWorkEventDTO>>> GetWeekEvents(DateTime startEventDate, DateTime finishEventDate)
         {
             try
