@@ -196,27 +196,6 @@ namespace Wman.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Returns a list of rolenames the selected user is assigned to.
-        /// </summary>
-        /// <param name="username">username of the user</param>
-        /// <returns></returns>
-        //[HttpGet]
-        //[Route("role/userroles")]
-        //[Authorize(Roles = "Admin")]
-        //public async Task<ActionResult<IEnumerable<string>>> RolesOfUser(string username)
-        //{
-        //    try
-        //    {
-        //        return Ok(await this.authLogic.GetAllRolesOfUser(username));
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        return StatusCode(500, $"Internal server error : {ex}");
-        //    }
-        //}
-
-        /// <summary>
         /// Returns a list of users that have the provided role
         /// </summary>
         /// <param name="rolename">Name of the rule</param>
