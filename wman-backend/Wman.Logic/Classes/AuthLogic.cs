@@ -184,24 +184,6 @@ namespace Wman.Logic.Classes
             return await userManager.GetRolesAsync(user);
         }
 
-        private async Task<string> ValidateRolename(string input)
-        {
-            switch (input.ToUpper())
-            {
-                case "ADMIN":
-                    return "Admin";
-                case "MANAGER":
-                    return "Manager";
-                case "WORKER":
-                    return "Worker";
-                default:
-                    throw new ArgumentException("Specified role doesn't exists");
-            }
-
-            //Alternate, could be useful if we would plan to have more roles in the future.
-            return await roleManager.Roles.Where(x => x.NormalizedName == input.ToUpper()).Select(y => y.Name).SingleOrDefaultAsync();
-            throw new ArgumentException("Specified role doesn't exists");
-        }
         private async Task RemovePrevRoles(WmanUser user)
         {
             var roles = await userManager.GetRolesAsync(user);
