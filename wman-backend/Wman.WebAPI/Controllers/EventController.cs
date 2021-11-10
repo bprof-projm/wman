@@ -37,7 +37,7 @@ namespace Wman.WebAPI.Controllers
         /// <param name="workEvent"></param>
         /// <returns></returns>
         [HttpPost("/CreateEvent")]
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(Roles = "Manager")]
         public async Task<ActionResult> CreateEvent([FromBody] CreateEventDTO workEvent)
         {
             try
