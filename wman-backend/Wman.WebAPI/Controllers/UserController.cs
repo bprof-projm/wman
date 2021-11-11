@@ -38,18 +38,7 @@ namespace Wman.WebAPI.Controllers
         [Route("workload/range")]
         public async Task<ActionResult<IEnumerable<WorkloadDTO>>> WorkloadRange([FromQuery] ICollection<string> usernames)
         {
-            try
-            {
                 return Ok(await userLogic.GetWorkLoads(usernames));
-            }
-            catch (Exception ex)
-            {
-                if (ex is ArgumentException)
-                {
-                    return StatusCode(400, $"Error: {ex.Message}");
-                }
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
         }
 
         /// <summary>
@@ -60,14 +49,7 @@ namespace Wman.WebAPI.Controllers
         [Route("workload")]
         public async Task<ActionResult<IEnumerable<WorkloadDTO>>> AllWorkloads()
         {
-            try
-            {
                 return Ok(await userLogic.GetWorkLoads());
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
         }
 
 
@@ -80,20 +62,8 @@ namespace Wman.WebAPI.Controllers
         [Route("workEvents")]
         public async Task<ActionResult<ICollection<AssignedEventDTO>>> GetAssignedEventsOfUser(string username)
         {
-            try
-            {
                 var result = await userLogic.WorkEventsOfUser(username);
                 return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                if (ex is InvalidOperationException || ex is ArgumentException)
-                {
-                    return StatusCode(400, $"Error: {ex.Message}");
-
-                }
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
         }
     }
 }
