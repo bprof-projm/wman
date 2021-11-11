@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Wman.WebAPI.Helpers
@@ -18,13 +19,28 @@ namespace Wman.WebAPI.Helpers
             switch (context.Exception)
             {
                 case Exception:
-                    context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Gone;
-                    context.ExceptionHandled = true;
+                   
+                    
+                    this.setContext(HttpStatusCode.Gone, "It's GONE", context);
+                    
+                    
                     break;
                 default:
 
                     break;
             }
+        }
+        private void setContext(HttpStatusCode statusCode, string input, ExceptionContext context)
+        {
+            context.HttpContext.Response.StatusCode = (int)statusCode;
+            context.HttpContext.Response.ContentType = "application/json; charset=utf-8";
+            var json = JsonSerializer.Serialize<string>(input);
+            MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
+            ReadOnlyMemory<byte> readOnlyMemory = new ReadOnlyMemory<byte>(stream.ToArray());
+            context.HttpContext.Response.Body.WriteAsync(readOnlyMemory);
+            context.ExceptionHandled = true;
+            
+
         }
     }
 }

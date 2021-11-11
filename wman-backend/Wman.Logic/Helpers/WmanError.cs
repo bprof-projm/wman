@@ -8,6 +8,7 @@ namespace Wman.Logic.Helpers
 {
     public enum WmanError
     {
+        generic,
         incorrectPassword,
         incorrentUsername,
         userNotFound,
