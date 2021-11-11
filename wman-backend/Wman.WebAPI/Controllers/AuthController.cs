@@ -45,7 +45,7 @@ namespace Wman.WebAPI.Controllers
         public async Task<ActionResult> Login([FromBody] LoginDTO model)
         {
 
-                return Ok(await authLogic.LoginUser(model));
+            return Ok(await authLogic.LoginUser(model));
         }
 
         /// <summary>
@@ -57,17 +57,17 @@ namespace Wman.WebAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> CreateWorker([FromBody] RegisterDTO model)
         {
-                return Ok("User created successfully");
+            return Ok("User created successfully");
         }
         /// <summary>
         /// Get a list of all users
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("all")]
         [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUsers()
         {
-                return Ok(Converter.MassConvert(await authLogic.GetAllUsers()));
+            return Ok(await authLogic.GetAllUsers());
 
         }
 
@@ -81,12 +81,7 @@ namespace Wman.WebAPI.Controllers
         [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<UserDTO>> GetUser(string username)
         {
-            var output = Converter.Convert(await authLogic.GetOneUser(username));
-            if (output == null)
-            {
-                return BadRequest("User not found");
-            }
-            return Ok(output);
+            return Ok(authLogic.GetOneUser(username));
         }
 
         /// <summary>
@@ -97,9 +92,7 @@ namespace Wman.WebAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteUser(string username)
         {
-            IdentityResult result;
-                result = await this.authLogic.DeleteUser(username);
-                    return Ok("User deleted successfully");
+            return Ok(await this.authLogic.DeleteUser(username));
         }
 
         /// <summary>
@@ -112,9 +105,7 @@ namespace Wman.WebAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UpdateUser(string oldUsername, string pwd, [FromBody] UserDTO user)
         {
-            IdentityResult result;
-                result = await this.authLogic.UpdateUser(oldUsername, pwd, user);
-                    return Ok("User updated successfully");
+            return Ok(await this.authLogic.UpdateUser(oldUsername, pwd, user));
         }
 
         /// <summary>
@@ -128,7 +119,7 @@ namespace Wman.WebAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> SetRole(string username, string rolename)
         {
-                await this.authLogic.SetRoleOfUser(username, rolename);
+            await this.authLogic.SetRoleOfUser(username, rolename);
             return Ok();
         }
 
@@ -142,7 +133,7 @@ namespace Wman.WebAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<UserDTO>>> UsersOfRole(string rolename)
         {
-                return Ok(await this.authLogic.GetAllUsersOfRole(rolename));
+            return Ok(await this.authLogic.GetAllUsersOfRole(rolename));
         }
         /// <summary>
         /// Endpoint used to fill database with testing data. Used only for development purposes.
@@ -153,7 +144,7 @@ namespace Wman.WebAPI.Controllers
 
         public async Task<ActionResult> PopulateDB()
         {
-                dBSeed.PopulateDB();
+            dBSeed.PopulateDB();
             return Ok();
         }
     }
