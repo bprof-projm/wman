@@ -36,6 +36,39 @@ namespace Wman.Test.Tests
         }
 
         [Test]
+        public async Task UpdateLabel_UpdateExistingLabel_SuccesfulOperation()
+        {
+            //Arrange
+            LabelLogic labelLogic = new LabelLogic(this.labelRepo.Object, this.mapper, this.eventRepo.Object);
+            CreateLabelDTO newLabel = new()
+            {
+                Color = "#000000",
+                Content = "TestCaseMeow"
+            };
+
+            //Act
+            var call = labelLogic.UpdateLabel(labelList[0].Id, newLabel);
+
+            //Assert
+            this.labelRepo.Verify(x => x.GetOne(It.IsAny<int>()), Times.Once);
+            this.labelRepo.Verify(x => x.Update(It.IsAny<int>(), It.IsAny<Label>()), Times.Once);
+        }
+
+        [Test]
+        public async Task DeleteLabel_DeleteExistingLabel_SuccessfulOperation()
+        {
+            //Arrange
+            LabelLogic labelLogic = new LabelLogic(this.labelRepo.Object, this.mapper, this.eventRepo.Object);
+
+            //Act
+            var call = labelLogic.DeleteLabel(labelList[0].Id);
+
+            //Assert
+            this.labelRepo.Verify(x => x.GetOne(It.IsAny<int>()), Times.Once);
+            this.labelRepo.Verify(x => x.Delete(It.IsAny<int>()), Times.Once);
+        }
+
+        [Test]
         public async Task GetAllLabels_ReturnsAllProperly_SuccessfulOperation()
         {
             //Arrange
