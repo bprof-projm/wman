@@ -127,7 +127,7 @@ namespace Wman.Test.Tests
                 JobDescription = "MocskosLucsok",
                 EstimatedStartDate = new DateTime(2021, 10, 16),
                 EstimatedFinishDate = new DateTime(2021, 10, 16),
-                AddressId = 1,
+                //AddressId = 1,
                 WorkStartDate = new DateTime(2021, 10, 16),
                 WorkFinishDate = new DateTime(2021, 10, 16),
                 Status = Status.started

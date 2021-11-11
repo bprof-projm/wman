@@ -29,7 +29,7 @@ namespace Wman.Test.Builders.LogicBuilders
             eventRepo.Setup(x => x.GetAll()).Returns(mock.Object);
             eventRepo.Setup(x => x.GetOne(It.IsAny<int>())).ReturnsAsync(eventList[0]);
             eventRepo.Setup(x => x.GetOneWithTracking(It.IsAny<int>())).ReturnsAsync(eventList[0]);
-                
+
             return eventRepo;
         }
 
@@ -78,11 +78,10 @@ namespace Wman.Test.Builders.LogicBuilders
             {
                 Id = 0,
                 JobDescription = "PizzaDobálóKretén",
-                EstimatedStartDate = new DateTime(2021, 10, 16),
-                EstimatedFinishDate = new DateTime(2021, 10, 16),
-                AddressId = 1,
+                EstimatedStartDate = DateTime.UtcNow,
+                EstimatedFinishDate = DateTime.UtcNow.AddMinutes(20),
                 WorkStartDate = new DateTime(2021, 10, 16),
-                WorkFinishDate= new DateTime(2021, 10, 16),
+                WorkFinishDate = new DateTime(2021, 10, 16),
                 Status = Status.started
             });
 
@@ -90,22 +89,19 @@ namespace Wman.Test.Builders.LogicBuilders
             {
                 Id = 1,
                 JobDescription = "NoggerFagyi",
-                EstimatedStartDate = new DateTime(2021, 10, 12),
-                EstimatedFinishDate = new DateTime(2021, 10, 14),
-                AddressId = 2,
+                EstimatedStartDate = DateTime.UtcNow.AddDays(-1),
+                EstimatedFinishDate = DateTime.UtcNow.AddDays(-1).AddMinutes(40),
                 WorkStartDate = new DateTime(2021, 10, 12),
                 WorkFinishDate = new DateTime(2021, 10, 14),
                 Status = Status.started
             });
 
-
             eventList.Add(new WorkEvent
             {
                 Id = 2,
                 JobDescription = "Allahmashhallah",
-                EstimatedStartDate = new DateTime(2021, 10, 15),
-                EstimatedFinishDate = new DateTime(2021, 10, 18),
-                AddressId = 3,
+                EstimatedStartDate = DateTime.UtcNow.AddDays(7),
+                EstimatedFinishDate = DateTime.UtcNow.AddDays(7).AddMinutes(40),
                 WorkStartDate = new DateTime(2021, 10, 15),
                 WorkFinishDate = new DateTime(2021, 10, 18),
                 Status = Status.awaiting
@@ -117,7 +113,6 @@ namespace Wman.Test.Builders.LogicBuilders
                 JobDescription = "Boombliallahkutarvashmir",
                 EstimatedStartDate = new DateTime(2021, 10, 10),
                 EstimatedFinishDate = new DateTime(2021, 10, 12),
-                AddressId = 3,
                 WorkStartDate = new DateTime(2021, 10, 10),
                 WorkFinishDate = new DateTime(2021, 10, 12),
                 Status = Status.finished
