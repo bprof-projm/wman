@@ -26,8 +26,36 @@ namespace Wman.Test.Builders.LogicBuilders
 
             labelList.Add( new Label{
                 Id = 0,
-                Color = "blue",
+                Color = "#0000FF",
                 Content = "something"
+            });
+
+            labelList.Add(new Label
+            {
+                Id = 1,
+                Color = "#FF0000",
+                Content = "dunno"
+            });
+
+            labelList.Add(new Label
+            {
+                Id = 2,
+                Color = "#FFFF00",
+                Content = "somethingelse"
+            });
+
+            labelList.Add(new Label
+            {
+                Id = 3,
+                Color = "#00FF00",
+                Content = "fesh"
+            });
+
+            labelList.Add(new Label
+            {
+                Id = 4,
+                Color = "#FFA500",
+                Content = "bruv"
             });
 
             return labelList;
