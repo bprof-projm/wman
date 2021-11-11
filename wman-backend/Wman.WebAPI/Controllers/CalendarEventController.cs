@@ -14,9 +14,9 @@ namespace Wman.WebAPI.Controllers
     /// <summary>
     /// CalendarEvent controller
     /// </summary>
-    [Authorize]
     [Route("[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin, Manager, Worker")]
     public class CalendarEventController : ControllerBase
     {
         ICalendarEventLogic calendarEvent;
@@ -140,7 +140,6 @@ namespace Wman.WebAPI.Controllers
             }
             catch (Exception ex)
             {
-
                 return StatusCode(500, $"Internal server error : {ex}");
             }
         }

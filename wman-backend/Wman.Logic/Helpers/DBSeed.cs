@@ -51,31 +51,56 @@ namespace Wman.Logic.Helpers
             {
                 Email = "string@string.com",
                 UserName = "string",
+                FirstName = "Admin",
+                LastName = "User",
+                SecurityStamp = Guid.NewGuid().ToString()
+            };
+            userManager.CreateAsync(user, "string").Wait();
+            userManager.AddToRoleAsync(user, "Admin").Wait();
+            user = new WmanUser
+            {
+                Email = "manager@gmail.com",
+                UserName = "manager",
+                FirstName = "Manager",
+                LastName = "User",
+                SecurityStamp = Guid.NewGuid().ToString()
+            };
+            userManager.CreateAsync(user, "string").Wait();
+            userManager.AddToRoleAsync(user, "Manager").Wait();
+
+            user = new WmanUser
+            {
+                Email = "pelda@abc.com",
+                UserName = "user1",
                 FirstName = "First",
                 LastName = "User",
                 SecurityStamp = Guid.NewGuid().ToString()
             };
             userManager.CreateAsync(user, "string").Wait();
+            userManager.AddToRoleAsync(user, "Worker").Wait();
 
             user = new WmanUser
             {
-                Email = "Pelda@gmail.com",
-                UserName = "string2",
+                Email = "Pelda2@gmail.com",
+                UserName = "user2",
                 FirstName = "Second",
                 LastName = "User",
                 SecurityStamp = Guid.NewGuid().ToString()
             };
-            userManager.CreateAsync(user, "string2").Wait();
+            userManager.CreateAsync(user, "string").Wait();
+            userManager.AddToRoleAsync(user, "Worker").Wait();
 
             user = new WmanUser
             {
                 Email = "Pelda3@gmail.com",
-                UserName = "string3",
+                UserName = "user3",
                 FirstName = "Third",
                 LastName = "User",
                 SecurityStamp = Guid.NewGuid().ToString()
             };
-            userManager.CreateAsync(user, "string3").Wait();
+            userManager.CreateAsync(user, "string").Wait();
+            userManager.AddToRoleAsync(user, "Worker").Wait();
+
         }
         private void AddEvents()
         {

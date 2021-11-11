@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 
 namespace Wman.Data
@@ -34,25 +29,16 @@ namespace Wman.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<WmanUser>()
-            .HasMany(ur => ur.UserRoles)
-            .WithOne(u => u.User)
-            .HasForeignKey(ur => ur.UserId)
-            .IsRequired();
-
-            modelBuilder.Entity<WmanRole>()
-              .HasMany(ur => ur.UserRoles)
-              .WithOne(u => u.Role)
-              .HasForeignKey(ur => ur.RoleId)
-              .IsRequired();
 
             modelBuilder.Entity<WmanRole>().HasData(
-                new {Id= 1, Name = "Debug", NormalizedName = "DEBUG" }
+                new { Id = 1, Name = "Admin", NormalizedName = "ADMIN" },
+                new { Id = 2, Name = "Manager", NormalizedName = "MANAGER" },
+                new { Id = 3, Name = "Worker", NormalizedName = "WORKER" }
             );
         }
-        public virtual DbSet<DB_Models.WorkEvent> WorkEvent { get; set; }
-        public virtual DbSet<DB_Models.Label> Label { get; set; }
-        public virtual DbSet<DB_Models.AddressHUN> Address { get; set; }
-        public virtual DbSet<DB_Models.Pictures> Picture { get; set; }
+        public virtual DbSet<WorkEvent> WorkEvent { get; set; }
+        public virtual DbSet<Label> Label { get; set; }
+        public virtual DbSet<AddressHUN> Address { get; set; }
+        public virtual DbSet<Pictures> Picture { get; set; }
     }
 }

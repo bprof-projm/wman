@@ -39,9 +39,14 @@ namespace Wman.Logic.Classes
             {
                 throw new ArgumentException("User not found! ");
             }
+            if (await userManager.IsInRoleAsync(selectedUser, "Worker") == false)
+            {
+                throw new InvalidOperationException("Selected user does not have the provided role.");
+            }
+
             bool testResult = await this.DoTasksOverlap(selectedUser.WorkEvents, selectedEvent);
             ;
-            if (testResult) //TODO: Teljesen blokkoljuk az ütközést, vagy csak figyelmeztessük a frontendet?
+            if (testResult)
             {
                 throw new ArgumentException("User is already busy during this event's estimated timeframe! ");
             }
@@ -69,7 +74,10 @@ namespace Wman.Logic.Classes
                 {
                     throw new ArgumentException($"User: {0} not found", item);
                 }
-
+                if (await userManager.IsInRoleAsync(selectedUser, "Worker") == false)
+                {
+                    throw new InvalidOperationException(String.Format("User: {0} does not have the provided role.", selectedUser.UserName));
+                }
                 testresult = await this.DoTasksOverlap(selectedUser.WorkEvents, selectedEvent);
                 if (testresult)
                 {

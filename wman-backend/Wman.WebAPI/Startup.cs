@@ -29,6 +29,7 @@ using Wman.Logic.Interfaces;
 using Wman.Logic.Services;
 using Wman.Repository.Classes;
 using Wman.Repository.Interfaces;
+using Wman.WebAPI.Helpers;
 //using System.Data.Entity.Database;
 
 namespace Wman.WebAPI
@@ -58,10 +59,10 @@ namespace Wman.WebAPI
             services.AddTransient<IPhotoLogic, PhotoLogic>();
             services.AddControllers().AddJsonOptions(options =>
           options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-
-            //TODO: Use transients
             //services.AddSingleton(Configuration);
-
+#if DEBUG
+            //services.AddSingleton<IAuthorizationHandler, AllowAnonymous>(); //Uncommenting this will disable auth, for debugging purposes.
+#endif
 
 
             services.AddTransient<IWorkEventRepo, WorkEventRepo>();
@@ -181,7 +182,7 @@ namespace Wman.WebAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseCors();
 

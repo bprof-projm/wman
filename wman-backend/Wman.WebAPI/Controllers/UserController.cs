@@ -15,7 +15,7 @@ namespace Wman.WebAPI.Controllers
     /// </summary>
     [Route("[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Admin, Manager")]
     public class UserController : ControllerBase
     {
         IUserLogic userLogic;
