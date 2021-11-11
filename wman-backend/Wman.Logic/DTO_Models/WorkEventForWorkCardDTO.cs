@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,17 +7,17 @@ using Wman.Data.DB_Models;
 
 namespace Wman.Logic.DTO_Models
 {
-    public class CalendarWorkEventDTO
+    public class WorkEventForWorkCardDTO
     {
-        
         public int Id { get; set; }
-        [DataType(DataType.Text)]
         public string JobDescription { get; set; }
-        [DataType(DataType.DateTime)]
         public DateTime EstimatedStartDate { get; set; }
-        [DataType(DataType.DateTime)]
-        public DateTime EstimatedFinishDate { get; set; }
-        public Status Status { get; set; }
+        public DateTime EstimatedFinishDate { get; set; }      
+        public List<WorkerDTO> AssignedUsers { get; set; }
+        public List<ListLabelsDTO> Labels { get; set; }
         public AddressHUNDTO Address { get; set; }
+        public DateTime WorkStartDate { get; set; }
+        public DateTime WorkFinishDate { get; set; }
+        public Status Status { get; set; }
     }
 }

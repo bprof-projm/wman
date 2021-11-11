@@ -10,12 +10,12 @@ namespace Wman.Logic.Interfaces
 {
     public interface ICalendarEventLogic
     {
-        Task<List<CalendarWorkEventDTO>> GetCurrentWeekEvents();
-        Task<List<CalendarWorkEventDTO>> GetCurrentDayEvents();
-        List<CalendarWorkEventDTO> GetWeekEvents(int week);
-        Task<List<CalendarWorkEventDTO>> GetDayEvents(int day);
-        Task<List<CalendarWorkEventDTO>> GetDayEvents(DateTime day);
-        Task<List<CalendarWorkEventDTO>> GetWeekEvents(DateTime firstDayOfTheWeek, DateTime lastDayOfTheWeek);
+        Task<List<WorkEventForWorkCardDTO>> GetCurrentWeekEvents();
+        Task<List<WorkEventForWorkCardDTO>> GetCurrentDayEvents();
+        List<WorkEventForWorkCardDTO> GetWeekEvents(int week);
+        Task<List<WorkEventForWorkCardDTO>> GetDayEvents(int day);
+        Task<List<WorkEventForWorkCardDTO>> GetDayEvents(DateTime day);
+        Task<List<WorkEventForWorkCardDTO>> GetWeekEvents(DateTime firstDayOfTheWeek, DateTime lastDayOfTheWeek);
         
     }
 }
