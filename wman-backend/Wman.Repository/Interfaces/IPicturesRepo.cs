@@ -9,5 +9,6 @@ namespace Wman.Repository.Interfaces
 {
     public interface IPicturesRepo : IRepository<Pictures,int>
     {
+        Task SaveDatabase();
     }
 }

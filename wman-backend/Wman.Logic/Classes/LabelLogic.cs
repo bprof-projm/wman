@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
@@ -109,8 +110,13 @@ namespace Wman.Logic.Classes
             }
         }
 
-        private string InverseColor(string color)
+        public static string InverseColor(string color)
         {
+            Regex rgx = new Regex(@"^#(?:[0-9a-fA-F]{3}){1,2}$");
+            if (!rgx.IsMatch(color))
+            {
+                throw new ArgumentException("Wrong regular expresion");
+            }
             string redstring = 255 - Convert.ToInt32(color.Substring(1, 2), 16) <= 15 ? "0"
                 + Convert.ToString(255 - Convert.ToInt32(color.Substring(1, 2), 16), 16)
                 : Convert.ToString(255 - Convert.ToInt32(color.Substring(1, 2), 16), 16);

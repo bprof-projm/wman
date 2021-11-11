@@ -95,10 +95,13 @@ namespace Wman.Logic.Classes
                 var find = await (from x in address.GetAll()
                                   where x.Street == result.Address.Street && x.ZIPCode == result.Address.ZIPCode && x.City == result.Address.City
                                   select x).FirstOrDefaultAsync();
-                if (find != null)
+                if (find == null)
                 {
-                    result.AddressId = find.Id;
-                    result.Address = null;
+                    await address.Add(result.Address);
+                }
+                else
+                {
+                    result.Address = find;
                 }
 
                 await eventRepo.Add(result);
@@ -139,8 +142,6 @@ namespace Wman.Logic.Classes
             await eventRepo.Update(Id, newWorkEvent);
         }
 
-
-
         public async Task<ICollection<UserDTO>> GetAllAssignedUsers(int id)
         {
             var selectedEvent = await GetEvent(id);
@@ -152,10 +153,10 @@ namespace Wman.Logic.Classes
         }
 
         /// <summary>
-        /// Decides if a new job overlaps with any of the provided ones
+        /// Decides if a new workevent overlaps with any of the provided ones
         /// </summary>
-        /// <param name="preExistingEvents">A collection of all the jobs to be checked against</param>
-        /// <param name="newEvent">The new job we'd like to check</param>
+        /// <param name="preExistingEvents">A collection of all the workevents to be checked against</param>
+        /// <param name="newEvent">The new workevent we'd like to check</param>
         /// <returns>False, if the <paramref name="newEvent"/> doesn't overlap with any of the ones provided in <paramref name="preExistingEvents"/>, true if it does collide</returns>
         private async Task<bool> DoTasksOverlap(ICollection<WorkEvent> preExistingEvents, WorkEvent newEvent)
         {

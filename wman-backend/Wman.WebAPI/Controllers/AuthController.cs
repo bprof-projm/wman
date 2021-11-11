@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.Classes;
 using Wman.Logic.DTO_Models;
+using Wman.Logic.Helpers;
 using Wman.Logic.Interfaces;
 
 namespace Wman.WebAPI.Controllers
@@ -22,13 +23,16 @@ namespace Wman.WebAPI.Controllers
     public class AuthController : Controller
     {
         IAuthLogic authLogic;
+        DBSeed dBSeed;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="authLogic"></param>
-        public AuthController(IAuthLogic authLogic)
+        /// /// <param name="dBSeed"></param>
+        public AuthController(IAuthLogic authLogic, DBSeed dBSeed)
         {
             this.authLogic = authLogic;
+            this.dBSeed = dBSeed;
         }
         /// <summary>
         /// Create a new user
@@ -170,29 +174,22 @@ namespace Wman.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Get all the events/jobs to which a selected user is assigned to
+        /// Endpoint used to fill database with testing data. Used only for development purposes.
         /// </summary>
-        /// <param name="username">Username of the searched user</param>
-        /// <returns>A collection of events/jobs that are assigned to the specified user</returns>
+        /// <returns>200</returns>
         [HttpGet]
-        [Route("jobs")]
-        public async Task<ActionResult<ICollection<AssignedEventDTO>>> getAssignedJobsOfUser(string username)
+        [Route("db")]
+        public async Task<ActionResult> PopulateDB()
         {
             try
             {
-                var result = await authLogic.JobsOfUser(username);
-                return Ok(result);
+                dBSeed.PopulateDB();
             }
             catch (Exception ex)
             {
-                if (ex is InvalidOperationException || ex is ArgumentException)
-                {
-                    return StatusCode(400, $"Error: {ex}");
-
-                }
                 return StatusCode(500, $"Internal server error : {ex}");
             }
+            return Ok();
         }
-
     }
 }

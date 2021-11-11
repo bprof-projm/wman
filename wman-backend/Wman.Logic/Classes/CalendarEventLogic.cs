@@ -22,16 +22,16 @@ namespace Wman.Logic.Classes
             this.workEventRepo = workEventRepo;
             this.mapper = mapper;
         }
-        public async Task<List<CalendarWorkEventDTO>> GetCurrentDayEvents()
+        public async Task<List<WorkEventForWorkCardDTO>> GetCurrentDayEvents()
         {
             var events = await (from x in workEventRepo.GetAll()
                          where x.EstimatedStartDate.DayOfYear == DateTime.UtcNow.DayOfYear
                          select x).ToListAsync();
             ;
-            return mapper.Map<List<CalendarWorkEventDTO>>(events);
+            return mapper.Map<List<WorkEventForWorkCardDTO>>(events);
         }
 
-        public async Task<List<CalendarWorkEventDTO>> GetCurrentWeekEvents()
+        public async Task<List<WorkEventForWorkCardDTO>> GetCurrentWeekEvents()
         {
             DateTime firstDayOfTheWeek = new DateTime();
             DateTime lastDayOfTheWeek = new DateTime();
@@ -77,18 +77,18 @@ namespace Wman.Logic.Classes
             var events = await(from x in workEventRepo.GetAll()
                           where x.EstimatedStartDate.DayOfYear >= firstDayOfTheWeek.DayOfYear && x.EstimatedStartDate.DayOfYear <=lastDayOfTheWeek.DayOfYear
                           select x).ToListAsync();
-            return mapper.Map<List<CalendarWorkEventDTO>>(events);
+            return mapper.Map<List<WorkEventForWorkCardDTO>>(events);
 
         }
 
-        public async Task<List<CalendarWorkEventDTO>> GetDayEvents(int day)
+        public async Task<List<WorkEventForWorkCardDTO>> GetDayEvents(int day)
         {
             if (day > 0 && day < 367)
             {
                 var events = await (from x in workEventRepo.GetAll()
                                     where x.EstimatedStartDate.DayOfYear == day
                                     select x).ToListAsync();
-                return mapper.Map<List<CalendarWorkEventDTO>>(events);
+                return mapper.Map<List<WorkEventForWorkCardDTO>>(events);
             }
             else
             {
@@ -97,7 +97,7 @@ namespace Wman.Logic.Classes
             
         }
 
-        public List<CalendarWorkEventDTO> GetWeekEvents(int week)
+        public List<WorkEventForWorkCardDTO> GetWeekEvents(int week)
         {
             if (week > 0 && week < 54)
             {
@@ -113,7 +113,7 @@ namespace Wman.Logic.Classes
 
                 });
 
-                return mapper.Map<List<CalendarWorkEventDTO>>(find);
+                return mapper.Map<List<WorkEventForWorkCardDTO>>(find);
             }
             else
             {
@@ -121,21 +121,21 @@ namespace Wman.Logic.Classes
             }
             
         }
-        public async Task<List<CalendarWorkEventDTO>> GetDayEvents(DateTime day)
+        public async Task<List<WorkEventForWorkCardDTO>> GetDayEvents(DateTime day)
         {
 
             var events = await (from x in workEventRepo.GetAll()
                           where x.EstimatedStartDate.DayOfYear == day.DayOfYear
                           select x).ToListAsync();
-            return mapper.Map<List<CalendarWorkEventDTO>>(events);
+            return mapper.Map<List<WorkEventForWorkCardDTO>>(events);
         }
 
-        public async Task<List<CalendarWorkEventDTO>> GetWeekEvents(DateTime firstDayOfTheWeek, DateTime lastDayOfTheWeek)
+        public async Task<List<WorkEventForWorkCardDTO>> GetWeekEvents(DateTime firstDayOfTheWeek, DateTime lastDayOfTheWeek)
         {
             var events =await (from x in workEventRepo.GetAll()
                           where x.EstimatedStartDate.DayOfYear >= firstDayOfTheWeek.DayOfYear && x.EstimatedStartDate.DayOfYear <= lastDayOfTheWeek.DayOfYear
                           select x).ToListAsync();
-            return mapper.Map<List<CalendarWorkEventDTO>>(events);
+            return mapper.Map<List<WorkEventForWorkCardDTO>>(events);
         }
     }
 }

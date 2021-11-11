@@ -10,8 +10,8 @@ using Wman.Data;
 namespace Wman.WebAPI.Migrations
 {
     [DbContext(typeof(wmanDb))]
-    [Migration("20211013165301_dbfix")]
-    partial class dbfix
+    [Migration("20211104163025_pictureFix")]
+    partial class pictureFix
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -344,7 +344,7 @@ namespace Wman.WebAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AddressId")
+                    b.Property<int?>("AddressId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EstimatedFinishDate")
@@ -458,11 +458,13 @@ namespace Wman.WebAPI.Migrations
 
             modelBuilder.Entity("Wman.Data.DB_Models.Pictures", b =>
                 {
-                    b.HasOne("Wman.Data.DB_Models.WmanUser", null)
+                    b.HasOne("Wman.Data.DB_Models.WmanUser", "WmanUser")
                         .WithOne("ProfilePicture")
                         .HasForeignKey("Wman.Data.DB_Models.Pictures", "WManUserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("WmanUser");
                 });
 
             modelBuilder.Entity("Wman.Data.DB_Models.WmanUserRole", b =>
@@ -488,9 +490,7 @@ namespace Wman.WebAPI.Migrations
                 {
                     b.HasOne("Wman.Data.DB_Models.AddressHUN", "Address")
                         .WithMany("WorkEvents")
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AddressId");
 
                     b.Navigation("Address");
                 });
