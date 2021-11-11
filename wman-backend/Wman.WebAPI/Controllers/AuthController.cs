@@ -44,18 +44,8 @@ namespace Wman.WebAPI.Controllers
 
         public async Task<ActionResult> Login([FromBody] LoginDTO model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            try
-            {
+
                 return Ok(await authLogic.LoginUser(model));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
         }
 
         /// <summary>
@@ -67,23 +57,7 @@ namespace Wman.WebAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> CreateWorker([FromBody] RegisterDTO model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            IdentityResult result;
-            try
-            {
-                result = await authLogic.CreateWorker(model);
-
-                if (result.Succeeded) return Ok("User created successfully");
-            }
-            catch (Exception ex)
-            {
-                return UnprocessableEntity(new { Error = ex.Message });
-                throw;
-            }
-            return BadRequest(result.Errors);
+                return Ok("User created successfully");
         }
         /// <summary>
         /// Get a list of all users
@@ -93,14 +67,7 @@ namespace Wman.WebAPI.Controllers
         [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUsers()
         {
-            try
-            {
                 return Ok(Converter.MassConvert(await authLogic.GetAllUsers()));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { Error = ex.Message });
-            }
 
         }
 
@@ -131,18 +98,8 @@ namespace Wman.WebAPI.Controllers
         public async Task<ActionResult> DeleteUser(string username)
         {
             IdentityResult result;
-            try
-            {
                 result = await this.authLogic.DeleteUser(username);
-                if (result.Succeeded)
                     return Ok("User deleted successfully");
-            }
-            catch (Exception ex)
-            {
-
-                return BadRequest(new { Error = ex.Message });
-            }
-            return BadRequest(result.Errors);
         }
 
         /// <summary>
@@ -155,22 +112,9 @@ namespace Wman.WebAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UpdateUser(string oldUsername, string pwd, [FromBody] UserDTO user)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             IdentityResult result;
-            try
-            {
                 result = await this.authLogic.UpdateUser(oldUsername, pwd, user);
-                if (result.Succeeded)
                     return Ok("User updated successfully");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { Error = ex.Message });
-            }
-            return BadRequest(result.Errors);
         }
 
         /// <summary>
@@ -184,14 +128,7 @@ namespace Wman.WebAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> SetRole(string username, string rolename)
         {
-            try
-            {
                 await this.authLogic.SetRoleOfUser(username, rolename);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
             return Ok();
         }
 
@@ -205,15 +142,7 @@ namespace Wman.WebAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<UserDTO>>> UsersOfRole(string rolename)
         {
-            try
-            {
                 return Ok(await this.authLogic.GetAllUsersOfRole(rolename));
-            }
-            catch (Exception ex)
-            {
-
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
         }
         /// <summary>
         /// Endpoint used to fill database with testing data. Used only for development purposes.
@@ -224,14 +153,7 @@ namespace Wman.WebAPI.Controllers
 
         public async Task<ActionResult> PopulateDB()
         {
-            try
-            {
                 dBSeed.PopulateDB();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
             return Ok();
         }
     }

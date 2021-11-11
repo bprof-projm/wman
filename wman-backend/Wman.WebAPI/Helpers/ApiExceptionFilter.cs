@@ -26,7 +26,7 @@ namespace Wman.WebAPI.Helpers
                     
                     break;
                 default:
-
+                    this.setContext(HttpStatusCode.InternalServerError, context.Exception.ToString(), context);
                     break;
             }
         }
