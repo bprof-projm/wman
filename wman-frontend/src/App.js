@@ -27,12 +27,12 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/test">
+        <ProtectedRoute path="/eventDetails">
           <EventDetails />
-        </Route>
-        <Route path="/login">
+        </ProtectedRoute>
+        <ProtectedRoute path="/login">
           <NormalLoginForm />
-        </Route>
+        </ProtectedRoute>
 
         <ProtectedRoute path="/" component={Logout} />
       </Switch>

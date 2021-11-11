@@ -39,38 +39,38 @@ const EventDetails = (props) => {
             }}
             size={componentSize}
           >
-            <Form.Item label="Description" name="Description">
+            <Form.Item label="Description">
               <Input />
             </Form.Item>
 
-            <Form.Item label="Workers" name="workers">
+            <Form.Item label="Workers">
               <Select>
                 <Select.Option value="demo">Demo</Select.Option>
               </Select>
             </Form.Item>
-            <Form.Item label="Labels" name="labels">
+            <Form.Item label="Labels">
               <Select>
                 <Select.Option value="demo">Demo</Select.Option>
               </Select>
             </Form.Item>
-            <Form.Item name="rangePicker" label="RangePicker" {...rangeConfig}>
-              <showTime format="YYYY-MM-DD HH:mm:ss" />
+            <Form.Item label="RangePicker" {...rangeConfig}>
+              <RangePicker showTime format="YYYY-MM-DD HH:mm:ss" />
             </Form.Item>
 
             <Form.Item label="Address"></Form.Item>
-            <Form.Item label="City" name="city">
+            <Form.Item label="City">
               <Input />
             </Form.Item>
-            <Form.Item label="Street" name="street">
+            <Form.Item label="Street">
               <Input />
             </Form.Item>
-            <Form.Item label="Zip Code" name="zipCode">
+            <Form.Item label="Zip Code">
               <Input />
             </Form.Item>
-            <Form.Item label="Building Number" name="buildingNumber">
+            <Form.Item label="Building Number">
               <Input />
             </Form.Item>
-            <Form.Item label="Floor and Door" name="floorDoor">
+            <Form.Item label="Floor and Door">
               <Input />
             </Form.Item>
 
@@ -84,9 +84,25 @@ const EventDetails = (props) => {
   } else {
     const onFinish = (e) => {
       console.log(e);
-      console.log("geci");
-    };
+      const data = {
+        jobDescription: e.description,
+        estimatedStartDate: e.rangePicker[0]._d.toJSON(),
+        estimatedFinishDate: e.rangePicker[1]._d.toJSON(),
+        address: {
+          city: e.city,
+          street: e.street,
+          zipCode: e.zipCode,
+          buildingNumber: e.buildingNumber,
+          floorDoor: e.floorDoor,
+        },
+        status: "awaiting",
+      };
 
+      axios
+        .post("/CreateEvent", data)
+        .then((response) => console.log(response));
+    };
+    console.log("create");
     return (
       <div className="card-container">
         <div className="card">
@@ -104,7 +120,7 @@ const EventDetails = (props) => {
             size={componentSize}
             onFinish={onFinish}
           >
-            <Form.Item label="Description" name="Description">
+            <Form.Item label="Description" name="description">
               <Input />
             </Form.Item>
 
@@ -118,8 +134,8 @@ const EventDetails = (props) => {
                 <Select.Option value="demo">Demo</Select.Option>
               </Select>
             </Form.Item>
-            <Form.Item name="rangePicker" label="RangePicker" {...rangeConfig}>
-              <showTime format="YYYY-MM-DD HH:mm:ss" />
+            <Form.Item label="RangePicker" {...rangeConfig} name="rangePicker">
+              <RangePicker showTime format="YYYY-MM-DD HH:mm:ss" />
             </Form.Item>
 
             <Form.Item label="Address"></Form.Item>
@@ -140,7 +156,9 @@ const EventDetails = (props) => {
             </Form.Item>
 
             <Form.Item label="Button">
-              <Button>Button</Button>
+              <Button type="primary" htmlType="submit">
+                Button
+              </Button>
             </Form.Item>
           </Form>
         </div>
