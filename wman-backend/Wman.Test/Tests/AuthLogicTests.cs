@@ -246,6 +246,23 @@ namespace Wman.Test.Tests
             this.userManager.Verify(x => x.UpdateAsync(It.IsAny<WmanUser>()), Times.Once);
         }
 
+        [Test]
+        public async Task SetRoleOfUser_ExistingUser_SuccessfulOperation()
+        {
+            //Arrange
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
+
+            //Act
+            var result = authLogic.SetRoleOfUser(users[2].UserName, "Debug");
+
+            //Assert
+            Assert.True(result.IsCompleted);
+
+            this.userManager.Verify(x => x.FindByNameAsync(It.IsAny<string>()), Times.Once);
+            this.userManager.Verify(x => x.GetRolesAsync(It.IsAny<WmanUser>()), Times.Once);
+            this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
+        }
+
         /*
          TEST CASES FOR OLDER METHODS
 
