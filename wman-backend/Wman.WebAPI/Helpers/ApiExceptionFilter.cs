@@ -19,7 +19,7 @@ namespace Wman.WebAPI.Helpers
             ;
             switch (context.Exception)
             {
-                case UserNotFoundException:
+                case NotFoundException:
                     await this.setContext(HttpStatusCode.Gone, context);
                     break;
                 case IncorrectPasswordException:

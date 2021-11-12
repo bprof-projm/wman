@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
+using Wman.Logic.Helpers;
 using Wman.Logic.Interfaces;
 using Wman.Repository.Interfaces;
 
@@ -38,7 +39,7 @@ namespace Wman.Logic.Classes
             }
             else
             {
-                throw new ArgumentException("This Label already exists");
+                throw new InvalidOperationException(WmanError.LabelExists);
             }
 
         }

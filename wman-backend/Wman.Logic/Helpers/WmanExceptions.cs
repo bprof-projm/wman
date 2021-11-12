@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Wman.Logic.Helpers
 {
-    public class UserNotFoundException : Exception
+    public class NotFoundException : Exception
     {
-        public UserNotFoundException(string message) : base(message) { }
+        public NotFoundException(string message) : base(message) { }
     }
     public class EmailNotFoundException : Exception
     {
@@ -19,15 +19,6 @@ namespace Wman.Logic.Helpers
     {
         public IncorrectPasswordException(string message) : base(message) { }
     }
-    public class RoleNotFoundException : Exception
-    {
-        public RoleNotFoundException(string message) : base(message) { }
-    }
-
-    public class EventNotFoundException : Exception
-    {
-        public EventNotFoundException(string message) : base(message) { }
-    }
     public class HasNoRoleException : Exception
     {
         public HasNoRoleException(string message) : base(message) { }
@@ -36,5 +27,6 @@ namespace Wman.Logic.Helpers
             mymessage = string.Format(mymessage, username, rolename);
         }
     }
+
 
 }

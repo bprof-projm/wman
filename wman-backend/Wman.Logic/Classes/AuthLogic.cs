@@ -42,7 +42,7 @@ namespace Wman.Logic.Classes
             var output = await userManager.Users.Where(x => x.UserName == username).SingleOrDefaultAsync();
             if (output == null)
             {
-                throw new UserNotFoundException(WmanError.UserNotFound);
+                throw new NotFoundException(WmanError.UserNotFound);
             }
             return output;
         }
@@ -54,7 +54,7 @@ namespace Wman.Logic.Classes
             var user = userManager.Users.Where(x => x.UserName == oldUsername).SingleOrDefault();
             if (user == null)
             {
-                throw new UserNotFoundException(WmanError.UserNotFound);
+                throw new NotFoundException(WmanError.UserNotFound);
             }
             user.UserName = newUser.Username; //Not using converter class/automapper on purpose
             user.Email = newUser.Email;
@@ -74,7 +74,7 @@ namespace Wman.Logic.Classes
             var user = userManager.Users.Where(x => x.UserName == uname).SingleOrDefault();
             if (user == null)
             {
-                throw new UserNotFoundException(WmanError.UserNotFound);
+                throw new NotFoundException(WmanError.UserNotFound);
             }
             result = await userManager.DeleteAsync(user);
 
@@ -122,7 +122,7 @@ namespace Wman.Logic.Classes
             }
             if (user == null)
             {
-                throw new UserNotFoundException(WmanError.UserNotFound);
+                throw new NotFoundException(WmanError.UserNotFound);
             }
             else if (await userManager.CheckPasswordAsync(user, model.Password))
             {
@@ -162,7 +162,7 @@ namespace Wman.Logic.Classes
 
             if (selectedUser == null)
             {
-                throw new UserNotFoundException(WmanError.UserNotFound);
+                throw new NotFoundException(WmanError.UserNotFound);
             }
             await this.RemovePrevRoles(selectedUser);
             await userManager.AddToRoleAsync(selectedUser, roleName);
@@ -173,7 +173,7 @@ namespace Wman.Logic.Classes
             var users = await this.userManager.GetUsersInRoleAsync(roleName);
             if (!await roleManager.RoleExistsAsync(roleName))
             {
-                throw new RoleNotFoundException(WmanError.EventNotFound);
+                throw new NotFoundException(WmanError.EventNotFound);
             }
             return mapper.Map<List<UserDTO>>(users);
         }
@@ -182,7 +182,7 @@ namespace Wman.Logic.Classes
             var user = await this.userManager.FindByNameAsync(username);
             if (user == null)
             {
-                throw new UserNotFoundException(WmanError.UserNotFound);
+                throw new NotFoundException(WmanError.UserNotFound);
             }
             return await userManager.GetRolesAsync(user);
         }

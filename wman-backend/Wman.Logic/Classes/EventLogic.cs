@@ -33,12 +33,12 @@ namespace Wman.Logic.Classes
             var selectedEvent = await eventRepo.GetOneWithTracking(eventID);
             if (selectedEvent == null)
             {
-                throw new EventNotFoundException(WmanError.EventNotFound);
+                throw new NotFoundException(WmanError.EventNotFound);
             }
             var selectedUser = await userManager.Users.Where(x => x.UserName == username).Include(y => y.WorkEvents).SingleOrDefaultAsync();
             if (selectedUser == null)
             {
-                throw new UserNotFoundException(WmanError.EventNotFound);
+                throw new NotFoundException(WmanError.EventNotFound);
             }
             if (await userManager.IsInRoleAsync(selectedUser, "Worker") == false)
             {
@@ -63,7 +63,7 @@ namespace Wman.Logic.Classes
             var selectedEvent = await eventRepo.GetOneWithTracking(eventID);
             if (selectedEvent == null)
             {
-                throw new EventNotFoundException(WmanError.EventNotFound);
+                throw new NotFoundException(WmanError.EventNotFound);
             }
             var okUsers = new List<WmanUser>();
             WmanUser selectedUser;
@@ -73,7 +73,7 @@ namespace Wman.Logic.Classes
                 selectedUser = await userManager.Users.Where(x => x.UserName == item).Include(y => y.WorkEvents).SingleOrDefaultAsync();
                 if (selectedUser == null)
                 {
-                    throw new UserNotFoundException(WmanError.UserNotFound);
+                    throw new NotFoundException(WmanError.UserNotFound);
                 }
                 if (await userManager.IsInRoleAsync(selectedUser, "Worker") == false)
                 {
@@ -156,7 +156,7 @@ namespace Wman.Logic.Classes
             var selectedEvent = await GetEvent(id);
             if (selectedEvent == null)
             {
-                throw new EventNotFoundException(WmanError.EventNotFound);
+                throw new NotFoundException(WmanError.EventNotFound);
             }
             return mapper.Map<List<UserDTO>>(selectedEvent.AssignedUsers);
         }
