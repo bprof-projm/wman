@@ -44,7 +44,7 @@ namespace Wman.Logic.Classes
 
         }
 
-        public List<ListLabelsDTO> GetAllLabels()
+        public async Task<List<ListLabelsDTO>> GetAllLabels()
         {
             List<ListLabelsDTO> labelsDTOs = new List<ListLabelsDTO>();
             var labels = labelRepo.GetAll();

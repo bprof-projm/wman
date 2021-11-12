@@ -29,9 +29,9 @@ namespace Wman.WebAPI.Controllers
         }
 
         [HttpGet("/GetAllLabel")]
-        public ActionResult<ListLabelsDTO> GetAllLabel()
+        public async Task<ActionResult<ListLabelsDTO>> GetAllLabel()
         {
-                return Ok(labelLogic.GetAllLabels());
+                return Ok(await labelLogic.GetAllLabels());
         }
 
         [HttpPut("/UpdateLabel/{Id}")]

@@ -98,7 +98,7 @@ namespace Wman.Logic.Classes
             
         }
 
-        public List<WorkEventForWorkCardDTO> GetWeekEvents(int week)
+        public async Task<List<WorkEventForWorkCardDTO>> GetWeekEvents(int week)
         {
             if (week > 0 && week < 54)
             {

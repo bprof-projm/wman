@@ -68,9 +68,9 @@ namespace Wman.WebAPI.Controllers
         /// <param name="week"></param>
         /// <returns>CalendarWorkEventDTO<returns>
         [HttpGet("GetWeekEvents/{week}")]
-        public ActionResult<IEnumerable<WorkEventForWorkCardDTO>> GetWeekEvents(int week)
+        public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetWeekEvents(int week)
         {
-                var events = calendarEvent.GetWeekEvents(week);
+                var events = await calendarEvent.GetWeekEvents(week);
                 return Ok(events);
         }
         /// <summary>
