@@ -124,7 +124,7 @@ namespace Wman.Logic.Classes
 
         public async Task DeleteEvent(int Id)
         {
-            var test = this.GetEvent(Id);
+            var test = await this.GetEvent(Id);
             await eventRepo.Delete(Id);
         }
 

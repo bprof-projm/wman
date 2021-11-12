@@ -53,15 +53,8 @@ namespace Wman.WebAPI.Controllers
         [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult> DeleteEvent(int Id)
         {
-            try
-            {
                 await eventLogic.DeleteEvent(Id);
                 return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
         }
 
         [HttpPut("/DnDEvent/{id}")]
