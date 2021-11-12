@@ -44,5 +44,6 @@ namespace Wman.Repository
         /// <param name="oldKey">Old key of the item</param>
         /// <param name="element">Updated object</param>
         Task Update(TKeyType oldKey ,TReturnType element);
+        Task SaveDatabase();
     }
 }

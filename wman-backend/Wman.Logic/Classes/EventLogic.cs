@@ -145,9 +145,35 @@ namespace Wman.Logic.Classes
             return output;
         }
 
-        public async Task UpdateEvent(int Id, WorkEvent newWorkEvent)
+        public async Task UpdateEvent(UpdateEventDTO newWorkEvent)
         {
-            await eventRepo.Update(Id, newWorkEvent);
+            var workevent =await eventRepo.GetOneWithTracking(newWorkEvent.Id);
+            if (workevent == null)
+            {
+                throw new ArgumentException("Event Not Found");
+            }
+            workevent.JobDescription = newWorkEvent.JobDescription;
+            workevent.Address = mapper.Map<AddressHUN>(newWorkEvent.Address);
+            if (newWorkEvent.EstimatedStartDate < newWorkEvent.EstimatedFinishDate && newWorkEvent.EstimatedStartDate.Day == newWorkEvent.EstimatedFinishDate.Day)
+            {
+                if (await WorkerTimeCheck(workevent.AssignedUsers.ToList(),newWorkEvent.EstimatedStartDate, newWorkEvent.EstimatedFinishDate))
+                {
+                    workevent.EstimatedStartDate = newWorkEvent.EstimatedStartDate;
+                    workevent.EstimatedFinishDate = newWorkEvent.EstimatedFinishDate;
+                }
+                else
+                {
+                    throw new ArgumentException("User Is already working at this time");
+                }
+                
+            }
+            else
+            {
+                throw new ArgumentException("Events are not at the same day or start is after the finishing date");
+            }
+            workevent.Status = newWorkEvent.Status;
+
+            await eventRepo.SaveDatabase();
         }
 
         public async Task<ICollection<UserDTO>> GetAllAssignedUsers(int id)
@@ -226,5 +252,41 @@ namespace Wman.Logic.Classes
                 throw new ArgumentException("Events are not at the same day or start is after the finishing date");
             }
         }
+        private async Task<bool> WorkerTimeCheck(List<WmanUser> assignedUsers, DateTime startDate , DateTime finishDate)
+        {
+            if (assignedUsers.Count > 0)
+            {
+                var eventsAtUpdateTime = await(from x in eventRepo.GetAll()
+                                             where x.EstimatedStartDate >= startDate && x.EstimatedStartDate <= finishDate && x.EstimatedFinishDate >= startDate && x.EstimatedFinishDate <= finishDate
+                                             select x).ToListAsync();
+                List<int> UpdateUserIds = new List<int>();
+                foreach (var item in assignedUsers)
+                {
+                    UpdateUserIds.Add(item.Id);
+                }
+                List<int> eventUserIdsAtDnDTime = new List<int>();
+
+                foreach (var item in eventsAtUpdateTime)
+                {
+                    foreach (var item2 in item.AssignedUsers)
+                    {
+                        eventUserIdsAtDnDTime.Add(item2.Id);
+                    }
+                }
+                if (eventUserIdsAtDnDTime.Count == 0 || !UpdateUserIds.Any(x => eventUserIdsAtDnDTime.Any(y => y == x)))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+            else
+            {
+                return true;
+            }
+        } 
     }
 }

@@ -142,5 +142,21 @@ namespace Wman.WebAPI.Controllers
                 return StatusCode(500, $"Internal server error : {ex}");
             }
         }
+
+        [HttpPut("/UpdateEvent")]
+        public async Task<ActionResult<UpdateEventDTO>> UpdateEvent([FromBody] UpdateEventDTO updateEvent) 
+        {
+            try
+            {
+                await eventLogic.UpdateEvent(updateEvent);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error : {ex}");
+            }
+        }
+
+
     }
 }
