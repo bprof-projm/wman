@@ -62,11 +62,11 @@ namespace Wman.Logic.Classes
             {
                 throw new NotFoundException(WmanError.UserNotFound);
             }
-            user.UserName = newUser.Username; //Not using converter class/automapper on purpose
+            user.UserName = newUser.Username;
             user.Email = newUser.Email;
             user.FirstName = newUser.Firstname;
             user.LastName = newUser.Lastname;
-            user.ProfilePicture = newUser.Picture;
+            //user.ProfilePicture = newUser.Picture;
             user.PasswordHash = userManager.PasswordHasher.HashPassword(user, pwd);
 
             result = await userManager.UpdateAsync(user);
