@@ -36,6 +36,21 @@ namespace Wman.Test.Tests
         }
 
         [Test]
+        public async Task AssignLabelToWorkEvent_AssignLabelToExistingWorkEvent_SuccessfulOperation()
+        {
+            //Arrange
+            LabelLogic labelLogic = new LabelLogic(this.labelRepo.Object, this.mapper, this.eventRepo.Object);
+            
+            //Act
+            var call = labelLogic.AssignLabelToWorkEvent(eventList[0].Id ,labelList[0].Id);
+
+            //Assert
+            this.eventRepo.Verify(x => x.GetOneWithTracking(It.IsAny<int>()), Times.Once);
+            this.labelRepo.Verify(x => x.GetOne(It.IsAny<int>()), Times.Once);
+            this.labelRepo.Verify(x => x.SaveDatabase(), Times.Once);
+        }
+
+        [Test]
         public async Task UpdateLabel_UpdateExistingLabel_SuccesfulOperation()
         {
             //Arrange
