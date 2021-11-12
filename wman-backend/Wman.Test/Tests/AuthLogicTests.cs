@@ -58,7 +58,12 @@ namespace Wman.Test.Tests
 
             //Assert
             Assert.That(result.Token != null);
-
+            
+            //CreateWorker
+            this.userManager.Verify(x => x.Users, Times.Exactly(2)); //2 because of 1 CreatWorker and 1 LoginUser call
+            this.userManager.Verify(x => x.CreateAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
+            this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
+            //LoginUser
             this.userManager.Verify(x => x.FindByNameAsync(model.LoginName), Times.Never);
             this.userManager.Verify(x => x.CheckPasswordAsync(It.IsAny<WmanUser>(), model.Password), Times.Once);
             this.userManager.Verify(x => x.GetRolesAsync(It.IsAny<WmanUser>()), Times.Once);
@@ -95,7 +100,7 @@ namespace Wman.Test.Tests
         }
 
         [Test]
-        public async Task CreateUser_SucceededCreation()
+        public async Task CreateWorker_SucceededCreation()
         {
             //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
@@ -116,12 +121,13 @@ namespace Wman.Test.Tests
             Assert.True(result.Succeeded);
             Assert.That(users.Count == 4);
 
+            this.userManager.Verify(x => x.Users, Times.Once);
             this.userManager.Verify(x => x.CreateAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
             this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
         }
 
         [Test]
-        public async Task CreateUser_FailedCreation_EmailAlreadyInRepo()
+        public async Task CreateWorker_FailedCreation_EmailAlreadyInRepo()
         {
             //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
@@ -142,6 +148,7 @@ namespace Wman.Test.Tests
             Assert.True(!result.Succeeded);
             Assert.That(users.Count == 3);
 
+            this.userManager.Verify(x => x.Users, Times.Once);
             this.userManager.Verify(x => x.CreateAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Never);
             this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Never);
         }
@@ -172,10 +179,13 @@ namespace Wman.Test.Tests
             //Should be 2 users in the repo after 2 deletions
             Assert.True(result.Succeeded);
             Assert.AreEqual(2, users.Count);
-
-            this.userManager.Verify(x => x.DeleteAsync(It.IsAny<WmanUser>()), Times.Exactly(2));
+            
+            //CreateWorker
+            this.userManager.Verify(x => x.Users, Times.Exactly(3)); //3 because of 2 DeleteUser calls and 1 CreateWorker
             this.userManager.Verify(x => x.CreateAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
             this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
+            //DeleteUser
+            this.userManager.Verify(x => x.DeleteAsync(It.IsAny<WmanUser>()), Times.Exactly(2));
         }
 
         [Test]
@@ -189,7 +199,8 @@ namespace Wman.Test.Tests
 
             //Assert
             Assert.AreEqual(4, result.Count());
-
+            
+            this.userManager.Verify(x => x.FindByNameAsync(It.IsAny<string>()), Times.Once);
             this.userManager.Verify(x => x.GetRolesAsync(It.IsAny<WmanUser>()), Times.Once);
         }
 
@@ -204,6 +215,7 @@ namespace Wman.Test.Tests
 
             //Assert
             Assert.AreEqual(3, result.Count());
+
             this.userManager.Verify(x => x.GetUsersInRoleAsync(It.IsAny<string>()), Times.Once);
             this.roleManager.Verify(x => x.RoleExistsAsync(It.IsAny<string>()), Times.Once);
         }
