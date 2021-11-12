@@ -18,7 +18,9 @@ namespace Wman.Logic.Helpers
             CreateMap<IdentityResult, UserDTO>();
             CreateMap<CreateEventDTO, AddressHUNDTO>();
             CreateMap<AddressHUNDTO, AddressHUN>().ReverseMap();
-            CreateMap<WmanUser, UserDTO>().ReverseMap();
+            CreateMap<WmanUser, UserDTO>()
+                .ForMember(dest => dest.Picture, x =>x.MapFrom(src => src.ProfilePicture))
+                .ReverseMap();
             CreateMap<WmanUser, WorkerDTO>().ReverseMap();
             CreateMap<WorkEvent, AssignedEventDTO>();
             //.ForMember(dest => dest.Address, x => x.MapFrom(src => src.Address));

@@ -34,12 +34,18 @@ namespace Wman.Logic.Classes
         }
         public async Task<IEnumerable<UserDTO>> GetAllUsers()
         {
-            return mapper.Map<IEnumerable<UserDTO>>(await userManager.Users.ToListAsync());
+            return mapper.Map<IEnumerable<UserDTO>>(await userManager.Users
+                .Include(x =>x.ProfilePicture)
+                .AsNoTracking()
+                .ToListAsync());
         }
 
         public async Task<UserDTO> GetOneUser(string username)
         {
-            var output = await userManager.Users.Where(x => x.UserName == username).SingleOrDefaultAsync();
+            var output = await userManager.Users.Where(x => x.UserName == username)
+                .Include(x => x.ProfilePicture)
+                .AsNoTracking()
+                .SingleOrDefaultAsync();
             if (output == null)
             {
                 throw new NotFoundException(WmanError.UserNotFound);
