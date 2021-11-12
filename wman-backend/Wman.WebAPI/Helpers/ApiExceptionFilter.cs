@@ -14,31 +14,31 @@ namespace Wman.WebAPI.Helpers
 {
     public class ApiExceptionFilter : ExceptionFilterAttribute
     {
-        public override async Task OnExceptionAsync(ExceptionContext context)
+        public override void OnException(ExceptionContext context)
         {
             ;
             switch (context.Exception)
             {
                 case NotFoundException:
-                    await this.setContext(HttpStatusCode.NotFound, context);
+                     this.setContext(HttpStatusCode.NotFound, context).Wait();
                     break;
                 case IncorrectPasswordException:
-                    await this.setContext(HttpStatusCode.Forbidden, context);
+                     this.setContext(HttpStatusCode.Forbidden, context).Wait();
                     break;
                 case NotMemberOfRoleException:
-                    await this.setContext(HttpStatusCode.BadRequest, context);
+                     this.setContext(HttpStatusCode.BadRequest, context).Wait();
                     break;
                 case ArgumentException:
-                    await this.setContext(HttpStatusCode.UnprocessableEntity, context);
+                     this.setContext(HttpStatusCode.UnprocessableEntity, context).Wait();
                     break;
                 case InvalidOperationException:
-                    await this.setContext(HttpStatusCode.Conflict, context);
+                     this.setContext(HttpStatusCode.Conflict, context).Wait();
                     break;
                 default:
-                    //await this.setContext(HttpStatusCode.InternalServerError, context);
+                    // this.setContext(HttpStatusCode.InternalServerError, context);
                     break;
             }
-            await base.OnExceptionAsync(context);
+             base.OnException(context);
         }
         private async Task setContext(HttpStatusCode statusCode, ExceptionContext context)
         {
