@@ -13,31 +13,45 @@ namespace Wman.WebAPI.Helpers
 {
     public class ApiExceptionFilter : ExceptionFilterAttribute
     {
-        public override void OnException(ExceptionContext context)
+        public override async Task OnExceptionAsync(ExceptionContext context)
         {
             ;
             switch (context.Exception)
             {
-                case Exception:
+                case ArgumentException:
                    
                     
-                    this.setContext(HttpStatusCode.Gone, "It's GONE", context);
+                    this.setContext(HttpStatusCode.Gone, "It's GONE2", context);
                     
                     
                     break;
                 default:
                     this.setContext(HttpStatusCode.InternalServerError, context.Exception.ToString(), context);
                     break;
+                    await base.OnExceptionAsync(context);
             }
         }
-        private void setContext(HttpStatusCode statusCode, string input, ExceptionContext context)
+        private async Task setContext(HttpStatusCode statusCode, string input, ExceptionContext context)
         {
+            context.HttpContext.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+            context.HttpContext.Response.Headers["Expires"] = "-1";
+            context.HttpContext.Response.Headers["Pragma"] = "no-cache";
+
             context.HttpContext.Response.StatusCode = (int)statusCode;
-            context.HttpContext.Response.ContentType = "application/json; charset=utf-8";
-            var json = JsonSerializer.Serialize<string>(input);
-            MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
+
+            //Json
+            //context.HttpContext.Response.ContentType = "application/json; charset=utf-8";
+            //var json = JsonSerializer.Serialize<string>(input);
+            //MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
+            //ReadOnlyMemory<byte> readOnlyMemory = new ReadOnlyMemory<byte>(stream.ToArray());
+
+            //Plain text
+            context.HttpContext.Response.ContentType = "text/plain; charset=utf-8";
+            MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(input));
             ReadOnlyMemory<byte> readOnlyMemory = new ReadOnlyMemory<byte>(stream.ToArray());
-            context.HttpContext.Response.Body.WriteAsync(readOnlyMemory);
+
+            await context.HttpContext.Response.Body.WriteAsync(readOnlyMemory);
+
             context.ExceptionHandled = true;
             
 
