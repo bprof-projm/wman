@@ -19,17 +19,12 @@ namespace Wman.Logic.Helpers
     {
         public IncorrectPasswordException(string message) : base(message) { }
     }
-    public class HasNoRoleException : Exception
+    public class NotMemberOfRoleException : Exception
     {
-        public HasNoRoleException(string message) : base(message) { }
-        public HasNoRoleException(string mymessage, string username, string rolename) : base(mymessage)
+        public NotMemberOfRoleException(string message) : base(message) { }
+        public NotMemberOfRoleException(string mymessage, string username, string rolename) : base(mymessage)
         {
             mymessage = string.Format(mymessage, username, rolename);
         }
     }
-    public class EmptyResultException : Exception
-    {
-        public EmptyResultException(string message) : base(message) { }
-    }
-
 }
