@@ -21,5 +21,6 @@ namespace Wman.Logic.Helpers
         public static string NoLabels { get { return "There are no labels added!"; } }
         public static string LabelNotFound { get { return "Label not found!"; } }
         public static string WrongColor { get { return "Color is wrong?"; } } //TODO
+        public static string PhotoNotFound { get { return "Photo not found"; } }
     }
 }
