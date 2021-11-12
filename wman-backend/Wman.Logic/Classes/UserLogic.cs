@@ -39,7 +39,7 @@ namespace Wman.Logic.Classes
                 }
                 if (await userManager.IsInRoleAsync(selectedUser, "Worker") == false)
                 {
-                    throw new NotMemberOfRoleException(WmanError.NotMemberOfRole, username, "Worker");
+                    throw new NotMemberOfRoleException(WmanError.NotAWorker);
                 }
                 if (selectedUser.ProfilePicture != null)
                 {

@@ -14,7 +14,7 @@ namespace Wman.Logic.Helpers
         public static string RoleNotFound = "The specified role does not exist";
         public static string EventNotFound = "The specified event does not exist";
         public static string InvalidInputRange = "The provided input parameter is not in the valid range";
-        public static string NotMemberOfRole = "The user '{0}' does not have the role '{1}'";
+        public static string NotAWorker = "Specified user is not member of the role 'Worker'";
         public static string UserIsBusy = "The user is busy in the event's timeframe";
         public static string EventDateInvalid = "The event date is invalid!"; //Not in same day/starts after it finishes
         public static string LabelExists = "This Label already exists!";

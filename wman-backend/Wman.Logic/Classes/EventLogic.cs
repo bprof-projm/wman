@@ -42,7 +42,7 @@ namespace Wman.Logic.Classes
             }
             if (await userManager.IsInRoleAsync(selectedUser, "Worker") == false)
             {
-                throw new InvalidOperationException(WmanError.NotMemberOfRole);
+                throw new NotMemberOfRoleException(WmanError.NotAWorker);
             }
 
             bool testResult = await this.DoTasksOverlap(selectedUser.WorkEvents, selectedEvent);
@@ -77,7 +77,7 @@ namespace Wman.Logic.Classes
                 }
                 if (await userManager.IsInRoleAsync(selectedUser, "Worker") == false)
                 {
-                    throw new NotMemberOfRoleException(WmanError.NotMemberOfRole, selectedUser.UserName, "Worker");
+                    throw new NotMemberOfRoleException(WmanError.NotAWorker);
                 }
                 testresult = await this.DoTasksOverlap(selectedUser.WorkEvents, selectedEvent);
                 if (testresult)
