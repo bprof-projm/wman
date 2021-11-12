@@ -18,18 +18,18 @@ namespace Wman.WebAPI.Helpers
             ;
             switch (context.Exception)
             {
-                case ArgumentException:
+                case ArithmeticException:
                    
                     
-                    this.setContext(HttpStatusCode.Gone, "It's GONE2", context);
+                    await this.setContext(HttpStatusCode.Gone, "It's GONE2", context);
                     
                     
                     break;
                 default:
-                    this.setContext(HttpStatusCode.InternalServerError, context.Exception.ToString(), context);
+                    await this.setContext(HttpStatusCode.InternalServerError, context.Exception.ToString(), context);
                     break;
-                    await base.OnExceptionAsync(context);
             }
+            await base.OnExceptionAsync(context);
         }
         private async Task setContext(HttpStatusCode statusCode, string input, ExceptionContext context)
         {
@@ -53,8 +53,6 @@ namespace Wman.WebAPI.Helpers
             await context.HttpContext.Response.Body.WriteAsync(readOnlyMemory);
 
             context.ExceptionHandled = true;
-            
-
         }
     }
 }

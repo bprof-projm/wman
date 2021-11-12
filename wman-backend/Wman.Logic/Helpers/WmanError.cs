@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace Wman.Logic.Helpers
 {
-    public enum WmanError
+    public class WmanError
     {
-        generic,
-        incorrectPassword,
-        incorrentUsername,
-        userNotFound,
+        public static string GenericError { get { return nameof(GenericError); } }
+        public static string UserNotFound { get { return nameof(UserNotFound); } }
+        public static string IncorrectPassword { get { return nameof(IncorrectPassword); } }
     }
 }
