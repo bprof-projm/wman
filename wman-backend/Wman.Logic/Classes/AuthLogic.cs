@@ -64,6 +64,7 @@ namespace Wman.Logic.Classes
             user.PasswordHash = userManager.PasswordHasher.HashPassword(user, pwd);
 
             result = await userManager.UpdateAsync(user);
+            await this.CheckResult(result);
             return result;
         }
 
@@ -77,8 +78,9 @@ namespace Wman.Logic.Classes
                 throw new NotFoundException(WmanError.UserNotFound);
             }
             result = await userManager.DeleteAsync(user);
-
+            await this.CheckResult(result);
             return result;
+            
 
         }
 
@@ -100,15 +102,9 @@ namespace Wman.Logic.Classes
                 SecurityStamp = Guid.NewGuid().ToString()
             };
             result = await userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
+            if (await CheckResult(result))
             {
                 await userManager.AddToRoleAsync(user, "Worker");
-                return result;
-            }
-            else
-            {
-                ;
-                throw new InvalidOperationException("User could not be created");
             }
 
             return result;
@@ -199,6 +195,20 @@ namespace Wman.Logic.Classes
             {
                 await userManager.RemoveFromRolesAsync(user, roles);
             }
+        }
+        private async Task<bool> CheckResult(IdentityResult result)
+        {
+            if (result.Succeeded)
+            {
+                return true;
+            }
+
+            var output = "";
+            foreach (var item in result.Errors)
+            {
+                output += item.Description + "\n";
+            }
+            throw new InvalidOperationException(output);
         }
     }
 }

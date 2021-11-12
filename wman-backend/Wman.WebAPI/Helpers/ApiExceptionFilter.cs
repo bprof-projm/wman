@@ -26,13 +26,13 @@ namespace Wman.WebAPI.Helpers
                     await this.setContext(HttpStatusCode.Forbidden, context);
                     break;
                 case NotMemberOfRoleException:
-                    await this.setContext(HttpStatusCode.NotAcceptable, context);
+                    await this.setContext(HttpStatusCode.BadRequest, context);
                     break;
                 case ArgumentException:
                     await this.setContext(HttpStatusCode.UnprocessableEntity, context);
                     break;
                 case InvalidOperationException:
-                    await this.setContext(HttpStatusCode.BadRequest, context);
+                    await this.setContext(HttpStatusCode.Conflict, context);
                     break;
                 default:
                     //await this.setContext(HttpStatusCode.InternalServerError, context);
