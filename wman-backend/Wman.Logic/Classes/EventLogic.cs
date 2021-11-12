@@ -38,7 +38,7 @@ namespace Wman.Logic.Classes
             var selectedUser = await userManager.Users.Where(x => x.UserName == username).Include(y => y.WorkEvents).SingleOrDefaultAsync();
             if (selectedUser == null)
             {
-                throw new NotFoundException(WmanError.EventNotFound);
+                throw new NotFoundException(WmanError.UserNotFound);
             }
             if (await userManager.IsInRoleAsync(selectedUser, "Worker") == false)
             {
