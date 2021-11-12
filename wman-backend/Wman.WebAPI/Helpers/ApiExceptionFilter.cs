@@ -20,19 +20,22 @@ namespace Wman.WebAPI.Helpers
             switch (context.Exception)
             {
                 case NotFoundException:
-                    await this.setContext(HttpStatusCode.Gone, context);
+                    await this.setContext(HttpStatusCode.NotFound, context);
                     break;
                 case IncorrectPasswordException:
-                    await this.setContext(HttpStatusCode.Gone, context);
+                    await this.setContext(HttpStatusCode.Forbidden, context);
+                    break;
+                case NotMemberOfRoleException:
+                    await this.setContext(HttpStatusCode.NotAcceptable, context);
                     break;
                 case ArgumentException:
-                    await this.setContext(HttpStatusCode.Gone, context);
+                    await this.setContext(HttpStatusCode.UnprocessableEntity, context);
                     break;
                 case InvalidOperationException:
-                    await this.setContext(HttpStatusCode.Gone, context);
+                    await this.setContext(HttpStatusCode.BadRequest, context);
                     break;
                 default:
-                    await this.setContext(HttpStatusCode.InternalServerError, context);
+                    //await this.setContext(HttpStatusCode.InternalServerError, context);
                     break;
             }
             await base.OnExceptionAsync(context);

@@ -105,6 +105,11 @@ namespace Wman.Logic.Classes
                 await userManager.AddToRoleAsync(user, "Worker");
                 return result;
             }
+            else
+            {
+                ;
+                throw new InvalidOperationException("User could not be created");
+            }
 
             return result;
         }
