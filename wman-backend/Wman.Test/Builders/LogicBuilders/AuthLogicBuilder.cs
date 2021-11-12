@@ -45,13 +45,15 @@ namespace Wman.Test.Builders.LogicBuilders
             var role = new Mock<RoleManager<WmanRole>>(
                          roleStore.Object, null, null, null, null);
 
+            role.Setup(x => x.RoleExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
             role.Setup(x => x.CreateAsync(It.IsAny<WmanRole>())).ReturnsAsync(IdentityResult.Success);
-            role.Setup(s => s.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(new WmanRole
+            role.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(new WmanRole
             {
                 Id = 0,
                 Name = "Test03",
                 NormalizedName = "TEST03"
             });
+            
             return role;
         }
 

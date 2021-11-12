@@ -178,8 +178,6 @@ namespace Wman.Test.Tests
             this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
         }
 
-        
-
         [Test]
         public async Task GetAllRolesOfUser_Returns4Roles()
         {
@@ -207,8 +205,8 @@ namespace Wman.Test.Tests
             //Assert
             Assert.AreEqual(3, result.Count());
             this.userManager.Verify(x => x.GetUsersInRoleAsync(It.IsAny<string>()), Times.Once);
+            this.roleManager.Verify(x => x.RoleExistsAsync(It.IsAny<string>()), Times.Once);
         }
-
 
         [Test]
         public async Task UpdateUser_SucceededUpdate_ExistingUser()
