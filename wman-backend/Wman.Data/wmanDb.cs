@@ -6,7 +6,7 @@ using Wman.Data.DB_Models;
 namespace Wman.Data
 {
     public class wmanDb : IdentityDbContext<WmanUser, WmanRole, int,
-   IdentityUserClaim<int>, WmanUserRole, IdentityUserLogin<int>,
+   IdentityUserClaim<int>, IdentityUserRole<int>, IdentityUserLogin<int>,
    IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         public wmanDb()

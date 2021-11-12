@@ -32,19 +32,19 @@ namespace Wman.Logic.Classes
             this.Configuration = configuration;
             this.mapper = mapper;
         }
-        public async Task<IQueryable<WmanUser>> GetAllUsers()
+        public async Task<IEnumerable<UserDTO>> GetAllUsers()
         {
-            return userManager.Users;
+            return mapper.Map<IEnumerable<UserDTO>>(await userManager.Users.ToListAsync());
         }
 
-        public async Task<WmanUser> GetOneUser(string username)
+        public async Task<UserDTO> GetOneUser(string username)
         {
             var output = await userManager.Users.Where(x => x.UserName == username).SingleOrDefaultAsync();
             if (output == null)
             {
-                throw new NotFoundException(WmanError.UserNotFound);
+                throw new NotFoundException("heh");
             }
-            return output;
+            return mapper.Map<UserDTO>(output);
         }
 
         public async Task<IdentityResult> UpdateUser(string oldUsername, string pwd, UserDTO newUser)

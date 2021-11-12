@@ -9,6 +9,6 @@ namespace Wman.Data.DB_Models
 {
     public class WmanRole : IdentityRole<int>
     {
-        public ICollection<WmanUserRole> UserRoles { get; set; }
+        public ICollection<WmanUser> WmanUsers { get; set; }
     }
 }

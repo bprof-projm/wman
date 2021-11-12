@@ -81,7 +81,7 @@ namespace Wman.WebAPI.Controllers
         [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<UserDTO>> GetUser(string username)
         {
-            return Ok(authLogic.GetOneUser(username));
+            return Ok(await authLogic.GetOneUser(username));
         }
 
         /// <summary>

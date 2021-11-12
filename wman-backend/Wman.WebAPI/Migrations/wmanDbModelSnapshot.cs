@@ -101,6 +101,21 @@ namespace Wman.WebAPI.Migrations
                     b.ToTable("AspNetUserLogins");
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
                     b.Property<int>("UserId")
@@ -335,31 +350,6 @@ namespace Wman.WebAPI.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Wman.Data.DB_Models.WmanUserRole", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RoleId1")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("RoleId1");
-
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("AspNetUserRoles");
-                });
-
             modelBuilder.Entity("Wman.Data.DB_Models.WorkEvent", b =>
                 {
                     b.Property<int>("Id")
@@ -388,14 +378,26 @@ namespace Wman.WebAPI.Migrations
                     b.Property<DateTime>("WorkStartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<TimeSpan>("WorkTime")
-                        .HasColumnType("time");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
 
                     b.ToTable("WorkEvent");
+                });
+
+            modelBuilder.Entity("WmanRoleWmanUser", b =>
+                {
+                    b.Property<int>("WmanRolesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WmanUsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("WmanRolesId", "WmanUsersId");
+
+                    b.HasIndex("WmanUsersId");
+
+                    b.ToTable("WmanRoleWmanUser");
                 });
 
             modelBuilder.Entity("WmanUserWorkEvent", b =>
@@ -455,6 +457,21 @@ namespace Wman.WebAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+                {
+                    b.HasOne("Wman.Data.DB_Models.WmanRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Wman.Data.DB_Models.WmanUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
                     b.HasOne("Wman.Data.DB_Models.WmanUser", null)
@@ -490,33 +507,6 @@ namespace Wman.WebAPI.Migrations
                     b.Navigation("WmanUser");
                 });
 
-            modelBuilder.Entity("Wman.Data.DB_Models.WmanUserRole", b =>
-                {
-                    b.HasOne("Wman.Data.DB_Models.WmanRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Wman.Data.DB_Models.WmanRole", "Role")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId1");
-
-                    b.HasOne("Wman.Data.DB_Models.WmanUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Wman.Data.DB_Models.WmanUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1");
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Wman.Data.DB_Models.WorkEvent", b =>
                 {
                     b.HasOne("Wman.Data.DB_Models.AddressHUN", "Address")
@@ -524,6 +514,21 @@ namespace Wman.WebAPI.Migrations
                         .HasForeignKey("AddressId");
 
                     b.Navigation("Address");
+                });
+
+            modelBuilder.Entity("WmanRoleWmanUser", b =>
+                {
+                    b.HasOne("Wman.Data.DB_Models.WmanRole", null)
+                        .WithMany()
+                        .HasForeignKey("WmanRolesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Wman.Data.DB_Models.WmanUser", null)
+                        .WithMany()
+                        .HasForeignKey("WmanUsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WmanUserWorkEvent", b =>
@@ -544,11 +549,6 @@ namespace Wman.WebAPI.Migrations
             modelBuilder.Entity("Wman.Data.DB_Models.AddressHUN", b =>
                 {
                     b.Navigation("WorkEvents");
-                });
-
-            modelBuilder.Entity("Wman.Data.DB_Models.WmanRole", b =>
-                {
-                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("Wman.Data.DB_Models.WmanUser", b =>

@@ -10,8 +10,8 @@ using Wman.Data;
 namespace Wman.WebAPI.Migrations
 {
     [DbContext(typeof(wmanDb))]
-    [Migration("20211104163025_pictureFix")]
-    partial class pictureFix
+    [Migration("20211112135630_initdb")]
+    partial class initdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -103,6 +103,21 @@ namespace Wman.WebAPI.Migrations
                     b.ToTable("AspNetUserLogins");
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
                     b.Property<int>("UserId")
@@ -189,6 +204,9 @@ namespace Wman.WebAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CloudPhotoID")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -244,8 +262,20 @@ namespace Wman.WebAPI.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Debug",
-                            NormalizedName = "DEBUG"
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Manager",
+                            NormalizedName = "MANAGER"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Worker",
+                            NormalizedName = "WORKER"
                         });
                 });
 
@@ -322,21 +352,6 @@ namespace Wman.WebAPI.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Wman.Data.DB_Models.WmanUserRole", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles");
-                });
-
             modelBuilder.Entity("Wman.Data.DB_Models.WorkEvent", b =>
                 {
                     b.Property<int>("Id")
@@ -365,14 +380,26 @@ namespace Wman.WebAPI.Migrations
                     b.Property<DateTime>("WorkStartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<TimeSpan>("WorkTime")
-                        .HasColumnType("time");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
 
                     b.ToTable("WorkEvent");
+                });
+
+            modelBuilder.Entity("WmanRoleWmanUser", b =>
+                {
+                    b.Property<int>("WmanRolesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WmanUsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("WmanRolesId", "WmanUsersId");
+
+                    b.HasIndex("WmanUsersId");
+
+                    b.ToTable("WmanRoleWmanUser");
                 });
 
             modelBuilder.Entity("WmanUserWorkEvent", b =>
@@ -432,6 +459,21 @@ namespace Wman.WebAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+                {
+                    b.HasOne("Wman.Data.DB_Models.WmanRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Wman.Data.DB_Models.WmanUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
                     b.HasOne("Wman.Data.DB_Models.WmanUser", null)
@@ -467,25 +509,6 @@ namespace Wman.WebAPI.Migrations
                     b.Navigation("WmanUser");
                 });
 
-            modelBuilder.Entity("Wman.Data.DB_Models.WmanUserRole", b =>
-                {
-                    b.HasOne("Wman.Data.DB_Models.WmanRole", "Role")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Wman.Data.DB_Models.WmanUser", "User")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Wman.Data.DB_Models.WorkEvent", b =>
                 {
                     b.HasOne("Wman.Data.DB_Models.AddressHUN", "Address")
@@ -493,6 +516,21 @@ namespace Wman.WebAPI.Migrations
                         .HasForeignKey("AddressId");
 
                     b.Navigation("Address");
+                });
+
+            modelBuilder.Entity("WmanRoleWmanUser", b =>
+                {
+                    b.HasOne("Wman.Data.DB_Models.WmanRole", null)
+                        .WithMany()
+                        .HasForeignKey("WmanRolesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Wman.Data.DB_Models.WmanUser", null)
+                        .WithMany()
+                        .HasForeignKey("WmanUsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WmanUserWorkEvent", b =>
@@ -515,16 +553,9 @@ namespace Wman.WebAPI.Migrations
                     b.Navigation("WorkEvents");
                 });
 
-            modelBuilder.Entity("Wman.Data.DB_Models.WmanRole", b =>
-                {
-                    b.Navigation("UserRoles");
-                });
-
             modelBuilder.Entity("Wman.Data.DB_Models.WmanUser", b =>
                 {
                     b.Navigation("ProfilePicture");
-
-                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }
