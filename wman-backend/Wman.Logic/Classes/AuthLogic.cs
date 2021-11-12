@@ -174,7 +174,7 @@ namespace Wman.Logic.Classes
             var users = await this.userManager.GetUsersInRoleAsync(roleName);
             if (!await roleManager.RoleExistsAsync(roleName))
             {
-                throw new NotFoundException(WmanError.EventNotFound);
+                throw new NotFoundException(WmanError.RoleNotFound);
             }
             return mapper.Map<List<UserDTO>>(users);
         }

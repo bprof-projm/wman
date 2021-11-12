@@ -22,5 +22,6 @@ namespace Wman.Logic.Helpers
         public static string LabelNotFound = "Label not found!";
         public static string WrongColor = "Color is wrong?"; //TODO
         public static string PhotoNotFound = "Photo not found";
+        
     }
 }
