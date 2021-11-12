@@ -70,7 +70,6 @@ namespace Wman.Logic.Classes
 
         public async Task<IdentityResult> DeleteUser(string uname)
         {
-            var myerror = new IdentityError() { Code = "UserNotFound", Description = "User not found!" };
             var result = new IdentityResult();
             var user = userManager.Users.Where(x => x.UserName == uname).SingleOrDefault();
             if (user == null)
@@ -90,7 +89,7 @@ namespace Wman.Logic.Classes
             user = userManager.Users.Where(x => x.Email == model.Email).SingleOrDefault();
             if (user != null)
             {
-                throw new NotAllowedException(WmanError.EmailExists);
+                throw new InvalidOperationException(WmanError.EmailExists);
             }
             user = new WmanUser
             {

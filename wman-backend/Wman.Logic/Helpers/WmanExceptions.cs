@@ -19,10 +19,6 @@ namespace Wman.Logic.Helpers
     {
         public IncorrectPasswordException(string message) : base(message) { }
     }
-    public class NotAllowedException : Exception
-    {
-        public NotAllowedException(string message) : base(message) { }
-    }
     public class RoleNotFoundException : Exception
     {
         public RoleNotFoundException(string message) : base(message) { }
@@ -31,6 +27,14 @@ namespace Wman.Logic.Helpers
     public class EventNotFoundException : Exception
     {
         public EventNotFoundException(string message) : base(message) { }
+    }
+    public class HasNoRoleException : Exception
+    {
+        public HasNoRoleException(string message) : base(message) { }
+        public HasNoRoleException(string mymessage, string username, string rolename) : base(mymessage)
+        {
+            mymessage = string.Format(mymessage, username, rolename);
+        }
     }
 
 }

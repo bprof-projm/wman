@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
+using Wman.Logic.Helpers;
 using Wman.Logic.Interfaces;
 using Wman.Repository.Interfaces;
 
@@ -32,23 +33,23 @@ namespace Wman.Logic.Classes
             var selectedEvent = await eventRepo.GetOneWithTracking(eventID);
             if (selectedEvent == null)
             {
-                throw new ArgumentException("Event not found! ");
+                throw new EventNotFoundException(WmanError.EventNotFound);
             }
             var selectedUser = await userManager.Users.Where(x => x.UserName == username).Include(y => y.WorkEvents).SingleOrDefaultAsync();
             if (selectedUser == null)
             {
-                throw new ArgumentException("User not found! ");
+                throw new UserNotFoundException(WmanError.EventNotFound);
             }
             if (await userManager.IsInRoleAsync(selectedUser, "Worker") == false)
             {
-                throw new InvalidOperationException("Selected user does not have the provided role.");
+                throw new InvalidOperationException(WmanError.HasNoRole);
             }
 
             bool testResult = await this.DoTasksOverlap(selectedUser.WorkEvents, selectedEvent);
             ;
             if (testResult)
             {
-                throw new ArgumentException("User is already busy during this event's estimated timeframe! ");
+                throw new InvalidOperationException(WmanError.UserIsBusy);
             }
             else
             {
@@ -62,7 +63,7 @@ namespace Wman.Logic.Classes
             var selectedEvent = await eventRepo.GetOneWithTracking(eventID);
             if (selectedEvent == null)
             {
-                throw new ArgumentException("Event not found! ");
+                throw new EventNotFoundException(WmanError.EventNotFound);
             }
             var okUsers = new List<WmanUser>();
             WmanUser selectedUser;
@@ -72,16 +73,16 @@ namespace Wman.Logic.Classes
                 selectedUser = await userManager.Users.Where(x => x.UserName == item).Include(y => y.WorkEvents).SingleOrDefaultAsync();
                 if (selectedUser == null)
                 {
-                    throw new ArgumentException($"User: {0} not found", item);
+                    throw new UserNotFoundException(WmanError.UserNotFound);
                 }
                 if (await userManager.IsInRoleAsync(selectedUser, "Worker") == false)
                 {
-                    throw new InvalidOperationException(String.Format("User: {0} does not have the provided role.", selectedUser.UserName));
+                    throw new HasNoRoleException(WmanError.HasNoRole, selectedUser.UserName, "Worker");
                 }
                 testresult = await this.DoTasksOverlap(selectedUser.WorkEvents, selectedEvent);
                 if (testresult)
                 {
-                    throw new InvalidOperationException(String.Format("User: {0} is busy during this event", selectedUser.UserName));
+                    throw new InvalidOperationException(WmanError.UserIsBusy);
                 }
                 else
                 {
@@ -116,7 +117,7 @@ namespace Wman.Logic.Classes
             }
             else
             {
-                throw new ArgumentException("Events are not at the same day or start is after the finishing date");
+                throw new InvalidOperationException(WmanError.EventDateInvalid);
             }
 
         }
@@ -155,7 +156,7 @@ namespace Wman.Logic.Classes
             var selectedEvent = await GetEvent(id);
             if (selectedEvent == null)
             {
-                throw new ArgumentException("Event not found! ");
+                throw new EventNotFoundException(WmanError.EventNotFound);
             }
             return mapper.Map<List<UserDTO>>(selectedEvent.AssignedUsers);
         }
@@ -214,7 +215,7 @@ namespace Wman.Logic.Classes
                     }
                     else
                     {
-                        throw new ArgumentException("Assigned user conflict(user already assigned to an event at this time)");
+                        throw new InvalidOperationException(WmanError.UserIsBusy);
                     }
 
 
@@ -223,7 +224,7 @@ namespace Wman.Logic.Classes
             }
             else
             {
-                throw new ArgumentException("Events are not at the same day or start is after the finishing date");
+                throw new InvalidOperationException(WmanError.EventDateInvalid);
             }
         }
     }

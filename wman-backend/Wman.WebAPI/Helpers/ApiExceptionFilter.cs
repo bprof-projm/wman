@@ -28,6 +28,9 @@ namespace Wman.WebAPI.Helpers
                 case ArgumentException:
                     await this.setContext(HttpStatusCode.Gone, context);
                     break;
+                case InvalidOperationException:
+                    await this.setContext(HttpStatusCode.Gone, context);
+                    break;
                 default:
                     await this.setContext(HttpStatusCode.InternalServerError, context);
                     break;
