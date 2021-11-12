@@ -42,7 +42,7 @@ namespace Wman.Logic.Classes
             var output = await userManager.Users.Where(x => x.UserName == username).SingleOrDefaultAsync();
             if (output == null)
             {
-                throw new NotFoundException("heh");
+                throw new NotFoundException(WmanError.UserNotFound);
             }
             return mapper.Map<UserDTO>(output);
         }
