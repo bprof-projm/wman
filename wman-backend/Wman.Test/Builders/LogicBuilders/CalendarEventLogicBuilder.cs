@@ -1,11 +1,9 @@
-﻿using AutoMapper;
-using MockQueryable.Moq;
+﻿using MockQueryable.Moq;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Wman.Data.DB_Models;
-using Wman.Logic.Helpers;
 using Wman.Repository.Interfaces;
 
 namespace Wman.Test.Builders.LogicBuilders
