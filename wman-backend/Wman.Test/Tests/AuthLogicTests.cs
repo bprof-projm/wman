@@ -64,8 +64,8 @@ namespace Wman.Test.Tests
             this.userManager.Verify(x => x.CreateAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
             this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
             //LoginUser
-            this.userManager.Verify(x => x.FindByNameAsync(model.LoginName), Times.Never);
-            this.userManager.Verify(x => x.CheckPasswordAsync(It.IsAny<WmanUser>(), model.Password), Times.Once);
+            this.userManager.Verify(x => x.FindByNameAsync(It.IsAny<string>()), Times.Never);
+            this.userManager.Verify(x => x.CheckPasswordAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
             this.userManager.Verify(x => x.GetRolesAsync(It.IsAny<WmanUser>()), Times.Once);
         }
 
@@ -242,8 +242,8 @@ namespace Wman.Test.Tests
             //Assert
             Assert.That(result.Succeeded);
 
-            this.userManager.Verify(x => x.UpdateAsync(It.IsAny<WmanUser>()), Times.Once);
             this.userManager.Verify(x => x.Users, Times.Once);
+            this.userManager.Verify(x => x.UpdateAsync(It.IsAny<WmanUser>()), Times.Once);
         }
 
         /*
