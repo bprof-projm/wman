@@ -78,18 +78,10 @@ namespace Wman.Logic.Classes
 
         }
 
-        public async Task<IdentityResult> CreateUser(RegisterDTO model)
+        public async Task<IdentityResult> CreateWorker(RegisterDTO model)
         {
             var result = new IdentityResult();
             var user = new WmanUser();
-            //Reinvented the wheel, it does this by itself :(
-
-            //user = userManager.Users.Where(x => x.UserName == model.Username).SingleOrDefault();
-            //if (user != null)
-            //{
-            //    var myerror = new IdentityError() { Code = "UsernameExists", Description = "Username already exists!" };
-            //    return IdentityResult.Failed(myerror);
-            //}
             user = userManager.Users.Where(x => x.Email == model.Email).SingleOrDefault();
             if (user != null)
             {
@@ -107,7 +99,7 @@ namespace Wman.Logic.Classes
             result = await userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                await userManager.AddToRoleAsync(user, "Debug");
+                await userManager.AddToRoleAsync(user, "Worker");
                 return result;
             }
 
@@ -135,7 +127,7 @@ namespace Wman.Logic.Classes
                 {
                   new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                   new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                  new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) //TODO: .tostring might break something, test.
+                  new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
                 };
 
 
@@ -161,109 +153,44 @@ namespace Wman.Logic.Classes
             }
             throw new ArgumentException("Incorrect password");
         }
-
-        public async Task<bool> HasRole(WmanUser user, string role)
+        public async Task SetRoleOfUser(string username, string roleName)
         {
-            if (await userManager.IsInRoleAsync(user, role))
+            WmanUser selectedUser = await userManager.FindByNameAsync(username);
+
+            if (selectedUser == null)
             {
-                return true;
+                throw new ArgumentException("User doesn't exists");
             }
-            return false;
+            await this.RemovePrevRoles(selectedUser);
+            await userManager.AddToRoleAsync(selectedUser, roleName);
         }
 
-        public async Task<bool> HasRoleByName(string userName, string role)
+        public async Task<List<UserDTO>> GetAllUsersOfRole(string roleName)
         {
-            var user = await this.userManager.FindByNameAsync(userName);
-            if (userManager.IsInRoleAsync(user, role).Result/* || userManager.IsInRoleAsync(user, "Admin").Result*/)
+            var users = await this.userManager.GetUsersInRoleAsync(roleName);
+            if (!await roleManager.RoleExistsAsync(roleName))
             {
-                return true;
+                throw new ArgumentException("Specified role doesn't exists! ");
             }
-            return false;
+            return mapper.Map<List<UserDTO>>(users);
         }
-        public async Task<IEnumerable<string>> GetAllRolesOfUser(WmanUser user)
+        public async Task<IEnumerable<string>> GetAllRolesOfUser(string username)
         {
+            var user = await this.userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                throw new ArgumentException("User doesn't exists");
+            }
             return await userManager.GetRolesAsync(user);
         }
 
-        public async Task<bool> AssignRolesToUser(WmanUser user, List<string> roles)
+        private async Task RemovePrevRoles(WmanUser user)
         {
-            WmanUser selectedUser;
-            selectedUser = await GetOneUser(user.UserName);
-            userManager.AddToRolesAsync(selectedUser, roles).Wait();
-            return true;
-        }
-
-        public async Task<bool> CreateRole(string name)
-        {
-            var query = await this.roleManager.FindByNameAsync(name);
-            if (query != null)
+            var roles = await userManager.GetRolesAsync(user);
+            foreach (var item in roles)
             {
-                return false;
+                await userManager.RemoveFromRolesAsync(user, roles);
             }
-            roleManager.CreateAsync(new WmanRole { Name = name, NormalizedName = name.ToUpper() }).Wait();
-            return true;
-        }
-
-        public async Task<string> RemoveUserFromRole(string userName, string requiredRole)
-        {
-            try
-            {
-                var user = await this.userManager.FindByNameAsync(userName);
-                await this.userManager.RemoveFromRoleAsync(user, requiredRole);
-                return "Success";
-            }
-            catch (Exception)
-            {
-                return "Fail";
-            }
-        }
-
-        public async Task<bool> SwitchRoleOfUser(string userName, string newRole)
-        {
-            try
-            {
-                var user = this.GetOneUser(userName).Result;
-                foreach (var role in this.GetAllRolesOfUser(user).Result)
-                {
-                    await this.RemoveUserFromRole(user.UserName, role);
-                }
-                await this.userManager.AddToRoleAsync(user, newRole);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-
-
-        }
-        public async Task<List<WmanUser>> GetAllUsersOfRole(string roleId)
-        {
-            var users = await this.userManager.GetUsersInRoleAsync(roleId);
-            return users.ToList();
-        }
-
-        public async Task<IEnumerable<AssignedEventDTO>> JobsOfUser(string username)
-        {
-            var selectedUser = await userManager.Users
-                .Where(x => x.UserName == username)
-                .Include(y => y.WorkEvents)
-                .ThenInclude(z => z.Address)
-                .AsNoTracking()
-                .SingleOrDefaultAsync();
-            if (selectedUser == null)
-            {
-                throw new ArgumentException("User not found!");
-            }
-            var output = selectedUser.WorkEvents;
-            if (output.Count() == 0)
-            {
-                throw new InvalidOperationException("User has no assigned jobs! ");
-            }
-            ;
-            var testResult = mapper.Map<IEnumerable<AssignedEventDTO>>(output);
-
-            return testResult;
         }
     }
 }

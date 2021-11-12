@@ -12,7 +12,7 @@ namespace Wman.WebAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Manager")]
     public class LabelController : ControllerBase
     {
         ILabelLogic labelLogic;

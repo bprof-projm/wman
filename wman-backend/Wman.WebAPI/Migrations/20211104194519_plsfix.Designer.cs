@@ -10,8 +10,8 @@ using Wman.Data;
 namespace Wman.WebAPI.Migrations
 {
     [DbContext(typeof(wmanDb))]
-    [Migration("20211013124329_dbtest")]
-    partial class dbtest
+    [Migration("20211104194519_plsfix")]
+    partial class plsfix
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,21 @@ namespace Wman.WebAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.10")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("LabelWorkEvent", b =>
+                {
+                    b.Property<int>("LabelsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WorkEventsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LabelsId", "WorkEventsId");
+
+                    b.HasIndex("WorkEventsId");
+
+                    b.ToTable("LabelWorkEvent");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
@@ -107,34 +122,19 @@ namespace Wman.WebAPI.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Wman.Data.DB_Connection_Tables.WorkEventLabel", b =>
+            modelBuilder.Entity("PicturesWorkEvent", b =>
                 {
-                    b.Property<int>("WorkEventId")
+                    b.Property<int>("ProofOfWorkPicId")
                         .HasColumnType("int");
 
-                    b.Property<int>("LabelId")
+                    b.Property<int>("WorkEventsId")
                         .HasColumnType("int");
 
-                    b.HasKey("WorkEventId", "LabelId");
+                    b.HasKey("ProofOfWorkPicId", "WorkEventsId");
 
-                    b.HasIndex("LabelId");
+                    b.HasIndex("WorkEventsId");
 
-                    b.ToTable("WorkEventLabel");
-                });
-
-            modelBuilder.Entity("Wman.Data.DB_Connection_Tables.WorkEventPicture", b =>
-                {
-                    b.Property<int>("WorkEventId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PictureId")
-                        .HasColumnType("int");
-
-                    b.HasKey("WorkEventId", "PictureId");
-
-                    b.HasIndex("PictureId");
-
-                    b.ToTable("WorkEventPicture");
+                    b.ToTable("PicturesWorkEvent");
                 });
 
             modelBuilder.Entity("Wman.Data.DB_Models.AddressHUN", b =>
@@ -188,6 +188,9 @@ namespace Wman.WebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CloudPhotoID")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -375,6 +378,36 @@ namespace Wman.WebAPI.Migrations
                     b.ToTable("WorkEvent");
                 });
 
+            modelBuilder.Entity("WmanUserWorkEvent", b =>
+                {
+                    b.Property<int>("AssignedUsersId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WorkEventsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AssignedUsersId", "WorkEventsId");
+
+                    b.HasIndex("WorkEventsId");
+
+                    b.ToTable("WmanUserWorkEvent");
+                });
+
+            modelBuilder.Entity("LabelWorkEvent", b =>
+                {
+                    b.HasOne("Wman.Data.DB_Models.Label", null)
+                        .WithMany()
+                        .HasForeignKey("LabelsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Wman.Data.DB_Models.WorkEvent", null)
+                        .WithMany()
+                        .HasForeignKey("WorkEventsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("Wman.Data.DB_Models.WmanRole", null)
@@ -411,51 +444,30 @@ namespace Wman.WebAPI.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Wman.Data.DB_Connection_Tables.WorkEventLabel", b =>
+            modelBuilder.Entity("PicturesWorkEvent", b =>
                 {
-                    b.HasOne("Wman.Data.DB_Models.WorkEvent", "WorkEvent")
-                        .WithMany("Labels")
-                        .HasForeignKey("LabelId")
+                    b.HasOne("Wman.Data.DB_Models.Pictures", null)
+                        .WithMany()
+                        .HasForeignKey("ProofOfWorkPicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Wman.Data.DB_Models.Label", "Label")
-                        .WithMany("WorkEvents")
-                        .HasForeignKey("WorkEventId")
+                    b.HasOne("Wman.Data.DB_Models.WorkEvent", null)
+                        .WithMany()
+                        .HasForeignKey("WorkEventsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Label");
-
-                    b.Navigation("WorkEvent");
-                });
-
-            modelBuilder.Entity("Wman.Data.DB_Connection_Tables.WorkEventPicture", b =>
-                {
-                    b.HasOne("Wman.Data.DB_Models.WorkEvent", "WorkEvent")
-                        .WithMany("ProofOfWorkPic")
-                        .HasForeignKey("PictureId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Wman.Data.DB_Models.Pictures", "Picture")
-                        .WithMany("WorkEvents")
-                        .HasForeignKey("WorkEventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Picture");
-
-                    b.Navigation("WorkEvent");
                 });
 
             modelBuilder.Entity("Wman.Data.DB_Models.Pictures", b =>
                 {
-                    b.HasOne("Wman.Data.DB_Models.WmanUser", null)
+                    b.HasOne("Wman.Data.DB_Models.WmanUser", "WmanUser")
                         .WithOne("ProfilePicture")
                         .HasForeignKey("Wman.Data.DB_Models.Pictures", "WManUserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("WmanUser");
                 });
 
             modelBuilder.Entity("Wman.Data.DB_Models.WmanUserRole", b =>
@@ -488,17 +500,22 @@ namespace Wman.WebAPI.Migrations
                     b.Navigation("Address");
                 });
 
+            modelBuilder.Entity("WmanUserWorkEvent", b =>
+                {
+                    b.HasOne("Wman.Data.DB_Models.WmanUser", null)
+                        .WithMany()
+                        .HasForeignKey("AssignedUsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Wman.Data.DB_Models.WorkEvent", null)
+                        .WithMany()
+                        .HasForeignKey("WorkEventsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Wman.Data.DB_Models.AddressHUN", b =>
-                {
-                    b.Navigation("WorkEvents");
-                });
-
-            modelBuilder.Entity("Wman.Data.DB_Models.Label", b =>
-                {
-                    b.Navigation("WorkEvents");
-                });
-
-            modelBuilder.Entity("Wman.Data.DB_Models.Pictures", b =>
                 {
                     b.Navigation("WorkEvents");
                 });
@@ -513,13 +530,6 @@ namespace Wman.WebAPI.Migrations
                     b.Navigation("ProfilePicture");
 
                     b.Navigation("UserRoles");
-                });
-
-            modelBuilder.Entity("Wman.Data.DB_Models.WorkEvent", b =>
-                {
-                    b.Navigation("Labels");
-
-                    b.Navigation("ProofOfWorkPic");
                 });
 #pragma warning restore 612, 618
         }

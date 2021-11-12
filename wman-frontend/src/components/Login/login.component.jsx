@@ -38,7 +38,7 @@ export const NormalLoginForm = () => {
   };
 
   return (
-    <div style={{ height: "100vh" }}>
+    <div className="login-background" style={{ height: "100vh" }}>
       <div className="logo-login">Wman</div>
       <div className="login-container">
         <Form

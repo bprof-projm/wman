@@ -31,11 +31,9 @@ namespace Wman.Data.DB_Models
         
         [JsonIgnore]
         public ICollection<Pictures> ProofOfWorkPic { get; set; }
-        public int AddressId { get; set; }
         public virtual AddressHUN Address { get; set; }
         public DateTime WorkStartDate { get; set; }
         public DateTime WorkFinishDate { get; set; }
-        public TimeSpan WorkTime { get; set; }
         //[JsonConverter(typeof(JsonStringEnumConverter))]
         public Status Status { get; set; }
         public WorkEvent()
