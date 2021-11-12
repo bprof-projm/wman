@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
+using Wman.Logic.Helpers;
 using Wman.Logic.Interfaces;
 using Wman.Repository.Interfaces;
 
@@ -38,7 +39,12 @@ namespace Wman.Logic.Classes
 
         public async Task<WmanUser> GetOneUser(string username)
         {
-            return await userManager.Users.Where(x => x.UserName == username).SingleOrDefaultAsync();
+            var output = await userManager.Users.Where(x => x.UserName == username).SingleOrDefaultAsync();
+            if (output == null)
+            {
+                throw new UserNotFoundException(WmanError.UserNotFound);
+            }
+            return output;
         }
 
         public async Task<IdentityResult> UpdateUser(string oldUsername, string pwd, UserDTO newUser)
@@ -48,8 +54,7 @@ namespace Wman.Logic.Classes
             var user = userManager.Users.Where(x => x.UserName == oldUsername).SingleOrDefault();
             if (user == null)
             {
-                var myerror = new IdentityError() { Code = "UserNotFound", Description = "User not found!" };
-                return IdentityResult.Failed(myerror);
+                throw new UserNotFoundException(WmanError.UserNotFound);
             }
             user.UserName = newUser.Username; //Not using converter class/automapper on purpose
             user.Email = newUser.Email;
@@ -70,7 +75,7 @@ namespace Wman.Logic.Classes
             var user = userManager.Users.Where(x => x.UserName == uname).SingleOrDefault();
             if (user == null)
             {
-                return IdentityResult.Failed(myerror);
+                throw new UserNotFoundException(WmanError.UserNotFound);
             }
             result = await userManager.DeleteAsync(user);
 
@@ -85,8 +90,7 @@ namespace Wman.Logic.Classes
             user = userManager.Users.Where(x => x.Email == model.Email).SingleOrDefault();
             if (user != null)
             {
-                var myerror = new IdentityError() { Code = "EmailExists", Description = "An accunt with this email address already exists!" };
-                return IdentityResult.Failed(myerror);
+                throw new NotAllowedException(WmanError.EmailExists);
             }
             user = new WmanUser
             {
@@ -119,7 +123,7 @@ namespace Wman.Logic.Classes
             }
             if (user == null)
             {
-                throw new ArgumentException("Username/email not found");
+                throw new UserNotFoundException(WmanError.UserNotFound);
             }
             else if (await userManager.CheckPasswordAsync(user, model.Password))
             {
@@ -151,7 +155,7 @@ namespace Wman.Logic.Classes
                     ExpirationDate = token.ValidTo
                 };
             }
-            throw new ArgumentException("Incorrect password");
+            throw new IncorrectPasswordException(WmanError.IncorrectPassword);
         }
         public async Task SetRoleOfUser(string username, string roleName)
         {
@@ -159,7 +163,7 @@ namespace Wman.Logic.Classes
 
             if (selectedUser == null)
             {
-                throw new ArgumentException("User doesn't exists");
+                throw new UserNotFoundException(WmanError.UserNotFound);
             }
             await this.RemovePrevRoles(selectedUser);
             await userManager.AddToRoleAsync(selectedUser, roleName);
@@ -170,7 +174,7 @@ namespace Wman.Logic.Classes
             var users = await this.userManager.GetUsersInRoleAsync(roleName);
             if (!await roleManager.RoleExistsAsync(roleName))
             {
-                throw new ArgumentException("Specified role doesn't exists! ");
+                throw new RoleNotFoundException(WmanError.EventNotFound);
             }
             return mapper.Map<List<UserDTO>>(users);
         }
@@ -179,7 +183,7 @@ namespace Wman.Logic.Classes
             var user = await this.userManager.FindByNameAsync(username);
             if (user == null)
             {
-                throw new ArgumentException("User doesn't exists");
+                throw new UserNotFoundException(WmanError.UserNotFound);
             }
             return await userManager.GetRolesAsync(user);
         }

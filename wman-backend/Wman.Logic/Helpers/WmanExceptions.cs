@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Wman.Logic.WmanEx
+namespace Wman.Logic.Helpers
 {
     public class UserNotFoundException : Exception
     {
@@ -22,5 +22,14 @@ namespace Wman.Logic.WmanEx
     public class NotAllowedException : Exception
     {
         public NotAllowedException(string message) : base(message) { }
+    }
+    public class RoleNotFoundException : Exception
+    {
+        public RoleNotFoundException(string message) : base(message) { }
+    }
+
+    public class EventNotFoundException : Exception
+    {
+        public EventNotFoundException(string message) : base(message) { }
     }
 }

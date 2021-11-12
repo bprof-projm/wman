@@ -19,23 +19,19 @@ namespace Wman.WebAPI.Helpers
             ;
             switch (context.Exception)
             {
-                case ArgumentException:
-                    if (context.Exception.Message == WmanError.UserNotFound)
-                    {
-                        
-                    }
-
-                    await this.setContext(HttpStatusCode.Gone, "It's GONE2", context);
-                    
-                    
+                case UserNotFoundException:
+                    await this.setContext(HttpStatusCode.Gone, context);
+                    break;
+                case IncorrectPasswordException:
+                    await this.setContext(HttpStatusCode.Gone, context);
                     break;
                 default:
-                    await this.setContext(HttpStatusCode.InternalServerError, context.Exception.ToString(), context);
+                    await this.setContext(HttpStatusCode.InternalServerError, context);
                     break;
             }
             await base.OnExceptionAsync(context);
         }
-        private async Task setContext(HttpStatusCode statusCode, string input, ExceptionContext context)
+        private async Task setContext(HttpStatusCode statusCode, ExceptionContext context)
         {
             context.HttpContext.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
             context.HttpContext.Response.Headers["Expires"] = "-1";
@@ -51,7 +47,7 @@ namespace Wman.WebAPI.Helpers
 
             //Plain text
             context.HttpContext.Response.ContentType = "text/plain; charset=utf-8";
-            MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(input));
+            MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(context.Exception.Message));
             ReadOnlyMemory<byte> readOnlyMemory = new ReadOnlyMemory<byte>(stream.ToArray());
 
             await context.HttpContext.Response.Body.WriteAsync(readOnlyMemory);
