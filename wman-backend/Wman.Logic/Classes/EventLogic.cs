@@ -124,25 +124,23 @@ namespace Wman.Logic.Classes
 
         public async Task DeleteEvent(int Id)
         {
+            var test = this.GetEvent(Id);
             await eventRepo.Delete(Id);
         }
 
         public async Task<IQueryable<WorkEvent>> GetAllEvents()
         {
             var output = eventRepo.GetAll();
-            //foreach (var item in output)
-            //{
-            //    if (item.Address.Id == 0)
-            //    {
-            //        item.Address = await address.GetOne(item.AddressId);
-            //    }
-            //}
             return output;
         }
 
         public async Task<WorkEvent> GetEvent(int id)
         {
             var output = await eventRepo.GetOne(id);
+            if (output == null)
+            {
+                throw new NotFoundException(WmanError.EventNotFound);
+            }
             return output;
         }
 
@@ -153,11 +151,8 @@ namespace Wman.Logic.Classes
 
         public async Task<ICollection<UserDTO>> GetAllAssignedUsers(int id)
         {
-            var selectedEvent = await GetEvent(id);
-            if (selectedEvent == null)
-            {
-                throw new NotFoundException(WmanError.EventNotFound);
-            }
+            var selectedEvent = await this.GetEvent(id);
+            
             return mapper.Map<List<UserDTO>>(selectedEvent.AssignedUsers);
         }
 

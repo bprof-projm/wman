@@ -35,10 +35,9 @@ namespace Wman.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Login/generate jwt token
+        /// Login
         /// </summary>
         /// <param name="model">Login details</param>
-        /// <returns>Hopefully a jwt token</returns>
         [HttpPut]
         [Route("login")]
 

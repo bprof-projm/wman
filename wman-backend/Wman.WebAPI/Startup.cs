@@ -173,6 +173,7 @@ namespace Wman.WebAPI
                 
             }
             app.UseSwagger();
+            //app.UseStatusCodePages();
             app.UseSwaggerUI(c =>
             {
 

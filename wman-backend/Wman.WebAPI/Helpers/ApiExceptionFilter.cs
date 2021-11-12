@@ -59,7 +59,7 @@ namespace Wman.WebAPI.Helpers
             MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(context.Exception.Message));
             ReadOnlyMemory<byte> readOnlyMemory = new ReadOnlyMemory<byte>(stream.ToArray());
 
-            await context.HttpContext.Response.Body.WriteAsync(readOnlyMemory);
+            await context.HttpContext.Response.Body.WriteAsync(readOnlyMemory); //Has to be async
 
             context.ExceptionHandled = true;
         }

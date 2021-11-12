@@ -35,6 +35,10 @@ namespace Wman.Logic.Classes
             var selectedUser = await (from x in userManager.Users
                                      where x.UserName == userName
                                      select x).Include(x => x.ProfilePicture).FirstOrDefaultAsync();
+            if (selectedUser == null)
+            {
+                throw new NotFoundException(WmanError.UserNotFound);
+            }
 
             var result = await _photoService.AddProfilePhotoAsync(file);
             if (result.Error != null)
@@ -61,6 +65,10 @@ namespace Wman.Logic.Classes
             var selectedUser = await (from x in userManager.Users
                                       where x.UserName == userName
                                       select x).Include(x => x.ProfilePicture).FirstOrDefaultAsync();
+            if (selectedUser == null)
+            {
+                throw new NotFoundException(WmanError.UserNotFound);
+            }
 
             var selectedPhoto = await (from x in picturesRepo.GetAll()
                                        where x.WManUserID == selectedUser.Id
@@ -83,6 +91,10 @@ namespace Wman.Logic.Classes
             var selectedUser = await (from x in userManager.Users
                                       where x.UserName == userName
                                       select x).Include(x => x.ProfilePicture).FirstOrDefaultAsync();
+            if (selectedUser == null)
+            {
+                throw new NotFoundException(WmanError.UserNotFound);
+            }
 
             var selectedPhoto = await (from x in picturesRepo.GetAll()
                                        where x.WManUserID == selectedUser.Id

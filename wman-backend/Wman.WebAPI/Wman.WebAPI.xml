@@ -18,10 +18,9 @@
         </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.Login(Wman.Logic.DTO_Models.LoginDTO)">
             <summary>
-            Login/generate jwt token
+            Login
             </summary>
             <param name="model">Login details</param>
-            <returns>Hopefully a jwt token</returns>
         </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.CreateWorker(Wman.Logic.DTO_Models.RegisterDTO)">
             <summary>
