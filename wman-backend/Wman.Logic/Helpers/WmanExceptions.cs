@@ -27,6 +27,9 @@ namespace Wman.Logic.Helpers
             mymessage = string.Format(mymessage, username, rolename);
         }
     }
-
+    public class EmptyResultException : Exception
+    {
+        public EmptyResultException(string message) : base(message) { }
+    }
 
 }

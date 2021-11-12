@@ -18,5 +18,8 @@ namespace Wman.Logic.Helpers
         public static string UserIsBusy { get { return "The user is busy in the event's timeframe"; } }
         public static string EventDateInvalid { get { return "The event date is invalid!"; } } //Not in same day/starts after it finishes
         public static string LabelExists { get { return "This Label already exists!"; } }
+        public static string NoLabels { get { return "There are no labels added!"; } }
+        public static string LabelNotFound { get { return "Label not found!"; } }
+        public static string WrongColor { get { return "Color is wrong?"; } } //TODO
     }
 }

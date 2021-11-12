@@ -59,14 +59,7 @@ namespace Wman.Logic.Classes
                     Content = item.Content
                 });
             }
-            if (labelsDTOs !=null)
-            {
                 return labelsDTOs;
-            }
-            else
-            {
-                throw new ArgumentException("Currently there are no labels added");
-            }
             
         }
         public async Task UpdateLabel(int Id, CreateLabelDTO NewLabel)
@@ -78,7 +71,7 @@ namespace Wman.Logic.Classes
             }
             else
             {
-                throw new ArgumentException("Not found");
+                throw new NotFoundException(WmanError.LabelNotFound);
             }
             
         }
@@ -88,12 +81,12 @@ namespace Wman.Logic.Classes
             var selectedEvent = await eventRepo.GetOneWithTracking(eventId);
             if (selectedEvent == null)
             {
-                throw new ArgumentException("Bad event Id");
+                throw new NotFoundException(WmanError.EventNotFound);
             }
             var selectedLabel = await labelRepo.GetOne(labelId);
             if (selectedLabel == null)
             {
-                throw new ArgumentException("Bad Label Id");
+                throw new NotFoundException(WmanError.LabelNotFound);
             }
             selectedLabel.WorkEvents.Add(selectedEvent);
             await labelRepo.SaveDatabase();
@@ -107,7 +100,7 @@ namespace Wman.Logic.Classes
             }
             else
             {
-                throw new ArgumentException("Bad Label Id");
+                throw new NotFoundException(WmanError.LabelNotFound);
             }
         }
 
@@ -116,7 +109,7 @@ namespace Wman.Logic.Classes
             Regex rgx = new Regex(@"^#(?:[0-9a-fA-F]{3}){1,2}$");
             if (!rgx.IsMatch(color))
             {
-                throw new ArgumentException("Wrong regular expresion");
+                throw new ArgumentException(WmanError.WrongColor);
             }
             string redstring = 255 - Convert.ToInt32(color.Substring(1, 2), 16) <= 15 ? "0"
                 + Convert.ToString(255 - Convert.ToInt32(color.Substring(1, 2), 16), 16)
