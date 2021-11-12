@@ -32,4 +32,5 @@ namespace Wman.Logic.Helpers
     {
         public EventNotFoundException(string message) : base(message) { }
     }
+
 }

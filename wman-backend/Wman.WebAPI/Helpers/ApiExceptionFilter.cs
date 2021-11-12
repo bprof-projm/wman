@@ -25,6 +25,9 @@ namespace Wman.WebAPI.Helpers
                 case IncorrectPasswordException:
                     await this.setContext(HttpStatusCode.Gone, context);
                     break;
+                case ArgumentException:
+                    await this.setContext(HttpStatusCode.Gone, context);
+                    break;
                 default:
                     await this.setContext(HttpStatusCode.InternalServerError, context);
                     break;

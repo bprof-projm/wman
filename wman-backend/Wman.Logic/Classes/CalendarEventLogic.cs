@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
+using Wman.Logic.Helpers;
 using Wman.Logic.Interfaces;
 using Wman.Repository.Interfaces;
 
@@ -92,7 +93,7 @@ namespace Wman.Logic.Classes
             }
             else
             {
-                throw new ArgumentException("invalid parameter (it has to be over 0 and under 365)");
+                throw new ArgumentException(WmanError.InvalidInputRange);
             }
             
         }
@@ -117,7 +118,7 @@ namespace Wman.Logic.Classes
             }
             else
             {
-                throw new ArgumentException("invalid parameter (it has to be over 0 and under 54)");
+                throw new ArgumentException(WmanError.InvalidInputRange);
             }
             
         }
