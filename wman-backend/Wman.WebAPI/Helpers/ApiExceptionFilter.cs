@@ -8,6 +8,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Wman.Logic.Helpers;
 
 namespace Wman.WebAPI.Helpers
 {
@@ -18,9 +19,12 @@ namespace Wman.WebAPI.Helpers
             ;
             switch (context.Exception)
             {
-                case ArithmeticException:
-                   
-                    
+                case ArgumentException:
+                    if (context.Exception.Message == WmanError.UserNotFound)
+                    {
+                        
+                    }
+
                     await this.setContext(HttpStatusCode.Gone, "It's GONE2", context);
                     
                     
