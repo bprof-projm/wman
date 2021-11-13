@@ -30,10 +30,9 @@ function App() {
         <ProtectedRoute path="/eventDetails">
           <EventDetails />
         </ProtectedRoute>
-        <ProtectedRoute path="/login">
+        <Route path="/login">
           <NormalLoginForm />
-        </ProtectedRoute>
-
+        </Route>
         <ProtectedRoute path="/" component={Logout} />
       </Switch>
     </Router>
