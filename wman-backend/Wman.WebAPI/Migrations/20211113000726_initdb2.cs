@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Wman.WebAPI.Migrations
 {
-    public partial class initdb : Migration
+    public partial class initdb2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -237,30 +237,6 @@ namespace Wman.WebAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "WmanRoleWmanUser",
-                columns: table => new
-                {
-                    WmanRolesId = table.Column<int>(type: "int", nullable: false),
-                    WmanUsersId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WmanRoleWmanUser", x => new { x.WmanRolesId, x.WmanUsersId });
-                    table.ForeignKey(
-                        name: "FK_WmanRoleWmanUser_AspNetRoles_WmanRolesId",
-                        column: x => x.WmanRolesId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_WmanRoleWmanUser_AspNetUsers_WmanUsersId",
-                        column: x => x.WmanUsersId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "LabelWorkEvent",
                 columns: table => new
                 {
@@ -403,11 +379,6 @@ namespace Wman.WebAPI.Migrations
                 column: "WorkEventsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WmanRoleWmanUser_WmanUsersId",
-                table: "WmanRoleWmanUser",
-                column: "WmanUsersId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_WmanUserWorkEvent_WorkEventsId",
                 table: "WmanUserWorkEvent",
                 column: "WorkEventsId");
@@ -442,19 +413,16 @@ namespace Wman.WebAPI.Migrations
                 name: "PicturesWorkEvent");
 
             migrationBuilder.DropTable(
-                name: "WmanRoleWmanUser");
+                name: "WmanUserWorkEvent");
 
             migrationBuilder.DropTable(
-                name: "WmanUserWorkEvent");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Label");
 
             migrationBuilder.DropTable(
                 name: "Picture");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "WorkEvent");

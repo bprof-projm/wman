@@ -34,6 +34,55 @@ namespace Wman.WebAPI.Migrations
                     b.ToTable("LabelWorkEvent");
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Manager",
+                            NormalizedName = "MANAGER"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Worker",
+                            NormalizedName = "WORKER"
+                        });
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.Property<int>("Id")
@@ -228,55 +277,6 @@ namespace Wman.WebAPI.Migrations
                     b.ToTable("Picture");
                 });
 
-            modelBuilder.Entity("Wman.Data.DB_Models.WmanRole", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Manager",
-                            NormalizedName = "MANAGER"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Worker",
-                            NormalizedName = "WORKER"
-                        });
-                });
-
             modelBuilder.Entity("Wman.Data.DB_Models.WmanUser", b =>
                 {
                     b.Property<int>("Id")
@@ -385,21 +385,6 @@ namespace Wman.WebAPI.Migrations
                     b.ToTable("WorkEvent");
                 });
 
-            modelBuilder.Entity("WmanRoleWmanUser", b =>
-                {
-                    b.Property<int>("WmanRolesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WmanUsersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("WmanRolesId", "WmanUsersId");
-
-                    b.HasIndex("WmanUsersId");
-
-                    b.ToTable("WmanRoleWmanUser");
-                });
-
             modelBuilder.Entity("WmanUserWorkEvent", b =>
                 {
                     b.Property<int>("AssignedUsersId")
@@ -432,7 +417,7 @@ namespace Wman.WebAPI.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("Wman.Data.DB_Models.WmanRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -459,7 +444,7 @@ namespace Wman.WebAPI.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.HasOne("Wman.Data.DB_Models.WmanRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -514,21 +499,6 @@ namespace Wman.WebAPI.Migrations
                         .HasForeignKey("AddressId");
 
                     b.Navigation("Address");
-                });
-
-            modelBuilder.Entity("WmanRoleWmanUser", b =>
-                {
-                    b.HasOne("Wman.Data.DB_Models.WmanRole", null)
-                        .WithMany()
-                        .HasForeignKey("WmanRolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Wman.Data.DB_Models.WmanUser", null)
-                        .WithMany()
-                        .HasForeignKey("WmanUsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("WmanUserWorkEvent", b =>

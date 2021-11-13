@@ -117,10 +117,10 @@ namespace Wman.WebAPI
                          option.Password.RequireUppercase = false;
                          option.Password.RequireLowercase = false;
                      }
-                 ).AddRoles<WmanRole>()
-                 .AddRoleManager<RoleManager<WmanRole>>()
+                 ).AddRoles<IdentityRole<int>>()
+                 .AddRoleManager<RoleManager<IdentityRole<int>>>()
                  .AddSignInManager<SignInManager<WmanUser>>()
-                 .AddRoleValidator<RoleValidator<WmanRole>>()
+                 .AddRoleValidator<RoleValidator<IdentityRole<int>>>()
                  .AddEntityFrameworkStores<wmanDb>()
                  .AddDefaultTokenProviders();
 

@@ -16,8 +16,6 @@ namespace Wman.Data.DB_Models
         public string LastName { get; set; }
         public Pictures ProfilePicture { get; set; }
         [JsonIgnore]
-        public ICollection<WmanRole> WmanRoles { get; set; }
-        [JsonIgnore]
         public virtual ICollection<WorkEvent> WorkEvents { get; set; }
 
         public WmanUser()

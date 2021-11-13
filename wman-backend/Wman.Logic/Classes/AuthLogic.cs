@@ -22,10 +22,10 @@ namespace Wman.Logic.Classes
     public class AuthLogic : IAuthLogic
     {
         UserManager<WmanUser> userManager;
-        RoleManager<WmanRole> roleManager;
+        RoleManager<IdentityRole<int>> roleManager;
         IMapper mapper;
         private IConfiguration Configuration;
-        public AuthLogic(UserManager<WmanUser> userManager, RoleManager<WmanRole> roleManager, IConfiguration configuration, IMapper mapper)
+        public AuthLogic(UserManager<WmanUser> userManager, RoleManager<IdentityRole<int>> roleManager, IConfiguration configuration, IMapper mapper)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
