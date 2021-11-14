@@ -257,8 +257,8 @@ namespace Wman.Logic.Classes
             if (assignedUsers.Count > 0)
             {
                 var eventsAtUpdateTime = await(from x in eventRepo.GetAll()
-                                             where x.EstimatedStartDate >= startDate && x.EstimatedStartDate <= finishDate && x.EstimatedFinishDate >= startDate && x.EstimatedFinishDate <= finishDate
-                                             select x).ToListAsync();
+                                             where x.EstimatedStartDate <= finishDate && x.EstimatedFinishDate >= startDate
+                                               select x).ToListAsync();
                 List<int> UpdateUserIds = new List<int>();
                 foreach (var item in assignedUsers)
                 {
