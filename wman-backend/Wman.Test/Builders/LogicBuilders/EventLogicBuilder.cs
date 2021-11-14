@@ -29,7 +29,7 @@ namespace Wman.Test.Builders.LogicBuilders
             eventRepo.Setup(x => x.GetAll()).Returns(mock.Object);
             eventRepo.Setup(x => x.GetOne(It.IsAny<int>())).ReturnsAsync(eventList[0]);
             eventRepo.Setup(x => x.GetOneWithTracking(It.IsAny<int>())).ReturnsAsync(eventList[0]);
-                
+
             return eventRepo;
         }
 
