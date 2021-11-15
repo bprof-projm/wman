@@ -5,11 +5,12 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
-import { NormalLoginForm } from "./components/login/login.component.jsx"
+import { NormalLoginForm } from "./components/login/login.component.jsx";
 import { Logout } from "./components/logout/logout.component.jsx";
 import Cookies from "js-cookie";
 import MyCalendar from "./components/manager/calendar.component.jsx";
 import { NewCalendar } from "./components/manager/new-calendar.component.jsx";
+import CalendarListComponent from "./components/manager/calendar-list.component.jsx";
 
 const axios = require("axios").default;
 
@@ -36,6 +37,9 @@ function App() {
         </Route>
         <Route path="/teszt2">
           <NewCalendar />
+        </Route>
+        <Route path="/calendarlist">
+          <CalendarListComponent />
         </Route>
         <ProtectedRoute path="/" component={Logout} />
         <ProtectedRoute path="/Calendar" component={MyCalendar} />
