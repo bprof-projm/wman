@@ -264,7 +264,7 @@ namespace Wman.Test.Tests
         }
 
         /*
-         TEST CASES FOR OLDER METHODS
+         TEST CASES FOR DEPRECATED METHODS
 
         [Test]
         public async Task RemoveUserFromRole_RemovesSuccessfully()

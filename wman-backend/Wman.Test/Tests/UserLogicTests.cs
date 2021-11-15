@@ -43,5 +43,22 @@ namespace Wman.Test.Tests
             this.userManager.Verify(x => x.Users, Times.Once);
             this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Exactly(users.Count()));
         }
+
+        [Test]
+        public async Task GetWorkLoads_WithParameters_ReturnsRepoProperly_SuccessfulOperation()
+        {
+            //Arrange
+            UserLogic userLogic = new(this.userManager.Object, this.mapper);
+            List<string> usernames = new() { users[0].UserName, users[1].UserName };
+
+            //Act
+            var call = await userLogic.GetWorkLoads(usernames);
+
+            //Assert
+            Assert.That(call.ElementAt(1).Username == usernames[1]);
+            this.userManager.Verify(x => x.Users, Times.Once);
+            this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Exactly(usernames.Count()));
+        }
+
     }
 }
