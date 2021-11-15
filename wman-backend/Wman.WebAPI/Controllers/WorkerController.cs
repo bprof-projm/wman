@@ -12,7 +12,7 @@ namespace Wman.WebAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    //[Authorize(Roles = "Admin, Manager, Worker")]
+    [Authorize(Roles = "Admin, Manager, Worker")]
     public class WorkerController : ControllerBase
     {
         IAllInWorkEventLogic allInWorkEvent;
