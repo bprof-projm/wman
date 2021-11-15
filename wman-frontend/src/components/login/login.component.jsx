@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import "antd/dist/antd.css";
-import "./login.styles.css";
-import { useHistory } from "react-router-dom";
-import { Form, Input, Button, Layout } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import Cookies from "js-cookie";
-import axios from "axios";
+import React, { useState } from 'react';
+import 'antd/dist/antd.css';
+import './login.styles.css';
+import { useHistory } from 'react-router-dom';
+import { Form, Input, Button, Layout } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
 var inFifteenMinutes = new Date(new Date().getTime() + 60 * 60 * 1000);
 
@@ -16,16 +16,16 @@ export const NormalLoginForm = () => {
 
   const onFinish = (values) => {
     axios
-      .put("/Auth/login", {
+      .put('/Auth/login', {
         loginName: values.username,
         password: values.password,
       })
       .then((response) => {
-        Cookies.set("auth", response.data.token, {
+        Cookies.set('auth', response.data.token, {
           expires: inFifteenMinutes,
         });
         console.log(response.data.token);
-        history.push("/");
+        history.push('/');
       })
       .catch(function (error) {
         setFailedLogin(true);
@@ -34,11 +34,11 @@ export const NormalLoginForm = () => {
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    console.log('Failed:', errorInfo);
   };
 
   return (
-    <div className="login" style={{ height: "100vh" }}>
+    <div className="login-background" style={{ height: '100vh' }}>
       <div className="logo-login">Wman</div>
       <div className="login-container">
         <Form
@@ -55,7 +55,7 @@ export const NormalLoginForm = () => {
             rules={[
               {
                 required: true,
-                message: "Please input your Username!",
+                message: 'Please input your Username!',
               },
             ]}
           >
@@ -70,7 +70,7 @@ export const NormalLoginForm = () => {
             rules={[
               {
                 required: true,
-                message: "Please input your Password!",
+                message: 'Please input your Password!',
               },
             ]}
           >
@@ -90,9 +90,9 @@ export const NormalLoginForm = () => {
               Log in
             </Button>
           </Form.Item>
-          <Form.Item style={{ margin: "0px" }}>
+          <Form.Item style={{ margin: '0px' }}>
             {failedLogin && (
-              <p style={{ color: "red", fontSize: "16px" }}>
+              <p style={{ color: 'red', fontSize: '16px' }}>
                 Wrong username or password
               </p>
             )}

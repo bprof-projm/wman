@@ -1,63 +1,61 @@
-    .login, .ant-layout-footer {
-    background: linear-gradient(-45deg, #fceb02, #e73c7e, #23a6d5, #23d5ab);
-    background-size: 400% 400%;
-    animation: gradient 20s ease infinite;
-    height: 100vh;
-  }
-  
-  @keyframes gradient {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
+.login-background {
+  background: linear-gradient(-45deg, #fceb02, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradient 20s ease infinite;
+  height: 100vh;
+}
 
-  
-  .ant-col-rtl .login-form-forgot {
-    float: left;
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
   }
-  
-  .form-item
-  {
-    border-radius: 5px;
-    box-shadow: none !important; 
+  50% {
+    background-position: 100% 50%;
   }
-  
-  .login-container{
-    height: calc(100% - 88px - 70px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  100% {
+    background-position: 0% 50%;
   }
-  
-  .login-form {
-    width: 400px;
-    border-radius: 15px;
-    padding: 20px 20px 0px 20px;
-    background-color: rgba(255, 255, 255, 0.6);
-  }
-  
-  .login-form-button {
-    width: 100%;
-    border-radius: 5px;
-    border-color: rgba(214, 210, 210, 0.5) !important;
-    box-shadow: none !important;
-    background-color: rgba(0, 0, 0, 0.7);
-  }
-  
-  .login-form-forgot {
-    float: right;    
-  }
-  
-  .logo-login {
-    font-size: 4em;
-    font-weight: bold;
-    color: white;
-    left: 0;
-    padding-left: 10px;
-  }  
+}
+
+.ant-col-rtl .login-form-forgot {
+  float: left;
+}
+
+.form-item {
+  border-radius: 5px;
+  box-shadow: none !important;
+}
+
+.login-container {
+  height: calc(100% - 88px - 70px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form {
+  width: 400px;
+  border-radius: 15px;
+  padding: 20px 20px 0px 20px;
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.login-form-button {
+  width: 100%;
+  border-radius: 5px;
+  border-color: rgba(214, 210, 210, 0.5) !important;
+  box-shadow: none !important;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.login-form-forgot {
+  float: right;
+}
+
+.logo-login {
+  font-size: 4em;
+  font-weight: bold;
+  color: white;
+  left: 0;
+  padding-left: 10px;
+}

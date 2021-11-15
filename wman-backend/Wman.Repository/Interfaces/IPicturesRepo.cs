@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 
-namespace Wman.Repository
+namespace Wman.Repository.Interfaces
 {
-    public interface IDebug : IRepository<WorkEvent, int>
+    public interface IPicturesRepo : IRepository<Pictures,int>
     {
-       
+        Task SaveDatabase();
     }
 }

@@ -19,11 +19,17 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Wman.Data;
 using Wman.Data.DB_Models;
 using Wman.Logic.Classes;
+using Wman.Logic.Helpers;
 using Wman.Logic.Interfaces;
+using Wman.Logic.Services;
+using Wman.Repository.Classes;
+using Wman.Repository.Interfaces;
+using Wman.WebAPI.Helpers;
 //using System.Data.Entity.Database;
 
 namespace Wman.WebAPI
@@ -41,14 +47,32 @@ namespace Wman.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             string signingKey = Configuration.GetValue<string>("SigningKey");
-            ;
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddControllers();
             services.AddTransient<IAuthLogic, AuthLogic>();
-            //TODO: Use transients
+            services.AddTransient<ICalendarEventLogic, CalendarEventLogic>();
+            services.AddTransient<IEventLogic, EventLogic>();
+            services.AddTransient<IUserLogic, UserLogic>();
+            services.AddTransient<DBSeed, DBSeed>();
+            services.AddTransient<ILabelLogic, LabelLogic>();
+            services.AddTransient<IAllInWorkEventLogic, AllInWorkEventLogic>();
+            services.AddTransient<IPhotoLogic, PhotoLogic>();
+            services.AddControllers().AddJsonOptions(options =>
+          options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             //services.AddSingleton(Configuration);
+#if DEBUG
+            //services.AddSingleton<IAuthorizationHandler, AllowAnonymous>(); //Uncommenting this will disable auth, for debugging purposes.
+#endif
 
+
+            services.AddTransient<IWorkEventRepo, WorkEventRepo>();
+            services.AddTransient<IPicturesRepo, PicturesRepo>();
+            services.AddTransient<ILabelRepo, LabelRepo>();
+            services.AddTransient<IAddressRepo, AddressRepo>();
+            services.AddTransient<IPhotoService, PhotoService>();
             services.AddSwaggerGen(c =>
             {
+                //c.DescribeAllEnumsAsStrings();
                 // configure SwaggerDoc and others
                 //c.SwaggerDoc("v1", new OpenApiInfo { Title = "Wman.WebAPI", Version = "v1" });
                 // add JWT Authentication
@@ -74,11 +98,17 @@ namespace Wman.WebAPI
                 });
             });
             string appsettingsConnectionString = Configuration.GetConnectionString("wmandb");
-            ;
-           
-            services.AddDbContext<wmanDb>(options => options.UseSqlServer(appsettingsConnectionString, b => b.MigrationsAssembly("Wman.WebAPI")));
 
-            services.AddIdentity<WmanUser, IdentityRole>(
+            services.AddDbContext<wmanDb>(options => options
+#if DEBUG
+            .EnableSensitiveDataLogging()
+            .EnableDetailedErrors()
+#else
+
+#endif
+            .UseSqlServer(appsettingsConnectionString, b => b.MigrationsAssembly("Wman.WebAPI")));
+
+            services.AddIdentityCore<WmanUser>(
                      option =>
                      {
                          option.Password.RequireDigit = false;
@@ -87,7 +117,11 @@ namespace Wman.WebAPI
                          option.Password.RequireUppercase = false;
                          option.Password.RequireLowercase = false;
                      }
-                 ).AddEntityFrameworkStores<wmanDb>()
+                 ).AddRoles<WmanRole>()
+                 .AddRoleManager<RoleManager<WmanRole>>()
+                 .AddSignInManager<SignInManager<WmanUser>>()
+                 .AddRoleValidator<RoleValidator<WmanRole>>()
+                 .AddEntityFrameworkStores<wmanDb>()
                  .AddDefaultTokenProviders();
 
 
@@ -126,6 +160,7 @@ namespace Wman.WebAPI
                                   });
             });
 
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
 
         }
@@ -147,7 +182,7 @@ namespace Wman.WebAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseCors();
 
