@@ -25,15 +25,8 @@ namespace Wman.WebAPI.Controllers
         [HttpGet("/GetWorkersAvailablityAtSpecTime")]
         public async Task<ActionResult<List<WorkerDTO>>> GetWorkersAtSpecTime(DateTime fromDate, DateTime toDate)
         {
-            try
-            {
-                var result = await allInWorkEvent.Available(fromDate, toDate);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
+            var result = await allInWorkEvent.Available(fromDate, toDate);
+            return Ok(result);
         }
     }
 }

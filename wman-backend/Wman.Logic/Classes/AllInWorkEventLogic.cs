@@ -93,7 +93,7 @@ namespace Wman.Logic.Classes
             }
             else
             {
-                throw new ArgumentException("Times not set appropriately");
+                throw new InvalidOperationException(WmanError.EventDateInvalid);
             }
             
         }

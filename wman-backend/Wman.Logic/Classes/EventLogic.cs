@@ -149,7 +149,7 @@ namespace Wman.Logic.Classes
             var workevent =await eventRepo.GetOneWithTracking(newWorkEvent.Id);
             if (workevent == null)
             {
-                throw new ArgumentException("Event Not Found");
+                throw new NotFoundException(WmanError.EventNotFound);
             }
             workevent.JobDescription = newWorkEvent.JobDescription;
             workevent.Address = mapper.Map<AddressHUN>(newWorkEvent.Address);
@@ -162,13 +162,13 @@ namespace Wman.Logic.Classes
                 }
                 else
                 {
-                    throw new ArgumentException("User Is already working at this time");
+                    throw new InvalidOperationException(WmanError.UserIsBusy);
                 }
                 
             }
             else
             {
-                throw new ArgumentException("Events are not at the same day or start is after the finishing date");
+                throw new InvalidOperationException(WmanError.EventDateInvalid);
             }
             workevent.Status = newWorkEvent.Status;
 
