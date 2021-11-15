@@ -40,16 +40,8 @@ namespace Wman.WebAPI.Controllers
         [Authorize(Roles = "Manager")]
         public async Task<ActionResult> CreateEvent([FromBody] CreateEventDTO workEvent)
         {
-            try
-            {
                 await eventLogic.CreateEvent(workEvent);
                 return Ok();
-            }
-            catch (Exception ex)
-            {
-
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
         }
 
         /// <summary>
@@ -61,30 +53,16 @@ namespace Wman.WebAPI.Controllers
         [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult> DeleteEvent(int Id)
         {
-            try
-            {
                 await eventLogic.DeleteEvent(Id);
                 return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
         }
 
         [HttpPut("/DnDEvent/{id}")]
         [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult> DnDEvent(int id,[FromBody] DnDEventDTO workEvent)
         {
-            try
-            {
                 await eventLogic.DnDEvent(id, workEvent);
                 return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
         }
         /// <summary>
         /// Assign a user to a specific event
@@ -97,19 +75,8 @@ namespace Wman.WebAPI.Controllers
         [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult> AssignUser(int eventid, string userName)
         {
-            try
-            {
                 await eventLogic.AssignUser(eventid, userName);
                 return Ok();
-            }
-            catch (Exception ex)
-            {
-                if (ex is ArgumentException)
-                {
-                    return StatusCode(400, $"Error : {ex}");
-                }
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
 
         }
 
@@ -124,23 +91,8 @@ namespace Wman.WebAPI.Controllers
         [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult> MassAssignUsers(int eventid, [FromBody] ICollection<string> usernames)
         {
-            try
-            {
                 await eventLogic.MassAssignUser(eventid, usernames);
                 return Ok();
-            }
-            catch (Exception ex)
-            {
-                if (ex is ArgumentException)
-                {
-                    return StatusCode(400, $"Error : {ex}");
-                }
-                else if (ex is InvalidOperationException)
-                {
-                    return StatusCode(405, $"Error: {ex}");
-                }
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
         }
     }
 }

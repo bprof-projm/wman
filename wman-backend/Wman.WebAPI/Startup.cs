@@ -48,7 +48,7 @@ namespace Wman.WebAPI
         {
             string signingKey = Configuration.GetValue<string>("SigningKey");
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
-            services.AddControllers();
+            services.AddControllers(x => x.Filters.Add(new ApiExceptionFilter()));
             services.AddTransient<IAuthLogic, AuthLogic>();
             services.AddTransient<ICalendarEventLogic, CalendarEventLogic>();
             services.AddTransient<IEventLogic, EventLogic>();
@@ -117,10 +117,10 @@ namespace Wman.WebAPI
                          option.Password.RequireUppercase = false;
                          option.Password.RequireLowercase = false;
                      }
-                 ).AddRoles<WmanRole>()
-                 .AddRoleManager<RoleManager<WmanRole>>()
+                 ).AddRoles<IdentityRole<int>>()
+                 .AddRoleManager<RoleManager<IdentityRole<int>>>()
                  .AddSignInManager<SignInManager<WmanUser>>()
-                 .AddRoleValidator<RoleValidator<WmanRole>>()
+                 .AddRoleValidator<RoleValidator<IdentityRole<int>>>()
                  .AddEntityFrameworkStores<wmanDb>()
                  .AddDefaultTokenProviders();
 
@@ -173,6 +173,7 @@ namespace Wman.WebAPI
                 
             }
             app.UseSwagger();
+            //app.UseStatusCodePages();
             app.UseSwaggerUI(c =>
             {
 

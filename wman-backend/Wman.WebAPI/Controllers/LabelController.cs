@@ -24,69 +24,33 @@ namespace Wman.WebAPI.Controllers
         [HttpPost("/CreateLabel")]
         public async Task<ActionResult> CreateLabel([FromBody] CreateLabelDTO label)
         {
-            try
-            {
                 await labelLogic.CreateLabel(label);
                 return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
         }
 
         [HttpGet("/GetAllLabel")]
-        public ActionResult<ListLabelsDTO> GetAllLabel()
+        public async Task<ActionResult<ListLabelsDTO>> GetAllLabel()
         {
-            try
-            {
-                
-                return Ok(labelLogic.GetAllLabels());
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
+                return Ok(await labelLogic.GetAllLabels());
         }
 
         [HttpPut("/UpdateLabel/{Id}")]
         public async Task<ActionResult> UpdateLabel(int Id, [FromBody] CreateLabelDTO newLabel)
         {
-            try
-            {
                 await labelLogic.UpdateLabel(Id, newLabel);
                 return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
         }
         [HttpPost("/AssignLabelToWorkEvent")]
         public async Task<ActionResult> AssignLabelToWorkEvent(int eventId, int labelId)
         {
-            try
-            {
                 await labelLogic.AssignLabelToWorkEvent(eventId, labelId);
                 return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
         }
         [HttpDelete("/DeleteLabel/{Id}")]
         public async Task<ActionResult> DeleteLabel(int Id)
         {
-            try
-            {
                 await labelLogic.DeleteLabel(Id);
                 return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
         }
     }
 }

@@ -15,8 +15,6 @@ namespace Wman.Data.DB_Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public Pictures ProfilePicture { get; set; }
-        [NotMapped]
-        public ICollection<WmanUserRole> UserRoles { get; set; }
         [JsonIgnore]
         public virtual ICollection<WorkEvent> WorkEvents { get; set; }
 
