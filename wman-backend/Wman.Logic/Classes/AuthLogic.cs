@@ -50,6 +50,7 @@ namespace Wman.Logic.Classes
             {
                 throw new NotFoundException(WmanError.UserNotFound);
             }
+            throw new ArithmeticException();
             return mapper.Map<UserDTO>(output);
         }
 

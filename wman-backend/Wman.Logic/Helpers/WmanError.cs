@@ -20,7 +20,7 @@ namespace Wman.Logic.Helpers
         public static string LabelExists = "This Label already exists!";
         public static string NoLabels = "There are no labels added!";
         public static string LabelNotFound = "Label not found!";
-        public static string WrongColor = "Color is wrong?"; //TODO
+        public static string WrongColor = "The color should be in hexadecimal format";
         public static string PhotoNotFound = "Photo not found";
         
     }

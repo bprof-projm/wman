@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -12,8 +13,15 @@ using Wman.Logic.Helpers;
 
 namespace Wman.WebAPI.Helpers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ApiExceptionFilter : ExceptionFilterAttribute
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
         public override void OnException(ExceptionContext context)
         {
             ;
@@ -35,7 +43,10 @@ namespace Wman.WebAPI.Helpers
                      this.setContext(HttpStatusCode.Conflict, context).Wait();
                     break;
                 default:
-                    // this.setContext(HttpStatusCode.InternalServerError, context);
+#if DEBUG
+                    Debug.Write(context.Exception);
+#endif
+                    this.setContext(HttpStatusCode.InternalServerError, context).Wait();
                     break;
             }
              base.OnException(context);

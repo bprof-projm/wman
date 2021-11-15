@@ -208,5 +208,16 @@
             <param name="context"></param>
             <returns></returns>
         </member>
+        <member name="T:Wman.WebAPI.Helpers.ApiExceptionFilter">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Wman.WebAPI.Helpers.ApiExceptionFilter.OnException(Microsoft.AspNetCore.Mvc.Filters.ExceptionContext)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
+        </member>
     </members>
 </doc>
