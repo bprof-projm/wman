@@ -33,7 +33,7 @@ namespace Wman.Test.Tests
         public async Task GetWorkLoads_ReturnsRepoProperly_SuccessfulOperation()
         {
             //Arrange
-            UserLogic userLogic = new (this.userManager.Object, this.mapper);
+            UserLogic userLogic = new(this.userManager.Object, this.mapper);
 
             //Act
             var call = await userLogic.GetWorkLoads();
@@ -60,5 +60,19 @@ namespace Wman.Test.Tests
             this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Exactly(usernames.Count()));
         }
 
+        [Test]
+        public async Task WorkEventsOfUser_ReturnsWorkEventProperly()
+        {
+            //Arrange
+            UserLogic userLogic = new(this.userManager.Object, this.mapper);
+            string usernameToTest = users[0].UserName;
+
+            //Act
+            var call = await userLogic.WorkEventsOfUser(usernameToTest);
+
+            //Assert
+            Assert.That(call.ElementAt(0).Id == users[0].WorkEvents.ElementAt(0).Id);
+            this.userManager.Verify(x => x.Users, Times.Once);
+        }
     }
 }
