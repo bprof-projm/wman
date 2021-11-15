@@ -85,14 +85,7 @@ namespace Wman.Logic.Classes
                     }
                 }
 
-                if (workersDTO.Count > 0)
-                {
-                    return workersDTO;
-                }
-                else
-                {
-                    throw new ArgumentException("No workers available at this time");
-                }
+                return workersDTO;
             }
             else
             {
