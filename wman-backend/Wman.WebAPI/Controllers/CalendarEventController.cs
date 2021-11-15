@@ -37,16 +37,8 @@ namespace Wman.WebAPI.Controllers
         [HttpGet("GetCurrentDayEvents")]
         public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetCurrentDayEvents()
         {
-            try
-            {
                 var events =await calendarEvent.GetCurrentDayEvents();
                 return Ok(events);
-            }
-            catch (Exception ex)
-            {
-
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
         }
         /// <summary>
         /// gets events from this week
@@ -55,16 +47,8 @@ namespace Wman.WebAPI.Controllers
         [HttpGet("GetCurrentWeekEvents")]
         public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetCurrentWeekEvents()
         {
-            try
-            {
                 var events =await calendarEvent.GetCurrentWeekEvents();
                 return Ok(events);
-            }
-            catch (Exception ex)
-            {
-
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
         }
 
         /// <summary>
@@ -75,16 +59,8 @@ namespace Wman.WebAPI.Controllers
         [HttpGet("GetDayEvents/{day}")]
         public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetDayEvents(int day)
         {
-            try
-            {
                 var events =await calendarEvent.GetDayEvents(day);
                 return Ok(events);
-            }
-            catch (Exception ex)
-            {
-
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
         }
         /// <summary>
         /// gets custom week events
@@ -92,18 +68,10 @@ namespace Wman.WebAPI.Controllers
         /// <param name="week"></param>
         /// <returns>CalendarWorkEventDTO<returns>
         [HttpGet("GetWeekEvents/{week}")]
-        public ActionResult<IEnumerable<WorkEventForWorkCardDTO>> GetWeekEvents(int week)
+        public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetWeekEvents(int week)
         {
-            try
-            {
-                var events = calendarEvent.GetWeekEvents(week);
+                var events = await calendarEvent.GetWeekEvents(week);
                 return Ok(events);
-            }
-            catch (Exception ex)
-            {
-
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
         }
         /// <summary>
         /// gets custom day events
@@ -113,16 +81,8 @@ namespace Wman.WebAPI.Controllers
         [HttpGet("GetDayEvents")]
         public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetDayEvents(DateTime time)
         {
-            try
-            {
                 var events = await calendarEvent.GetDayEvents(time);
                 return Ok(events);
-            }
-            catch (Exception ex)
-            {
-
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
         }
         /// <summary>
         /// gets custom week events
@@ -133,30 +93,15 @@ namespace Wman.WebAPI.Controllers
         [HttpGet("GetWeekEvents")]
         public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetWeekEvents(DateTime startEventDate, DateTime finishEventDate)
         {
-            try
-            {
                 var events = await calendarEvent.GetWeekEvents(startEventDate, finishEventDate);
                 return Ok(events);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
         }
 
         [HttpGet("WorkCard/{Id}")]
         public async Task<ActionResult<WorkEventForWorkCardDTO>> ForWorkCard(int Id)
         {
-            try
-            {
                 var workCard = await workCardEvent.ForWorkCard(Id);
                 return Ok(workCard);
-            }
-            catch (Exception ex)
-            {
-
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
         }
     }
 }

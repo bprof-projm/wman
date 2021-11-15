@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
+using Wman.Logic.Helpers;
 using Wman.Logic.Interfaces;
 using Wman.Repository.Interfaces;
 
@@ -31,7 +32,10 @@ namespace Wman.Logic.Classes
         public async Task<WorkEventForWorkCardDTO> ForWorkCard(int eventId)
         {
             var selectedWorkEvent =await workEvent.GetOne(eventId);
-
+            if (selectedWorkEvent == null)
+            {
+                throw new NotFoundException(WmanError.EventNotFound);
+            }
             var result = mapper.Map<WorkEventForWorkCardDTO>(selectedWorkEvent);
             return result;
         }

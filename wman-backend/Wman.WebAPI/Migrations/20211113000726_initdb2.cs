@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Wman.WebAPI.Migrations
 {
-    public partial class plsfix : Migration
+    public partial class initdb2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -90,10 +90,9 @@ namespace Wman.WebAPI.Migrations
                     JobDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EstimatedStartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EstimatedFinishDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AddressId = table.Column<int>(type: "int", nullable: false),
+                    AddressId = table.Column<int>(type: "int", nullable: true),
                     WorkStartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     WorkFinishDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    WorkTime = table.Column<TimeSpan>(type: "time", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -104,7 +103,7 @@ namespace Wman.WebAPI.Migrations
                         column: x => x.AddressId,
                         principalTable: "Address",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -312,7 +311,17 @@ namespace Wman.WebAPI.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 1, null, "Debug", "DEBUG" });
+                values: new object[] { 1, null, "Admin", "ADMIN" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { 2, null, "Manager", "MANAGER" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { 3, null, "Worker", "WORKER" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

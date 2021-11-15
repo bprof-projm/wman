@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
+using Wman.Logic.Helpers;
 using Wman.Logic.Interfaces;
 using Wman.Logic.Services;
 using Wman.Repository.Interfaces;
@@ -34,6 +35,10 @@ namespace Wman.Logic.Classes
             var selectedUser = await (from x in userManager.Users
                                      where x.UserName == userName
                                      select x).Include(x => x.ProfilePicture).FirstOrDefaultAsync();
+            if (selectedUser == null)
+            {
+                throw new NotFoundException(WmanError.UserNotFound);
+            }
 
             var result = await _photoService.AddProfilePhotoAsync(file);
             if (result.Error != null)
@@ -60,13 +65,17 @@ namespace Wman.Logic.Classes
             var selectedUser = await (from x in userManager.Users
                                       where x.UserName == userName
                                       select x).Include(x => x.ProfilePicture).FirstOrDefaultAsync();
+            if (selectedUser == null)
+            {
+                throw new NotFoundException(WmanError.UserNotFound);
+            }
 
             var selectedPhoto = await (from x in picturesRepo.GetAll()
                                        where x.WManUserID == selectedUser.Id
                                        select x).FirstOrDefaultAsync();
             if (selectedPhoto == null)
             {
-                throw new ArgumentException("Photo Not found");
+                throw new NotFoundException(WmanError.PhotoNotFound);
             }
 
 
@@ -82,13 +91,17 @@ namespace Wman.Logic.Classes
             var selectedUser = await (from x in userManager.Users
                                       where x.UserName == userName
                                       select x).Include(x => x.ProfilePicture).FirstOrDefaultAsync();
+            if (selectedUser == null)
+            {
+                throw new NotFoundException(WmanError.UserNotFound);
+            }
 
             var selectedPhoto = await (from x in picturesRepo.GetAll()
                                        where x.WManUserID == selectedUser.Id
                                        select x).FirstOrDefaultAsync();
             if (selectedPhoto == null)
             {
-                throw new ArgumentException("Photo Not found");
+                throw new NotFoundException(WmanError.PhotoNotFound);
             }
 
             // Remove Photo from the cloud

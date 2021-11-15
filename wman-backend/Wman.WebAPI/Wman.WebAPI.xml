@@ -18,10 +18,9 @@
         </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.Login(Wman.Logic.DTO_Models.LoginDTO)">
             <summary>
-            Login/generate jwt token
+            Login
             </summary>
             <param name="model">Login details</param>
-            <returns>Hopefully a jwt token</returns>
         </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.CreateWorker(Wman.Logic.DTO_Models.RegisterDTO)">
             <summary>
@@ -208,6 +207,17 @@
             </summary>
             <param name="context"></param>
             <returns></returns>
+        </member>
+        <member name="T:Wman.WebAPI.Helpers.ApiExceptionFilter">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Wman.WebAPI.Helpers.ApiExceptionFilter.OnException(Microsoft.AspNetCore.Mvc.Filters.ExceptionContext)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
         </member>
     </members>
 </doc>

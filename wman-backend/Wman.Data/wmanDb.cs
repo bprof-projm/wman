@@ -5,8 +5,8 @@ using Wman.Data.DB_Models;
 
 namespace Wman.Data
 {
-    public class wmanDb : IdentityDbContext<WmanUser, WmanRole, int,
-   IdentityUserClaim<int>, WmanUserRole, IdentityUserLogin<int>,
+    public class wmanDb : IdentityDbContext<WmanUser, IdentityRole<int>, int,
+   IdentityUserClaim<int>, IdentityUserRole<int>, IdentityUserLogin<int>,
    IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         public wmanDb()
@@ -30,7 +30,7 @@ namespace Wman.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<WmanRole>().HasData(
+            modelBuilder.Entity<IdentityRole<int>>().HasData(
                 new { Id = 1, Name = "Admin", NormalizedName = "ADMIN" },
                 new { Id = 2, Name = "Manager", NormalizedName = "MANAGER" },
                 new { Id = 3, Name = "Worker", NormalizedName = "WORKER" }

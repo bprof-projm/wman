@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
+using Wman.Logic.Helpers;
 using Wman.Logic.Interfaces;
 
 namespace Wman.Logic.Classes
@@ -34,11 +35,11 @@ namespace Wman.Logic.Classes
                 selectedUser = allUsers.Where(x => x.UserName == username).SingleOrDefault();
                 if (selectedUser == null)
                 {
-                    throw new ArgumentException(String.Format("User: {0} doesn't exists!", username));
+                    throw new NotFoundException(WmanError.UserNotFound);
                 }
                 if (await userManager.IsInRoleAsync(selectedUser, "Worker") == false)
                 {
-                    throw new InvalidOperationException(String.Format("User: {0} is not a worker! ", username));
+                    throw new NotMemberOfRoleException(WmanError.NotAWorker);
                 }
                 if (selectedUser.ProfilePicture != null)
                 {
@@ -103,13 +104,9 @@ namespace Wman.Logic.Classes
                 .SingleOrDefaultAsync();
             if (selectedUser == null)
             {
-                throw new ArgumentException("User not found!");
+                throw new NotFoundException(WmanError.UserNotFound);
             }
             var output = selectedUser.WorkEvents;
-            if (output.Count() == 0)
-            {
-                throw new InvalidOperationException("User has no assigned workEvents! ");
-            }
             var testResult = mapper.Map<IEnumerable<AssignedEventDTO>>(output);
 
             return testResult;

@@ -11,9 +11,9 @@ namespace Wman.Logic.Interfaces
 {
     public interface IAuthLogic
     {
-        Task<WmanUser> GetOneUser(string username);
+        Task<UserDTO> GetOneUser(string username);
 
-        Task<IQueryable<WmanUser>> GetAllUsers();
+        Task<IEnumerable<UserDTO>> GetAllUsers();
 
         Task<IdentityResult> CreateWorker(RegisterDTO login);
 

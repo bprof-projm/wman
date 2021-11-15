@@ -187,7 +187,7 @@ namespace Wman.Logic.Helpers
             {
                 Name = "Test pic",
                 Url = "https://upload.wikimedia.org/wikipedia/commons/c/c5/Number-One.JPG",
-                WmanUser = userManager.Users.ToList()[0],
+                WmanUser = userManager.Users.Where(x => x.UserName == "user1").SingleOrDefault(),
                 PicturesType = PicturesType.ProfilePic
             }).Wait();
 
@@ -195,7 +195,7 @@ namespace Wman.Logic.Helpers
             {
                 Name = "Test pic2",
                 Url = "https://upload.wikimedia.org/wikipedia/commons/d/d5/Number-two.JPG",
-                WmanUser = userManager.Users.ToList()[1],
+                WmanUser = userManager.Users.Where(x => x.UserName == "user2").SingleOrDefault(),
                 PicturesType = PicturesType.ProfilePic
             }).Wait();
         }
