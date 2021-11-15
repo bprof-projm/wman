@@ -65,7 +65,7 @@ namespace Wman.Test.Tests
             //Assert
             Assert.ThrowsAsync<ArgumentException>(testDelegate);
 
-            this.eventRepo.Verify(x => x.GetOneWithTracking(It.IsAny<int>()), Times.Exactly(0));
+            this.eventRepo.Verify(x => x.GetOneWithTracking(It.IsAny<int>()), Times.Never);
         }
 
         [Test]
@@ -89,6 +89,7 @@ namespace Wman.Test.Tests
 
             this.eventRepo.Verify(x => x.GetOneWithTracking(It.IsAny<int>()), Times.Exactly(2));
             this.userManager.Verify(x => x.Users, Times.Once);
+            this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
             this.eventRepo.Verify(x => x.GetAll(), Times.Once);
             this.eventRepo.Verify(x => x.Update(It.IsAny<int>(), It.IsAny<WorkEvent>()), Times.Once);
         }
@@ -108,6 +109,7 @@ namespace Wman.Test.Tests
 
             this.eventRepo.Verify(x => x.GetOneWithTracking(It.IsAny<int>()), Times.Once);
             this.userManager.Verify(x => x.Users, Times.Exactly(userNames.Count));
+            this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Exactly(userNames.Count));
             this.eventRepo.Verify(x => x.Update(It.IsAny<int>(), It.IsAny<WorkEvent>()), Times.Exactly(userNames.Count));
         }
 
@@ -128,6 +130,7 @@ namespace Wman.Test.Tests
             Assert.ThrowsAsync<ArgumentException>(testDelegate);
 
             this.eventRepo.Verify(x => x.Update(It.IsAny<int>(), It.IsAny<WorkEvent>()), Times.Never);
+            this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Never);
         }
 
         [Test]
@@ -144,6 +147,7 @@ namespace Wman.Test.Tests
 
             this.eventRepo.Verify(x => x.GetOneWithTracking(It.IsAny<int>()), Times.Once);
             this.userManager.Verify(x => x.Users, Times.Once);
+            this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
             this.eventRepo.Verify(x => x.Update(It.IsAny<int>(), It.IsAny<WorkEvent>()), Times.Once);
         }
 
@@ -162,6 +166,7 @@ namespace Wman.Test.Tests
 
             this.eventRepo.Verify(x => x.GetOneWithTracking(It.IsAny<int>()), Times.Once);
             this.userManager.Verify(x => x.Users, Times.Once);
+            this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
             this.eventRepo.Verify(x => x.Update(It.IsAny<int>(), It.IsAny<WorkEvent>()), Times.Once);
             this.eventRepo.Verify(x => x.GetOne(It.IsAny<int>()), Times.Once);
         }
