@@ -47,7 +47,7 @@ namespace Wman.Logic.Classes
                 .Include(z => z.ProfilePicture);
 
                 var notavailableWorkers = await (from x in workEvent.GetAll()
-                                              where fromDate <= x.EstimatedStartDate && toDate >= x.EstimatedFinishDate
+                                              where fromDate <= x.EstimatedFinishDate && toDate >= x.EstimatedStartDate
                                               select x.AssignedUsers).ToListAsync();
 
                 List<WorkerDTO> workersDTO = new List<WorkerDTO>();
