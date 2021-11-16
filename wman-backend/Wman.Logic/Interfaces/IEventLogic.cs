@@ -12,7 +12,7 @@ namespace Wman.Logic.Interfaces
     {
         Task CreateEvent(CreateEventDTO workEvent);
         Task DeleteEvent(int Id);
-        Task UpdateEvent(int Id, WorkEvent newWorkEvent);
+        Task UpdateEvent(UpdateEventDTO newWorkEvent);
         Task<WorkEvent> GetEvent(int id);
         Task<IQueryable<WorkEvent>> GetAllEvents();
         Task DnDEvent(int Id, DnDEventDTO newWorkEvent);

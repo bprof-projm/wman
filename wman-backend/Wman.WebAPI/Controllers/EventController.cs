@@ -94,5 +94,15 @@ namespace Wman.WebAPI.Controllers
                 await eventLogic.MassAssignUser(eventid, usernames);
                 return Ok();
         }
+
+        [HttpPut("/UpdateEvent")]
+        [Authorize(Roles = "Admin, Manager")]
+        public async Task<ActionResult<UpdateEventDTO>> UpdateEvent([FromBody] UpdateEventDTO updateEvent) 
+        {
+                await eventLogic.UpdateEvent(updateEvent);
+                return Ok();
+        }
+
+
     }
 }

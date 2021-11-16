@@ -10,5 +10,6 @@ namespace Wman.Logic.Interfaces
     public interface IAllInWorkEventLogic
     {
        Task<WorkEventForWorkCardDTO> ForWorkCard(int eventId);
+       Task<List<WorkerDTO>> Available(DateTime fromDate, DateTime toDate);
     }
 }
