@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Cascader } from 'antd';
 import jwt_decode from 'jwt-decode';
 import axios from 'axios';
-import DocumentToPrint from '../Document-to-print/document-to-print.component';
+import DocumentToPrint from '../To-print/document-to-print.component';
 import Cookies from "js-cookie";
 import './print-events.styles.css';
 
@@ -29,11 +29,8 @@ const PrintEvents = () => {
 
     return (
         <div className='print-events'>
-            <div className='print-events-prewiew'>
-                <DocumentToPrint username={username} eventlist={events} />
-            </div>
             <div className='print-events-instructions'>
-                <br />
+                <br />                
                 <br />
                 <select onChange={handleChange} name="subject" id="subject">
                     <option value="" selected disabled hidden>Choose the user!</option>
@@ -41,6 +38,9 @@ const PrintEvents = () => {
                         <option key={user.userID} value={user.username}>{user.username}</option>
                     )}
                 </select>
+            </div>
+            <div className='print-events-prewiew'>
+                <DocumentToPrint username={username} events={events}/>
             </div>
         </div>
     )

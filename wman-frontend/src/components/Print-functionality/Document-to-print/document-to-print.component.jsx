@@ -14,31 +14,20 @@ const DocumentToPrint = (props) => (
                 </div>
                 <div className='print-title'><h1>Events To Do:</h1></div>
                 <div className='print-all-events'>
-                    {console.log(props)}
-                    Event1:<br/>
-                    event date<br/>
-                    event description<br/>
-                    <br/>
-                    Event2:<br/>
-                    event date<br/>
-                    event description<br/>
-                    <br/>
-                    Event3:<br/>
-                    event date<br/>
-                    event description 
 
-                {props.eventlist.map(event =>
+                {props.eventlist?.map(event =>
                     <div className='one-event'>
-                        <p>Event Details</p>
-                        <p>Desription:{event.jobDescription}</p>
-                        <p>Start:{event.estimatedStartDate}</p>
-                        <p>Finish:{event.estimatedFinishDate}</p>
-                        <p>Address:</p>
-                        <p>City:{event.address.city}</p>
-                        <p>Street:{event.address.street}</p>
-                        <p>ZipCode:{event.address.zipCode}</p>
-                        <p>Building number:{event.address.buildingNumber}</p>
-                        <p>Floor door:{event.address.floorDoor}</p>                        
+                        <br/>
+                        <h2>Event Details:</h2>
+                        <b>Desription:</b>{event.jobDescription}      Notes:<br/>
+                        <b>Start:</b>{event.estimatedStartDate}<br/>
+                        <b>Finish:</b>{event.estimatedFinishDate}
+                        <h3>Address:</h3>
+                        <b>City:</b>{event.address.city}<br/>
+                        <b>Street:</b>{event.address.street}<br/>
+                        <b>ZipCode:</b>{event.address.zipCode}<br/>
+                        <b>Building number:</b>{event.address.buildingNumber}<br/>
+                        <b>Floor door:</b>{event.address.floorDoor}<br/>                        
                     </div>)}
                 </div>
 
