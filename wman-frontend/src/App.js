@@ -9,8 +9,7 @@ import { NormalLoginForm } from "./components/Login/login.component.jsx"
 import { Logout } from "./components/Logout/logout.component.jsx";
 import Cookies from "js-cookie";
 import { TempPage } from "./components/DemoPage/temp.component.jsx";
-import WorkerPage from "./components/Worker-page/base-worker-page/worker-page.component.jsx";
-import DocumentToPrint from "./components/Worker-page/To-print/document-to-print.component.jsx";
+import PrintEvents from "./components/Print-functionality/Print-events/print-events.component.jsx";
 
 const axios = require("axios").default;
 
@@ -30,10 +29,8 @@ function App() {
     <Router>
       <Switch>
         <Route path="/login" component={NormalLoginForm}/>
-        <Route path="/print" component={DocumentToPrint}/>        
-        <Route path="/tempPage" component ={TempPage} />        
-        <Route path="/worker" component={WorkerPage} />          
-        <ProtectedRoute path="/" component={Logout} />      
+        <ProtectedRoute path="/print" component={PrintEvents}/>       
+        <ProtectedRoute path="/" component={TempPage} />      
       </Switch>
     </Router>
   );
