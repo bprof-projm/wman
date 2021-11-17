@@ -7,8 +7,9 @@ const PrintButton = () =>
     const history = useHistory();
 
     function handleClick() {
-        history.push('/print');
+        window.open('/print');
     }
+    
     return(
         <div>
         <Button shape='circle' icon={<PrinterOutlined />} text="Print" onClick ={handleClick}/>
