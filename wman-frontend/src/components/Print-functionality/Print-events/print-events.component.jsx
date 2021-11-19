@@ -9,7 +9,7 @@ import './print-events.styles.css';
 const PrintEvents = () => {
     const [users, setUsers] = useState([]);
 
-    const [calendarEvents, setCalendarEvents] = useState([]);    
+    const [calendarEvents, setCalendarEvents] = useState([]);
     const [searched, setSearched] = useState("");
 
     useEffect(() => {
@@ -24,12 +24,12 @@ const PrintEvents = () => {
             .catch(error => console.log(error))
     }, [axios]);
 
-   const handleChange = (e) => {
-        setSearched(e.target.value);       
+    const handleChange = (e) => {
+        setSearched(e.target.value);
     }
-    
-    const filteredEvents = calendarEvents.filter(        
-        event => event.assignedUsers[0].username.includes(searched)
+
+    const filteredEvents = calendarEvents.filter(
+        event => event.assignedUsers.map(assigned => assigned.username).includes(searched)
     );
     return (
         <div className='print-events'>
@@ -39,9 +39,10 @@ const PrintEvents = () => {
             <div className='print-events-instructions'>
                 <br />
                 <br />
-                <label>Choose the user!</label><br/>
+                <label>Choose the user!</label><br />
                 <select onChange={handleChange} name="subject" id="subject">
-                    <option value="" selected disabled hidden>Every worker</option>
+                    <option value="" selected disabled hidden>choose here</option>
+                    {console.log(filteredEvents)}
                     {users.map(user =>
                         <option key={user.userID} value={user.username}>{user.username}</option>
                     )}
