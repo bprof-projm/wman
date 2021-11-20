@@ -5,3 +5,6 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
+.preview-error h3{
+    color: red;
+}
