@@ -15,13 +15,13 @@ const PrintEvents = () => {
     useEffect(() => {
         axios.get(`/User/workload`)
             .then(response => setUsers(response.data))
-            .catch(error => console.log(error));
+            .catch(error => alert(error));
     }, [axios]);
 
     useEffect(() => {
         axios.get(`/CalendarEvent/GetCurrentDayEvents`)
             .then(response => setCalendarEvents(response.data))
-            .catch(error => console.log(error))
+            .catch(error => alert(error))
     }, [axios]);
 
     const handleChange = (e) => {
