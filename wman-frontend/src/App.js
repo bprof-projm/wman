@@ -9,6 +9,7 @@ import { NormalLoginForm } from "./components/Login/login.component.jsx"
 import { Logout } from "./components/Logout/logout.component.jsx";
 import Cookies from "js-cookie";
 import { TempPage } from "./components/DemoPage/temp.component.jsx";
+import PrintEvents from "./components/Print-functionality/Print-events/print-events.component.jsx";
 
 const axios = require("axios").default;
 
@@ -27,11 +28,9 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/login">
-          <NormalLoginForm />
-        </Route>
-        <Route path="/tempPage" component ={TempPage} />        
-          <ProtectedRoute path="/" component={Logout} />
+        <Route path="/login" component={NormalLoginForm}/>
+        <ProtectedRoute path="/print" component={PrintEvents}/>       
+        <ProtectedRoute path="/" component={TempPage} />      
       </Switch>
     </Router>
   );
