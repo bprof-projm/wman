@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import ColumnComponent from "./column.component.jsx";
 import { DragDropContext } from "react-beautiful-dnd";
@@ -10,7 +10,10 @@ const Container = styled.div`
 `;
 
 class CalendarListComponent extends Component {
-  state = initialData;
+  constructor(props) {
+    super(props);
+    this.state = { initialData: initialData, currentWeek: [] };
+  }
 
   onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -78,6 +81,19 @@ class CalendarListComponent extends Component {
 
     this.setState(newState);
   };
+
+  generateListOfCurrentWeek() {
+    let curr = new Date();
+    let week = [];
+
+    for (let i = 1; i <= 7; i++) {
+      let first = curr.getDate() - curr.getDay() + i;
+      let day = new Date(curr.setDate(first)).toISOString().slice(0, 10);
+      week.push(day);
+    }
+
+    this.setState({ currentWeek: week });
+  }
 
   render() {
     return (
