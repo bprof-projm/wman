@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, setState } from "react";
 import { Form, Input, Button, Select, DatePicker } from "antd";
 import "antd/dist/antd.css";
 import "./eventDetails.css";
@@ -77,16 +77,6 @@ const EventDetails = ({ workerEventId, workerEvent }) => {
     status: "awaiting",
   };
 
-  const onHandleChangeNumeric = (e) => {
-    let valu = e.target.value;
-
-    if (!Number(valu)) {
-      return;
-    }
-
-    this.setState({ [e.target.name]: valu });
-  };
-
   if (workerEvent) {
     console.log(workerEvent.jobDescription);
     return (
@@ -123,6 +113,14 @@ const EventDetails = ({ workerEventId, workerEvent }) => {
               name="rangePicker"
               rules={[
                 { required: true, message: "Please select a time range" },
+              ]}
+              initialValue={[
+                moment(workerEvent.estimatedStartDate, "YYYY-MM-DD HH:mm:ss"),
+                moment(workerEvent.estimatedFinishDate, "YYYY-MM-DD HH:mm:ss"),
+              ]}
+              initialValue={[
+                moment(workerEvent.estimatedStartDate, "YYYY-MM-DD HH:mm:ss"),
+                moment(workerEvent.estimatedFinishDate, "YYYY-MM-DD HH:mm:ss"),
               ]}
             >
               <RangePicker
@@ -162,7 +160,6 @@ const EventDetails = ({ workerEventId, workerEvent }) => {
               rules={[
                 { required: true, message: "Please enter your Zip code" },
               ]}
-              onChange={onHandleChangeNumeric}
             >
               <Input />
             </Form.Item>
