@@ -30,12 +30,10 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/login" component={NormalLoginForm}/>
+        <Route path="/login" component={NormalLoginForm}/>  
+        <ProtectedRoute path="/eventDetails" component={EventDetails} />
         <ProtectedRoute path="/print" component={PrintEvents}/>       
-        <ProtectedRoute path="/" component={TempPage} />  
-        <ProtectedRoute path="/eventDetails">
-          <EventDetails />
-        </ProtectedRoute>
+        <ProtectedRoute path="/" component={TempPage} />
       </Switch>
     </Router>
   );
