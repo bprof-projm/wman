@@ -1,0 +1,15 @@
+.print-events{
+    display: flex;
+    flex-direction: row;
+}
+.print-events-instructions{
+    min-width: 13vw;
+    height: 100vh;
+    border-right: 1px rgb(234, 239, 255);
+    text-align: center;
+    background:rgb(234, 239, 255);  
+}
+.print-events-prewiew{
+    min-width: 87vw;
+    height: 100vh;
+}

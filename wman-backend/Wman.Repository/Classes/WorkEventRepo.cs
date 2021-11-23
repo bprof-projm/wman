@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,11 @@ namespace Wman.Repository.Classes
     public class WorkEventRepo : IWorkEventRepo
     {
         private wmanDb db;
-        public WorkEventRepo(wmanDb inDb)
+        UserManager<WmanUser> userManager;
+        public WorkEventRepo(wmanDb inDb, UserManager<WmanUser> userManager)
         {
             this.db = inDb;
+            this.userManager = userManager;
         }
         public async Task Add(WorkEvent element)
         {
@@ -32,15 +35,28 @@ namespace Wman.Repository.Classes
 
         public IQueryable<WorkEvent> GetAll()
         {
-            return this.db.WorkEvent;
+            return this.db.WorkEvent.AsNoTracking().Include(x => x.Address).Include(x => x.AssignedUsers).ThenInclude(x => x.ProfilePicture).Include(x => x.Labels).OrderBy(x => x.EstimatedStartDate);
         }
-
-        public async Task<WorkEvent> GetOne(int key)
+        /// <inheritdoc />
+        public async Task<WorkEvent> GetOne(int key) 
         {
             var entity = await (from x in db.WorkEvent
                           where x.Id == key
-                          select x).FirstOrDefaultAsync();
+                          select x).AsNoTracking().Include(x => x.AssignedUsers).ThenInclude(x => x.ProfilePicture).Include(x => x.Address).Include(x => x.Labels).FirstOrDefaultAsync();
             return entity;
+        }
+        /// <inheritdoc />
+        public async Task<WorkEvent> GetOneWithTracking(int key)
+        {
+            var entity = await (from x in db.WorkEvent
+                                where x.Id == key
+                                select x).Include(x => x.AssignedUsers).FirstOrDefaultAsync();
+            return entity;
+        }
+
+        public async Task SaveDatabase()
+        {
+            await this.db.SaveChangesAsync();
         }
 
         public async Task Update(int oldKey, WorkEvent element)
@@ -49,6 +65,7 @@ namespace Wman.Repository.Classes
             oldWorkEvent.JobDescription = element.JobDescription;
             oldWorkEvent.EstimatedStartDate = element.EstimatedStartDate;
             oldWorkEvent.EstimatedFinishDate = element.EstimatedFinishDate;
+            oldWorkEvent.AssignedUsers = element.AssignedUsers;
             await this.db.SaveChangesAsync();
         }
     }

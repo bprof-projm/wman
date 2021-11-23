@@ -39,10 +39,6 @@ namespace Wman.Logic.DTO_Models
         [StringLength(30)]
         public string Lastname { get; set; }
 
-        //[DataType(DataType.ImageUrl)]
-        [JsonIgnore]
-        public Pictures Picture { get; set; }
-
-
+        public PhotoDTO Picture { get; set; }
     }
 }

@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Wman.Data.DB_Connection_Tables;
 
 namespace Wman.Data.DB_Models
 {
@@ -17,8 +16,12 @@ namespace Wman.Data.DB_Models
         public int Id { get; set; }
         public string Color { get; set; }
         public string Content { get; set; }
-        [NotMapped]
         [JsonIgnore]
-        public virtual ICollection<WorkEventLabel> WorkEvents { get; set; }
+        public virtual ICollection<WorkEvent> WorkEvents { get; set; }
+
+        public Label()
+        {
+            this.WorkEvents = new List<WorkEvent>();
+        }
     }
 }

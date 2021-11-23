@@ -20,13 +20,16 @@ namespace Wman.WebAPI.Controllers
     public class EventController : ControllerBase
     {
         IEventLogic eventLogic;
+        IAuthLogic authLogic;
         /// <summary>
         /// ctor
         /// </summary>
         /// <param name="eventLogic"></param>
-        public EventController(IEventLogic eventLogic)
+        /// <param name="authLogic"></param>
+        public EventController(IEventLogic eventLogic, IAuthLogic authLogic)
         {
             this.eventLogic = eventLogic;
+            this.authLogic = authLogic;
         }
         /// <summary>
         /// Creates an event from body
@@ -34,57 +37,11 @@ namespace Wman.WebAPI.Controllers
         /// <param name="workEvent"></param>
         /// <returns></returns>
         [HttpPost("/CreateEvent")]
+        [Authorize(Roles = "Manager")]
         public async Task<ActionResult> CreateEvent([FromBody] CreateEventDTO workEvent)
         {
-            try
-            {
                 await eventLogic.CreateEvent(workEvent);
                 return Ok();
-            }
-            catch (Exception ex)
-            {
-
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
-        }
-        /// <summary>
-        /// Getting a custom event back
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        [HttpGet("/GetEvent/{Id}")]
-        public async Task<ActionResult<CreateEventDTO>> GetEvent(int Id)
-        {
-            try
-            {
-                var entity =await eventLogic.GetEvent(Id);
-                return Ok(entity);
-            }
-            catch (Exception ex)
-            {
-
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
-        }
-
-        /// <summary>
-        /// Get all the events
-        /// </summary>
-        /// <returns>A collection of all the events</returns>
-        [HttpGet]
-        [Route("all")]
-        public async Task<ActionResult<IEnumerable<CreateEventDTO>>> GetAll()
-        {
-            try
-            {
-                var output = eventLogic.GetAllEvents();
-                return Ok(output);
-            }
-            catch (Exception ex)
-            {
-
-                return StatusCode(500, ex);
-            }
         }
 
         /// <summary>
@@ -93,17 +50,59 @@ namespace Wman.WebAPI.Controllers
         /// <param name="Id"></param>
         /// <returns></returns>
         [HttpDelete("/DeleteEvent/{Id}")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult> DeleteEvent(int Id)
         {
-            try
-            {
                 await eventLogic.DeleteEvent(Id);
                 return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error : {ex}");
-            }
         }
+
+        [HttpPut("/DnDEvent/{id}")]
+        [Authorize(Roles = "Admin, Manager")]
+        public async Task<ActionResult> DnDEvent(int id,[FromBody] DnDEventDTO workEvent)
+        {
+                await eventLogic.DnDEvent(id, workEvent);
+                return Ok();
+        }
+        /// <summary>
+        /// Assign a user to a specific event
+        /// </summary>
+        /// <param name="eventid">The id of the event</param>
+        /// <param name="userName">username of the user</param>
+        /// <returns>HTTP response code</returns>
+        [HttpPost]
+        [Route("assign")]
+        [Authorize(Roles = "Admin, Manager")]
+        public async Task<ActionResult> AssignUser(int eventid, string userName)
+        {
+                await eventLogic.AssignUser(eventid, userName);
+                return Ok();
+
+        }
+
+        /// <summary>
+        /// Assign multiple users at a time to a selected event.
+        /// </summary>
+        /// <param name="eventid">The ID of the event we'd like to add to</param>
+        /// <param name="usernames">A list of string string usernames, which we'd like to assign to the event</param>
+        /// <returns>A list of userDTOs, where the users could be assigned without date collision</returns>
+        [HttpPost]
+        [Route("massAssign")]
+        [Authorize(Roles = "Admin, Manager")]
+        public async Task<ActionResult> MassAssignUsers(int eventid, [FromBody] ICollection<string> usernames)
+        {
+                await eventLogic.MassAssignUser(eventid, usernames);
+                return Ok();
+        }
+
+        [HttpPut("/UpdateEvent")]
+        [Authorize(Roles = "Admin, Manager")]
+        public async Task<ActionResult<UpdateEventDTO>> UpdateEvent([FromBody] UpdateEventDTO updateEvent) 
+        {
+                await eventLogic.UpdateEvent(updateEvent);
+                return Ok();
+        }
+
+
     }
 }
