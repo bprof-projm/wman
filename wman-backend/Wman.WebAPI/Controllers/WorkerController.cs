@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Wman.Logic.DTO_Models;
 using Wman.Logic.Interfaces;
@@ -16,9 +17,11 @@ namespace Wman.WebAPI.Controllers
     public class WorkerController : ControllerBase
     {
         IAllInWorkEventLogic allInWorkEvent;
+        IUserLogic userLogic;
 
-        public WorkerController(IAllInWorkEventLogic allInWorkEvent)
+        public WorkerController(IAllInWorkEventLogic allInWorkEvent, IUserLogic userLogic)
         {
+            this.userLogic = userLogic;
             this.allInWorkEvent = allInWorkEvent;
         }
 
@@ -27,6 +30,16 @@ namespace Wman.WebAPI.Controllers
         {
             var result = await allInWorkEvent.Available(fromDate, toDate);
             return Ok(result);
+        }
+        [HttpGet]
+        [Route("asd")]
+        public async Task<ActionResult> GetAvaliableEventsForLoggedIn()
+        {
+            var username = HttpContext.User.Identity.Name;
+            //var username = User.FindFirst(ClaimTypes.Name).Value;
+            
+           
+            return Ok(await userLogic.WorkEventsOfLoggedInUser(username));
         }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
@@ -110,6 +111,14 @@ namespace Wman.Logic.Classes
             var testResult = mapper.Map<IEnumerable<AssignedEventDTO>>(output);
 
             return testResult;
+        }
+
+        public async Task<IEnumerable<WorkEventForWorkCardDTO>> WorkEventsOfLoggedInUser(string username)
+        {
+            ;
+            var events = await this.WorkEventsOfUser(username);
+            var output = mapper.Map<IEnumerable<WorkEventForWorkCardDTO>>(events);
+            return output;
         }
 
         private double CalculateLoad(WmanUser user)
