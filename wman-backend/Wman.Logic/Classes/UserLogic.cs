@@ -19,11 +19,13 @@ namespace Wman.Logic.Classes
     {
         UserManager<WmanUser> userManager;
         IMapper mapper;
+        IWorkEventRepo eventRepo;
         //EventRepo eventRepo;
-        public UserLogic(UserManager<WmanUser> userManager, IMapper mapper)
+        public UserLogic(UserManager<WmanUser> userManager, IMapper mapper, IWorkEventRepo eventRepo)
         {
             this.userManager = userManager;
             this.mapper = mapper;
+            this.eventRepo = eventRepo;
         }
         public async Task<IEnumerable<WorkloadDTO>> GetWorkLoads(IEnumerable<string> usernames)
         {
@@ -100,7 +102,7 @@ namespace Wman.Logic.Classes
         public async Task<IEnumerable<AssignedEventDTO>> WorkEventsOfUser(string username) //Kept this as a legacy method, because it might be already used on FE with this older DTO. But this essentially does the same as this.WorkEventsOfLoggedInUser(), just a differently formatted output. Should probably be deleted, together with the endpoint referencing this. 
         {
 
-            var events = await this.GetWorkEventsOfUser(username);
+            var events = await this.GetEventsOfUser(username);
             var mapped = mapper.Map<IEnumerable<AssignedEventDTO>>(events);
 
             return mapped;
@@ -108,46 +110,40 @@ namespace Wman.Logic.Classes
 
         public async Task<IEnumerable<WorkEventForWorkCardDTO>> WorkEventsOfLoggedInUser(string username)
         {
-            var events = await this.GetWorkEventsOfUser(username);
+            var events = await this.GetEventsOfUser(username);
             var output = mapper.Map<IEnumerable<WorkEventForWorkCardDTO>>(events);
             return output;
         }
 
         public async Task<WorkEventForWorkCardDTO> GetEventDetailsForWorker(string username, int id)
         {
-            var selectedUser = await GetUser(username);
-            if (selectedUser == null)
+            var job = await eventRepo.GetOne(id);
+            if (job == null)
             {
-                throw new NotFoundException(WmanError.UserNotFound);
+                throw new NotFoundException(WmanError.EventNotFound);
             }
-            var job = selectedUser.WorkEvents.Where(x => x.Id == id).SingleOrDefault();
-            if (job != null)
+            if (job.AssignedUsers.Where(x => x.UserName == username).SingleOrDefault() != null)
             {
                 return mapper.Map<WorkEventForWorkCardDTO>(job);
             }
             throw new InvalidOperationException(WmanError.NotHisBusiness);
         }
+        private async Task<IEnumerable<WorkEvent>> GetEventsOfUser(string username)
+        {
+            var selectedUser = await this.GetUser(username);
+           var events = eventRepo.GetAll().Where(x => x.AssignedUsers.Contains(selectedUser));
+            return events;
+        }
         private async Task<WmanUser> GetUser(string username)
         {
             var selectedUser = await userManager.Users
                 .Where(x => x.UserName == username)
-                .Include(y => y.WorkEvents)
-                .ThenInclude(z => z.Address)
-                .Include(y => y.WorkEvents)
-                .ThenInclude(z => z.Labels)
-                .AsNoTracking()
                 .SingleOrDefaultAsync();
-            return selectedUser;
-        }
-        private async Task<IEnumerable<WorkEvent>> GetWorkEventsOfUser(string username)
-        {
-            var selectedUser = await GetUser(username);
             if (selectedUser == null)
             {
                 throw new NotFoundException(WmanError.UserNotFound);
             }
-            var output = selectedUser.WorkEvents;
-            return output;
+            return selectedUser;
         }
 
         private double CalculateLoad(WmanUser user)
