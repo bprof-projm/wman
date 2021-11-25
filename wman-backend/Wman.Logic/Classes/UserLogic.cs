@@ -18,6 +18,7 @@ namespace Wman.Logic.Classes
     {
         UserManager<WmanUser> userManager;
         IMapper mapper;
+        //EventRepo eventRepo;
         public UserLogic(UserManager<WmanUser> userManager, IMapper mapper)
         {
             this.userManager = userManager;
@@ -95,7 +96,23 @@ namespace Wman.Logic.Classes
             return output;
         }
 
-        public async Task<IEnumerable<AssignedEventDTO>> WorkEventsOfUser(string username)
+        public async Task<IEnumerable<AssignedEventDTO>> WorkEventsOfUser(string username) //Kept this as a legacy method, because it might be already used on FE with this older DTO. But this essentially does the same as this.WorkEventsOfLoggedInUser(), just a differently formatted output. Should probably be deleted, together with the endpoint referencing this. 
+        {
+
+            var events = await this.getWorkEventsOfUser(username);
+            var mapped = mapper.Map<IEnumerable<AssignedEventDTO>>(events);
+
+            return mapped;
+        }
+
+        public async Task<IEnumerable<WorkEventForWorkCardDTO>> WorkEventsOfLoggedInUser(string username)
+        {
+            var events = await this.getWorkEventsOfUser(username);
+            var output = mapper.Map<IEnumerable<WorkEventForWorkCardDTO>>(events);
+            return output;
+        }
+
+        private async Task<IEnumerable<WorkEvent>> getWorkEventsOfUser(string username)
         {
             var selectedUser = await userManager.Users
                 .Where(x => x.UserName == username)
@@ -108,16 +125,6 @@ namespace Wman.Logic.Classes
                 throw new NotFoundException(WmanError.UserNotFound);
             }
             var output = selectedUser.WorkEvents;
-            var testResult = mapper.Map<IEnumerable<AssignedEventDTO>>(output);
-
-            return testResult;
-        }
-
-        public async Task<IEnumerable<WorkEventForWorkCardDTO>> WorkEventsOfLoggedInUser(string username)
-        {
-            ;
-            var events = await this.WorkEventsOfUser(username);
-            var output = mapper.Map<IEnumerable<WorkEventForWorkCardDTO>>(events);
             return output;
         }
 
