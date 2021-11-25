@@ -15,5 +15,6 @@ namespace Wman.Logic.Interfaces
 
         Task<IEnumerable<AssignedEventDTO>> WorkEventsOfUser(string username);
         Task<IEnumerable<WorkEventForWorkCardDTO>> WorkEventsOfLoggedInUser(string username);
+        Task<WorkEventForWorkCardDTO> GetEventDetailsForWorker(string username, int id);
     }
 }

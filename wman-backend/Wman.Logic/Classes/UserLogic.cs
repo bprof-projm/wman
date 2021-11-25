@@ -11,6 +11,7 @@ using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
 using Wman.Logic.Helpers;
 using Wman.Logic.Interfaces;
+using Wman.Repository.Interfaces;
 
 namespace Wman.Logic.Classes
 {
@@ -99,7 +100,7 @@ namespace Wman.Logic.Classes
         public async Task<IEnumerable<AssignedEventDTO>> WorkEventsOfUser(string username) //Kept this as a legacy method, because it might be already used on FE with this older DTO. But this essentially does the same as this.WorkEventsOfLoggedInUser(), just a differently formatted output. Should probably be deleted, together with the endpoint referencing this. 
         {
 
-            var events = await this.getWorkEventsOfUser(username);
+            var events = await this.GetWorkEventsOfUser(username);
             var mapped = mapper.Map<IEnumerable<AssignedEventDTO>>(events);
 
             return mapped;
@@ -107,12 +108,31 @@ namespace Wman.Logic.Classes
 
         public async Task<IEnumerable<WorkEventForWorkCardDTO>> WorkEventsOfLoggedInUser(string username)
         {
-            var events = await this.getWorkEventsOfUser(username);
+            var events = await this.GetWorkEventsOfUser(username);
             var output = mapper.Map<IEnumerable<WorkEventForWorkCardDTO>>(events);
             return output;
         }
 
-        private async Task<IEnumerable<WorkEvent>> getWorkEventsOfUser(string username)
+        public async Task<WorkEventForWorkCardDTO> GetEventDetailsForWorker(string username, int id)
+        {
+            var selectedUser = await userManager.Users
+                .Where(x => x.UserName == username)
+                .Include(y => y.WorkEvents)
+                .AsNoTracking()
+                .SingleOrDefaultAsync();
+            if (selectedUser == null)
+            {
+                throw new NotFoundException(WmanError.UserNotFound);
+            }
+            var job = selectedUser.WorkEvents.Where(x => x.Id == id).SingleOrDefault();
+            if (job != null)
+            {
+                return mapper.Map<WorkEventForWorkCardDTO>(job);
+            }
+            throw new InvalidOperationException(WmanError.NotHisBusiness);
+        }
+
+        private async Task<IEnumerable<WorkEvent>> GetWorkEventsOfUser(string username)
         {
             var selectedUser = await userManager.Users
                 .Where(x => x.UserName == username)

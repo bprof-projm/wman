@@ -41,5 +41,12 @@ namespace Wman.WebAPI.Controllers
            
             return Ok(await userLogic.WorkEventsOfLoggedInUser(username));
         }
+
+        [HttpGet]
+        [Route("ASD2")]
+        public async Task<ActionResult> GetEventDetailsForWorker(int id)
+        {
+            return Ok(userLogic.GetEventDetailsForWorker(HttpContext.User.Identity.Name, id));
+        }
     }
 }
