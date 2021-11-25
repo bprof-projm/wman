@@ -33,7 +33,7 @@ namespace Wman.WebAPI.Controllers
         }
         [HttpGet]
         [Route("asd")]
-        public async Task<ActionResult> GetAvaliableEventsForLoggedIn()
+        public async Task<ActionResult> GetAvaliableEventsForMyself()
         {
             var username = HttpContext.User.Identity.Name;
             //var username = User.FindFirst(ClaimTypes.Name).Value;
@@ -44,9 +44,9 @@ namespace Wman.WebAPI.Controllers
 
         [HttpGet]
         [Route("ASD2")]
-        public async Task<ActionResult> GetEventDetailsForWorker(int id)
+        public async Task<ActionResult> GetEventDetailsForMyself(int id)
         {
-            return Ok(userLogic.GetEventDetailsForWorker(HttpContext.User.Identity.Name, id));
+            return Ok(await userLogic.GetEventDetailsForWorker(HttpContext.User.Identity.Name, id));
         }
     }
 }

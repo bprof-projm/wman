@@ -115,11 +115,7 @@ namespace Wman.Logic.Classes
 
         public async Task<WorkEventForWorkCardDTO> GetEventDetailsForWorker(string username, int id)
         {
-            var selectedUser = await userManager.Users
-                .Where(x => x.UserName == username)
-                .Include(y => y.WorkEvents)
-                .AsNoTracking()
-                .SingleOrDefaultAsync();
+            var selectedUser = await GetUser(username);
             if (selectedUser == null)
             {
                 throw new NotFoundException(WmanError.UserNotFound);
@@ -131,15 +127,21 @@ namespace Wman.Logic.Classes
             }
             throw new InvalidOperationException(WmanError.NotHisBusiness);
         }
-
-        private async Task<IEnumerable<WorkEvent>> GetWorkEventsOfUser(string username)
+        private async Task<WmanUser> GetUser(string username)
         {
             var selectedUser = await userManager.Users
                 .Where(x => x.UserName == username)
                 .Include(y => y.WorkEvents)
                 .ThenInclude(z => z.Address)
+                .Include(y => y.WorkEvents)
+                .ThenInclude(z => z.Labels)
                 .AsNoTracking()
                 .SingleOrDefaultAsync();
+            return selectedUser;
+        }
+        private async Task<IEnumerable<WorkEvent>> GetWorkEventsOfUser(string username)
+        {
+            var selectedUser = await GetUser(username);
             if (selectedUser == null)
             {
                 throw new NotFoundException(WmanError.UserNotFound);
