@@ -196,6 +196,19 @@
             <param name="username">Username of the searched user</param>
             <returns>A collection of events that are assigned to the specified user</returns>
         </member>
+        <member name="M:Wman.WebAPI.Controllers.WorkerController.GetAvaliableEventsForMyself">
+            <summary>
+            Get all the events avaliable to the currently logged in user
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.WorkerController.GetEventDetailsForMyself(System.Int32)">
+            <summary>
+            Get event details (Only works on the ones assigned to the currently logged in user)
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="T:Wman.WebAPI.Helpers.AllowAnonymous">
             <summary>
             This authorisation handler will bypass all requirements

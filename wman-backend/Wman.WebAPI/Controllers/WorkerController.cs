@@ -31,8 +31,12 @@ namespace Wman.WebAPI.Controllers
             var result = await allInWorkEvent.Available(fromDate, toDate);
             return Ok(result);
         }
+        /// <summary>
+        /// Get all the events avaliable to the currently logged in user
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        [Route("asd")]
+        [Route("events")]
         public async Task<ActionResult> GetAvaliableEventsForMyself()
         {
             var username = HttpContext.User.Identity.Name;
@@ -41,9 +45,13 @@ namespace Wman.WebAPI.Controllers
            
             return Ok(await userLogic.WorkEventsOfLoggedInUser(username));
         }
-
+        /// <summary>
+        /// Get event details (Only works on the ones assigned to the currently logged in user)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
-        [Route("ASD2")]
+        [Route("eventdetail")]
         public async Task<ActionResult> GetEventDetailsForMyself(int id)
         {
             return Ok(await userLogic.GetEventDetailsForWorker(HttpContext.User.Identity.Name, id));
