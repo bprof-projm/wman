@@ -177,19 +177,17 @@ namespace Wman.Test.Tests
             //Arrange
             EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
 
-            WorkEvent workEvent = new WorkEvent
+            UpdateEventDTO workEvent = new UpdateEventDTO
             {
-                JobDescription = "MocskosLucsok",
+                Id= eventList[0].Id,
+                JobDescription = "LucsokMokos",
                 EstimatedStartDate = new DateTime(2021, 10, 16),
                 EstimatedFinishDate = new DateTime(2021, 10, 16),
-                //AddressId = 1,
-                WorkStartDate = new DateTime(2021, 10, 16),
-                WorkFinishDate = new DateTime(2021, 10, 16),
                 Status = Status.started
             };
 
             //Act
-            var result = eventLogic.UpdateEvent(eventList[0].Id, workEvent);
+            var result = eventLogic.UpdateEvent(workEvent);
 
             //Assert
             this.eventRepo.Verify(x => x.Update(It.IsAny<int>(), It.IsAny<WorkEvent>()), Times.Once);
