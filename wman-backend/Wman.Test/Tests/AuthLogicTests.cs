@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,7 +32,7 @@ namespace Wman.Test.Tests
             this.userManager = UserManagerBuilder.GetUserManager(users);
 
             this.roleManager = AuthLogicBuilder.GetMockRoleManager();
-            this.config = AuthLogicBuilder.GetConfiguration();
+            this.config = AspConfigurationBuilder.GetConfiguration();
             this.mapper = MapperBuilder.GetMapper();
         }
 
@@ -142,11 +143,10 @@ namespace Wman.Test.Tests
             };
 
             //Act
-            var result = await authLogic.CreateWorker(user);
+            AsyncTestDelegate testDelegate = async () => await authLogic.CreateWorker(user);
 
             //Assert
-            Assert.True(!result.Succeeded);
-            Assert.That(users.Count == 3);
+            Assert.ThrowsAsync<InvalidOperationException>(testDelegate);
 
             this.userManager.Verify(x => x.Users, Times.Once);
             this.userManager.Verify(x => x.CreateAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Never);

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.Classes;
 using Wman.Logic.DTO_Models;
+using Wman.Logic.Helpers;
 using Wman.Repository.Interfaces;
 using Wman.Test.Builders;
 using Wman.Test.Builders.LogicBuilders;
@@ -63,7 +64,7 @@ namespace Wman.Test.Tests
             AsyncTestDelegate testDelegate = async () => await eventLogic.DnDEvent(desiredId, eventDTO);
 
             //Assert
-            Assert.ThrowsAsync<ArgumentException>(testDelegate);
+            Assert.ThrowsAsync<InvalidOperationException>(testDelegate);
 
             this.eventRepo.Verify(x => x.GetOneWithTracking(It.IsAny<int>()), Times.Never);
         }
@@ -127,7 +128,7 @@ namespace Wman.Test.Tests
             AsyncTestDelegate testDelegate = async () => await eventLogic.AssignUser(idInput, userInput);
 
             //Assert
-            Assert.ThrowsAsync<ArgumentException>(testDelegate);
+            Assert.ThrowsAsync<NotFoundException>(testDelegate);
 
             this.eventRepo.Verify(x => x.Update(It.IsAny<int>(), It.IsAny<WorkEvent>()), Times.Never);
             this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Never);
@@ -181,8 +182,8 @@ namespace Wman.Test.Tests
             {
                 Id= eventList[0].Id,
                 JobDescription = "LucsokMokos",
-                EstimatedStartDate = new DateTime(2021, 10, 16),
-                EstimatedFinishDate = new DateTime(2021, 10, 16),
+                EstimatedStartDate = DateTime.UtcNow,
+                EstimatedFinishDate = DateTime.UtcNow.AddMinutes(20),
                 Status = Status.started
             };
 
@@ -190,9 +191,8 @@ namespace Wman.Test.Tests
             var result = eventLogic.UpdateEvent(workEvent);
 
             //Assert
-            this.eventRepo.Verify(x => x.Update(It.IsAny<int>(), It.IsAny<WorkEvent>()), Times.Once);
+            this.eventRepo.Verify(x => x.GetOneWithTracking(It.IsAny<int>()), Times.Once);
             this.eventRepo.Verify(x => x.SaveDatabase(), Times.Once);
-
         }
 
         [Test]

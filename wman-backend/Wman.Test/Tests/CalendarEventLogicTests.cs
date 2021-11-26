@@ -40,7 +40,7 @@ namespace Wman.Test.Tests
             CalendarEventLogic calendarLogic = new CalendarEventLogic(this.eventRepo.Object, this.mapper);
 
             //Act
-            AsyncTestDelegate testDelegate = async () => calendarLogic.GetWeekEvents(testInput); // GetWeekEvents isnt a Task for whatever reason
+            AsyncTestDelegate testDelegate = async () => await calendarLogic.GetWeekEvents(testInput);
 
             //Assert
             Assert.ThrowsAsync<ArgumentException>(testDelegate);

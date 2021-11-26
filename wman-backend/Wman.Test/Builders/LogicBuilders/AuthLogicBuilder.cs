@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Moq;
-using System.Collections.Generic;
-using Wman.Data.DB_Models;
 
 namespace Wman.Test.Builders.LogicBuilders
 {
@@ -25,18 +22,6 @@ namespace Wman.Test.Builders.LogicBuilders
             });
             
             return role;
-        }
-
-        public static IConfiguration GetConfiguration()
-        {
-            var cfg = new Dictionary<string, string>
-            {
-                { "SigningKey", "TestValueAJKSJDJ2732636auhsdnh"}
-            };
-
-            IConfiguration cfgBuild = new ConfigurationBuilder().AddInMemoryCollection(cfg).Build();
-
-            return cfgBuild;
         }
     }
 }
