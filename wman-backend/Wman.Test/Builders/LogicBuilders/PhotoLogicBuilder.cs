@@ -1,8 +1,9 @@
 ﻿using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Http;
+using MockQueryable.Moq;
 using Moq;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.Services;
@@ -14,7 +15,13 @@ namespace Wman.Test.Builders.LogicBuilders
     {
         public static Mock<IPicturesRepo> GetPicturesRepo(List<Pictures> pictureList)
         {
-            throw new NotImplementedException();
+            var pictureRepo = new Mock<IPicturesRepo>();
+            var mock = pictureList.AsQueryable().BuildMock();
+
+            pictureRepo.Setup(x => x.GetAll()).Returns(mock.Object);
+            pictureRepo.Setup(x => x.GetOne(It.IsAny<int>())).ReturnsAsync(pictureList[0]);
+
+            return pictureRepo;
         }
 
         public static List<Pictures> GetPictures()
