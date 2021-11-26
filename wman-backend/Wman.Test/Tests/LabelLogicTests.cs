@@ -90,7 +90,7 @@ namespace Wman.Test.Tests
             LabelLogic labelLogic = new LabelLogic(this.labelRepo.Object, this.mapper, this.eventRepo.Object);
 
             //Act
-            var call = labelLogic.GetAllLabels();
+            var call = await labelLogic.GetAllLabels();
 
             //Assert
             Assert.That(call.Count() == labelList.Count());

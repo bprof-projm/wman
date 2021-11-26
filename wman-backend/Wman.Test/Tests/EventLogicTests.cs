@@ -191,6 +191,8 @@ namespace Wman.Test.Tests
 
             //Assert
             this.eventRepo.Verify(x => x.Update(It.IsAny<int>(), It.IsAny<WorkEvent>()), Times.Once);
+            this.eventRepo.Verify(x => x.SaveDatabase(), Times.Once);
+
         }
 
         [Test]

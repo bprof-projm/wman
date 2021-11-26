@@ -129,7 +129,7 @@ namespace Wman.Test.Tests
             int week = CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(lastDayOfTheWeek, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
 
             //Act
-            var resultInt = calendarLogic.GetWeekEvents(week);
+            var resultInt = await calendarLogic.GetWeekEvents(week);
             var resultDateTime = await calendarLogic.GetWeekEvents(firstDayOfWeek, lastDayOfTheWeek);
 
             //Assert

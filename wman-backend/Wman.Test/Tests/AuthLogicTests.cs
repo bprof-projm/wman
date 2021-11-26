@@ -17,7 +17,7 @@ namespace Wman.Test.Tests
     public class AuthLogicTests
     {
         private Mock<UserManager<WmanUser>> userManager;
-        private Mock<RoleManager<WmanRole>> roleManager;
+        private Mock<RoleManager<IdentityRole<int>>> roleManager;
         
         private IConfiguration config;
         private IMapper mapper;
@@ -79,7 +79,7 @@ namespace Wman.Test.Tests
             var result = await authLogic.GetOneUser(users[0].UserName);
 
             //Assert
-            Assert.AreEqual(result.UserName, users[0].UserName);
+            Assert.AreEqual(result.Username, users[0].UserName);
 
             this.userManager.Verify(x => x.Users, Times.Once);
         }
