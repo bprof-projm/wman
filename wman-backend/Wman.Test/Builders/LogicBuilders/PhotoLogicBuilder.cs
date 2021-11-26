@@ -68,19 +68,19 @@ namespace Wman.Test.Builders.LogicBuilders
         {
             var mock = new Mock<IPhotoService>();
 
-            mock.Setup(x => x.AddProfilePhotoAsync(It.IsAny<IFormFile>())).Returns(taskImageUploadHelper);
-            mock.Setup(x => x.DeleteProfilePhotoAsync(It.IsAny<string>())).Returns(taskDeletionHelper);
+            mock.Setup(x => x.AddProfilePhotoAsync(It.IsAny<IFormFile>())).Returns(TaskImageUploadHelper);
+            mock.Setup(x => x.DeleteProfilePhotoAsync(It.IsAny<string>())).Returns(TaskDeletionHelper);
 
             return mock;
         }
 
-        private static Task<ImageUploadResult> taskImageUploadHelper()
+        private static Task<ImageUploadResult> TaskImageUploadHelper()
         {
             var akarmi = new ImageUploadResult();
             return Task.FromResult(akarmi);
         }
 
-        private static Task<DeletionResult> taskDeletionHelper()
+        private static Task<DeletionResult> TaskDeletionHelper()
         {
             var akarmi = new DeletionResult();
             return Task.FromResult(akarmi);

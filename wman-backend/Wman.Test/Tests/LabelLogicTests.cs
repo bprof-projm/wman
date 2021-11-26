@@ -39,7 +39,7 @@ namespace Wman.Test.Tests
         public async Task AssignLabelToWorkEvent_AssignLabelToExistingWorkEvent_SuccessfulOperation()
         {
             //Arrange
-            LabelLogic labelLogic = new LabelLogic(this.labelRepo.Object, this.mapper, this.eventRepo.Object);
+            LabelLogic labelLogic = new(this.labelRepo.Object, this.mapper, this.eventRepo.Object);
             
             //Act
             var call = labelLogic.AssignLabelToWorkEvent(eventList[0].Id ,labelList[0].Id);
@@ -54,7 +54,7 @@ namespace Wman.Test.Tests
         public async Task UpdateLabel_UpdateExistingLabel_SuccesfulOperation()
         {
             //Arrange
-            LabelLogic labelLogic = new LabelLogic(this.labelRepo.Object, this.mapper, this.eventRepo.Object);
+            LabelLogic labelLogic = new(this.labelRepo.Object, this.mapper, this.eventRepo.Object);
             CreateLabelDTO newLabel = new()
             {
                 Color = "#000000",
@@ -73,7 +73,7 @@ namespace Wman.Test.Tests
         public async Task DeleteLabel_DeleteExistingLabel_SuccessfulOperation()
         {
             //Arrange
-            LabelLogic labelLogic = new LabelLogic(this.labelRepo.Object, this.mapper, this.eventRepo.Object);
+            LabelLogic labelLogic = new(this.labelRepo.Object, this.mapper, this.eventRepo.Object);
 
             //Act
             var call = labelLogic.DeleteLabel(labelList[0].Id);
@@ -87,13 +87,13 @@ namespace Wman.Test.Tests
         public async Task GetAllLabels_ReturnsAllProperly_SuccessfulOperation()
         {
             //Arrange
-            LabelLogic labelLogic = new LabelLogic(this.labelRepo.Object, this.mapper, this.eventRepo.Object);
+            LabelLogic labelLogic = new(this.labelRepo.Object, this.mapper, this.eventRepo.Object);
 
             //Act
             var call = await labelLogic.GetAllLabels();
 
             //Assert
-            Assert.That(call.Count() == labelList.Count());
+            Assert.That(call.Count == labelList.Count);
             this.labelRepo.Verify(x => x.GetAll(), Times.Once);
         }
 
@@ -101,7 +101,7 @@ namespace Wman.Test.Tests
         public async Task CreateLabel_CreatedNewLabel_AddedToRepoSuccessfully()
         {
             //Arrange
-            LabelLogic labelLogic = new LabelLogic(this.labelRepo.Object, this.mapper, this.eventRepo.Object);
+            LabelLogic labelLogic = new(this.labelRepo.Object, this.mapper, this.eventRepo.Object);
             CreateLabelDTO newLabel = new()
             {
                 Color= "#000000",

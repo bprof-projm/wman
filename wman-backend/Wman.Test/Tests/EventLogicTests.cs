@@ -52,8 +52,8 @@ namespace Wman.Test.Tests
         public async Task DnDEvent_WrongInput_ThrowsException_FailedOperation(DateTime startDate, DateTime finishDate)
         {
             //Arrange
-            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
-            DnDEventDTO eventDTO = new DnDEventDTO()
+            EventLogic eventLogic = new(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
+            DnDEventDTO eventDTO = new()
             {
                 EstimatedStartDate = startDate,
                 EstimatedFinishDate = finishDate
@@ -61,7 +61,7 @@ namespace Wman.Test.Tests
             int desiredId = eventList[1].Id;
 
             //Act
-            AsyncTestDelegate testDelegate = async () => await eventLogic.DnDEvent(desiredId, eventDTO);
+            async Task testDelegate() => await eventLogic.DnDEvent(desiredId, eventDTO);
 
             //Assert
             Assert.ThrowsAsync<InvalidOperationException>(testDelegate);
@@ -73,8 +73,8 @@ namespace Wman.Test.Tests
         public async Task DnDEvent_AssignUser_NoConflictsDuringDnDEvent_SuccessfulOperation()
         {
             //Arrange
-            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
-            DnDEventDTO eventDTO = new DnDEventDTO()
+            EventLogic eventLogic = new(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
+            DnDEventDTO eventDTO = new()
             {
                 EstimatedStartDate = eventList[0].EstimatedStartDate,
                 EstimatedFinishDate = eventList[0].EstimatedFinishDate
@@ -99,8 +99,8 @@ namespace Wman.Test.Tests
         public async Task MassAssignUser_AssignMultipleUsers_Successfull()
         {
             //Arrange
-            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
-            List<string> userNames = new List<string>() { users[0].UserName, users[1].UserName };
+            EventLogic eventLogic = new(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
+            List<string> userNames = new() { users[0].UserName, users[1].UserName };
 
             //Act
             var call = eventLogic.MassAssignUser(eventList[0].Id, userNames);
@@ -122,10 +122,10 @@ namespace Wman.Test.Tests
         public async Task AssignUser_AssignBadValues_ExceptionCaught(int idInput, string userInput)
         {
             //Arrange
-            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
+            EventLogic eventLogic = new(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
 
             //Act
-            AsyncTestDelegate testDelegate = async () => await eventLogic.AssignUser(idInput, userInput);
+            async Task testDelegate() => await eventLogic.AssignUser(idInput, userInput);
 
             //Assert
             Assert.ThrowsAsync<NotFoundException>(testDelegate);
@@ -138,7 +138,7 @@ namespace Wman.Test.Tests
         public async Task AssignUser_AssignToExistingUser_Successful()
         {
             //Arrange
-            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
+            EventLogic eventLogic = new(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
 
             //Act
             var call = eventLogic.AssignUser(eventList[0].Id, users[0].UserName);
@@ -156,14 +156,14 @@ namespace Wman.Test.Tests
         public async Task GetAllAssignedUsers_AssignExistingUser_ReturnsSuccessfully()
         {
             //Arrange
-            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
+            EventLogic eventLogic = new(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
 
             //Act
             await eventLogic.AssignUser(eventList[0].Id, users[0].UserName);
             var call = await eventLogic.GetAllAssignedUsers(eventList[0].Id);
 
             //Assert
-            Assert.AreEqual(1, call.Count());
+            Assert.AreEqual(1, call.Count);
 
             this.eventRepo.Verify(x => x.GetOneWithTracking(It.IsAny<int>()), Times.Once);
             this.userManager.Verify(x => x.Users, Times.Once);
@@ -176,9 +176,9 @@ namespace Wman.Test.Tests
         public async Task UpdateEvent_UpdateExisitingEvent_SuccessfulOperation()
         {
             //Arrange
-            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
+            EventLogic eventLogic = new(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
 
-            UpdateEventDTO workEvent = new UpdateEventDTO
+            UpdateEventDTO workEvent = new()
             {
                 Id= eventList[0].Id,
                 JobDescription = "LucsokMokos",
@@ -199,7 +199,7 @@ namespace Wman.Test.Tests
         public async Task DeleteEvent_SuccessfullyDeletesElement()
         {
             //Arrange
-            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
+            EventLogic eventLogic = new(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
 
             //Act
             var result = eventLogic.DeleteEvent(eventList[0].Id);
@@ -212,13 +212,13 @@ namespace Wman.Test.Tests
         public async Task GetAllEvents_ReturnsRepoCorrectly()
         {
             //Arrange
-            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
+            EventLogic eventLogic = new(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
 
             //Act
             var result = await eventLogic.GetAllEvents();
 
             //Assert
-            Assert.That(result.Count() == eventList.Count());
+            Assert.That(result.Count() == eventList.Count);
             this.eventRepo.Verify(x => x.GetAll(), Times.Once);
         }
 
@@ -226,7 +226,7 @@ namespace Wman.Test.Tests
         public async Task GetEvent_ReturnsWorkEvent_CompareToEventInList_Successful()
         {
             //Arrange
-            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
+            EventLogic eventLogic = new(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
 
             //Act
             var result = await eventLogic.GetEvent(eventList[0].Id);
@@ -240,9 +240,9 @@ namespace Wman.Test.Tests
         public async Task CreateEvent_SuccessfulCreation()
         {
             //Arrange
-            EventLogic eventLogic = new EventLogic(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
+            EventLogic eventLogic = new(this.eventRepo.Object, this.mapper, this.addressRepo.Object, this.userManager.Object);
 
-            var helper = new AddressHUNDTO()
+            AddressHUNDTO helper = new()
             {
                 City = addressList[0].City,
                 BuildingNumber = addressList[0].BuildingNumber,
@@ -251,7 +251,7 @@ namespace Wman.Test.Tests
                 ZIPCode = int.Parse(addressList[0].ZIPCode),
             };
 
-            CreateEventDTO eventDTO = new CreateEventDTO()
+            CreateEventDTO eventDTO = new()
             {
                 JobDescription = "ValmiTestXDLOLNI",
                 EstimatedStartDate = new DateTime(2021,10,12,8,10,15),
