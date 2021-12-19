@@ -79,7 +79,14 @@ namespace Wman.WebAPI.Controllers
                 return Ok();
 
         }
-
+#if DEBUG
+        [HttpGet]
+        [Route("all_debug")]
+        public async Task<ActionResult<IEnumerable<WorkEvent>>> GetAll()
+        {
+            return Ok(await eventLogic.GetAllEvents());
+        }
+#endif
         /// <summary>
         /// Assign multiple users at a time to a selected event.
         /// </summary>

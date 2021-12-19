@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -112,6 +113,51 @@ namespace Wman.Logic.Classes
         {
             var events = await this.GetEventsOfUser(username);
             var output = mapper.Map<IEnumerable<WorkEventForWorkCardDTO>>(events);
+            return output;
+        }
+
+        public async Task<IEnumerable<WorkEventForWorkCardDTO>> WorkEventsOfUserToday(string username)
+        {
+            var allEventsAvail = await this.GetEventsOfUser(username);
+            var selected = allEventsAvail.Where(x => x.EstimatedStartDate.DayOfYear == DateTime.Now.DayOfYear && x.EstimatedStartDate.Year == DateTime.Now.Year);
+
+            var output = mapper.Map<IEnumerable<WorkEventForWorkCardDTO>>(selected);
+            return output;
+        }
+        public async Task<IEnumerable<WorkEventForWorkCardDTO>> WorkEventsOfUserThisWeek(string username)
+        {
+            var allEventsAvail = await this.GetEventsOfUser(username);
+            DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(DateTime.Now);
+            DateTime StartDate = DateTime.MinValue;
+            DateTime EndDate = DateTime.MinValue;
+
+            switch (day)
+            {
+                case DayOfWeek.Sunday:
+                    StartDate = DateTime.Now.AddDays(-6);
+                    break;
+                case DayOfWeek.Monday:
+                    break;
+                case DayOfWeek.Tuesday:
+                    StartDate = DateTime.Now.AddDays(-1);
+                    break;
+                case DayOfWeek.Wednesday:
+                    StartDate = DateTime.Now.AddDays(-2);
+                    break;
+                case DayOfWeek.Thursday:
+                    StartDate = DateTime.Now.AddDays(-3);
+                    break;
+                case DayOfWeek.Friday:
+                    StartDate = DateTime.Now.AddDays(-4);
+                    break;
+                case DayOfWeek.Saturday:
+                    StartDate = DateTime.Now.AddDays(-5);
+                    break;
+                EndDate = StartDate.AddDays(6);
+            }
+            var selected = allEventsAvail.Where(x => x.EstimatedStartDate.DayOfYear >= StartDate.DayOfYear && x.EstimatedStartDate.DayOfYear <= EndDate.DayOfYear && x.EstimatedStartDate.Year == StartDate.Year);
+
+            var output = mapper.Map<IEnumerable<WorkEventForWorkCardDTO>>(selected);
             return output;
         }
 

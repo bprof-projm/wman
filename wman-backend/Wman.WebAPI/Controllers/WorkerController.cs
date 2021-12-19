@@ -36,7 +36,7 @@ namespace Wman.WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("events")]
+        [Route("events/all")]
         public async Task<ActionResult> GetAvaliableEventsForMyself()
         {
             var username = HttpContext.User.Identity.Name;
@@ -44,6 +44,24 @@ namespace Wman.WebAPI.Controllers
             
            
             return Ok(await userLogic.WorkEventsOfLoggedInUser(username));
+        }
+        [HttpGet]
+        [Route("events/day")]
+        public async Task<ActionResult> GetAvaliableEventsToday()
+        {
+            throw new NotImplementedException();
+        }
+        [HttpGet]
+        [Route("events/week")]
+        public async Task<ActionResult> GetAvaliableEventsThisWeek()
+        {
+            throw new NotImplementedException();
+        }
+        [HttpGet]
+        [Route("events/date")]
+        public async Task<ActionResult> GetAvaliableEventsSpecific(int day)
+        {
+            throw new NotImplementedException();
         }
         /// <summary>
         /// Get event details (Only works on the ones assigned to the currently logged in user)
