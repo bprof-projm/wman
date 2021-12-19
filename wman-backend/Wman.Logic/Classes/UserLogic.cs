@@ -130,7 +130,7 @@ namespace Wman.Logic.Classes
             DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(DateTime.Now);
             DateTime StartDate = DateTime.MinValue;
             DateTime EndDate = DateTime.MinValue;
-            StartDate = this.WeekStartDatePicker(DateTime.Now);
+            StartDate = this.GetWeekStartDate(DateTime.Now);
         
             EndDate = StartDate.AddDays(6);
             var selected = allEventsAvail.Where(x => x.EstimatedStartDate.DayOfYear >= StartDate.DayOfYear && x.EstimatedStartDate.DayOfYear <= EndDate.DayOfYear && x.EstimatedStartDate.Year == StartDate.Year);
@@ -141,7 +141,7 @@ namespace Wman.Logic.Classes
         public async Task<IEnumerable<WorkEventForWorkCardDTO>> WorkEventsOfUserSpecific(string username, DateTime start, DateTime finish)
         {
             var allEventsAvail = await this.GetEventsOfUser(username);
-            var selected = allEventsAvail.Where(x => x.EstimatedStartDate.DayOfYear >= start.DayOfYear && x.EstimatedStartDate.DayOfYear <= finish.DayOfYear && x.EstimatedStartDate.Year == start.Year);
+            var selected = allEventsAvail.Where(x => x.EstimatedStartDate >= start && x.EstimatedStartDate <= finish);
 
             var output = mapper.Map<IEnumerable<WorkEventForWorkCardDTO>>(selected);
             return output;
@@ -218,7 +218,7 @@ namespace Wman.Logic.Classes
         {
             return works.Where(x => x.EstimatedStartDate.Day >= selectedMonth.Day && x.EstimatedStartDate.Year == selectedMonth.Year && x.EstimatedStartDate.Month == selectedMonth.Month && x.WorkStartDate == DateTime.MinValue);
         }
-        private DateTime WeekStartDatePicker(DateTime input)
+        private DateTime GetWeekStartDate(DateTime input)
         {
             DateTime StartDate = DateTime.MinValue;
             DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(input);
