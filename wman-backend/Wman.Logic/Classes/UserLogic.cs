@@ -153,14 +153,21 @@ namespace Wman.Logic.Classes
                 case DayOfWeek.Saturday:
                     StartDate = DateTime.Now.AddDays(-5);
                     break;
-                EndDate = StartDate.AddDays(6);
             }
+            EndDate = StartDate.AddDays(6);
             var selected = allEventsAvail.Where(x => x.EstimatedStartDate.DayOfYear >= StartDate.DayOfYear && x.EstimatedStartDate.DayOfYear <= EndDate.DayOfYear && x.EstimatedStartDate.Year == StartDate.Year);
 
             var output = mapper.Map<IEnumerable<WorkEventForWorkCardDTO>>(selected);
             return output;
         }
+        public async Task<IEnumerable<WorkEventForWorkCardDTO>> WorkEventsOfUserSpecific(string username, DateTime start, DateTime finish)
+        {
+            var allEventsAvail = await this.GetEventsOfUser(username);
+            var selected = allEventsAvail.Where(x => x.EstimatedStartDate.DayOfYear >= start.DayOfYear && x.EstimatedStartDate.DayOfYear <= finish.DayOfYear && x.EstimatedStartDate.Year == start.Year);
 
+            var output = mapper.Map<IEnumerable<WorkEventForWorkCardDTO>>(selected);
+            return output;
+        }
         public async Task<WorkEventForWorkCardDTO> GetEventDetailsForWorker(string username, int id)
         {
             var job = await eventRepo.GetOne(id);
