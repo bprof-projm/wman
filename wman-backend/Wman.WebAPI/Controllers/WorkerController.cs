@@ -11,6 +11,9 @@ using Wman.Logic.Interfaces;
 
 namespace Wman.WebAPI.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     [Authorize(Roles = "Admin, Manager, Worker")]
@@ -24,7 +27,12 @@ namespace Wman.WebAPI.Controllers
             this.userLogic = userLogic;
             this.allInWorkEvent = allInWorkEvent;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fromDate"></param>
+        /// <param name="toDate"></param>
+        /// <returns></returns>
         [HttpGet("/GetWorkersAvailablityAtSpecTime")]
         public async Task<ActionResult<List<WorkerDTO>>> GetWorkersAtSpecTime(DateTime fromDate, DateTime toDate)
         {
@@ -45,20 +53,34 @@ namespace Wman.WebAPI.Controllers
            
             return Ok(await userLogic.WorkEventsOfLoggedInUser(username));
         }
+        /// <summary>
+        /// Lists all the workevents avaliable to the currently logged in user today
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        [Route("events/day")]
+        [Route("events/today")]
         public async Task<ActionResult> GetAvaliableEventsToday()
         {
             var username = HttpContext.User.Identity.Name;
             return Ok(await this.userLogic.WorkEventsOfUserToday(username));
         }
+        /// <summary>
+        /// Lists all the workevents avaliable to the currently logged in user this week
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        [Route("events/week")]
+        [Route("events/thisweek")]
         public async Task<ActionResult> GetAvaliableEventsThisWeek()
         {
             var username = HttpContext.User.Identity.Name;
             return Ok(await this.userLogic.WorkEventsOfUserThisWeek(username));
         }
+        /// <summary>
+        /// Lists all the workevents avaliable to the currently logged in user, within the specified time interval
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="finish"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("events/date")]
         public async Task<ActionResult> GetAvaliableEventsSpecific(DateTime start, DateTime finish)

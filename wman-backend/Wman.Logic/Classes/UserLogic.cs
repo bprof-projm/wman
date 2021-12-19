@@ -130,30 +130,8 @@ namespace Wman.Logic.Classes
             DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(DateTime.Now);
             DateTime StartDate = DateTime.MinValue;
             DateTime EndDate = DateTime.MinValue;
-
-            switch (day)
-            {
-                case DayOfWeek.Sunday:
-                    StartDate = DateTime.Now.AddDays(-6);
-                    break;
-                case DayOfWeek.Monday:
-                    break;
-                case DayOfWeek.Tuesday:
-                    StartDate = DateTime.Now.AddDays(-1);
-                    break;
-                case DayOfWeek.Wednesday:
-                    StartDate = DateTime.Now.AddDays(-2);
-                    break;
-                case DayOfWeek.Thursday:
-                    StartDate = DateTime.Now.AddDays(-3);
-                    break;
-                case DayOfWeek.Friday:
-                    StartDate = DateTime.Now.AddDays(-4);
-                    break;
-                case DayOfWeek.Saturday:
-                    StartDate = DateTime.Now.AddDays(-5);
-                    break;
-            }
+            StartDate = this.WeekStartDatePicker(DateTime.Now);
+        
             EndDate = StartDate.AddDays(6);
             var selected = allEventsAvail.Where(x => x.EstimatedStartDate.DayOfYear >= StartDate.DayOfYear && x.EstimatedStartDate.DayOfYear <= EndDate.DayOfYear && x.EstimatedStartDate.Year == StartDate.Year);
 
@@ -240,6 +218,34 @@ namespace Wman.Logic.Classes
         {
             return works.Where(x => x.EstimatedStartDate.Day >= selectedMonth.Day && x.EstimatedStartDate.Year == selectedMonth.Year && x.EstimatedStartDate.Month == selectedMonth.Month && x.WorkStartDate == DateTime.MinValue);
         }
-
+        private DateTime WeekStartDatePicker(DateTime input)
+        {
+            DateTime StartDate = DateTime.MinValue;
+            DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(input);
+            switch (day)
+            {
+                case DayOfWeek.Sunday:
+                    StartDate = DateTime.Now.AddDays(-6);
+                    break;
+                case DayOfWeek.Monday:
+                    break;
+                case DayOfWeek.Tuesday:
+                    StartDate = DateTime.Now.AddDays(-1);
+                    break;
+                case DayOfWeek.Wednesday:
+                    StartDate = DateTime.Now.AddDays(-2);
+                    break;
+                case DayOfWeek.Thursday:
+                    StartDate = DateTime.Now.AddDays(-3);
+                    break;
+                case DayOfWeek.Friday:
+                    StartDate = DateTime.Now.AddDays(-4);
+                    break;
+                case DayOfWeek.Saturday:
+                    StartDate = DateTime.Now.AddDays(-5);
+                    break;
+            }
+            return StartDate;
+        }
     }
 }

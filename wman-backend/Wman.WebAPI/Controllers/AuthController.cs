@@ -135,7 +135,7 @@ namespace Wman.WebAPI.Controllers
             return Ok(await this.authLogic.GetAllUsersOfRole(rolename));
         }
         /// <summary>
-        /// Endpoint used to fill database with testing data. Used only for development purposes.
+        /// DEBUG Endpoint used to fill database with testing data. Used only for development purposes.
         /// </summary>
         /// <returns>200</returns>
         [HttpGet]
