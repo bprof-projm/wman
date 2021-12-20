@@ -103,5 +103,41 @@ namespace Wman.WebAPI.Controllers
                 var workCard = await workCardEvent.ForWorkCard(Id);
                 return Ok(workCard);
         }
+
+        [HttpGet("GetCurrentDayEventsForWorker")]
+        public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetCurrentDayEventsForWorker(string username)
+        {
+            var events = await calendarEvent.GetCurrentDayEventsForWorker(username);
+            return Ok(events);
+        }
+        /// <summary>
+        /// gets events from this week
+        /// </summary>
+        /// <returns>CalendarWorkEventDTO</returns>
+        [HttpGet("GetCurrentWeekEventsForWorker")]
+        public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetCurrentWeekEventsForWorker(string username)
+        {
+            var events = await calendarEvent.GetCurrentWeekEventsForWorker(username);
+            return Ok(events);
+        }
+
+        
+        [HttpGet("GetDayEventsForWorker/{day}")]
+        public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetDayEventsForWorker(int day, string username)
+        {
+            var events = await calendarEvent.GetDayEventsForWorker(day, username);
+            return Ok(events);
+        }
+        /// <summary>
+        /// gets custom week events
+        /// </summary>
+        /// <param name="week"></param>
+        /// <returns>CalendarWorkEventDTO<returns>
+        [HttpGet("GetWeekEventsForWorker/{week}")]
+        public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetWeekEventsForWorker(int week, string username)
+        {
+            var events = await calendarEvent.GetWeekEventsForWorker(week, username);
+            return Ok(events);
+        }
     }
 }

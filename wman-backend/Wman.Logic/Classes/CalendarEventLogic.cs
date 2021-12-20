@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,17 +19,20 @@ namespace Wman.Logic.Classes
     {
         private IWorkEventRepo workEventRepo;
         private IMapper mapper;
-        public CalendarEventLogic(IWorkEventRepo workEventRepo, IMapper mapper)
+        UserManager<WmanUser> userManager;
+
+        public CalendarEventLogic(IWorkEventRepo workEventRepo, IMapper mapper, UserManager<WmanUser> userManager)
         {
             this.workEventRepo = workEventRepo;
             this.mapper = mapper;
+            this.userManager = userManager;
         }
+
         public async Task<List<WorkEventForWorkCardDTO>> GetCurrentDayEvents()
         {
             var events = await (from x in workEventRepo.GetAll()
                          where x.EstimatedStartDate.DayOfYear == DateTime.UtcNow.DayOfYear
                          select x).ToListAsync();
-            ;
             return mapper.Map<List<WorkEventForWorkCardDTO>>(events);
         }
 
@@ -137,6 +141,148 @@ namespace Wman.Logic.Classes
                           where x.EstimatedStartDate.DayOfYear >= firstDayOfTheWeek.DayOfYear && x.EstimatedStartDate.DayOfYear <= lastDayOfTheWeek.DayOfYear
                           select x).ToListAsync();
             return mapper.Map<List<WorkEventForWorkCardDTO>>(events);
+        }
+
+        public async Task<List<WorkEventForWorkCardDTO>> GetCurrentWeekEventsForWorker(string username)
+        {
+            var user = await userManager.Users
+                .Where(x => x.UserName == username)
+                .Include(y => y.WorkEvents)
+                .ThenInclude(z => z.Address)
+                .AsNoTracking()
+                .SingleOrDefaultAsync();
+            if (user == null)
+            {
+                throw new NotFoundException(WmanError.UserNotFound);
+            }
+
+            DateTime firstDayOfTheWeek = new DateTime();
+            DateTime lastDayOfTheWeek = new DateTime();
+
+            DateTime time = DateTime.Today;
+            DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(time);
+
+            switch (day)
+            {
+                case DayOfWeek.Sunday:
+                    lastDayOfTheWeek = time;
+                    firstDayOfTheWeek = time - TimeSpan.FromDays(6);
+                    break;
+                case DayOfWeek.Monday:
+                    firstDayOfTheWeek = time;
+                    lastDayOfTheWeek = time + TimeSpan.FromDays(6);
+                    break;
+                case DayOfWeek.Tuesday:
+                    firstDayOfTheWeek = time - TimeSpan.FromDays(1);
+                    lastDayOfTheWeek = time + TimeSpan.FromDays(5);
+                    break;
+                case DayOfWeek.Wednesday:
+                    firstDayOfTheWeek = time - TimeSpan.FromDays(2);
+                    lastDayOfTheWeek = time + TimeSpan.FromDays(4);
+                    break;
+                case DayOfWeek.Thursday:
+                    firstDayOfTheWeek = time - TimeSpan.FromDays(3);
+                    lastDayOfTheWeek = time + TimeSpan.FromDays(3);
+                    break;
+                case DayOfWeek.Friday:
+                    firstDayOfTheWeek = time - TimeSpan.FromDays(4);
+                    lastDayOfTheWeek = time + TimeSpan.FromDays(2);
+                    break;
+                case DayOfWeek.Saturday:
+                    firstDayOfTheWeek = time - TimeSpan.FromDays(5);
+                    lastDayOfTheWeek = time + TimeSpan.FromDays(1);
+                    break;
+                default:
+                    break;
+            }
+
+
+            var events = (from x in user.WorkEvents
+                          where x.EstimatedStartDate.DayOfYear >= firstDayOfTheWeek.DayOfYear && x.EstimatedStartDate.DayOfYear <= lastDayOfTheWeek.DayOfYear
+                          select x).ToList();
+            return mapper.Map<List<WorkEventForWorkCardDTO>>(events);
+
+        }
+
+        public async Task<List<WorkEventForWorkCardDTO>> GetCurrentDayEventsForWorker(string username)
+        {
+            var user = await userManager.Users
+                .Where(x => x.UserName == username)
+                .Include(y => y.WorkEvents)
+                .ThenInclude(z => z.Address)
+                .AsNoTracking()
+                .SingleOrDefaultAsync();
+            if (user == null)
+            {
+                throw new NotFoundException(WmanError.UserNotFound);
+            }
+
+            var events = (from x in user.WorkEvents
+                          where x.EstimatedStartDate.DayOfYear == DateTime.UtcNow.DayOfYear
+                          select x).ToList();
+
+            return mapper.Map<List<WorkEventForWorkCardDTO>>(events);
+        }
+
+        public async Task<List<WorkEventForWorkCardDTO>> GetWeekEventsForWorker(int week, string username)
+        {
+            var user = await userManager.Users
+                .Where(x => x.UserName == username)
+                .Include(y => y.WorkEvents)
+                .ThenInclude(z => z.Address)
+                .AsNoTracking()
+                .SingleOrDefaultAsync();
+            if (user == null)
+            {
+                throw new NotFoundException(WmanError.UserNotFound);
+            }
+
+            if (week > 0 && week < 54)
+            {
+                var find = user.WorkEvents.ToList().Where(x =>
+                {
+                    DateTime time = x.EstimatedStartDate;
+                    DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(time);
+                    if (day >= DayOfWeek.Monday && day <= DayOfWeek.Wednesday)
+                    {
+                        time = time.AddDays(3);
+                    }
+                    return week == CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(time, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+
+                });
+
+                return mapper.Map<List<WorkEventForWorkCardDTO>>(find);
+            }
+            else
+            {
+                throw new ArgumentException(WmanError.InvalidInputRange);
+            }
+            
+        }
+
+        public async Task<List<WorkEventForWorkCardDTO>> GetDayEventsForWorker(int day, string username)
+        {
+            var user = await userManager.Users
+                .Where(x => x.UserName == username)
+                .Include(y => y.WorkEvents)
+                .ThenInclude(z => z.Address)
+                .AsNoTracking()
+                .SingleOrDefaultAsync();
+            if (user == null)
+            {
+                throw new NotFoundException(WmanError.UserNotFound);
+            }
+            if (day > 0 && day < 367)
+            {
+                var events = (from x in user.WorkEvents
+                                   where x.EstimatedStartDate.DayOfYear == day
+                                   select x).ToList();
+                return mapper.Map<List<WorkEventForWorkCardDTO>>(events);
+            }
+            else
+            {
+                throw new ArgumentException(WmanError.InvalidInputRange);
+            }
         }
     }
 }
