@@ -228,6 +228,7 @@ namespace Wman.Logic.Classes
                     StartDate = DateTime.Now.AddDays(-6);
                     break;
                 case DayOfWeek.Monday:
+                    StartDate = DateTime.Now;
                     break;
                 case DayOfWeek.Tuesday:
                     StartDate = DateTime.Now.AddDays(-1);
