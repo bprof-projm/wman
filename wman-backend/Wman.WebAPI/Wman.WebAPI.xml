@@ -71,6 +71,13 @@
             <param name="rolename">Name of the role</param>
             <returns></returns>
         </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.RolesOfUser(System.String)">
+            <summary>
+            Returns the role(s) assigned to the user. (Worker/Admin/Manager)
+            </summary>
+            <param name="username"></param>
+            <returns>Worker/Admin/Manager</returns>
+        </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.PopulateDB">
             <summary>
             DEBUG Endpoint used to fill database with testing data. Used only for development purposes.

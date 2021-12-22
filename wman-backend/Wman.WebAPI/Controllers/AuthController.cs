@@ -135,6 +135,18 @@ namespace Wman.WebAPI.Controllers
             return Ok(await this.authLogic.GetAllUsersOfRole(rolename));
         }
         /// <summary>
+        /// Returns the role(s) assigned to the user. (Worker/Admin/Manager)
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns>Worker/Admin/Manager</returns>
+        [HttpGet]
+        [Route("userrole")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<string>>> RolesOfUser(string username)
+        {
+            return Ok(await this.authLogic.GetAllRolesOfUser(username));
+        }
+        /// <summary>
         /// DEBUG Endpoint used to fill database with testing data. Used only for development purposes.
         /// </summary>
         /// <returns>200</returns>
