@@ -3,13 +3,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
 using Wman.Logic.Helpers;
 using Wman.Logic.Interfaces;
+using Wman.Repository.Interfaces;
 
 namespace Wman.Logic.Classes
 {
@@ -17,10 +20,13 @@ namespace Wman.Logic.Classes
     {
         UserManager<WmanUser> userManager;
         IMapper mapper;
-        public UserLogic(UserManager<WmanUser> userManager, IMapper mapper)
+        IWorkEventRepo eventRepo;
+        //EventRepo eventRepo;
+        public UserLogic(UserManager<WmanUser> userManager, IMapper mapper, IWorkEventRepo eventRepo)
         {
             this.userManager = userManager;
             this.mapper = mapper;
+            this.eventRepo = eventRepo;
         }
         public async Task<IEnumerable<WorkloadDTO>> GetWorkLoads(IEnumerable<string> usernames)
         {
@@ -94,22 +100,81 @@ namespace Wman.Logic.Classes
             return output;
         }
 
-        public async Task<IEnumerable<AssignedEventDTO>> WorkEventsOfUser(string username)
+        public async Task<IEnumerable<AssignedEventDTO>> WorkEventsOfUser(string username) //Kept this as a legacy method, because it might be already used on FE with this older DTO. But this essentially does the same as this.WorkEventsOfLoggedInUser(), just a differently formatted output. Should probably be deleted, together with the endpoint referencing this. 
+        {
+
+            var events = await this.GetEventsOfUser(username);
+            var mapped = mapper.Map<IEnumerable<AssignedEventDTO>>(events);
+
+            return mapped;
+        }
+
+        public async Task<IEnumerable<WorkEventForWorkCardDTO>> WorkEventsOfLoggedInUser(string username)
+        {
+            var events = await this.GetEventsOfUser(username);
+            var output = mapper.Map<IEnumerable<WorkEventForWorkCardDTO>>(events);
+            return output;
+        }
+
+        public async Task<IEnumerable<WorkEventForWorkCardDTO>> WorkEventsOfUserToday(string username)
+        {
+            var allEventsAvail = await this.GetEventsOfUser(username);
+            var selected = allEventsAvail.Where(x => x.EstimatedStartDate.DayOfYear == DateTime.Now.DayOfYear && x.EstimatedStartDate.Year == DateTime.Now.Year);
+
+            var output = mapper.Map<IEnumerable<WorkEventForWorkCardDTO>>(selected);
+            return output;
+        }
+        public async Task<IEnumerable<WorkEventForWorkCardDTO>> WorkEventsOfUserThisWeek(string username)
+        {
+            var allEventsAvail = await this.GetEventsOfUser(username);
+            DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(DateTime.Now);
+            DateTime StartDate = DateTime.MinValue;
+            DateTime EndDate = DateTime.MinValue;
+            StartDate = this.GetWeekStartDate(DateTime.Now);
+        
+            EndDate = StartDate.AddDays(6);
+            var selected = allEventsAvail.Where(x => x.EstimatedStartDate.DayOfYear >= StartDate.DayOfYear && x.EstimatedStartDate.DayOfYear <= EndDate.DayOfYear && x.EstimatedStartDate.Year == StartDate.Year);
+
+            var output = mapper.Map<IEnumerable<WorkEventForWorkCardDTO>>(selected);
+            return output;
+        }
+        public async Task<IEnumerable<WorkEventForWorkCardDTO>> WorkEventsOfUserSpecific(string username, DateTime start, DateTime finish)
+        {
+            var allEventsAvail = await this.GetEventsOfUser(username);
+            var selected = allEventsAvail.Where(x => x.EstimatedStartDate >= start && x.EstimatedStartDate <= finish);
+
+            var output = mapper.Map<IEnumerable<WorkEventForWorkCardDTO>>(selected);
+            return output;
+        }
+        public async Task<WorkEventForWorkCardDTO> GetEventDetailsForWorker(string username, int id)
+        {
+            var job = await eventRepo.GetOne(id);
+            if (job == null)
+            {
+                throw new NotFoundException(WmanError.EventNotFound);
+            }
+            if (job.AssignedUsers.Where(x => x.UserName == username).SingleOrDefault() != null)
+            {
+                return mapper.Map<WorkEventForWorkCardDTO>(job);
+            }
+            throw new InvalidOperationException(WmanError.NotHisBusiness);
+        }
+        private async Task<IEnumerable<WorkEvent>> GetEventsOfUser(string username)
+        {
+            var selectedUser = await this.GetUser(username);
+           var events = eventRepo.GetAll().Where(x => x.AssignedUsers.Contains(selectedUser));
+            return events;
+        }
+        private async Task<WmanUser> GetUser(string username)
         {
             var selectedUser = await userManager.Users
                 .Where(x => x.UserName == username)
-                .Include(y => y.WorkEvents)
-                .ThenInclude(z => z.Address)
-                .AsNoTracking()
                 .SingleOrDefaultAsync();
             if (selectedUser == null)
             {
                 throw new NotFoundException(WmanError.UserNotFound);
             }
-            var output = selectedUser.WorkEvents;
-            var testResult = mapper.Map<IEnumerable<AssignedEventDTO>>(output);
-
-            return testResult;
+            return selectedUser;
         }
 
         private double CalculateLoad(WmanUser user)
@@ -153,6 +218,35 @@ namespace Wman.Logic.Classes
         {
             return works.Where(x => x.EstimatedStartDate.Day >= selectedMonth.Day && x.EstimatedStartDate.Year == selectedMonth.Year && x.EstimatedStartDate.Month == selectedMonth.Month && x.WorkStartDate == DateTime.MinValue);
         }
-
+        private DateTime GetWeekStartDate(DateTime input)
+        {
+            DateTime StartDate = DateTime.MinValue;
+            DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(input);
+            switch (day)
+            {
+                case DayOfWeek.Sunday:
+                    StartDate = DateTime.Now.AddDays(-6);
+                    break;
+                case DayOfWeek.Monday:
+                    StartDate = DateTime.Now;
+                    break;
+                case DayOfWeek.Tuesday:
+                    StartDate = DateTime.Now.AddDays(-1);
+                    break;
+                case DayOfWeek.Wednesday:
+                    StartDate = DateTime.Now.AddDays(-2);
+                    break;
+                case DayOfWeek.Thursday:
+                    StartDate = DateTime.Now.AddDays(-3);
+                    break;
+                case DayOfWeek.Friday:
+                    StartDate = DateTime.Now.AddDays(-4);
+                    break;
+                case DayOfWeek.Saturday:
+                    StartDate = DateTime.Now.AddDays(-5);
+                    break;
+            }
+            return StartDate;
+        }
     }
 }

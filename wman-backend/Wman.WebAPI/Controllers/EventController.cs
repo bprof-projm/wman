@@ -79,7 +79,18 @@ namespace Wman.WebAPI.Controllers
                 return Ok();
 
         }
-
+#if DEBUG
+        /// <summary>
+        /// Debug endpoint used for listing every workevent. Will not be avaliable in production.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("all_debug")]
+        public async Task<ActionResult<IEnumerable<WorkEvent>>> GetAll()
+        {
+            return Ok(await eventLogic.GetAllEvents());
+        }
+#endif
         /// <summary>
         /// Assign multiple users at a time to a selected event.
         /// </summary>

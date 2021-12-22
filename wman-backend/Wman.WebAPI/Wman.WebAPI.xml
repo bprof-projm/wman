@@ -73,7 +73,7 @@
         </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.PopulateDB">
             <summary>
-            Endpoint used to fill database with testing data. Used only for development purposes.
+            DEBUG Endpoint used to fill database with testing data. Used only for development purposes.
             </summary>
             <returns>200</returns>
         </member>
@@ -157,6 +157,12 @@
             <param name="userName">username of the user</param>
             <returns>HTTP response code</returns>
         </member>
+        <member name="M:Wman.WebAPI.Controllers.EventController.GetAll">
+            <summary>
+            Debug endpoint used for listing every workevent. Will not be avaliable in production.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Wman.WebAPI.Controllers.EventController.MassAssignUsers(System.Int32,System.Collections.Generic.ICollection{System.String})">
             <summary>
             Assign multiple users at a time to a selected event.
@@ -195,6 +201,52 @@
             </summary>
             <param name="username">Username of the searched user</param>
             <returns>A collection of events that are assigned to the specified user</returns>
+        </member>
+        <member name="T:Wman.WebAPI.Controllers.WorkerController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.WorkerController.GetWorkersAtSpecTime(System.DateTime,System.DateTime)">
+            <summary>
+            
+            </summary>
+            <param name="fromDate"></param>
+            <param name="toDate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.WorkerController.GetAvaliableEventsForMyself">
+            <summary>
+            Get all the events avaliable to the currently logged in user
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.WorkerController.GetAvaliableEventsToday">
+            <summary>
+            Lists all the workevents avaliable to the currently logged in user today
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.WorkerController.GetAvaliableEventsThisWeek">
+            <summary>
+            Lists all the workevents avaliable to the currently logged in user this week
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.WorkerController.GetAvaliableEventsSpecific(System.DateTime,System.DateTime)">
+            <summary>
+            Lists all the workevents avaliable to the currently logged in user, within the specified time interval
+            </summary>
+            <param name="start"></param>
+            <param name="finish"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.WorkerController.GetEventDetailsForMyself(System.Int32)">
+            <summary>
+            Get event details (Only works on the ones assigned to the currently logged in user)
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
         </member>
         <member name="T:Wman.WebAPI.Helpers.AllowAnonymous">
             <summary>

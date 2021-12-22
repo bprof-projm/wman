@@ -22,6 +22,7 @@ namespace Wman.Logic.Helpers
         public static string LabelNotFound = "Label not found!";
         public static string WrongColor = "The color should be in hexadecimal format";
         public static string PhotoNotFound = "Photo not found";
-        
+        public static string NotHisBusiness = "The currently logged in user is not assigned to the requested event";
+
     }
 }

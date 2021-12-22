@@ -44,7 +44,7 @@ namespace Wman.WebAPI.Helpers
                     break;
                 default:
 #if DEBUG
-                    Debug.Write(context.Exception);
+                    Debug.WriteLine(context.Exception);
 #endif
                     this.setContext(HttpStatusCode.InternalServerError, context).Wait();
                     break;
