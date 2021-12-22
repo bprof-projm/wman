@@ -6,6 +6,7 @@ import { Form, Input, Button, Layout } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import Cookies from "js-cookie";
 import axios from "axios";
+import jwt_decode from "jwt-decode";
 
 var inFifteenMinutes = new Date(new Date().getTime() + 60 * 60 * 1000);
 
@@ -25,6 +26,13 @@ export const NormalLoginForm = () => {
           expires: inFifteenMinutes,
         });
         console.log(response.data.token);
+        const token = response.data.token;
+        const decoded = jwt_decode(token);
+        console.log(decoded); 
+        console.log(decoded[2])
+        //TODO!!!
+        //Role szerinti nézetre dobni a felhasználót ha megvan hozzá az API: név => role
+        
         history.push("/");
       })
       .catch(function (error) {
