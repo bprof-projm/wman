@@ -1,0 +1,21 @@
+.select-intervall{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    background-color: ghostwhite;
+    height: 12vh;
+}
+.select-intervall Button{
+    width: 45vw;
+    height: 10vh;
+    background-color:rgb(235, 234, 255);
+    border: 1px solid rgb(240, 220, 220);
+    border-radius:20px;  
+    transform: translateZ(0);
+    transition: transform 0.25s ease-out;
+  
+}
+.select-intervall Button:hover{
+    transform: scale(1.05);
+}
