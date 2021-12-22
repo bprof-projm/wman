@@ -13,10 +13,10 @@ const OneDayEvents = (event) => {
             <div className='one-event-tables'>
                 <table>
                     <tr>
-                        <th colspan='4' ><b>Desription:</b></th>
+                        <th colSpan='2' ><b>Description:</b></th>
                     </tr>
                     <tr>
-                        <th colspan='2' >{event.event.jobDescription}</th>
+                        <th colSpan='2' >{event.event.jobDescription}</th>
                     </tr>
                     <tr>
                         <th>Start:</th>
@@ -31,7 +31,7 @@ const OneDayEvents = (event) => {
                             <th>{event.event.estimatedFinishDate}</th>
                         </tr>
                         <tr>
-                            <th colspan='2'><b>Address:</b></th>
+                            <th colSpan='2'><b>Address:</b></th>
                         </tr>
                         <tr>
                             <th>City:</th>
