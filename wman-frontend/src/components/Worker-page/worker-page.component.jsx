@@ -1,7 +1,7 @@
 import { Button } from "antd";
 import { useState } from "react/cjs/react.development";
 import WorkerThisWeek from "./worker-page-this-week-events/worker-page-this-week.component";
-import WorkerToday from "./worker-page-today-events/worker-page-today";
+import WorkerToday from "./worker-page-today-events/worker-page-today.component";
 import "./worker-page.styles.css"
 
 const WorkerPage = () => {

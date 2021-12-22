@@ -1,0 +1,33 @@
+.one-event{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 1vh;
+}
+.one-event table{
+    width: 80vw;
+    border-collapse: collapse;
+    border-radius: 20px;
+    overflow: hidden;
+    background-color:rgb(235, 234, 255);
+    
+}
+
+.one-event th, tr{
+    width:max-content;
+    text-align: center;
+}
+
+.select-intervall Button{
+    width: 45vw;
+    height: 10vh;
+    background-color:rgb(235, 234, 255);
+    border: 1px solid rgb(240, 220, 220);
+    border-radius:20px;  
+    transform: translateZ(0);
+    transition: transform 0.25s ease-out;
+  
+}
+.select-intervall Button:hover{
+    transform: scale(1.05);
+}
