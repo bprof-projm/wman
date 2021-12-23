@@ -73,7 +73,7 @@ namespace Wman.Logic.Classes
             return result;
         }
 
-        public async Task<IdentityResult> CreateWorker(RegisterDTO model)
+        public async Task<IdentityResult> CreateWorker(RegisterDTO model, IPhotoLogic photoLogic)
         {
             var result = new IdentityResult();
             var user = new WmanUser();
@@ -95,7 +95,10 @@ namespace Wman.Logic.Classes
             {
                 await userManager.AddToRoleAsync(user, "Worker");
             }
-
+            if (model.Photo != null)
+            {
+               await photoLogic.AddProfilePhoto(user.UserName, model.Photo);
+            }
             return result;
         }
 

@@ -29,8 +29,7 @@ namespace Wman.WebAPI.Controllers
         [Route("Create")]
         public async Task<ActionResult> CreateWorker([FromForm] RegisterDTO model)
         {
-            await this.adminLogic.CreateWorker(model);
-            await this.photoLogic.AddProfilePhoto(model.Username, model.Photo);
+            await this.adminLogic.CreateWorker(model, this.photoLogic);
             return Ok();
         }
         [HttpPut]

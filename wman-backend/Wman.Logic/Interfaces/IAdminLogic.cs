@@ -10,7 +10,7 @@ namespace Wman.Logic.Interfaces
 {
     public interface IAdminLogic
     {
-        Task<IdentityResult> CreateWorker(RegisterDTO login);
+        Task<IdentityResult> CreateWorker(RegisterDTO login, IPhotoLogic photoLogic);
 
         Task<IdentityResult> DeleteWorker(string uname, IPhotoLogic photoLogic);
 
