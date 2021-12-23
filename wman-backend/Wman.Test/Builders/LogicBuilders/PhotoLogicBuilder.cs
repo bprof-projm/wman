@@ -101,7 +101,7 @@ namespace Wman.Test.Builders.LogicBuilders
             var akarmi = new ImageUploadResult();
             System.Uri uriHelper = new System.Uri("https://cdn.discordapp.com/attachments/432444267802132480/903766815962988604/catto.PNG");
             akarmi.SecureUrl = uriHelper;
-            
+            akarmi.PublicId = "Test";
             return Task.FromResult(akarmi);
         }
 
