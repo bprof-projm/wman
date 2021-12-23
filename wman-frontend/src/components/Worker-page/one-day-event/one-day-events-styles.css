@@ -1,15 +1,9 @@
 body{
     background-color: ghostwhite;
 }
-.one-event{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    margin-top: 1vh;
-}
 
 .one-event table{
-    width: 80vw;
+    width: 45vw;
     border-collapse: collapse;
     border-radius: 20px;
     overflow: hidden;
@@ -21,6 +15,7 @@ body{
 }
 
 .one-event-tables{
+    
     background-color:rgb(235, 234, 255);
     border-radius: 20px;
     transform: translateZ(0);
@@ -28,7 +23,19 @@ body{
 }
 
 .one-event th, tr{
+    
     text-align: center;
     font-weight: normal;
     background-color:rgb(235, 234, 255);
+}
+.one-event{
+    margin-top: 1vh;
+}
+@media screen and (max-width:600px) {
+ .one-event table{
+     width: 80vw;
+ }  
+ .one-event{
+     align-content: center;
+ }
 }
