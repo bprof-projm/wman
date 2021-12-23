@@ -53,21 +53,20 @@ namespace Wman.Logic.Classes
             return mapper.Map<UserDTO>(output);
         }
 
-        public async Task<IdentityResult> UpdateUser(string oldUsername, string pwd, UserDTO newUser)
+        public async Task<IdentityResult> UpdateUser(string username, WorkerModifyDTO model)
         {
 
             var result = new IdentityResult();
-            var user = userManager.Users.Where(x => x.UserName == oldUsername).SingleOrDefault();
+            var user = userManager.Users.Where(x => x.UserName == username).SingleOrDefault();
             if (user == null)
             {
                 throw new NotFoundException(WmanError.UserNotFound);
             }
-            user.UserName = newUser.Username;
-            user.Email = newUser.Email;
-            user.FirstName = newUser.Firstname;
-            user.LastName = newUser.Lastname;
+            user.Email = model.Email;
+            user.FirstName = model.Firstname;
+            user.LastName = model.Lastname;
             //user.ProfilePicture = newUser.Picture;
-            user.PasswordHash = userManager.PasswordHasher.HashPassword(user, pwd);
+            //user.PasswordHash = userManager.PasswordHasher.HashPassword(user, model.Password);
 
             result = await userManager.UpdateAsync(user);
             await this.CheckResult(result);
