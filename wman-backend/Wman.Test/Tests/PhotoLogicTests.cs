@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.Classes;
@@ -46,17 +45,7 @@ namespace Wman.Test.Tests
         {
             //Arrange
             PhotoLogic photoLogic = new(this.photoService.Object, this.userManager.Object, this.picturesRepo.Object, this.mapper);
-            
-            var content = "Hello World from a Fake File";
-            var fileName = "test.pdf";
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-            writer.Write(content);
-            writer.Flush();
-            stream.Position = 0;
-
-            //create FormFile with desired data
-            IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
+            IFormFile file = PhotoLogicBuilder.GetFormFile();
 
             //Act
             var call = await photoLogic.AddProfilePhoto(users[0].UserName, file);
