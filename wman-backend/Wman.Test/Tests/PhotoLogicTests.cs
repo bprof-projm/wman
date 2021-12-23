@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.Classes;
-using Wman.Logic.DTO_Models;
 using Wman.Logic.Services;
 using Wman.Repository.Interfaces;
 using Wman.Test.Builders;
@@ -41,5 +41,29 @@ namespace Wman.Test.Tests
             this.photoService = PhotoLogicBuilder.GetPhotoService();
         }
 
+        [Test]
+        public async Task AddProfilePhoto_AddNewPhoto_SuccessfulOperation()
+        {
+            //Arrange
+            PhotoLogic photoLogic = new(this.photoService.Object, this.userManager.Object, this.picturesRepo.Object, this.mapper);
+            
+            var content = "Hello World from a Fake File";
+            var fileName = "test.pdf";
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            writer.Write(content);
+            writer.Flush();
+            stream.Position = 0;
+
+            //create FormFile with desired data
+            IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
+
+            //Act
+            var call = await photoLogic.AddProfilePhoto(users[0].UserName, file);
+
+            //Assert
+            this.photoService.Verify(x => x.AddProfilePhotoAsync(It.IsAny<FormFile>()), Times.Once);
+            this.picturesRepo.Verify(x => x.Add(It.IsAny<Pictures>()), Times.Once);
+        }
     }
 }
