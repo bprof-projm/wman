@@ -12,7 +12,6 @@ var inFifteenMinutes = new Date(new Date().getTime() + 60 * 60 * 1000);
 
 export const NormalLoginForm = () => {
   const [failedLogin, setFailedLogin] = useState(false);
-
   const history = useHistory();
 
   const onFinish = (values) => {
@@ -28,12 +27,8 @@ export const NormalLoginForm = () => {
         console.log(response.data.token);
         const token = response.data.token;
         const decoded = jwt_decode(token);
-        console.log(decoded); 
-        console.log(decoded[2])
-        //TODO!!!
-        //Role szerinti nézetre dobni a felhasználót ha megvan hozzá az API: név => role
-        
-        history.push("/");
+        const user = decoded.sub;
+        navigateUser(user);
       })
       .catch(function (error) {
         setFailedLogin(true);
@@ -44,6 +39,24 @@ export const NormalLoginForm = () => {
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+
+  const navigateUser = (user) => {
+    console.log(user)
+    axios.get(`/Auth/userrole?username=${user}`, { headers: { 'Authorization': `Bearer ${Cookies.get("auth")}` } })
+      .then((response) => {
+        if (response.data[0] == 'Manager') {
+          history.push("/");
+        }
+        else if (response.data[0] == 'Worker') {
+          history.push("/worker")
+        }
+        else{
+          alert("something went wrong, check the navigateUser function!")
+        }
+      })
+      .catch(error => console.log(error));
+
+  }
 
   return (
     <div className="login-background" style={{ height: "100vh" }}>
