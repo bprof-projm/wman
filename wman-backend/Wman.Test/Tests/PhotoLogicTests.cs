@@ -41,7 +41,7 @@ namespace Wman.Test.Tests
             this.pictureList = PhotoLogicBuilder.GetPictures();
             this.picturesRepo = PhotoLogicBuilder.GetPicturesRepo(pictureList);
             
-            this.file = PhotoLogicBuilder.GetFormFile();
+            this.file = FormFileBuilder.GetFormFile();
         }
 
         [Test]
@@ -82,9 +82,10 @@ namespace Wman.Test.Tests
             PhotoLogic photoLogic = new(this.photoService.Object, this.userManager.Object, this.picturesRepo.Object, this.mapper);
 
             //Act
-            await photoLogic.UpdateProfilePhoto(users[0].UserName, file);
+            var call = await photoLogic.UpdateProfilePhoto(users[0].UserName, file);
 
             //Assert
+            Assert.That(call.CloudPhotoID == "Test");
             this.userManager.Verify(x => x.Users, Times.Once);
             //deletions
             this.photoService.Verify(x => x.DeleteProfilePhotoAsync(It.IsAny<string>()), Times.Once);
