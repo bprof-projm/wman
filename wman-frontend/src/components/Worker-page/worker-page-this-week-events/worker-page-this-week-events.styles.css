@@ -1,0 +1,17 @@
+.events-of-the-week{
+}
+
+.week-day{
+    background-color: rgb(202, 193, 255);
+    width: 90vw;
+    margin-top: 1vh;
+    margin-left: 5vw;
+    border-radius: 20px;
+    
+    height:20vh;
+}
+.weekday-events{
+    background-color:rgb(235, 234, 255);
+    
+    height:10vh;
+}
