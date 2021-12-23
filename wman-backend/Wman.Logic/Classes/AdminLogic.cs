@@ -23,8 +23,9 @@ namespace Wman.Logic.Classes
             this.roleManager = roleManager;
             this.mapper = mapper;
         }
-        public async Task<IdentityResult> UpdateWorker(string username, WorkerModifyDTO model)
+        public async Task<IdentityResult> UpdateWorker(string username, WorkerModifyDTO model, IPhotoLogic photoLogic)
         {
+            ;
             var result = new IdentityResult();
             var user = userManager.Users.Where(x => x.UserName == username).SingleOrDefault();
             if (user == null)
@@ -38,16 +39,19 @@ namespace Wman.Logic.Classes
             user.Email = model.Email;
             user.FirstName = model.Firstname;
             user.LastName = model.Lastname;
-            //user.ProfilePicture = newUser.Picture;
-            //user.PasswordHash = userManager.PasswordHasher.HashPassword(user, model.Password);
 
+            //user.PasswordHash = userManager.PasswordHasher.HashPassword(user, model.Password);
+            if (model.Photo != null)
+            {
+                await photoLogic.UpdateProfilePhoto(username, model.Photo);
+            }
             result = await userManager.UpdateAsync(user);
             await this.CheckResult(result);
             return result;
         }
 
 
-        public async Task<IdentityResult> DeleteWorker(string uname)
+        public async Task<IdentityResult> DeleteWorker(string uname, IPhotoLogic photoLogic)
         {
             var result = new IdentityResult();
             var user = userManager.Users.Where(x => x.UserName == uname).SingleOrDefault();
@@ -59,11 +63,14 @@ namespace Wman.Logic.Classes
             {
                 throw new InvalidOperationException(WmanError.NotAWorker);
             }
+            if (user.ProfilePicture.CloudPhotoID != null)
+            {
+                await photoLogic.RemoveProfilePhoto(user.UserName);
+            }
             result = await userManager.DeleteAsync(user);
             await this.CheckResult(result);
+
             return result;
-
-
         }
 
         public async Task<IdentityResult> CreateWorker(RegisterDTO model)

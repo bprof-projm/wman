@@ -35,9 +35,9 @@ namespace Wman.WebAPI.Controllers
         }
         [HttpPut]
         [Route("Modify/{username}")]
-        public async Task<ActionResult> ModifyWorker(string username, [FromBody] WorkerModifyDTO model)
+        public async Task<ActionResult> ModifyWorker(string username, [FromForm] WorkerModifyDTO model)
         {
-            return Ok(await this.adminLogic.UpdateWorker(username, model));
+            return Ok(await this.adminLogic.UpdateWorker(username, model, this.photoLogic));
         }
         [HttpDelete]
         [Route("Delete")]

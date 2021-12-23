@@ -12,9 +12,9 @@ namespace Wman.Logic.Interfaces
     {
         Task<IdentityResult> CreateWorker(RegisterDTO login);
 
-        Task<IdentityResult> DeleteWorker(string uname);
+        Task<IdentityResult> DeleteWorker(string uname, IPhotoLogic photoLogic);
 
-        Task<IdentityResult> UpdateWorker(string username, WorkerModifyDTO model);
+        Task<IdentityResult> UpdateWorker(string username, WorkerModifyDTO model, IPhotoLogic photoLogic);
         void test(IAuthLogic logic);
     }
 }
