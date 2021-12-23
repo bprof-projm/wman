@@ -108,21 +108,6 @@ namespace Wman.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Set the role of a user, while removing any previous roles he had before
-        /// </summary>
-        /// <param name="username">Username of the user</param>
-        /// <param name="rolename">Name of the role(Admin/Manager/Worker)</param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("role/set")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> SetRole(string username, string rolename)
-        {
-            await this.authLogic.SetRoleOfUser(username, rolename);
-            return Ok();
-        }
-
-        /// <summary>
         /// Returns a list of users that have the provided role
         /// </summary>
         /// <param name="rolename">Name of the role</param>
