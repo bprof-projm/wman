@@ -63,7 +63,7 @@ namespace Wman.Logic.Classes
             {
                 throw new InvalidOperationException(WmanError.NotAWorker);
             }
-            if (user.ProfilePicture.CloudPhotoID != null)
+            if (user.ProfilePicture != null)
             {
                 await photoLogic.RemoveProfilePhoto(user.UserName);
             }

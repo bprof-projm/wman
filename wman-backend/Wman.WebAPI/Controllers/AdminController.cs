@@ -43,7 +43,7 @@ namespace Wman.WebAPI.Controllers
         [Route("Delete")]
         public async Task<ActionResult> DeleteWorker(string username)
         {
-            return Ok(await this.adminLogic.DeleteWorker(username));
+            return Ok(await this.adminLogic.DeleteWorker(username, this.photoLogic));
         }
         /// <summary>
         /// Set the role of a user, while removing any previous roles he had before
