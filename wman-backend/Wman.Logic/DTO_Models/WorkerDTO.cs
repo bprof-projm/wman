@@ -39,5 +39,8 @@ namespace Wman.Logic.DTO_Models
 
         //[DataType(DataType.ImageUrl)]
         public PhotoDTO ProfilePicture { get; set; }
+        [DataType(DataType.PhoneNumber)]
+        [StringLength(15)]
+        public string PhoneNumber { get; set; }
     }
 }
