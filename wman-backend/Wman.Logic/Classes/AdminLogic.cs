@@ -15,15 +15,15 @@ namespace Wman.Logic.Classes
     public class AdminLogic : IAdminLogic
     {
         UserManager<WmanUser> userManager;
-        RoleManager<IdentityRole<int>> roleManager;
+        IPhotoLogic photoLogic;
         IMapper mapper;
-        public AdminLogic(UserManager<WmanUser> userManager, RoleManager<IdentityRole<int>> roleManager, IMapper mapper)
+        public AdminLogic(UserManager<WmanUser> userManager, IPhotoLogic photoLogic, IMapper mapper)
         {
             this.userManager = userManager;
-            this.roleManager = roleManager;
+            this.photoLogic = photoLogic;
             this.mapper = mapper;
         }
-        public async Task<IdentityResult> UpdateWorker(string username, WorkerModifyDTO model, IPhotoLogic photoLogic)
+        public async Task<IdentityResult> UpdateWorker(string username, WorkerModifyDTO model)
         {
             ;
             var result = new IdentityResult();
@@ -51,7 +51,7 @@ namespace Wman.Logic.Classes
         }
 
 
-        public async Task<IdentityResult> DeleteWorker(string uname, IPhotoLogic photoLogic)
+        public async Task<IdentityResult> DeleteWorker(string uname)
         {
             var result = new IdentityResult();
             var user = userManager.Users.Where(x => x.UserName == uname).SingleOrDefault();
@@ -73,7 +73,7 @@ namespace Wman.Logic.Classes
             return result;
         }
 
-        public async Task<IdentityResult> CreateWorker(RegisterDTO model, IPhotoLogic photoLogic)
+        public async Task<IdentityResult> CreateWorker(RegisterDTO model)
         {
             var result = new IdentityResult();
             var user = new WmanUser();
