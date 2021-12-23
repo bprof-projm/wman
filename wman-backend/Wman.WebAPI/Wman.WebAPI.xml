@@ -30,13 +30,6 @@
             </summary>
             <param name="model">Login details</param>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.CreateWorker(Wman.Logic.DTO_Models.RegisterDTO)">
-            <summary>
-            Create a new user
-            </summary>
-            <param name="model">Login model</param>
-            <returns>ActionResult</returns>
-        </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.GetAllUsers">
             <summary>
             Get a list of all users

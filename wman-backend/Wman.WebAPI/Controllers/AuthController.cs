@@ -48,17 +48,6 @@ namespace Wman.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Create a new user
-        /// </summary>
-        /// <param name="model">Login model</param>
-        /// <returns>ActionResult</returns>
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> CreateWorker([FromBody] RegisterDTO model)
-        {
-            return Ok(await authLogic.CreateWorker(model));
-        }
-        /// <summary>
         /// Get a list of all users
         /// </summary>
         /// <returns></returns>

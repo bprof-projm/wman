@@ -29,7 +29,7 @@ namespace Wman.WebAPI.Controllers
         [Route("Create")]
         public async Task<ActionResult> CreateWorker([FromBody] RegisterDTO model, IFormFile file)
         {
-            await this.authLogic.CreateWorker(model);
+            await this.adminLogic.CreateWorker(model);
             await this.photoLogic.AddProfilePhoto(model.Username, file);
             return Ok();
         }
@@ -37,13 +37,13 @@ namespace Wman.WebAPI.Controllers
         [Route("Modify/{username}")]
         public async Task<ActionResult> ModifyWorker(string username, [FromBody] WorkerModifyDTO model)
         {
-            return Ok(await this.authLogic.UpdateUser(username, model));
+            return Ok(await this.adminLogic.UpdateWorker(username, model));
         }
         [HttpDelete]
         [Route("Delete")]
         public async Task<ActionResult> DeleteWorker(string username)
         {
-            return Ok(await this.authLogic.DeleteUser(username));
+            return Ok(await this.adminLogic.DeleteUser(username));
         }
         /// <summary>
         /// Set the role of a user, while removing any previous roles he had before
