@@ -4,6 +4,14 @@
         <name>Wman.WebAPI</name>
     </assembly>
     <members>
+        <member name="M:Wman.WebAPI.Controllers.AdminController.SetRole(System.String,System.String)">
+            <summary>
+            Set the role of a user, while removing any previous roles he had before
+            </summary>
+            <param name="username">Username of the user</param>
+            <param name="rolename">Name of the role(Admin/Manager/Worker)</param>
+            <returns></returns>
+        </member>
         <member name="T:Wman.WebAPI.Controllers.AuthController">
             <summary>
             Auth controller
@@ -40,28 +48,6 @@
             Get one specific user
             </summary>
             <param name="username"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.DeleteUser(System.String)">
-            <summary>
-            Delete a user
-            </summary>
-            <param name="username">Username of the user to be deleted</param>
-        </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.UpdateUser(System.String,System.String,Wman.Logic.DTO_Models.UserDTO)">
-            <summary>
-            Update a user
-            </summary>
-            <param name="oldUsername">Prev. id</param>
-            <param name="pwd">Password of the user to be updated</param>
-            <param name="user">User to be updated</param>
-        </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.SetRole(System.String,System.String)">
-            <summary>
-            Set the role of a user, while removing any previous roles he had before
-            </summary>
-            <param name="username">Username of the user</param>
-            <param name="rolename">Name of the role(Admin/Manager/Worker)</param>
             <returns></returns>
         </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.UsersOfRole(System.String)">

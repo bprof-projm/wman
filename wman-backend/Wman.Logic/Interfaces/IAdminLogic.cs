@@ -8,6 +8,6 @@ namespace Wman.Logic.Interfaces
 {
     public interface IAdminLogic
     {
-
+        void test(IAuthLogic logic);
     }
 }

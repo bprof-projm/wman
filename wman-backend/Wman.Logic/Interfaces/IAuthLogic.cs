@@ -19,7 +19,7 @@ namespace Wman.Logic.Interfaces
 
         Task<IdentityResult> DeleteUser(string uname);
 
-        Task<IdentityResult> UpdateUser(string oldUsername, string pwd, UserDTO newUser);
+        Task<IdentityResult> UpdateUser(string username, WorkerModifyDTO model);
 
         Task<TokenModel> LoginUser(LoginDTO login);
 

@@ -17,11 +17,13 @@ namespace Wman.WebAPI.Controllers
     {
         IPhotoLogic photoLogic;
         IAuthLogic authLogic;
+        IAdminLogic adminLogic;
 
-        public AdminController(IPhotoLogic photoLogic, IAuthLogic authLogic)
+        public AdminController(IPhotoLogic photoLogic, IAuthLogic authLogic, IAdminLogic adminLogic)
         {
             this.authLogic = authLogic;
             this.photoLogic = photoLogic;
+            this.adminLogic = adminLogic;
         }
         [HttpPost]
         [Route("Create")]
@@ -32,10 +34,10 @@ namespace Wman.WebAPI.Controllers
             return Ok();
         }
         [HttpPut]
-        [Route("Modify")]
-        public async Task<ActionResult> ModifyWorker([FromBody] RegisterDTO model)
+        [Route("Modify/{username}")]
+        public async Task<ActionResult> ModifyWorker(string username, [FromBody] WorkerModifyDTO model)
         {
-            return Ok(await this.authLogic.UpdateUser(oldUsername, pwd, user));
+            return Ok(await this.authLogic.UpdateUser(username, model));
         }
         [HttpDelete]
         [Route("Delete")]
@@ -55,6 +57,13 @@ namespace Wman.WebAPI.Controllers
         public async Task<ActionResult> SetRole(string username, string rolename)
         {
             await this.authLogic.SetRoleOfUser(username, rolename);
+            return Ok();
+        }
+        [HttpGet]
+        [Route("test")]
+        public async Task<ActionResult> testme()
+        {
+            adminLogic.test(this.authLogic);
             return Ok();
         }
     }
