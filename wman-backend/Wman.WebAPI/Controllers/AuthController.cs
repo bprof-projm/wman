@@ -84,30 +84,6 @@ namespace Wman.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Delete a user
-        /// </summary>
-        /// <param name="username">Username of the user to be deleted</param>
-        [HttpDelete("{username}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> DeleteUser(string username)
-        {
-            return Ok(await this.authLogic.DeleteUser(username));
-        }
-
-        /// <summary>
-        /// Update a user
-        /// </summary>
-        /// <param name="oldUsername">Prev. id</param>
-        /// <param name="pwd">Password of the user to be updated</param>
-        /// <param name="user">User to be updated</param>
-        [HttpPut("{oldUsername}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> UpdateUser(string oldUsername, string pwd, [FromBody] UserDTO user)
-        {
-            return Ok(await this.authLogic.UpdateUser(oldUsername, pwd, user));
-        }
-
-        /// <summary>
         /// Returns a list of users that have the provided role
         /// </summary>
         /// <param name="rolename">Name of the role</param>
