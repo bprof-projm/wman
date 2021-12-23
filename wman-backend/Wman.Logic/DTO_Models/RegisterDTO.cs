@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -35,5 +36,6 @@ namespace Wman.Logic.DTO_Models
         [DataType(DataType.Text)]
         [StringLength(30)]
         public string Lastname { get; set; }
+        public IFormFile Photo { get; set; }
     }
 }

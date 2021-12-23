@@ -25,12 +25,15 @@ namespace Wman.Logic.Classes
         }
         public async Task<IdentityResult> UpdateWorker(string username, WorkerModifyDTO model)
         {
-
             var result = new IdentityResult();
             var user = userManager.Users.Where(x => x.UserName == username).SingleOrDefault();
             if (user == null)
             {
                 throw new NotFoundException(WmanError.UserNotFound);
+            }
+            if (await userManager.IsInRoleAsync(user, "Worker") == false)
+            {
+                throw new InvalidOperationException(WmanError.NotAWorker);
             }
             user.Email = model.Email;
             user.FirstName = model.Firstname;
@@ -44,13 +47,17 @@ namespace Wman.Logic.Classes
         }
 
 
-        public async Task<IdentityResult> DeleteUser(string uname)
+        public async Task<IdentityResult> DeleteWorker(string uname)
         {
             var result = new IdentityResult();
             var user = userManager.Users.Where(x => x.UserName == uname).SingleOrDefault();
             if (user == null)
             {
                 throw new NotFoundException(WmanError.UserNotFound);
+            }
+            if (await userManager.IsInRoleAsync(user, "Worker") == false)
+            {
+                throw new InvalidOperationException(WmanError.NotAWorker);
             }
             result = await userManager.DeleteAsync(user);
             await this.CheckResult(result);
