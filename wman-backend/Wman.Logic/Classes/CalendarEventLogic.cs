@@ -38,7 +38,7 @@ namespace Wman.Logic.Classes
                 throw new NotFoundException(WmanError.UserNotFound);
             }
             List<WorkEvent> events = await (from x in workEventRepo.GetAll()
-                                            where x.EstimatedStartDate.DayOfYear == DateTime.UtcNow.DayOfYear && x.EstimatedStartDate.Year == DateTime.Today.Year
+                                            where x.EstimatedStartDate.DayOfYear == DateTime.Now.DayOfYear && x.EstimatedStartDate.Year == DateTime.Today.Year
                                             select x).ToListAsync();
 
             if (await userManager.IsInRoleAsync(user, "worker"))
