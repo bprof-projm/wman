@@ -34,6 +34,9 @@ namespace Wman.Logic.DTO_Models
 
         [DataType(DataType.Text)]
         [StringLength(30)]
-        public string Lastname { get; set; }
+        public string Lastname { get; set; }     
+        [DataType(DataType.PhoneNumber)]
+        [StringLength(15)] 
+        public string PhoneNumber { get; set; }
     }
 }

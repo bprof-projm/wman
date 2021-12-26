@@ -37,8 +37,9 @@ namespace Wman.WebAPI.Controllers
         [HttpGet("GetCurrentDayEvents")]
         public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetCurrentDayEvents()
         {
-                var events =await calendarEvent.GetCurrentDayEvents();
-                return Ok(events);
+            var username = HttpContext.User.Identity.Name;
+            var events =await calendarEvent.GetCurrentDayEvents(username);
+            return Ok(events);
         }
         /// <summary>
         /// gets events from this week
@@ -47,7 +48,8 @@ namespace Wman.WebAPI.Controllers
         [HttpGet("GetCurrentWeekEvents")]
         public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetCurrentWeekEvents()
         {
-                var events =await calendarEvent.GetCurrentWeekEvents();
+            var username = HttpContext.User.Identity.Name;
+            var events =await calendarEvent.GetCurrentWeekEvents(username);
                 return Ok(events);
         }
 
@@ -59,8 +61,9 @@ namespace Wman.WebAPI.Controllers
         [HttpGet("GetDayEvents/{day}")]
         public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetDayEvents(int day)
         {
-                var events =await calendarEvent.GetDayEvents(day);
-                return Ok(events);
+            var username = HttpContext.User.Identity.Name;
+            var events =await calendarEvent.GetDayEvents(day, username);
+            return Ok(events);
         }
         /// <summary>
         /// gets custom week events
@@ -70,8 +73,9 @@ namespace Wman.WebAPI.Controllers
         [HttpGet("GetWeekEvents/{week}")]
         public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetWeekEvents(int week)
         {
-                var events = await calendarEvent.GetWeekEvents(week);
-                return Ok(events);
+            var username = HttpContext.User.Identity.Name;
+            var events = await calendarEvent.GetWeekEvents(week, username);
+            return Ok(events);
         }
         /// <summary>
         /// gets custom day events
@@ -81,7 +85,8 @@ namespace Wman.WebAPI.Controllers
         [HttpGet("GetDayEvents")]
         public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetDayEvents(DateTime time)
         {
-                var events = await calendarEvent.GetDayEvents(time);
+            var username = HttpContext.User.Identity.Name;
+            var events = await calendarEvent.GetDayEvents(time, username);
                 return Ok(events);
         }
         /// <summary>
@@ -93,8 +98,9 @@ namespace Wman.WebAPI.Controllers
         [HttpGet("GetWeekEvents")]
         public async Task<ActionResult<IEnumerable<WorkEventForWorkCardDTO>>> GetWeekEvents(DateTime startEventDate, DateTime finishEventDate)
         {
-                var events = await calendarEvent.GetWeekEvents(startEventDate, finishEventDate);
-                return Ok(events);
+            var username = HttpContext.User.Identity.Name;
+            var events = await calendarEvent.GetWeekEvents(startEventDate, finishEventDate, username);
+            return Ok(events);
         }
 
         [HttpGet("WorkCard/{Id}")]
@@ -103,5 +109,7 @@ namespace Wman.WebAPI.Controllers
                 var workCard = await workCardEvent.ForWorkCard(Id);
                 return Ok(workCard);
         }
+
+        
     }
 }
