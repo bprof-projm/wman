@@ -4,19 +4,46 @@
         <name>Wman.WebAPI</name>
     </assembly>
     <members>
+        <member name="T:Wman.WebAPI.Controllers.AdminController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AdminController.#ctor(Wman.Logic.Interfaces.IAuthLogic,Wman.Logic.Interfaces.IAdminLogic)">
+            <summary>
+            
+            </summary>
+            <param name="authLogic"></param>
+            <param name="adminLogic"></param>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AdminController.CreateWorker(Wman.Logic.DTO_Models.RegisterDTO)">
+            <summary>
+            Create a new worker
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AdminController.ModifyWorker(System.String,Wman.Logic.DTO_Models.WorkerModifyDTO)">
+            <summary>
+            Edit an existing worker
+            </summary>
+            <param name="username"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AdminController.DeleteWorker(System.String)">
+            <summary>
+            Delete a worker
+            </summary>
+            <param name="username"></param>
+            <returns></returns>
+        </member>
         <member name="M:Wman.WebAPI.Controllers.AdminController.SetRole(System.String,System.String)">
             <summary>
-            Set the role of a user, while removing any previous roles he had before
+            Set the role of a user, while removing any previous roles it had before
             </summary>
             <param name="username">Username of the user</param>
             <param name="rolename">Name of the role(Admin/Manager/Worker)</param>
-            <returns></returns>
-        </member>
-        <member name="M:Wman.WebAPI.Controllers.AdminController.FirstTimeSetup(Wman.Logic.DTO_Models.RegisterDTO)">
-            <summary>
-            Api used to create a new admin user, if there are none present.
-            </summary>
-            <param name="model"></param>
             <returns></returns>
         </member>
         <member name="T:Wman.WebAPI.Controllers.AuthController">
@@ -24,12 +51,13 @@
             Auth controller
             </summary>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.#ctor(Wman.Logic.Interfaces.IAuthLogic,Wman.Logic.Helpers.DBSeed)">
+        <member name="M:Wman.WebAPI.Controllers.AuthController.#ctor(Wman.Logic.Interfaces.IAuthLogic,Wman.Logic.Helpers.DBSeed,Wman.Logic.Interfaces.IAdminLogic)">
             <summary>
             
             </summary>
             <param name="authLogic"></param>
             /// <param name="dBSeed"></param>
+            <param name="adminLogic"></param>
         </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.Login(Wman.Logic.DTO_Models.LoginDTO)">
             <summary>
@@ -63,6 +91,13 @@
             </summary>
             <param name="username"></param>
             <returns>Worker/Admin/Manager</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.FirstTimeSetup(Wman.Logic.DTO_Models.RegisterDTO)">
+            <summary>
+            Api used to create a new admin user, if there are none present.
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
         </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.PopulateDB">
             <summary>

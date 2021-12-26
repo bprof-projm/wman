@@ -119,7 +119,6 @@ namespace Wman.Logic.Classes
             {
                 throw new InvalidOperationException(WmanError.AdminExists);
             }
-            ;
         }
 
         private async Task<bool> CheckResult(IdentityResult result)

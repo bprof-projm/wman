@@ -10,6 +10,9 @@ using Wman.Logic.Interfaces;
 
 namespace Wman.WebAPI.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     [Authorize(Roles = "Admin")]
@@ -17,12 +20,21 @@ namespace Wman.WebAPI.Controllers
     {
         IAuthLogic authLogic;
         IAdminLogic adminLogic;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="authLogic"></param>
+        /// <param name="adminLogic"></param>
         public AdminController(IAuthLogic authLogic, IAdminLogic adminLogic)
         {
             this.authLogic = authLogic;
             this.adminLogic = adminLogic;
         }
+        /// <summary>
+        /// Create a new worker
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("Create")]
         public async Task<ActionResult> CreateWorker([FromForm] RegisterDTO model)
@@ -30,12 +42,23 @@ namespace Wman.WebAPI.Controllers
             await this.adminLogic.CreateWorker(model);
             return Ok();
         }
+        /// <summary>
+        /// Edit an existing worker
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPut]
         [Route("Modify/{username}")]
         public async Task<ActionResult> ModifyWorker(string username, [FromForm] WorkerModifyDTO model)
         {
             return Ok(await this.adminLogic.UpdateWorker(username, model));
         }
+        /// <summary>
+        /// Delete a worker
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("Delete")]
         public async Task<ActionResult> DeleteWorker(string username)
@@ -43,7 +66,7 @@ namespace Wman.WebAPI.Controllers
             return Ok(await this.adminLogic.DeleteWorker(username));
         }
         /// <summary>
-        /// Set the role of a user, while removing any previous roles he had before
+        /// Set the role of a user, while removing any previous roles it had before
         /// </summary>
         /// <param name="username">Username of the user</param>
         /// <param name="rolename">Name of the role(Admin/Manager/Worker)</param>
@@ -55,17 +78,6 @@ namespace Wman.WebAPI.Controllers
             await this.authLogic.SetRoleOfUser(username, rolename);
             return Ok();
         }
-        /// <summary>
-        /// Api used to create a new admin user, if there are none present.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("AdminSetup")]
-        public async Task<ActionResult> FirstTimeSetup([FromForm] RegisterDTO model)
-        {
-            await adminLogic.Setup(model);
-            return Ok();
-        }
+        
     }
 }

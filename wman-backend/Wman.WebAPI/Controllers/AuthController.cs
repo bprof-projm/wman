@@ -23,15 +23,18 @@ namespace Wman.WebAPI.Controllers
     {
         IAuthLogic authLogic;
         DBSeed dBSeed;
+        IAdminLogic adminLogic;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="authLogic"></param>
         /// /// <param name="dBSeed"></param>
-        public AuthController(IAuthLogic authLogic, DBSeed dBSeed)
+        /// <param name="adminLogic"></param>
+        public AuthController(IAuthLogic authLogic, DBSeed dBSeed, IAdminLogic adminLogic)
         {
             this.authLogic = authLogic;
             this.dBSeed = dBSeed;
+            this.adminLogic = adminLogic;
         }
 
         /// <summary>
@@ -96,6 +99,20 @@ namespace Wman.WebAPI.Controllers
         {
             return Ok(await this.authLogic.GetAllRolesOfUser(username));
         }
+
+        /// <summary>
+        /// Api used to create a new admin user, if there are none present.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AdminSetup")]
+        public async Task<ActionResult> FirstTimeSetup([FromForm] RegisterDTO model)
+        {
+            await adminLogic.Setup(model);
+            return Ok();
+        }
+
         /// <summary>
         /// DEBUG Endpoint used to fill database with testing data. Used only for development purposes.
         /// </summary>
