@@ -57,6 +57,7 @@ namespace Wman.Logic.Helpers
                 UserName = "string",
                 FirstName = "Admin",
                 LastName = "User",
+                PhoneNumber = "0690123456",
                 SecurityStamp = Guid.NewGuid().ToString()
             };
             userManager.CreateAsync(user, "string").Wait();
@@ -67,6 +68,7 @@ namespace Wman.Logic.Helpers
                 UserName = "manager",
                 FirstName = "Manager",
                 LastName = "User",
+                PhoneNumber = "0690123456",
                 SecurityStamp = Guid.NewGuid().ToString()
             };
             userManager.CreateAsync(user, "string").Wait();
@@ -78,6 +80,7 @@ namespace Wman.Logic.Helpers
                 UserName = "user1",
                 FirstName = "First",
                 LastName = "User",
+                PhoneNumber = "0690123456",
                 SecurityStamp = Guid.NewGuid().ToString()
             };
             userManager.CreateAsync(user, "string").Wait();
@@ -89,6 +92,7 @@ namespace Wman.Logic.Helpers
                 UserName = "user2",
                 FirstName = "Second",
                 LastName = "User",
+                PhoneNumber = "0690123456",
                 SecurityStamp = Guid.NewGuid().ToString()
             };
             userManager.CreateAsync(user, "string").Wait();
@@ -100,6 +104,7 @@ namespace Wman.Logic.Helpers
                 UserName = "user3",
                 FirstName = "Third",
                 LastName = "User",
+                PhoneNumber = "06204403705",
                 SecurityStamp = Guid.NewGuid().ToString()
             };
             userManager.CreateAsync(user, "string").Wait();
