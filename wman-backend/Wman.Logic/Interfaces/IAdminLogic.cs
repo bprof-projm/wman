@@ -15,6 +15,6 @@ namespace Wman.Logic.Interfaces
         Task<IdentityResult> DeleteWorker(string uname);
 
         Task<IdentityResult> UpdateWorker(string username, WorkerModifyDTO model);
-        void test(IAuthLogic logic);
+        Task Setup(RegisterDTO model);
     }
 }

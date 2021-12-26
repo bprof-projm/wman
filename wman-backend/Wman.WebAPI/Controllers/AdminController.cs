@@ -55,11 +55,16 @@ namespace Wman.WebAPI.Controllers
             await this.authLogic.SetRoleOfUser(username, rolename);
             return Ok();
         }
-        [HttpGet]
-        [Route("test")]
-        public async Task<ActionResult> testme()
+        /// <summary>
+        /// Api used to create a new admin user, if there are none present.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AdminSetup")]
+        public async Task<ActionResult> FirstTimeSetup([FromForm] RegisterDTO model)
         {
-            adminLogic.test(this.authLogic);
+            await adminLogic.Setup(model);
             return Ok();
         }
     }

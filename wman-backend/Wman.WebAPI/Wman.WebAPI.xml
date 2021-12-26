@@ -12,6 +12,13 @@
             <param name="rolename">Name of the role(Admin/Manager/Worker)</param>
             <returns></returns>
         </member>
+        <member name="M:Wman.WebAPI.Controllers.AdminController.FirstTimeSetup(Wman.Logic.DTO_Models.RegisterDTO)">
+            <summary>
+            Api used to create a new admin user, if there are none present.
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
         <member name="T:Wman.WebAPI.Controllers.AuthController">
             <summary>
             Auth controller
