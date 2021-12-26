@@ -25,7 +25,6 @@ namespace Wman.Logic.Classes
         }
         public async Task<IdentityResult> UpdateWorker(string username, WorkerModifyDTO model)
         {
-            ;
             var result = new IdentityResult();
             var user = userManager.Users.Where(x => x.UserName == username).SingleOrDefault();
             if (user == null)
@@ -39,6 +38,7 @@ namespace Wman.Logic.Classes
             user.Email = model.Email;
             user.FirstName = model.Firstname;
             user.LastName = model.Lastname;
+            user.PhoneNumber = model.PhoneNumber;
 
             //user.PasswordHash = userManager.PasswordHasher.HashPassword(user, model.Password);
             if (model.Photo != null)
@@ -88,6 +88,7 @@ namespace Wman.Logic.Classes
                 UserName = model.Username,
                 FirstName = model.Firstname,
                 LastName = model.Lastname,
+                PhoneNumber = model.PhoneNumber,
                 SecurityStamp = Guid.NewGuid().ToString()
             };
             result = await userManager.CreateAsync(user, model.Password);
