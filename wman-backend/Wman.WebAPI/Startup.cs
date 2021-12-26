@@ -47,6 +47,7 @@ namespace Wman.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             string signingKey = Configuration.GetValue<string>("SigningKey");
+            services.AddSingleton<NotifyHub>();
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddControllers(x => x.Filters.Add(new ApiExceptionFilter()));
             services.AddTransient<IAuthLogic, AuthLogic>();
@@ -70,6 +71,7 @@ namespace Wman.WebAPI
             services.AddTransient<ILabelRepo, LabelRepo>();
             services.AddTransient<IAddressRepo, AddressRepo>();
             services.AddTransient<IPhotoService, PhotoService>();
+            
             services.AddSwaggerGen(c =>
             {
                 //c.DescribeAllEnumsAsStrings();
@@ -161,7 +163,7 @@ namespace Wman.WebAPI
             });
 
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
-
+            services.AddSignalR();
 
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -190,6 +192,10 @@ namespace Wman.WebAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<NotifyHub>("/notify", opt =>
+                {
+
+                });
             });
         }
 

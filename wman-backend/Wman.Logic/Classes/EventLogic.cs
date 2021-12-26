@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
 using Wman.Logic.Helpers;
 using Wman.Logic.Interfaces;
+using Wman.Logic.Services;
 using Wman.Repository.Interfaces;
 
 namespace Wman.Logic.Classes
@@ -20,12 +22,15 @@ namespace Wman.Logic.Classes
         IMapper mapper;
         IAddressRepo address;
         UserManager<WmanUser> userManager;
-        public EventLogic(IWorkEventRepo eventRepo, IMapper mapper, IAddressRepo address, UserManager<WmanUser> userManager)
+        private readonly IHubContext<NotifyHub> _hub;
+
+        public EventLogic(IWorkEventRepo eventRepo, IMapper mapper, IAddressRepo address, UserManager<WmanUser> userManager, IHubContext<NotifyHub> hub)
         {
             this.eventRepo = eventRepo;
             this.mapper = mapper;
             this.address = address;
             this.userManager = userManager;
+            _hub = hub;
         }
 
         public async Task AssignUser(int eventID, string username)
@@ -55,6 +60,7 @@ namespace Wman.Logic.Classes
             {
                 selectedEvent.AssignedUsers.Add(selectedUser);
                 await this.eventRepo.Update(eventID, selectedEvent);
+                await _hub.Clients.User(selectedUser.UserName).SendAsync("UserAssiged", selectedEvent);
             }
         }
 
@@ -93,6 +99,7 @@ namespace Wman.Logic.Classes
             {
                 selectedEvent.AssignedUsers.Add(item);
                 await this.eventRepo.Update(eventID, selectedEvent);
+                await _hub.Clients.User(item.UserName).SendAsync("UserAssiged", selectedEvent);
             }
         }
 
