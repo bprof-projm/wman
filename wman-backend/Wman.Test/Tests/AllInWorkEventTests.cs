@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
@@ -52,6 +53,24 @@ namespace Wman.Test.Tests
             //Assert
             Assert.That(call.Id == helperId);
             this.eventRepo.Verify(x => x.GetOne(It.IsAny<int>()), Times.Once);
+        }
+
+        [Test]
+        public async Task Available()
+        {
+            //Arrange
+            AllInWorkEventLogic workLogic = new(this.userManager.Object,
+                this.eventRepo.Object, this.labelRepo.Object, this.mapper);
+            DateTime fromDate = DateTime.UtcNow.AddDays(-2);
+            DateTime toDate = DateTime.UtcNow.AddDays(1);
+
+            //Act
+            var call = await workLogic.Available(fromDate, toDate);
+
+            //Assert
+            this.userManager.Verify(x => x.Users, Times.Exactly(2));
+            this.eventRepo.Verify(x => x.GetAll(), Times.Once);
+            this.userManager.Verify(x => x.GetRolesAsync(It.IsAny<WmanUser>()), Times.Exactly(3));//there are 3 users in the test repo
         }
     }
 }
