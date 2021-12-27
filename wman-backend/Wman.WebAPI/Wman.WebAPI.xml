@@ -202,7 +202,7 @@
             <param name="username">Username of the searched user</param>
             <returns>A collection of events that are assigned to the specified user</returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.UserController.CalculateStats(System.String)">
+        <member name="M:Wman.WebAPI.Controllers.UserController.CalculateStats(System.String,System.DateTime)">
             <summary>
             Calculate the workload stats of a selected user, in the specified year
             </summary>

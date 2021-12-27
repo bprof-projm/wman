@@ -72,9 +72,9 @@ namespace Wman.WebAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("stats")]
-        public async Task<ActionResult> CalculateStats(string username)
+        public async Task<ActionResult> CalculateStats(string username, DateTime yearSelect)
         {
-            return Ok(await this.userLogic.GetMonthlyStats(username, DateTime.Now));
+            return Ok(await this.userLogic.GetMonthlyStats(username, yearSelect));
         }
     }
 }
