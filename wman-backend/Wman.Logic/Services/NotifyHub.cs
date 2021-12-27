@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
+using Wman.Logic.DTO_Models;
 
 namespace Wman.Logic.Services
 {
@@ -20,7 +21,7 @@ namespace Wman.Logic.Services
             Clients.Caller.SendAsync("Disconnected", Context.ConnectionId);
             return base.OnDisconnectedAsync(exception);
         }
-        public async Task NotifyWorkerAboutEvent(WorkEvent we)
+        public async Task NotifyWorkerAboutEvent(WorkEventForWorkCardDTO we)
         {
             try
             {
@@ -39,7 +40,7 @@ namespace Wman.Logic.Services
             
             
         }
-        public async Task NotifyWorkerAboutEventChange(WorkEvent we)
+        public async Task NotifyWorkerAboutEventChange(WorkEventForWorkCardDTO we)
         {
             try
             {
