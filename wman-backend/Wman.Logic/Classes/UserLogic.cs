@@ -168,6 +168,10 @@ namespace Wman.Logic.Classes
                 .AsNoTracking()
                 .Where(x=> x.UserName == username)
                 .SingleOrDefaultAsync();
+            if (user == null)
+            {
+                throw new NotFoundException(WmanError.UserNotFound);
+            }
             var availiableJobs = user.WorkEvents;
             var selectedYearsJobs = availiableJobs.Where(x => x.EstimatedStartDate.Year == inYear.Year);
             WorkloadWithHoursDTO wlwh;
@@ -217,7 +221,6 @@ namespace Wman.Logic.Classes
         {
             var beforeToday = WorksBeforeToday(user.WorkEvents, selectedDate);
             var fromToday = RemainingWorks(user.WorkEvents, selectedDate);
-            ;
             TimeSpan tsBeforeToday = TimeSpan.Zero;
             TimeSpan tsFromToday = TimeSpan.Zero;
 
@@ -256,7 +259,7 @@ namespace Wman.Logic.Classes
 
         private IEnumerable<WorkEvent> RemainingWorks(IEnumerable<WorkEvent> works, DateTime selectedMonth)
         {
-            return works.Where(x => x.EstimatedStartDate.Day >= selectedMonth.Day && x.EstimatedStartDate.Year == selectedMonth.Year && x.EstimatedStartDate.Month == selectedMonth.Month && x.WorkStartDate == DateTime.MinValue);
+            return works.Where(x => x.EstimatedStartDate.Day >= selectedMonth.Day && x.EstimatedStartDate.Year == selectedMonth.Year && x.EstimatedStartDate.Month == selectedMonth.Month);
         }
         private DateTime GetWeekStartDate(DateTime input)
         {
