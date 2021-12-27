@@ -162,8 +162,13 @@ namespace Wman.Logic.Classes
 
         public async Task<MonthlyStatsDTO> GetMonthlyStats(string username, DateTime inYear)
         {
-            var user = await this.GetUser(username);
-            var availiableJobs = await  this.GetEventsOfUser(username);
+            var user = await userManager.Users
+                .Include(y => y.WorkEvents)
+                .Include(z => z.ProfilePicture)
+                .AsNoTracking()
+                .Where(x=> x.UserName == username)
+                .SingleOrDefaultAsync();
+            var availiableJobs = user.WorkEvents;
             var selectedYearsJobs = availiableJobs.Where(x => x.EstimatedStartDate.Year == inYear.Year);
             WorkloadWithHoursDTO wlwh;
             var output = new MonthlyStatsDTO();
@@ -182,13 +187,12 @@ namespace Wman.Logic.Classes
                 {
                     hours += (item.EstimatedFinishDate - item.EstimatedStartDate).TotalHours;
                 }
-                wlpercent = this.CalculateLoadSpecific(user, inYear);
+                wlpercent = this.CalculateLoadSpecific(user, new DateTime(inYear.Year, i, 1));
                 wlwh = new WorkloadWithHoursDTO();
                 wlwh.Hours = Convert.ToInt32(hours);
                 wlwh.WorkloadPercent = Convert.ToInt32(wlpercent);
                 output.MonthlyStats.Add(CultureInfo.InvariantCulture.DateTimeFormat.GetMonthName(i), wlwh);
             }
-            ;
             return output;
         }
 
@@ -213,7 +217,7 @@ namespace Wman.Logic.Classes
         {
             var beforeToday = WorksBeforeToday(user.WorkEvents, selectedDate);
             var fromToday = RemainingWorks(user.WorkEvents, selectedDate);
-
+            ;
             TimeSpan tsBeforeToday = TimeSpan.Zero;
             TimeSpan tsFromToday = TimeSpan.Zero;
 
@@ -238,6 +242,7 @@ namespace Wman.Logic.Classes
 
             TimeSpan tsSUM = tsBeforeToday + tsFromToday;
             var hoursInMonth = DateTime.DaysInMonth(selectedDate.Year, selectedDate.Month) * 8;
+            ;
             return (tsSUM.TotalHours / hoursInMonth) * 100;
         }
         private double CalculateLoad(WmanUser user)
