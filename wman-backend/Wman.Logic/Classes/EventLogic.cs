@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
@@ -64,7 +65,11 @@ namespace Wman.Logic.Classes
                 await this.eventRepo.Update(eventID, selectedEvent);
                 var notifyEvent = await eventRepo.GetOne(eventID);
                 var n = mapper.Map<WorkEventForWorkCardDTO>(notifyEvent);
-                var k = System.Text.Json.JsonSerializer.Serialize(n);
+                var k = Newtonsoft.Json.JsonConvert.SerializeObject(n, new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    StringEscapeHandling = StringEscapeHandling.EscapeNonAscii
+                });
                 await _notifyHub.NotifyWorkerAboutEvent(k);
             }
         }
