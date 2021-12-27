@@ -164,10 +164,8 @@ namespace Wman.Logic.Classes
         {
             var user = await this.GetUser(username);
             var availiableJobs = await  this.GetEventsOfUser(username);
-            var selectedYear = availiableJobs.Where(x => x.EstimatedStartDate.Year == inYear.Year);
-            var debug = new WorkloadWithHoursDTO();
-            debug.WorkloadPercent = 42;
-            debug.Hours = 69;
+            var selectedYearsJobs = availiableJobs.Where(x => x.EstimatedStartDate.Year == inYear.Year);
+            WorkloadWithHoursDTO wlwh;
             var output = new MonthlyStatsDTO();
             output.UserID = user.Id;
             output.Username = user.UserName;
@@ -175,8 +173,22 @@ namespace Wman.Logic.Classes
             {
                 output.ProfilePicUrl = user.ProfilePicture.Url;
             }
-            output.MonthlyStats.Add("January", debug);
-            output.MonthlyStats.Add("February", debug);
+            for (int i = 1; i < 13; i++)
+            {
+                var hours = 0.0;
+                var wlpercent = 0.0;
+                var monthjobs = selectedYearsJobs.Where(x => x.EstimatedStartDate.Month == i);
+                foreach (var item in monthjobs)
+                {
+                    hours += (item.EstimatedFinishDate - item.EstimatedStartDate).TotalHours;
+                }
+                wlpercent = this.CalculateLoadSpecific(user, inYear);
+                wlwh = new WorkloadWithHoursDTO();
+                wlwh.Hours = Convert.ToInt32(hours);
+                wlwh.WorkloadPercent = Convert.ToInt32(wlpercent);
+                output.MonthlyStats.Add(CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i), wlwh);
+            }
+            ;
             return output;
         }
 
@@ -197,10 +209,8 @@ namespace Wman.Logic.Classes
             }
             return selectedUser;
         }
-
-        private double CalculateLoad(WmanUser user)
+        private double CalculateLoadSpecific(WmanUser user, DateTime selectedDate)
         {
-            var selectedDate = DateTime.Now;
             var beforeToday = WorksBeforeToday(user.WorkEvents, selectedDate);
             var fromToday = RemainingWorks(user.WorkEvents, selectedDate);
 
@@ -229,6 +239,10 @@ namespace Wman.Logic.Classes
             TimeSpan tsSUM = tsBeforeToday + tsFromToday;
             var hoursInMonth = DateTime.DaysInMonth(selectedDate.Year, selectedDate.Month) * 8;
             return (tsSUM.TotalHours / hoursInMonth) * 100;
+        }
+        private double CalculateLoad(WmanUser user)
+        {
+            return CalculateLoadSpecific(user, DateTime.Now);
         }
         private IEnumerable<WorkEvent> WorksBeforeToday(IEnumerable<WorkEvent> works, DateTime selectedMonth)
         {
