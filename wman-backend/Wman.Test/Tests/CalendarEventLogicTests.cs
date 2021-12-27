@@ -27,13 +27,13 @@ namespace Wman.Test.Tests
         [SetUp]
         public void SetUp()
         {
-            this.eventList = CalendarEventLogicBuilder.GetWorkEvents();
+            this.eventList = EventLogicBuilder.GetWorkEvents();
             this.users = UserManagerBuilder.GetWmanUsers();
             UserLogicBuilder.AssignWorkEvents(this.users, this.eventList);
 
             this.mapper = MapperBuilder.GetMapper();
 
-            this.eventRepo = CalendarEventLogicBuilder.GetEventRepo(this.eventList);
+            this.eventRepo = EventLogicBuilder.GetEventRepo(this.eventList);
             this.userManager = UserManagerBuilder.GetUserManager(this.users);
         }
 
@@ -119,9 +119,11 @@ namespace Wman.Test.Tests
             ;
             //Assert
             Assert.That(resultInt is not null && resultDateTime is not null);
-            Assert.True(resultInt.Count == 1 && resultDateTime.Count == 1); 
-            
+            Assert.True(resultInt.Count == 1 && resultDateTime.Count == 1);
+
             this.eventRepo.Verify(x => x.GetAll(), Times.Exactly(2));
+            this.userManager.Verify(x => x.Users, Times.Exactly(2));
+            this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Exactly(2));
         }
 
         [Test]
@@ -144,6 +146,8 @@ namespace Wman.Test.Tests
             Assert.True(resultInt.Count == 1 && resultDateTime.Count == 1);
 
             this.eventRepo.Verify(x => x.GetAll(), Times.Exactly(2));
+            this.userManager.Verify(x => x.Users, Times.Exactly(2));
+            this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(),It.IsAny<string>()), Times.Exactly(2));
         }
     }
 }
