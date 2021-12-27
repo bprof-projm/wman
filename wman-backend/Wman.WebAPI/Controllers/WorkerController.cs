@@ -99,5 +99,16 @@ namespace Wman.WebAPI.Controllers
         {
             return Ok(await userLogic.GetEventDetailsForWorker(HttpContext.User.Identity.Name, id));
         }
+        /// <summary>
+        /// Return the workload of the currently logged in user
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("myworkload")]
+        public async Task<ActionResult> GetLoggedInWorkersWorkload()
+        {
+            var templist = new List<string>() { HttpContext.User.Identity.Name };
+            return Ok(await userLogic.GetWorkLoads(templist));
+        }
     }
 }
