@@ -63,7 +63,8 @@ namespace Wman.Logic.Classes
                 selectedEvent.AssignedUsers.Add(selectedUser);
                 await this.eventRepo.Update(eventID, selectedEvent);
                 var notifyEvent = await eventRepo.GetOne(eventID);
-                await _notifyHub.NotifyWorkerAboutEvent(notifyEvent);
+                var n = mapper.Map<WorkEventForWorkCardDTO>(notifyEvent);
+                await _notifyHub.NotifyWorkerAboutEvent(n);
             }
         }
 
@@ -103,7 +104,8 @@ namespace Wman.Logic.Classes
             {
                 selectedEvent.AssignedUsers.Add(item);
                 await this.eventRepo.Update(eventID, selectedEvent);
-                await _notifyHub.NotifyWorkerAboutEvent(notifyEvent);
+                var n = mapper.Map<WorkEventForWorkCardDTO>(notifyEvent);
+                await _notifyHub.NotifyWorkerAboutEvent(n);
             }
         }
 
@@ -184,6 +186,9 @@ namespace Wman.Logic.Classes
             workevent.Status = newWorkEvent.Status;
 
             await eventRepo.SaveDatabase();
+            var notifyEvent = await eventRepo.GetOne(workevent.Id);
+            var n = mapper.Map<WorkEventForWorkCardDTO>(notifyEvent);
+            await _notifyHub.NotifyWorkerAboutEvent(n);
         }
 
         public async Task<ICollection<UserDTO>> GetAllAssignedUsers(int id)
@@ -252,7 +257,10 @@ namespace Wman.Logic.Classes
 
 
                 }
+                var notifyEvent = await eventRepo.GetOne(Id);
                 await eventRepo.Update(Id, workEventInDb);
+                var n = mapper.Map<WorkEventForWorkCardDTO>(notifyEvent);
+                await _notifyHub.NotifyWorkerAboutEvent(n);
             }
             else
             {

@@ -39,6 +39,23 @@ namespace Wman.Logic.Services
             
             
         }
+        public async Task NotifyWorkerAboutEventChange(WorkEvent we)
+        {
+            try
+            {
+                if (Clients != null)
+                {
+                    await Clients.User(Context.User.Identity.Name).SendAsync("EventChanged", we);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+            }
+        }
 
     }
+    
 }
