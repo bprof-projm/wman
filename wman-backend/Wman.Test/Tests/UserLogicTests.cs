@@ -27,13 +27,13 @@ namespace Wman.Test.Tests
         public void SetUp()
         {
             this.users = UserManagerBuilder.GetWmanUsers();
-            UserLogicBuilder.AssignWorkEvents(this.users);
+            this.eventList = EventLogicBuilder.GetWorkEvents();
+            UserLogicBuilder.AssignWorkEvents(this.users, this.eventList);
+
+            this.eventRepo = EventLogicBuilder.GetEventRepo(this.eventList);
             this.userManager = UserManagerBuilder.GetUserManager(this.users);
 
             this.mapper = MapperBuilder.GetMapper();
-
-            this.eventList = EventLogicBuilder.GetWorkEvents();
-            this.eventRepo = EventLogicBuilder.GetEventRepo(eventList);
         }
 
         [Test]
