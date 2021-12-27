@@ -28,12 +28,13 @@ namespace Wman.Test.Tests
         public void SetUp()
         {
             this.eventList = CalendarEventLogicBuilder.GetWorkEvents();
-            this.eventRepo = CalendarEventLogicBuilder.GetEventRepo(eventList);
+            this.users = UserManagerBuilder.GetWmanUsers();
+            UserLogicBuilder.AssignWorkEvents(this.users, this.eventList);
 
             this.mapper = MapperBuilder.GetMapper();
 
-            this.users = UserManagerBuilder.GetWmanUsers();
-            this.userManager = UserManagerBuilder.GetUserManager(users);
+            this.eventRepo = CalendarEventLogicBuilder.GetEventRepo(this.eventList);
+            this.userManager = UserManagerBuilder.GetUserManager(this.users);
         }
 
         [Test]
@@ -115,7 +116,7 @@ namespace Wman.Test.Tests
             //Act
             var resultInt = await calendarLogic.GetDayEvents(dateTime.DayOfYear, users[0].UserName);
             var resultDateTime = await calendarLogic.GetDayEvents(dateTime, users[0].UserName);
-
+            ;
             //Assert
             Assert.That(resultInt is not null && resultDateTime is not null);
             Assert.True(resultInt.Count == 1 && resultDateTime.Count == 1); 
