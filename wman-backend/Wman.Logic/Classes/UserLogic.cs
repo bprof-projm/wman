@@ -227,11 +227,11 @@ namespace Wman.Logic.Classes
             foreach (var item in beforeToday)
             {
                 if (item.WorkFinishDate != DateTime.MinValue && item.WorkStartDate != DateTime.MinValue)
-                {
+                { // normal case
                     tsBeforeToday += (item.WorkFinishDate - item.WorkStartDate);
                 }
                 else
-                {
+                { //incorrect case
                     tsFromToday += (item.EstimatedFinishDate - item.EstimatedStartDate); //Work finish/start date is not valid, but it should already be. Assuming still in progress, and adding it to the remaining work pool
                 }
             }
@@ -239,7 +239,15 @@ namespace Wman.Logic.Classes
             {
                 if (item.EstimatedFinishDate != DateTime.MinValue && item.EstimatedStartDate != DateTime.MinValue)
                 {
-                    tsFromToday += (item.EstimatedFinishDate - item.EstimatedStartDate);
+                    if (item.WorkFinishDate == DateTime.MinValue || item.WorkStartDate == DateTime.MinValue) //If either of the actual work start/finish dates are invalid, use the estimated values instead
+                    { // normal case
+                        tsFromToday += (item.EstimatedFinishDate - item.EstimatedStartDate);
+                    }
+                    else
+                    { //incorrect case
+                        tsBeforeToday += (item.WorkFinishDate - item.WorkStartDate);
+                    }
+                    
                 }
             }
 
@@ -259,6 +267,7 @@ namespace Wman.Logic.Classes
 
         private IEnumerable<WorkEvent> RemainingWorks(IEnumerable<WorkEvent> works, DateTime selectedMonth)
         {
+
             return works.Where(x => x.EstimatedStartDate.Day >= selectedMonth.Day && x.EstimatedStartDate.Year == selectedMonth.Year && x.EstimatedStartDate.Month == selectedMonth.Month);
         }
         private DateTime GetWeekStartDate(DateTime input)
