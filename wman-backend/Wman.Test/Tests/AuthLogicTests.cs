@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace Wman.Test.Tests
     public class AuthLogicTests
     {
         private Mock<UserManager<WmanUser>> userManager;
-        private Mock<RoleManager<WmanRole>> roleManager;
+        private Mock<RoleManager<IdentityRole<int>>> roleManager;
         
         private IConfiguration config;
         private IMapper mapper;
@@ -31,7 +32,7 @@ namespace Wman.Test.Tests
             this.userManager = UserManagerBuilder.GetUserManager(users);
 
             this.roleManager = AuthLogicBuilder.GetMockRoleManager();
-            this.config = AuthLogicBuilder.GetConfiguration();
+            this.config = AspConfigurationBuilder.GetConfiguration();
             this.mapper = MapperBuilder.GetMapper();
         }
 
@@ -41,7 +42,7 @@ namespace Wman.Test.Tests
             //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
 
-            RegisterDTO user = new RegisterDTO()
+            RegisterDTO user = new()
             {
                 Username = "fogvaratartottGyik",
                 Email = "maszkosfutocsiga@gmail.com",
@@ -50,7 +51,7 @@ namespace Wman.Test.Tests
                 Lastname = "VeszettMacska",
             };
 
-            LoginDTO model = new LoginDTO() { LoginName = user.Email, Password = user.Password };
+            LoginDTO model = new() { LoginName = user.Email, Password = user.Password };
 
             //Act
             var akarmi = await authLogic.CreateWorker(user);
@@ -79,7 +80,7 @@ namespace Wman.Test.Tests
             var result = await authLogic.GetOneUser(users[0].UserName);
 
             //Assert
-            Assert.AreEqual(result.UserName, users[0].UserName);
+            Assert.AreEqual(result.Username, users[0].UserName);
 
             this.userManager.Verify(x => x.Users, Times.Once);
         }
@@ -94,7 +95,7 @@ namespace Wman.Test.Tests
             var result = await authLogic.GetAllUsers();
 
             //Assert
-            Assert.AreEqual(users.Count(), result.Count());
+            Assert.AreEqual(users.Count, result.Count());
 
             this.userManager.Verify(x => x.Users, Times.Once);
         }
@@ -105,7 +106,7 @@ namespace Wman.Test.Tests
             //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
 
-            RegisterDTO user = new RegisterDTO()
+            RegisterDTO user = new()
             {
                 Username = "fogvaratartottGyik",
                 Email = "maszkosfutocsiga@gmail.com",
@@ -132,7 +133,7 @@ namespace Wman.Test.Tests
             //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
 
-            RegisterDTO user = new RegisterDTO()
+            RegisterDTO user = new()
             {
                 Username = "fogvaratartottGyik",
                 Email = "sanyesz@gmail.com",
@@ -142,11 +143,10 @@ namespace Wman.Test.Tests
             };
 
             //Act
-            var result = await authLogic.CreateWorker(user);
+            async Task testDelegate() => await authLogic.CreateWorker(user);
 
             //Assert
-            Assert.True(!result.Succeeded);
-            Assert.That(users.Count == 3);
+            Assert.ThrowsAsync<InvalidOperationException>(testDelegate);
 
             this.userManager.Verify(x => x.Users, Times.Once);
             this.userManager.Verify(x => x.CreateAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Never);
@@ -159,7 +159,7 @@ namespace Wman.Test.Tests
             //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
 
-            RegisterDTO user = new RegisterDTO()
+            RegisterDTO user = new()
             {
                 Username = "fogvaratartottGyik",
                 Email = "maszkosfutocsiga@gmail.com",
@@ -214,7 +214,7 @@ namespace Wman.Test.Tests
             var result = await authLogic.GetAllUsersOfRole("Test");
 
             //Assert
-            Assert.AreEqual(3, result.Count());
+            Assert.AreEqual(3, result.Count);
 
             this.userManager.Verify(x => x.GetUsersInRoleAsync(It.IsAny<string>()), Times.Once);
             this.roleManager.Verify(x => x.RoleExistsAsync(It.IsAny<string>()), Times.Once);
@@ -226,7 +226,7 @@ namespace Wman.Test.Tests
             //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
 
-            UserDTO user = new UserDTO()
+            UserDTO user = new()
             {
                 Username = "fogvaratartottGyik",
                 Email = "maszkosfutocsiga@gmail.com",

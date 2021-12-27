@@ -100,12 +100,15 @@ namespace Wman.Logic.Classes
 
 
             var events = await(from x in workEventRepo.GetAll()
-                          where x.EstimatedStartDate.DayOfYear >= firstDayOfTheWeek.DayOfYear && x.EstimatedStartDate.DayOfYear <=lastDayOfTheWeek.DayOfYear && x.EstimatedStartDate.Year == DateTime.Today.Year
-                               select x).ToListAsync();
+                          where x.EstimatedStartDate.DayOfYear >= firstDayOfTheWeek.DayOfYear &&
+                          (x.EstimatedStartDate.DayOfYear <=lastDayOfTheWeek.DayOfYear || x.EstimatedStartDate.Year < lastDayOfTheWeek.Year)
+                          select x).ToListAsync();
+
             if (await userManager.IsInRoleAsync(user, "worker"))
             {
                 events = events.Where(x => x.AssignedUsers.Any(x => x.UserName == username)).ToList();
             }
+
             return mapper.Map<List<WorkEventForWorkCardDTO>>(events);
 
         }

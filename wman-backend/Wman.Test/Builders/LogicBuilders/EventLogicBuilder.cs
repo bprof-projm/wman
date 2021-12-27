@@ -35,7 +35,7 @@ namespace Wman.Test.Builders.LogicBuilders
 
         public static List<AddressHUN> GetAddresses()
         {
-            List<AddressHUN> addressList = new List<AddressHUN>();
+            List<AddressHUN> addressList = new();
 
             addressList.Add(new AddressHUN
             {
@@ -72,7 +72,7 @@ namespace Wman.Test.Builders.LogicBuilders
 
         public static List<WorkEvent> GetWorkEvents()
         {
-            List<WorkEvent> eventList = new List<WorkEvent>();
+            List<WorkEvent> eventList = new();
 
             eventList.Add(new WorkEvent
             {
