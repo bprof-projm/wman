@@ -186,7 +186,7 @@ namespace Wman.Logic.Classes
                 wlwh = new WorkloadWithHoursDTO();
                 wlwh.Hours = Convert.ToInt32(hours);
                 wlwh.WorkloadPercent = Convert.ToInt32(wlpercent);
-                output.MonthlyStats.Add(CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i), wlwh);
+                output.MonthlyStats.Add(CultureInfo.InvariantCulture.DateTimeFormat.GetMonthName(i), wlwh);
             }
             ;
             return output;
