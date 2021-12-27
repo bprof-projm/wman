@@ -76,7 +76,8 @@ namespace Wman.Logic.Classes
 
 
             var events = await(from x in workEventRepo.GetAll()
-                          where x.EstimatedStartDate.DayOfYear >= firstDayOfTheWeek.DayOfYear && x.EstimatedStartDate.DayOfYear <=lastDayOfTheWeek.DayOfYear
+                          where x.EstimatedStartDate.DayOfYear >= firstDayOfTheWeek.DayOfYear &&
+                          (x.EstimatedStartDate.DayOfYear <=lastDayOfTheWeek.DayOfYear || x.EstimatedStartDate.Year < lastDayOfTheWeek.Year)
                           select x).ToListAsync();
             return mapper.Map<List<WorkEventForWorkCardDTO>>(events);
 

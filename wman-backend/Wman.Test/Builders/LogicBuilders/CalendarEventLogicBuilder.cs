@@ -9,7 +9,7 @@ using Wman.Repository.Interfaces;
 namespace Wman.Test.Builders.LogicBuilders
 {
     //This builder class implements similar functions to EventLogicBuilder,
-    //but the required test cases are a bit different than the one need for EventLogicTests, so this was a necessity
+    //but the required test cases are a bit different than the one needed for EventLogicTests, so this was a necessity
     public class CalendarEventLogicBuilder
     {
         public static Mock<IWorkEventRepo> GetEventRepo(List<WorkEvent> eventList)
