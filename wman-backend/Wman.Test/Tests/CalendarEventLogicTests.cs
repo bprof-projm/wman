@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -20,6 +21,9 @@ namespace Wman.Test.Tests
 
         private IMapper mapper;
 
+        private Mock<UserManager<WmanUser>> userManager;
+        private List<WmanUser> users;
+
         [SetUp]
         public void SetUp()
         {
@@ -27,6 +31,9 @@ namespace Wman.Test.Tests
             this.eventRepo = CalendarEventLogicBuilder.GetEventRepo(eventList);
 
             this.mapper = MapperBuilder.GetMapper();
+
+            this.users = UserManagerBuilder.GetWmanUsers();
+            this.userManager = UserManagerBuilder.GetUserManager(users);
         }
 
         [Test]
@@ -37,10 +44,10 @@ namespace Wman.Test.Tests
         public async Task GetWeekEvents_IntParameter_InvalidParametersGiven_ExceptionExpected(int testInput)
         {
             //Arrange
-            CalendarEventLogic calendarLogic = new(this.eventRepo.Object, this.mapper);
+            CalendarEventLogic calendarLogic = new(this.eventRepo.Object, this.mapper, this.userManager.Object);
 
             //Act
-            async Task testDelegate() => await calendarLogic.GetWeekEvents(testInput);
+            async Task testDelegate() => await calendarLogic.GetWeekEvents(testInput, users[0].UserName);
 
             //Assert
             Assert.ThrowsAsync<ArgumentException>(testDelegate);
@@ -56,10 +63,10 @@ namespace Wman.Test.Tests
         public async Task GetDayEvents_IntParameter_InvalidParametersGiven_ExceptionExpected(int testInput)
         {
             //Arrange
-            CalendarEventLogic calendarLogic = new(this.eventRepo.Object, this.mapper);
+            CalendarEventLogic calendarLogic = new(this.eventRepo.Object, this.mapper, this.userManager.Object);
 
             //Act
-            async Task testDelegate() => await calendarLogic.GetDayEvents(testInput);
+            async Task testDelegate() => await calendarLogic.GetDayEvents(testInput, users[0].UserName);
 
             //Assert
             Assert.ThrowsAsync<ArgumentException>(testDelegate);
@@ -71,10 +78,10 @@ namespace Wman.Test.Tests
         public async Task GetCurrentDayEvents_ReturnedEventsNotNull_GetAllCalledOnce()
         {
             //Arrange
-            CalendarEventLogic calendarLogic = new(this.eventRepo.Object, this.mapper);
+            CalendarEventLogic calendarLogic = new(this.eventRepo.Object, this.mapper, this.userManager.Object);
 
             //Act
-            var result = await calendarLogic.GetCurrentDayEvents();
+            var result = await calendarLogic.GetCurrentDayEvents(users[0].UserName);
 
             //Assert
             Assert.That(result != null);
@@ -87,10 +94,10 @@ namespace Wman.Test.Tests
         public async Task GetCurrentWeekEvents_ReturnedEventsNotNull_GetAllCalledOnce()
         {
             //Arrange
-            CalendarEventLogic calendarLogic = new(this.eventRepo.Object, this.mapper);
+            CalendarEventLogic calendarLogic = new(this.eventRepo.Object, this.mapper, this.userManager.Object);
 
             //Act
-            var result = await calendarLogic.GetCurrentWeekEvents();
+            var result = await calendarLogic.GetCurrentWeekEvents(users[0].UserName);
 
             //Assert
             Assert.That(result != null);
@@ -102,12 +109,12 @@ namespace Wman.Test.Tests
         public async Task GetDayEvents_ReturnsOneEvent_GetAllCalledOnce()
         {
             //Arrange
-            CalendarEventLogic calendarLogic = new(this.eventRepo.Object, this.mapper);
+            CalendarEventLogic calendarLogic = new(this.eventRepo.Object, this.mapper, this.userManager.Object);
             DateTime dateTime = new(2021, 10, 10);
 
             //Act
-            var resultInt = await calendarLogic.GetDayEvents(dateTime.DayOfYear);
-            var resultDateTime = await calendarLogic.GetDayEvents(dateTime);
+            var resultInt = await calendarLogic.GetDayEvents(dateTime.DayOfYear, users[0].UserName);
+            var resultDateTime = await calendarLogic.GetDayEvents(dateTime, users[0].UserName);
 
             //Assert
             Assert.That(resultInt is not null && resultDateTime is not null);
@@ -120,7 +127,7 @@ namespace Wman.Test.Tests
         public async Task GetWeekEvents_ReturnsOneEvent_GetAllCalledOnce()
         {
             //Arrange
-            CalendarEventLogic calendarLogic = new(this.eventRepo.Object, this.mapper);
+            CalendarEventLogic calendarLogic = new(this.eventRepo.Object, this.mapper, this.userManager.Object);
 
             DateTime firstDayOfWeek = new(2021, 10, 4); // first day of the week
             DateTime lastDayOfTheWeek = new(2021, 10, 10); // last day of the week
@@ -128,8 +135,8 @@ namespace Wman.Test.Tests
             int week = CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(lastDayOfTheWeek, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
 
             //Act
-            var resultInt = await calendarLogic.GetWeekEvents(week);
-            var resultDateTime = await calendarLogic.GetWeekEvents(firstDayOfWeek, lastDayOfTheWeek);
+            var resultInt = await calendarLogic.GetWeekEvents(week, users[0].UserName);
+            var resultDateTime = await calendarLogic.GetWeekEvents(firstDayOfWeek, lastDayOfTheWeek, users[0].UserName);
 
             //Assert
             Assert.That(!(resultInt is null) && !(resultDateTime is null));
