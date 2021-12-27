@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Wman.Data.DB_Models;
 
 namespace Wman.Logic.Services
 {
@@ -19,6 +20,25 @@ namespace Wman.Logic.Services
             Clients.Caller.SendAsync("Disconnected", Context.ConnectionId);
             return base.OnDisconnectedAsync(exception);
         }
-        
+        public async Task NotifyWorkerAboutEvent(WorkEvent we)
+        {
+            try
+            {
+                if (Clients != null)
+                {
+                    await Clients.User(Context.User.Identity.Name).SendAsync("UserAssiged", we);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                
+            }
+                
+            
+            
+        }
+
     }
 }

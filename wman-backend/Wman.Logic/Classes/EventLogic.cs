@@ -23,14 +23,16 @@ namespace Wman.Logic.Classes
         IAddressRepo address;
         UserManager<WmanUser> userManager;
         private readonly IHubContext<NotifyHub> _hub;
+        private NotifyHub _notifyHub;
 
-        public EventLogic(IWorkEventRepo eventRepo, IMapper mapper, IAddressRepo address, UserManager<WmanUser> userManager, IHubContext<NotifyHub> hub)
+        public EventLogic(IWorkEventRepo eventRepo, IMapper mapper, IAddressRepo address, UserManager<WmanUser> userManager, IHubContext<NotifyHub> hub, NotifyHub notifyHub)
         {
             this.eventRepo = eventRepo;
             this.mapper = mapper;
             this.address = address;
             this.userManager = userManager;
             _hub = hub;
+            _notifyHub = notifyHub;
         }
 
         public async Task AssignUser(int eventID, string username)
@@ -60,7 +62,8 @@ namespace Wman.Logic.Classes
             {
                 selectedEvent.AssignedUsers.Add(selectedUser);
                 await this.eventRepo.Update(eventID, selectedEvent);
-                await _hub.Clients.User(selectedUser.UserName).SendAsync("UserAssiged", selectedEvent);
+                var notifyEvent = await eventRepo.GetOne(eventID);
+                await _notifyHub.NotifyWorkerAboutEvent(notifyEvent);
             }
         }
 
@@ -95,11 +98,12 @@ namespace Wman.Logic.Classes
                     okUsers.Add(selectedUser);
                 }
             }
+            var notifyEvent = await eventRepo.GetOne(eventID);
             foreach (var item in okUsers)
             {
                 selectedEvent.AssignedUsers.Add(item);
                 await this.eventRepo.Update(eventID, selectedEvent);
-                await _hub.Clients.User(item.UserName).SendAsync("UserAssiged", selectedEvent);
+                await _notifyHub.NotifyWorkerAboutEvent(notifyEvent);
             }
         }
 
