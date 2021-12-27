@@ -20,5 +20,7 @@ namespace Wman.Logic.Interfaces
         Task<IEnumerable<WorkEventForWorkCardDTO>> WorkEventsOfUserToday(string username);
         Task<IEnumerable<WorkEventForWorkCardDTO>> WorkEventsOfUserThisWeek(string username);
         Task<IEnumerable<WorkEventForWorkCardDTO>> WorkEventsOfUserSpecific(string username, DateTime start, DateTime finish);
+
+        Task<MonthlyStatsDTO> GetMonthlyStats(string username, DateTime year);
     }
 }

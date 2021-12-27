@@ -94,7 +94,7 @@ namespace Wman.Logic.Classes
                         ProfilePicUrl = profileUrl
                     });
                 }
-                
+
             }
 
             return output;
@@ -131,7 +131,7 @@ namespace Wman.Logic.Classes
             DateTime StartDate = DateTime.MinValue;
             DateTime EndDate = DateTime.MinValue;
             StartDate = this.GetWeekStartDate(DateTime.Now);
-        
+
             EndDate = StartDate.AddDays(6);
             var selected = allEventsAvail.Where(x => x.EstimatedStartDate.DayOfYear >= StartDate.DayOfYear && x.EstimatedStartDate.DayOfYear <= EndDate.DayOfYear && x.EstimatedStartDate.Year == StartDate.Year);
 
@@ -159,6 +159,27 @@ namespace Wman.Logic.Classes
             }
             throw new InvalidOperationException(WmanError.NotHisBusiness);
         }
+
+        public async Task<MonthlyStatsDTO> GetMonthlyStats(string username, DateTime inYear)
+        {
+            var user = await this.GetUser(username);
+            var availiableJobs = await  this.GetEventsOfUser(username);
+            var selectedYear = availiableJobs.Where(x => x.EstimatedStartDate.Year == inYear.Year);
+            var debug = new WorkloadWithHoursDTO();
+            debug.WorkloadPercent = 42;
+            debug.Hours = 69;
+            var output = new MonthlyStatsDTO();
+            output.UserID = user.Id;
+            output.Username = user.UserName;
+            if (user.ProfilePicture != null)
+            {
+                output.ProfilePicUrl = user.ProfilePicture.Url;
+            }
+            output.MonthlyStats.Add("January", debug);
+            output.MonthlyStats.Add("February", debug);
+            return output;
+        }
+
         private async Task<IEnumerable<WorkEvent>> GetEventsOfUser(string username)
         {
             var selectedUser = await this.GetUser(username);

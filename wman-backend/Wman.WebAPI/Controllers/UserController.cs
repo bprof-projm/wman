@@ -65,5 +65,16 @@ namespace Wman.WebAPI.Controllers
                 var result = await userLogic.WorkEventsOfUser(username);
                 return Ok(result);
         }
+        /// <summary>
+        /// Calculate the workload stats of a selected user, in the specified year
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("stats")]
+        public async Task<ActionResult> CalculateStats(string username)
+        {
+            return Ok(await this.userLogic.GetMonthlyStats(username, DateTime.Now));
+        }
     }
 }
