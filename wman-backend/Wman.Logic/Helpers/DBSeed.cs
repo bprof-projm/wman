@@ -16,14 +16,16 @@ namespace Wman.Logic.Helpers
         IMapper mapper;
         IAddressRepo addressRepo;
         IPicturesRepo picRepo;
+        ILabelRepo labelRepo;
         UserManager<WmanUser> userManager;
-        public DBSeed(IWorkEventRepo eventRepo, IMapper mapper, IAddressRepo addressRepo, UserManager<WmanUser> userManager, IPicturesRepo picRepo)
+        public DBSeed(IWorkEventRepo eventRepo, IMapper mapper, IAddressRepo addressRepo, UserManager<WmanUser> userManager, IPicturesRepo picRepo, ILabelRepo labelRepo)
         {
             this.eventRepo = eventRepo;
             this.mapper = mapper;
             this.addressRepo = addressRepo;
             this.userManager = userManager;
             this.picRepo = picRepo;
+            this.labelRepo = labelRepo;
 
         }
 
@@ -33,10 +35,12 @@ namespace Wman.Logic.Helpers
         public void PopulateDB()
         {
 #if DEBUG
+            AddLabels();
             AddUsers();
             AddAddress();
             AddEvents();
             AddPicture();
+            
 #else
         throw new InvalidOperationException("API is not running in debug mode!");
 #endif    
@@ -53,6 +57,7 @@ namespace Wman.Logic.Helpers
                 UserName = "string",
                 FirstName = "Admin",
                 LastName = "User",
+                PhoneNumber = "0690123456",
                 SecurityStamp = Guid.NewGuid().ToString()
             };
             userManager.CreateAsync(user, "string").Wait();
@@ -63,6 +68,7 @@ namespace Wman.Logic.Helpers
                 UserName = "manager",
                 FirstName = "Manager",
                 LastName = "User",
+                PhoneNumber = "0690123456",
                 SecurityStamp = Guid.NewGuid().ToString()
             };
             userManager.CreateAsync(user, "string").Wait();
@@ -74,6 +80,7 @@ namespace Wman.Logic.Helpers
                 UserName = "user1",
                 FirstName = "First",
                 LastName = "User",
+                PhoneNumber = "0690123456",
                 SecurityStamp = Guid.NewGuid().ToString()
             };
             userManager.CreateAsync(user, "string").Wait();
@@ -85,6 +92,7 @@ namespace Wman.Logic.Helpers
                 UserName = "user2",
                 FirstName = "Second",
                 LastName = "User",
+                PhoneNumber = "0690123456",
                 SecurityStamp = Guid.NewGuid().ToString()
             };
             userManager.CreateAsync(user, "string").Wait();
@@ -96,6 +104,7 @@ namespace Wman.Logic.Helpers
                 UserName = "user3",
                 FirstName = "Third",
                 LastName = "User",
+                PhoneNumber = "06204403705",
                 SecurityStamp = Guid.NewGuid().ToString()
             };
             userManager.CreateAsync(user, "string").Wait();
@@ -104,13 +113,17 @@ namespace Wman.Logic.Helpers
         }
         private void AddEvents()
         {
+            var labelList = new List<Label>();
+            labelList.Add(labelRepo.GetOne(1).Result);
+            labelList.Add(labelRepo.GetOne(2).Result);
             eventRepo.Add(new WorkEvent
             {
                 JobDescription = "Example event #1",
                 EstimatedStartDate = DateTime.Today.AddDays(-1).AddHours(3),
                 EstimatedFinishDate = DateTime.Today.AddDays(-1).AddHours(4),
                 Address = addressRepo.GetAll().First(),
-                Status = Status.awaiting
+                Status = Status.awaiting,
+                Labels = labelList
             }).Wait();
 
             eventRepo.Add(new WorkEvent
@@ -197,6 +210,20 @@ namespace Wman.Logic.Helpers
                 Url = "https://upload.wikimedia.org/wikipedia/commons/d/d5/Number-two.JPG",
                 WmanUser = userManager.Users.Where(x => x.UserName == "user2").SingleOrDefault(),
                 PicturesType = PicturesType.ProfilePic
+            }).Wait();
+        }
+        private void AddLabels()
+        {
+            labelRepo.Add(new Label()
+            {
+                Color = "#FFFFFF",
+                Content = "test label 1",
+            }).Wait();
+
+            labelRepo.Add(new Label()
+            {
+                Color = "#000000",
+                Content = "test label 2",
             }).Wait();
         }
     }
