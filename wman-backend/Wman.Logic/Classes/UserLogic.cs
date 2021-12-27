@@ -188,7 +188,10 @@ namespace Wman.Logic.Classes
                 var thisMonthJobs = selectedYearsJobs.Where(x => x.EstimatedStartDate.Month == i);
                 foreach (var item in thisMonthJobs)
                 {
-                    hours += (item.EstimatedFinishDate - item.EstimatedStartDate).TotalHours;
+                    if (item.WorkStartDate != DateTime.MinValue && item.WorkFinishDate != DateTime.MinValue)
+                    {
+                        hours += (item.WorkFinishDate - item.WorkStartDate).TotalHours;
+                    }
                 }
                 workloadPercent = this.CalculateLoadSpecific(user, new DateTime(inYear.Year, i, 1));
                 workLoadWithHours = new WorkloadWithHoursDTO();
