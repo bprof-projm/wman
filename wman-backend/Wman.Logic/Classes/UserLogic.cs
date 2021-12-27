@@ -166,15 +166,14 @@ namespace Wman.Logic.Classes
                 .Include(y => y.WorkEvents)
                 .Include(z => z.ProfilePicture)
                 .AsNoTracking()
-                .Where(x=> x.UserName == username)
+                .Where(x => x.UserName == username)
                 .SingleOrDefaultAsync();
             if (user == null)
             {
                 throw new NotFoundException(WmanError.UserNotFound);
             }
-            var availiableJobs = user.WorkEvents;
-            var selectedYearsJobs = availiableJobs.Where(x => x.EstimatedStartDate.Year == inYear.Year);
-            WorkloadWithHoursDTO wlwh;
+            var selectedYearsJobs = user.WorkEvents.Where(x => x.EstimatedStartDate.Year == inYear.Year);
+            WorkloadWithHoursDTO workLoadWithHours;
             var output = new MonthlyStatsDTO();
             output.UserID = user.Id;
             output.Username = user.UserName;
@@ -185,38 +184,32 @@ namespace Wman.Logic.Classes
             for (int i = 1; i < 13; i++)
             {
                 var hours = 0.0;
-                var wlpercent = 0.0;
-                var monthjobs = selectedYearsJobs.Where(x => x.EstimatedStartDate.Month == i);
-                foreach (var item in monthjobs)
+                var workloadPercent = 0.0;
+                var thisMonthJobs = selectedYearsJobs.Where(x => x.EstimatedStartDate.Month == i);
+                foreach (var item in thisMonthJobs)
                 {
                     hours += (item.EstimatedFinishDate - item.EstimatedStartDate).TotalHours;
                 }
-                wlpercent = this.CalculateLoadSpecific(user, new DateTime(inYear.Year, i, 1));
-                wlwh = new WorkloadWithHoursDTO();
-                wlwh.Hours = Convert.ToInt32(hours);
-                wlwh.WorkloadPercent = Convert.ToInt32(wlpercent);
-                output.MonthlyStats.Add(CultureInfo.InvariantCulture.DateTimeFormat.GetMonthName(i), wlwh);
+                workloadPercent = this.CalculateLoadSpecific(user, new DateTime(inYear.Year, i, 1));
+                workLoadWithHours = new WorkloadWithHoursDTO();
+                workLoadWithHours.Hours = Convert.ToInt32(hours);
+                workLoadWithHours.WorkloadPercent = Convert.ToInt32(workloadPercent);
+                output.MonthlyStats.Add(CultureInfo.InvariantCulture.DateTimeFormat.GetMonthName(i), workLoadWithHours);
             }
             return output;
         }
-
+        
         private async Task<IEnumerable<WorkEvent>> GetEventsOfUser(string username)
         {
-            var selectedUser = await this.GetUser(username);
-           var events = eventRepo.GetAll().Where(x => x.AssignedUsers.Contains(selectedUser));
-            return events;
-        }
-        private async Task<WmanUser> GetUser(string username)
-        {
-            var selectedUser = await userManager.Users
-                .Where(x => x.UserName == username)
-                .SingleOrDefaultAsync();
+            var selectedUser = await userManager.Users.Where(x => x.UserName == username).SingleOrDefaultAsync();
             if (selectedUser == null)
             {
                 throw new NotFoundException(WmanError.UserNotFound);
             }
-            return selectedUser;
+            var events = eventRepo.GetAll().Where(x => x.AssignedUsers.Contains(selectedUser));
+            return events;
         }
+
         private double CalculateLoadSpecific(WmanUser user, DateTime selectedDate)
         {
             var beforeToday = WorksBeforeToday(user.WorkEvents, selectedDate);
@@ -247,13 +240,12 @@ namespace Wman.Logic.Classes
                     { //incorrect case
                         tsBeforeToday += (item.WorkFinishDate - item.WorkStartDate);
                     }
-                    
+
                 }
             }
 
             TimeSpan tsSUM = tsBeforeToday + tsFromToday;
             var hoursInMonth = DateTime.DaysInMonth(selectedDate.Year, selectedDate.Month) * 8;
-            ;
             return (tsSUM.TotalHours / hoursInMonth) * 100;
         }
         private double CalculateLoad(WmanUser user)

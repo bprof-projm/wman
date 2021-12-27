@@ -38,7 +38,7 @@ namespace Wman.WebAPI.Controllers
         [Route("workload/range")]
         public async Task<ActionResult<IEnumerable<WorkloadDTO>>> WorkloadRange([FromQuery] ICollection<string> usernames)
         {
-                return Ok(await userLogic.GetWorkLoads(usernames));
+            return Ok(await userLogic.GetWorkLoads(usernames));
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Wman.WebAPI.Controllers
         [Route("workload")]
         public async Task<ActionResult<IEnumerable<WorkloadDTO>>> AllWorkloads()
         {
-                return Ok(await userLogic.GetWorkLoads());
+            return Ok(await userLogic.GetWorkLoads());
         }
 
 
@@ -62,19 +62,20 @@ namespace Wman.WebAPI.Controllers
         [Route("workEvents")]
         public async Task<ActionResult<ICollection<AssignedEventDTO>>> GetAssignedEventsOfUser(string username)
         {
-                var result = await userLogic.WorkEventsOfUser(username);
-                return Ok(result);
+            var result = await userLogic.WorkEventsOfUser(username);
+            return Ok(result);
         }
         /// <summary>
         /// Calculate the workload stats of a selected user, in the specified year
         /// </summary>
         /// <param name="username"></param>
+        /// <param name="date">Datetime, containing the year we're filtering to</param>
         /// <returns></returns>
         [HttpGet]
         [Route("stats")]
-        public async Task<ActionResult> CalculateStats(string username, DateTime yearSelect)
+        public async Task<ActionResult> CalculateStats(string username, DateTime date)
         {
-            return Ok(await this.userLogic.GetMonthlyStats(username, yearSelect));
+            return Ok(await this.userLogic.GetMonthlyStats(username, date));
         }
     }
 }
