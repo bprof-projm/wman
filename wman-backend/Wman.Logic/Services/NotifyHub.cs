@@ -21,7 +21,7 @@ namespace Wman.Logic.Services
             Clients.Caller.SendAsync("Disconnected", Context.ConnectionId);
             return base.OnDisconnectedAsync(exception);
         }
-        public async Task NotifyWorkerAboutEvent(WorkEventForWorkCardDTO we)
+        public async Task NotifyWorkerAboutEvent(string we)
         {
             try
             {
@@ -40,7 +40,7 @@ namespace Wman.Logic.Services
             
             
         }
-        public async Task NotifyWorkerAboutEventChange(WorkEventForWorkCardDTO we)
+        public async Task NotifyWorkerAboutEventChange(string we)
         {
             try
             {

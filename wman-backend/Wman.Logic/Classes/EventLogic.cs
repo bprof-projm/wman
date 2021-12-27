@@ -64,7 +64,8 @@ namespace Wman.Logic.Classes
                 await this.eventRepo.Update(eventID, selectedEvent);
                 var notifyEvent = await eventRepo.GetOne(eventID);
                 var n = mapper.Map<WorkEventForWorkCardDTO>(notifyEvent);
-                await _notifyHub.NotifyWorkerAboutEvent(n);
+                var k = System.Text.Json.JsonSerializer.Serialize(n);
+                await _notifyHub.NotifyWorkerAboutEvent(k);
             }
         }
 
@@ -105,7 +106,8 @@ namespace Wman.Logic.Classes
                 selectedEvent.AssignedUsers.Add(item);
                 await this.eventRepo.Update(eventID, selectedEvent);
                 var n = mapper.Map<WorkEventForWorkCardDTO>(notifyEvent);
-                await _notifyHub.NotifyWorkerAboutEvent(n);
+                var k = System.Text.Json.JsonSerializer.Serialize(n);
+                await _notifyHub.NotifyWorkerAboutEvent(k);
             }
         }
 
@@ -188,7 +190,8 @@ namespace Wman.Logic.Classes
             await eventRepo.SaveDatabase();
             var notifyEvent = await eventRepo.GetOne(workevent.Id);
             var n = mapper.Map<WorkEventForWorkCardDTO>(notifyEvent);
-            await _notifyHub.NotifyWorkerAboutEvent(n);
+            var k = System.Text.Json.JsonSerializer.Serialize(n);
+            await _notifyHub.NotifyWorkerAboutEvent(k);
         }
 
         public async Task<ICollection<UserDTO>> GetAllAssignedUsers(int id)
@@ -260,7 +263,8 @@ namespace Wman.Logic.Classes
                 var notifyEvent = await eventRepo.GetOne(Id);
                 await eventRepo.Update(Id, workEventInDb);
                 var n = mapper.Map<WorkEventForWorkCardDTO>(notifyEvent);
-                await _notifyHub.NotifyWorkerAboutEvent(n);
+                var k = System.Text.Json.JsonSerializer.Serialize(n);
+                await _notifyHub.NotifyWorkerAboutEvent(k);
             }
             else
             {
