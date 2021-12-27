@@ -54,6 +54,8 @@ namespace Wman.Test.Tests
             Assert.ThrowsAsync<ArgumentException>(testDelegate);
 
             this.eventRepo.Verify(x => x.GetAll(), Times.Never);
+            this.userManager.Verify(x => x.Users, Times.Once);
+            this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Never);
         }
 
         [Test]
@@ -73,6 +75,8 @@ namespace Wman.Test.Tests
             Assert.ThrowsAsync<ArgumentException>(testDelegate);
 
             this.eventRepo.Verify(x => x.GetAll(), Times.Never);
+            this.userManager.Verify(x => x.Users, Times.Once);
+            this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Never);
         }
 
         [Test]
@@ -87,8 +91,10 @@ namespace Wman.Test.Tests
             //Assert
             Assert.That(result != null);
             Assert.AreEqual(1, result.Count);
-            
+
             this.eventRepo.Verify(x => x.GetAll(), Times.Once);
+            this.userManager.Verify(x => x.Users, Times.Once);
+            this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
         }
 
         [Test]
@@ -103,7 +109,10 @@ namespace Wman.Test.Tests
             //Assert
             Assert.That(result != null);
             Assert.True(result.Count >= 1 && result.Count <= 2); //Could be 1 or 2 because one of the test cases has -1 days on it and if we were to test it on Monday it would be different than on Friday
+            
             this.eventRepo.Verify(x => x.GetAll(), Times.Once);
+            this.userManager.Verify(x => x.Users, Times.Once);
+            this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
         }
 
         [Test]
