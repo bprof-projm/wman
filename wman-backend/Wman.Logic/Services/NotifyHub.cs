@@ -24,13 +24,13 @@ namespace Wman.Logic.Services
             Clients.Caller.SendAsync("Disconnected", Context.ConnectionId);
             return base.OnDisconnectedAsync(exception);
         }
-        public async Task NotifyWorkerAboutEvent(string user, string we)
+        public async Task NotifyWorkerAboutEventForToday(string user, string we)
         {
             try
             {
                 if (Clients != null)
                 {
-                    await Clients.User(user).SendAsync("UserAssiged", we);
+                    await Clients.User(user).SendAsync("UserAssignedCurrentDay", we);
                 }
                 
             }
@@ -42,6 +42,41 @@ namespace Wman.Logic.Services
                 
             
             
+        }
+        public async Task NotifyWorkerAboutEvent(string user, string we)
+        {
+            try
+            {
+                if (Clients != null)
+                {
+                    await Clients.User(user).SendAsync("UserAssigned", we);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+            }
+
+
+
+        }
+        public async Task NotifyWorkerAboutEventChangeForToday(string user, string we)
+        {
+            try
+            {
+                if (Clients != null)
+                {
+                    await Clients.User(user).SendAsync("EventChangedForToday", we);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+            }
         }
         public async Task NotifyWorkerAboutEventChange(string user, string we)
         {

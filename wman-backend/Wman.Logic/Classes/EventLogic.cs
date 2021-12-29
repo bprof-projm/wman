@@ -73,7 +73,11 @@ namespace Wman.Logic.Classes
                     StringEscapeHandling = StringEscapeHandling.Default,
                     Converters = { new Newtonsoft.Json.Converters.StringEnumConverter() }
                 });
-                await _notifyHub.NotifyWorkerAboutEvent(selectedUser.UserName,k);
+                if (DateTime.Now.Year == notifyEvent.EstimatedStartDate.Year && DateTime.Now.Month == notifyEvent.EstimatedStartDate.Month && DateTime.Now.Day == notifyEvent.EstimatedStartDate.Year)
+                {
+                    await _notifyHub.NotifyWorkerAboutEventForToday(selectedUser.UserName, k);
+                }
+                await _notifyHub.NotifyWorkerAboutEvent(selectedUser.UserName, k);
                 await _email.AssigedToWorkEvent(notifyEvent, selectedUser);
             }
         }
@@ -121,6 +125,10 @@ namespace Wman.Logic.Classes
                     StringEscapeHandling = StringEscapeHandling.Default,
                     Converters = { new Newtonsoft.Json.Converters.StringEnumConverter() }
                 });
+                if (DateTime.Now.Year == notifyEvent.EstimatedStartDate.Year && DateTime.Now.Month == notifyEvent.EstimatedStartDate.Month && DateTime.Now.Day == notifyEvent.EstimatedStartDate.Year)
+                {
+                    await _notifyHub.NotifyWorkerAboutEventForToday(item.UserName, k);
+                }
                 await _notifyHub.NotifyWorkerAboutEvent(item.UserName, k);
                 await _email.AssigedToWorkEvent(notifyEvent, item);
             }
@@ -213,6 +221,10 @@ namespace Wman.Logic.Classes
             });
             foreach (var item in notifyEvent.AssignedUsers)
             {
+                if (DateTime.Now.Year == notifyEvent.EstimatedStartDate.Year && DateTime.Now.Month == notifyEvent.EstimatedStartDate.Month && DateTime.Now.Day == notifyEvent.EstimatedStartDate.Year)
+                {
+                    await _notifyHub.NotifyWorkerAboutEventChangeForToday(item.UserName, k);
+                }
                 await _notifyHub.NotifyWorkerAboutEventChange(item.UserName, k);
                 await _email.WorkEventUpdated(notifyEvent, item);
             }
@@ -293,6 +305,10 @@ namespace Wman.Logic.Classes
                     
                     foreach (var item in notifyEvent.AssignedUsers)
                     {
+                        if (DateTime.Now.Year == notifyEvent.EstimatedStartDate.Year && DateTime.Now.Month == notifyEvent.EstimatedStartDate.Month && DateTime.Now.Day == notifyEvent.EstimatedStartDate.Year)
+                        {
+                            await _notifyHub.NotifyWorkerAboutEventChangeForToday(item.UserName, k);
+                        }
                         await _notifyHub.NotifyWorkerAboutEventChange(item.UserName, k);
                         await _email.WorkEventUpdated(notifyEvent, item);
                     }
