@@ -133,7 +133,7 @@ namespace Wman.Logic.Classes
             StartDate = this.GetWeekStartDate(DateTime.Now);
         
             EndDate = StartDate.AddDays(6);
-            var selected = allEventsAvail.Where(x => x.EstimatedStartDate.DayOfYear >= StartDate.DayOfYear && x.EstimatedStartDate.DayOfYear <= EndDate.DayOfYear && x.EstimatedStartDate.Year == StartDate.Year);
+            var selected = allEventsAvail.Where(x => x.EstimatedStartDate.Date >= StartDate.Date && x.EstimatedStartDate.Date <= EndDate.Date);
 
             var output = mapper.Map<IEnumerable<WorkEventForWorkCardDTO>>(selected);
             return output;
