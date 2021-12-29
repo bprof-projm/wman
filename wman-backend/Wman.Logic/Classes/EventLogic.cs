@@ -25,8 +25,9 @@ namespace Wman.Logic.Classes
         UserManager<WmanUser> userManager;
         private readonly IHubContext<NotifyHub> _hub;
         private NotifyHub _notifyHub;
+        private IEmailService _email;
 
-        public EventLogic(IWorkEventRepo eventRepo, IMapper mapper, IAddressRepo address, UserManager<WmanUser> userManager, IHubContext<NotifyHub> hub, NotifyHub notifyHub)
+        public EventLogic(IWorkEventRepo eventRepo, IMapper mapper, IAddressRepo address, UserManager<WmanUser> userManager, IHubContext<NotifyHub> hub, NotifyHub notifyHub , IEmailService email)
         {
             this.eventRepo = eventRepo;
             this.mapper = mapper;
@@ -34,6 +35,7 @@ namespace Wman.Logic.Classes
             this.userManager = userManager;
             _hub = hub;
             _notifyHub = notifyHub;
+            _email = email;
         }
 
         public async Task AssignUser(int eventID, string username)
@@ -68,9 +70,11 @@ namespace Wman.Logic.Classes
                 var k = Newtonsoft.Json.JsonConvert.SerializeObject(n, new JsonSerializerSettings
                 {
                     ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                    StringEscapeHandling = StringEscapeHandling.EscapeNonAscii
+                    StringEscapeHandling = StringEscapeHandling.Default,
+                    Converters = { new Newtonsoft.Json.Converters.StringEnumConverter() }
                 });
                 await _notifyHub.NotifyWorkerAboutEvent(k);
+                await _email.AssigedToWorkEvent(notifyEvent, selectedUser);
             }
         }
 
@@ -111,8 +115,14 @@ namespace Wman.Logic.Classes
                 selectedEvent.AssignedUsers.Add(item);
                 await this.eventRepo.Update(eventID, selectedEvent);
                 var n = mapper.Map<WorkEventForWorkCardDTO>(notifyEvent);
-                var k = System.Text.Json.JsonSerializer.Serialize(n);
+                var k = Newtonsoft.Json.JsonConvert.SerializeObject(n, new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    StringEscapeHandling = StringEscapeHandling.Default,
+                    Converters = { new Newtonsoft.Json.Converters.StringEnumConverter() }
+                });
                 await _notifyHub.NotifyWorkerAboutEvent(k);
+                await _email.AssigedToWorkEvent(notifyEvent, item);
             }
         }
 
@@ -195,8 +205,18 @@ namespace Wman.Logic.Classes
             await eventRepo.SaveDatabase();
             var notifyEvent = await eventRepo.GetOne(workevent.Id);
             var n = mapper.Map<WorkEventForWorkCardDTO>(notifyEvent);
-            var k = System.Text.Json.JsonSerializer.Serialize(n);
+            var k = Newtonsoft.Json.JsonConvert.SerializeObject(n, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                StringEscapeHandling = StringEscapeHandling.Default,
+                Converters = { new Newtonsoft.Json.Converters.StringEnumConverter() }
+            });
             await _notifyHub.NotifyWorkerAboutEvent(k);
+            foreach (var item in notifyEvent.AssignedUsers)
+            {
+                await _email.WorkEventUpdated(notifyEvent, item);
+            }
+            
         }
 
         public async Task<ICollection<UserDTO>> GetAllAssignedUsers(int id)
@@ -266,10 +286,18 @@ namespace Wman.Logic.Classes
 
                 }
                 var notifyEvent = await eventRepo.GetOne(Id);
-                await eventRepo.Update(Id, workEventInDb);
                 var n = mapper.Map<WorkEventForWorkCardDTO>(notifyEvent);
-                var k = System.Text.Json.JsonSerializer.Serialize(n);
+                var k = Newtonsoft.Json.JsonConvert.SerializeObject(n, new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    StringEscapeHandling = StringEscapeHandling.Default,
+                    Converters = { new Newtonsoft.Json.Converters.StringEnumConverter() }
+                });
                 await _notifyHub.NotifyWorkerAboutEvent(k);
+                foreach (var item in notifyEvent.AssignedUsers)
+                {
+                    await _email.WorkEventUpdated(notifyEvent, item);
+                }
             }
             else
             {

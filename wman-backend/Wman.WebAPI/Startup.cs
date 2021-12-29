@@ -49,6 +49,7 @@ namespace Wman.WebAPI
             string signingKey = Configuration.GetValue<string>("SigningKey");
             services.AddSingleton<NotifyHub>();
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
+            services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
             services.AddControllers(x => x.Filters.Add(new ApiExceptionFilter()));
             services.AddTransient<IAuthLogic, AuthLogic>();
             services.AddTransient<ICalendarEventLogic, CalendarEventLogic>();
@@ -71,6 +72,7 @@ namespace Wman.WebAPI
             services.AddTransient<ILabelRepo, LabelRepo>();
             services.AddTransient<IAddressRepo, AddressRepo>();
             services.AddTransient<IPhotoService, PhotoService>();
+            services.AddTransient<IEmailService, EmailService>();
             
             services.AddSwaggerGen(c =>
             {
