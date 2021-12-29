@@ -11,7 +11,7 @@ using Wman.Logic.DTO_Models;
 
 namespace Wman.Logic.Services
 {
-    [Authorize(Roles = "Workers", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(Roles = "Worker", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class NotifyHub : Hub
     {
         public override Task OnConnectedAsync()
