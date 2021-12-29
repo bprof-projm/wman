@@ -31,7 +31,7 @@ namespace Wman.Logic.Services
                 "" :
                 we.Address.ZIPCode + ", " + we.Address.City + "<br>" + we.Address.Street +" "+ we.Address.BuildingNumber + $" {we.Address.Floordoor}");
             await SendEmail(user.Email, $"You have been assigned to {we.JobDescription} event!", htmlContent);
-            //await SendEmail("openpubsotherwisekillm3@gmail.com", $"You have been assigned to {we.JobDescription} event!", htmlContent);
+            
         }
         public async Task WorkEventUpdated(WorkEvent we, WmanUser user)
         {
@@ -45,8 +45,7 @@ namespace Wman.Logic.Services
                 we.Address.ZIPCode + ", " + we.Address.City + "<br>" + we.Address.Street + " " + we.Address.BuildingNumber +
                 "" :
                 we.Address.ZIPCode + ", " + we.Address.City + "<br>" + we.Address.Street +" " + we.Address.BuildingNumber + $" {we.Address.Floordoor}");
-            await SendEmail(user.Email, $"You have been assigned to {we.JobDescription} event!", htmlContent);
-            //await SendEmail("openpubsotherwisekillm3@gmail.com", $"The {we.JobDescription} event has been modified!", htmlContent);
+            await SendEmail(user.Email, $"The {we.JobDescription} event has been modified!", htmlContent);
         }
         private async Task SendEmail(string toAddress, string subject, string htmlContent) 
         {

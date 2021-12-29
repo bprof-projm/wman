@@ -73,7 +73,7 @@ namespace Wman.Logic.Classes
                     StringEscapeHandling = StringEscapeHandling.Default,
                     Converters = { new Newtonsoft.Json.Converters.StringEnumConverter() }
                 });
-                await _notifyHub.NotifyWorkerAboutEvent(k);
+                await _notifyHub.NotifyWorkerAboutEvent(selectedUser.UserName,k);
                 await _email.AssigedToWorkEvent(notifyEvent, selectedUser);
             }
         }
@@ -121,7 +121,7 @@ namespace Wman.Logic.Classes
                     StringEscapeHandling = StringEscapeHandling.Default,
                     Converters = { new Newtonsoft.Json.Converters.StringEnumConverter() }
                 });
-                await _notifyHub.NotifyWorkerAboutEvent(k);
+                await _notifyHub.NotifyWorkerAboutEvent(item.UserName, k);
                 await _email.AssigedToWorkEvent(notifyEvent, item);
             }
         }
@@ -211,9 +211,9 @@ namespace Wman.Logic.Classes
                 StringEscapeHandling = StringEscapeHandling.Default,
                 Converters = { new Newtonsoft.Json.Converters.StringEnumConverter() }
             });
-            await _notifyHub.NotifyWorkerAboutEvent(k);
             foreach (var item in notifyEvent.AssignedUsers)
             {
+                await _notifyHub.NotifyWorkerAboutEventChange(item.UserName, k);
                 await _email.WorkEventUpdated(notifyEvent, item);
             }
             
@@ -290,9 +290,10 @@ namespace Wman.Logic.Classes
                         StringEscapeHandling = StringEscapeHandling.Default,
                         Converters = { new Newtonsoft.Json.Converters.StringEnumConverter() }
                     });
-                    await _notifyHub.NotifyWorkerAboutEvent(k);
+                    
                     foreach (var item in notifyEvent.AssignedUsers)
                     {
+                        await _notifyHub.NotifyWorkerAboutEventChange(item.UserName, k);
                         await _email.WorkEventUpdated(notifyEvent, item);
                     }
 

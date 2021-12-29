@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,7 @@ using Wman.Logic.DTO_Models;
 
 namespace Wman.Logic.Services
 {
+    [Authorize(Roles = "Workers", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class NotifyHub : Hub
     {
         public override Task OnConnectedAsync()
@@ -21,13 +24,13 @@ namespace Wman.Logic.Services
             Clients.Caller.SendAsync("Disconnected", Context.ConnectionId);
             return base.OnDisconnectedAsync(exception);
         }
-        public async Task NotifyWorkerAboutEvent(string we)
+        public async Task NotifyWorkerAboutEvent(string user, string we)
         {
             try
             {
                 if (Clients != null)
                 {
-                    await Clients.User(Context.User.Identity.Name).SendAsync("UserAssiged", we);
+                    await Clients.User(user).SendAsync("UserAssiged", we);
                 }
                 
             }
@@ -40,13 +43,13 @@ namespace Wman.Logic.Services
             
             
         }
-        public async Task NotifyWorkerAboutEventChange(string we)
+        public async Task NotifyWorkerAboutEventChange(string user, string we)
         {
             try
             {
                 if (Clients != null)
                 {
-                    await Clients.User(Context.User.Identity.Name).SendAsync("EventChanged", we);
+                    await Clients.User(user).SendAsync("EventChanged", we);
                 }
 
             }
