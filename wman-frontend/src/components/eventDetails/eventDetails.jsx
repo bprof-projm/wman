@@ -60,12 +60,12 @@ const EventDetails = ({ workerEventId, workerEvent }) => {
     }
   };
 
-  //tesztelési szempont miatt hardCodeolni kellett a workerEvent értékét mert tomi mégmindig nincs kész a calendarral
-  //, ezt később ki kell szedni és a komponens meghívásánál meg kell hívni a getWorkerEventet és átadni a workerEventet paraméterként
+  // tesztelési szempont miatt hardCodeolni kellett a workerEvent értékét mert tomi mégmindig nincs kész a calendarral
+  // , ezt később ki kell szedni és a komponens meghívásánál meg kell hívni a getWorkerEventet és átadni a workerEventet paraméterként
   workerEvent = {
-    jobDescription: "heee",
-    estimatedStartDate: "2021-11-12T19:06:21.053Z",
-    estimatedFinishDate: "2021-11-12T20:06:21.053Z",
+    jobDescription: "React fejlesztés",
+    estimatedStartDate: "2021-11-26T19:06:21.053Z",
+    estimatedFinishDate: "2021-11-26T20:06:21.053Z",
     date: ["2021-11-12T19:06:21.053Z", "2021-11-12T20:06:21.053Z"],
     address: {
       city: "city",
@@ -78,7 +78,6 @@ const EventDetails = ({ workerEventId, workerEvent }) => {
   };
 
   if (workerEvent) {
-    console.log(workerEvent.jobDescription);
     return (
       <div className="card-container">
         <div className="card">
