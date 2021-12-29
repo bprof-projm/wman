@@ -12,5 +12,6 @@ namespace Wman.Logic.Services
     {
         Task<ImageUploadResult> AddProfilePhotoAsync(IFormFile file);
         Task<DeletionResult> DeleteProfilePhotoAsync(string publicId);
+        Task<ImageUploadResult> AddProofOfWorkPhotoAsync(IFormFile file);
     }
 }
