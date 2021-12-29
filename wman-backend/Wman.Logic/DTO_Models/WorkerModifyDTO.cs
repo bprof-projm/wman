@@ -35,6 +35,10 @@ namespace Wman.Logic.DTO_Models
         [StringLength(15)]
         public string PhoneNumber { get; set; }
 
+        [DataType(DataType.Text)]
+        [StringLength(7)]
+        public string Role { get; set; }
+
         public IFormFile Photo { get; set; }
     }
 }

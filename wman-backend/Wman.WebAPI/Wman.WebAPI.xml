@@ -16,7 +16,7 @@
             <param name="authLogic"></param>
             <param name="adminLogic"></param>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AdminController.CreateWorkforce(Wman.Logic.DTO_Models.RegisterDTO,System.String)">
+        <member name="M:Wman.WebAPI.Controllers.AdminController.CreateWorkforce(Wman.Logic.DTO_Models.RegisterDTO)">
             <summary>
             Create a new workforce
             </summary>
@@ -37,14 +37,6 @@
             Delete a workforce
             </summary>
             <param name="username"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Wman.WebAPI.Controllers.AdminController.SetRole(System.String,System.String)">
-            <summary>
-            Set the role of a user, while removing any previous roles it had before
-            </summary>
-            <param name="username">Username of the user</param>
-            <param name="rolename">Name of the role(Admin/Manager/Worker)</param>
             <returns></returns>
         </member>
         <member name="T:Wman.WebAPI.Controllers.AuthController">

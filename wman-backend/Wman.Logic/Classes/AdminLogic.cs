@@ -32,16 +32,35 @@ namespace Wman.Logic.Classes
             {
                 throw new NotFoundException(WmanError.UserNotFound);
             }
-            if (await userManager.IsInRoleAsync(user, "Worker") == false && await userManager.IsInRoleAsync(user, "Manager") == false)
+            if (await userManager.IsInRoleAsync(user, "Admin"))
             {
                 throw new InvalidOperationException(WmanError.NotAWorkforce);
             }
+            
 
             user.Email = model.Email;
             user.FirstName = model.Firstname;
             user.LastName = model.Lastname;
             user.PhoneNumber = model.PhoneNumber;
-
+            if (!string.IsNullOrWhiteSpace(model.Role))
+            {
+                if (model.Role.ToLower() == "admin")
+                {
+                    throw new InvalidOperationException(WmanError.CantCreateAdmin);
+                }
+                if (model.Role.ToLower() != "worker" && model.Role.ToLower() != "manager")
+                {
+                    throw new InvalidOperationException(WmanError.RoleNotFound);
+                }
+                var prevRole = userManager.GetRolesAsync(user).Result.FirstOrDefault();
+                
+                if (prevRole.ToLower() != model.Role.ToLower())
+                {
+                    await userManager.RemoveFromRoleAsync(user, prevRole);
+                    await userManager.AddToRoleAsync(user, model.Role);
+                }
+            }
+           
             //user.PasswordHash = userManager.PasswordHasher.HashPassword(user, model.Password);
             if (model.Photo != null)
             {
@@ -61,7 +80,7 @@ namespace Wman.Logic.Classes
             {
                 throw new NotFoundException(WmanError.UserNotFound);
             }
-            if (await userManager.IsInRoleAsync(user, "Worker") == false && await userManager.IsInRoleAsync(user, "Manager") == false)
+            if (await userManager.IsInRoleAsync(user, "Admin"))
             {
                 throw new InvalidOperationException(WmanError.NotAWorkforce);
             }
@@ -75,12 +94,16 @@ namespace Wman.Logic.Classes
             return result;
         }
 
-        public async Task<IdentityResult> CreateWorkforce(RegisterDTO model, string role)
+        public async Task<IdentityResult> CreateWorkforce(RegisterDTO model)
         {
-            if (role.ToLower() == "admin")
+            if (model.Role.ToLower() == "admin")
             {
                 throw new InvalidOperationException(WmanError.CantCreateAdmin);
             }
+                if (model.Role.ToLower() != "worker" && model.Role.ToLower() != "manager")
+                {
+                    throw new InvalidOperationException(WmanError.RoleNotFound);
+                }
             var result = new IdentityResult();
             var user = new WmanUser();
             user = userManager.Users.Where(x => x.Email == model.Email).SingleOrDefault();
@@ -100,7 +123,7 @@ namespace Wman.Logic.Classes
             result = await userManager.CreateAsync(user, model.Password);
             if (await CheckResult(result))
             {
-                await userManager.AddToRoleAsync(user, role);
+                await userManager.AddToRoleAsync(user, model.Role);
             }
             if (model.Photo != null)
             {

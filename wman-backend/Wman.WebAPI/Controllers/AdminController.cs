@@ -38,9 +38,9 @@ namespace Wman.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("Create")]
-        public async Task<ActionResult> CreateWorkforce([FromForm] RegisterDTO model, string role)
+        public async Task<ActionResult> CreateWorkforce([FromForm] RegisterDTO model)
         {
-            await this.adminLogic.CreateWorkforce(model, role);
+            await this.adminLogic.CreateWorkforce(model);
             return Ok();
         }
         /// <summary>
@@ -66,19 +66,19 @@ namespace Wman.WebAPI.Controllers
         {
             return Ok(await this.adminLogic.DeleteWorkforce(username));
         }
-        /// <summary>
-        /// Set the role of a user, while removing any previous roles it had before
-        /// </summary>
-        /// <param name="username">Username of the user</param>
-        /// <param name="rolename">Name of the role(Admin/Manager/Worker)</param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("setrole")]
-        public async Task<ActionResult> SetRole(string username, string rolename)
-        {
-            await this.authLogic.SetRoleOfUser(username, rolename);
-            return Ok();
-        }
+        ///// <summary>
+        ///// Set the role of a user, while removing any previous roles it had before
+        ///// </summary>
+        ///// <param name="username">Username of the user</param>
+        ///// <param name="rolename">Name of the role(Admin/Manager/Worker)</param>
+        ///// <returns></returns>
+        //[HttpGet]
+        //[Route("setrole")]
+        //public async Task<ActionResult> SetRole(string username, string rolename)
+        //{
+        //    await this.authLogic.SetRoleOfUser(username, rolename);
+        //    return Ok();
+        //}
         
     }
 }

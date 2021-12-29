@@ -27,9 +27,12 @@ namespace Wman.Logic.DTO_Models
         [StringLength(20, MinimumLength = 5)]
         [Required(AllowEmptyStrings = false)]
         public string Password { get; set; }
+        [DataType(DataType.Text)]
+        [StringLength(7)]
+        [Required(AllowEmptyStrings = false)]
+        public string Role { get; set; }
 
         [DataType(DataType.Text)]
-
         [StringLength(30)]
         public string Firstname { get; set; }
 
