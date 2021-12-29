@@ -195,13 +195,6 @@
             </summary>
             <returns>WorkLoadDTO</returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.UserController.GetAssignedEventsOfUser(System.String)">
-            <summary>
-            Get all the events to which a selected user is assigned to
-            </summary>
-            <param name="username">Username of the searched user</param>
-            <returns>A collection of events that are assigned to the specified user</returns>
-        </member>
         <member name="T:Wman.WebAPI.Controllers.WorkerController">
             <summary>
             
@@ -213,32 +206,6 @@
             </summary>
             <param name="fromDate"></param>
             <param name="toDate"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Wman.WebAPI.Controllers.WorkerController.GetAvaliableEventsForMyself">
-            <summary>
-            Get all the events avaliable to the currently logged in user
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Wman.WebAPI.Controllers.WorkerController.GetAvaliableEventsToday">
-            <summary>
-            Lists all the workevents avaliable to the currently logged in user today
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Wman.WebAPI.Controllers.WorkerController.GetAvaliableEventsThisWeek">
-            <summary>
-            Lists all the workevents avaliable to the currently logged in user this week
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Wman.WebAPI.Controllers.WorkerController.GetAvaliableEventsSpecific(System.DateTime,System.DateTime)">
-            <summary>
-            Lists all the workevents avaliable to the currently logged in user, within the specified time interval
-            </summary>
-            <param name="start"></param>
-            <param name="finish"></param>
             <returns></returns>
         </member>
         <member name="M:Wman.WebAPI.Controllers.WorkerController.GetEventDetailsForMyself(System.Int32)">
