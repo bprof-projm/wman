@@ -45,5 +45,26 @@ namespace Wman.Logic.Services
             var result = await _cloudinary.DestroyAsync(deleteParams);
             return result;
         }
+        public async Task<ImageUploadResult> AddProofOfWorkPhotoAsync(IFormFile file)
+        {
+            var uploadResult = new ImageUploadResult();
+            if (file.Length > 0)
+            {
+                using var stream = file.OpenReadStream();
+                var uploadParams = new ImageUploadParams
+                {
+                    File = new FileDescription(file.FileName, stream),
+                    Transformation = new Transformation().Height(1000).Width(1000).Crop("fill").FetchFormat("png")
+                };
+                uploadResult = await _cloudinary.UploadAsync(uploadParams);
+            }
+            return uploadResult;
+        }
+        public async Task<DeletionResult> DeleteProofOfWorkPhotoAsync(string publicId)
+        {
+            var deleteParams = new DeletionParams(publicId);
+            var result = await _cloudinary.DestroyAsync(deleteParams);
+            return result;
+        }
     }
 }

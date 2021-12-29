@@ -35,14 +35,14 @@ namespace Wman.Repository.Classes
 
         public IQueryable<WorkEvent> GetAll()
         {
-            return this.db.WorkEvent.AsNoTracking().Include(x => x.Address).Include(x => x.AssignedUsers).ThenInclude(x => x.ProfilePicture).Include(x => x.Labels).OrderBy(x => x.EstimatedStartDate);
+            return this.db.WorkEvent.AsNoTracking().Include(x => x.Address).Include(x => x.AssignedUsers).ThenInclude(x => x.ProfilePicture).Include(x => x.Labels).Include(x => x.ProofOfWorkPic).OrderBy(x => x.EstimatedStartDate);
         }
         /// <inheritdoc />
         public async Task<WorkEvent> GetOne(int key) 
         {
             var entity = await (from x in db.WorkEvent
                           where x.Id == key
-                          select x).AsNoTracking().Include(x => x.AssignedUsers).ThenInclude(x => x.ProfilePicture).Include(x => x.Address).Include(x => x.Labels).FirstOrDefaultAsync();
+                          select x).AsNoTracking().Include(x => x.AssignedUsers).ThenInclude(x => x.ProfilePicture).Include(x => x.Address).Include(x => x.Labels).Include(x => x.ProofOfWorkPic).FirstOrDefaultAsync();
             return entity;
         }
         /// <inheritdoc />
