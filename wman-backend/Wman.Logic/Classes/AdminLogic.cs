@@ -105,22 +105,6 @@ namespace Wman.Logic.Classes
             return result;
         }
 
-        public async Task Setup(RegisterDTO model)
-        {
-            var admins = await userManager.GetUsersInRoleAsync("Admin");
-            if (admins.Count == 0)
-            {
-                await this.CreateWorker(model);
-                var user = await userManager.Users.Where(x => x.UserName == model.Username).SingleOrDefaultAsync();
-                await userManager.RemoveFromRoleAsync(user, "Worker");
-                await userManager.AddToRoleAsync(user, "Admin");
-            }
-            else
-            {
-                throw new InvalidOperationException(WmanError.AdminExists);
-            }
-        }
-
         private async Task<bool> CheckResult(IdentityResult result)
         {
             if (result.Succeeded)

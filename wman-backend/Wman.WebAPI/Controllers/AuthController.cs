@@ -101,19 +101,6 @@ namespace Wman.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Api used to create a new admin user, if there are none present.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("AdminSetup")]
-        public async Task<ActionResult> FirstTimeSetup([FromForm] RegisterDTO model)
-        {
-            await adminLogic.Setup(model);
-            return Ok();
-        }
-
-        /// <summary>
         /// DEBUG Endpoint used to fill database with testing data. Used only for development purposes.
         /// </summary>
         /// <returns>200</returns>
