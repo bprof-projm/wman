@@ -282,22 +282,22 @@ namespace Wman.Logic.Classes
                     {
                         throw new InvalidOperationException(WmanError.UserIsBusy);
                     }
-
+                    var notifyEvent = await eventRepo.GetOne(Id);
+                    var n = mapper.Map<WorkEventForWorkCardDTO>(notifyEvent);
+                    var k = Newtonsoft.Json.JsonConvert.SerializeObject(n, new JsonSerializerSettings
+                    {
+                        ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                        StringEscapeHandling = StringEscapeHandling.Default,
+                        Converters = { new Newtonsoft.Json.Converters.StringEnumConverter() }
+                    });
+                    await _notifyHub.NotifyWorkerAboutEvent(k);
+                    foreach (var item in notifyEvent.AssignedUsers)
+                    {
+                        await _email.WorkEventUpdated(notifyEvent, item);
+                    }
 
                 }
-                var notifyEvent = await eventRepo.GetOne(Id);
-                var n = mapper.Map<WorkEventForWorkCardDTO>(notifyEvent);
-                var k = Newtonsoft.Json.JsonConvert.SerializeObject(n, new JsonSerializerSettings
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                    StringEscapeHandling = StringEscapeHandling.Default,
-                    Converters = { new Newtonsoft.Json.Converters.StringEnumConverter() }
-                });
-                await _notifyHub.NotifyWorkerAboutEvent(k);
-                foreach (var item in notifyEvent.AssignedUsers)
-                {
-                    await _email.WorkEventUpdated(notifyEvent, item);
-                }
+                
             }
             else
             {

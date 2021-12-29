@@ -27,9 +27,9 @@ namespace Wman.Logic.Services
             htmlContent = htmlContent.Replace("EstimatedStartDateDynamicValue", we.EstimatedStartDate.ToString("yyyy.MM.dd, HH:mm"));
             htmlContent = htmlContent.Replace("EstimatedFinishDateDynamicValue", we.EstimatedFinishDate.ToString("yyyy.MM.dd, HH:mm"));
             htmlContent = htmlContent.Replace("AddressDynamicValue", we.Address.Floordoor == null ?
-                we.Address.ZIPCode +", "+ we.Address.City + " <br> " + we.Address.Street + " " +  we.Address.BuildingNumber +
+                we.Address.ZIPCode +", "+ we.Address.City + "<br>" + we.Address.Street + " " +  we.Address.BuildingNumber +
                 "" :
-                we.Address.ZIPCode + ", " + we.Address.City + "<br>" + we.Address.Street + we.Address.BuildingNumber + $" {we.Address.Floordoor}");
+                we.Address.ZIPCode + ", " + we.Address.City + "<br>" + we.Address.Street +" "+ we.Address.BuildingNumber + $" {we.Address.Floordoor}");
             await SendEmail(user.Email, $"You have been assigned to {we.JobDescription} event!", htmlContent);
             //await SendEmail("openpubsotherwisekillm3@gmail.com", $"You have been assigned to {we.JobDescription} event!", htmlContent);
         }
@@ -37,14 +37,14 @@ namespace Wman.Logic.Services
         {
             string htmlContent = File.ReadAllText("./Assets/emailhtml.html");
             htmlContent = htmlContent.Replace("NameDynamicValue", $"Dear Mr/Mrs.{user.LastName}");
-            htmlContent = htmlContent.Replace("SubjectDynamicValue", $"You have been assigned to {we.JobDescription} event!");
+            htmlContent = htmlContent.Replace("SubjectDynamicValue", $"The {we.JobDescription} event has been modified!");
             htmlContent = htmlContent.Replace("JobDescriptionDynamicValue", we.JobDescription);
             htmlContent = htmlContent.Replace("EstimatedStartDateDynamicValue", we.EstimatedStartDate.ToString("yyyy.MM.dd, HH:mm"));
             htmlContent = htmlContent.Replace("EstimatedFinishDateDynamicValue", we.EstimatedFinishDate.ToString("yyyy.MM.dd, HH:mm"));
             htmlContent = htmlContent.Replace("AddressDynamicValue", we.Address.Floordoor == null ?
-                we.Address.ZIPCode + ", " + we.Address.City + " <br> " + we.Address.Street + " " + we.Address.BuildingNumber +
+                we.Address.ZIPCode + ", " + we.Address.City + "<br>" + we.Address.Street + " " + we.Address.BuildingNumber +
                 "" :
-                we.Address.ZIPCode + ", " + we.Address.City + "<br>" + we.Address.Street + we.Address.BuildingNumber + $" {we.Address.Floordoor}");
+                we.Address.ZIPCode + ", " + we.Address.City + "<br>" + we.Address.Street +" " + we.Address.BuildingNumber + $" {we.Address.Floordoor}");
             await SendEmail(user.Email, $"You have been assigned to {we.JobDescription} event!", htmlContent);
             //await SendEmail("openpubsotherwisekillm3@gmail.com", $"The {we.JobDescription} event has been modified!", htmlContent);
         }
