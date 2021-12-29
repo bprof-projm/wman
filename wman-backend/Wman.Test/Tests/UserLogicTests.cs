@@ -156,5 +156,22 @@ namespace Wman.Test.Tests
 
             this.eventRepo.Verify(x => x.GetOne(It.IsAny<int>()), Times.Once);
         }
+
+        [Test]
+        public async Task WorkEventsOfUserThisWeek_ReturnsWorkEventProperly()
+        {
+            //Arrange
+            UserLogic userLogic = new(this.userManager.Object, this.mapper, this.eventRepo.Object);
+            string usernameToTest = users[0].UserName;
+
+            //Act
+            var call = await userLogic.WorkEventsOfUserThisWeek(usernameToTest);
+
+            //Assert
+            Assert.That(call.ElementAt(0).Id == users[0].WorkEvents.ElementAt(0).Id);
+
+            this.userManager.Verify(x => x.Users, Times.Once);
+            this.eventRepo.Verify(x => x.GetAll(), Times.Once);
+        }
     }
 }
