@@ -16,24 +16,25 @@
             <param name="authLogic"></param>
             <param name="adminLogic"></param>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AdminController.CreateWorker(Wman.Logic.DTO_Models.RegisterDTO)">
+        <member name="M:Wman.WebAPI.Controllers.AdminController.CreateWorkforce(Wman.Logic.DTO_Models.RegisterDTO,System.String)">
             <summary>
-            Create a new worker
+            Create a new workforce
             </summary>
             <param name="model"></param>
+            <param name="role"></param>
             <returns></returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AdminController.ModifyWorker(System.String,Wman.Logic.DTO_Models.WorkerModifyDTO)">
+        <member name="M:Wman.WebAPI.Controllers.AdminController.ModifyWorkForce(System.String,Wman.Logic.DTO_Models.WorkerModifyDTO)">
             <summary>
-            Edit an existing worker
+            Edit an existing workforce
             </summary>
             <param name="username"></param>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AdminController.DeleteWorker(System.String)">
+        <member name="M:Wman.WebAPI.Controllers.AdminController.DeleteWorkforce(System.String)">
             <summary>
-            Delete a worker
+            Delete a workforce
             </summary>
             <param name="username"></param>
             <returns></returns>
@@ -91,13 +92,6 @@
             </summary>
             <param name="username"></param>
             <returns>Worker/Admin/Manager</returns>
-        </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.FirstTimeSetup(Wman.Logic.DTO_Models.RegisterDTO)">
-            <summary>
-            Api used to create a new admin user, if there are none present.
-            </summary>
-            <param name="model"></param>
-            <returns></returns>
         </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.PopulateDB">
             <summary>

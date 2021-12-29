@@ -24,7 +24,7 @@ namespace Wman.Logic.Classes
             this.photoLogic = photoLogic;
             this.mapper = mapper;
         }
-        public async Task<IdentityResult> UpdateWorker(string username, WorkerModifyDTO model)
+        public async Task<IdentityResult> UpdateWorkforce(string username, WorkerModifyDTO model)
         {
             var result = new IdentityResult();
             var user = userManager.Users.Where(x => x.UserName == username).SingleOrDefault();
@@ -32,9 +32,9 @@ namespace Wman.Logic.Classes
             {
                 throw new NotFoundException(WmanError.UserNotFound);
             }
-            if (await userManager.IsInRoleAsync(user, "Worker") == false)
+            if (await userManager.IsInRoleAsync(user, "Worker") == false && await userManager.IsInRoleAsync(user, "Manager") == false)
             {
-                throw new InvalidOperationException(WmanError.NotAWorker);
+                throw new InvalidOperationException(WmanError.NotAWorkforce);
             }
 
             user.Email = model.Email;
@@ -53,7 +53,7 @@ namespace Wman.Logic.Classes
         }
 
 
-        public async Task<IdentityResult> DeleteWorker(string uname)
+        public async Task<IdentityResult> DeleteWorkforce(string uname)
         {
             var result = new IdentityResult();
             var user = userManager.Users.Where(x => x.UserName == uname).SingleOrDefault();
@@ -61,9 +61,9 @@ namespace Wman.Logic.Classes
             {
                 throw new NotFoundException(WmanError.UserNotFound);
             }
-            if (await userManager.IsInRoleAsync(user, "Worker") == false)
+            if (await userManager.IsInRoleAsync(user, "Worker") == false && await userManager.IsInRoleAsync(user, "Manager") == false)
             {
-                throw new InvalidOperationException(WmanError.NotAWorker);
+                throw new InvalidOperationException(WmanError.NotAWorkforce);
             }
             if (user.ProfilePicture != null)
             {
@@ -75,8 +75,12 @@ namespace Wman.Logic.Classes
             return result;
         }
 
-        public async Task<IdentityResult> CreateWorker(RegisterDTO model)
+        public async Task<IdentityResult> CreateWorkforce(RegisterDTO model, string role)
         {
+            if (role.ToLower() == "admin")
+            {
+                throw new InvalidOperationException(WmanError.CantCreateAdmin);
+            }
             var result = new IdentityResult();
             var user = new WmanUser();
             user = userManager.Users.Where(x => x.Email == model.Email).SingleOrDefault();
@@ -96,7 +100,7 @@ namespace Wman.Logic.Classes
             result = await userManager.CreateAsync(user, model.Password);
             if (await CheckResult(result))
             {
-                await userManager.AddToRoleAsync(user, "Worker");
+                await userManager.AddToRoleAsync(user, role);
             }
             if (model.Photo != null)
             {

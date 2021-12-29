@@ -10,10 +10,10 @@ namespace Wman.Logic.Interfaces
 {
     public interface IAdminLogic
     {
-        Task<IdentityResult> CreateWorker(RegisterDTO login);
+        Task<IdentityResult> CreateWorkforce(RegisterDTO login, string role);
 
-        Task<IdentityResult> DeleteWorker(string uname);
+        Task<IdentityResult> DeleteWorkforce(string uname);
 
-        Task<IdentityResult> UpdateWorker(string username, WorkerModifyDTO model);
+        Task<IdentityResult> UpdateWorkforce(string username, WorkerModifyDTO model);
     }
 }
