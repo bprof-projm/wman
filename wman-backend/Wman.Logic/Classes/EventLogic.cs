@@ -353,24 +353,20 @@ namespace Wman.Logic.Classes
         }
         public async Task<WorkEventForWorkCardDTO> StatusUpdater(int eventId)
         {
-            var workevent = await eventRepo.GetOne(eventId);
-            if (workevent.Status != Status.proofawait)
-            {
-                workevent.Status++;
-            }
-            if (workevent.Status == Status.finished)
+            var workevent = await eventRepo.GetOneWithTracking(eventId);
+
+            if (Status.finished == workevent.Status)
             {
                 throw new InvalidOperationException(WmanError.StatusFinished);
             }
-            if (workevent.ProofOfWorkPic.Count > 0)
-            {
-                workevent.Status++;
-            }
-            else
+            if (Status.proofawait == workevent.Status && workevent.ProofOfWorkPic.Count==0)
             {
                 throw new InvalidOperationException(WmanError.StatusPowMissing);
             }
-            return mapper.Map<WorkEventForWorkCardDTO>(workevent);
+            workevent.Status++;
+            await eventRepo.SaveDatabase();
+            var workevent2 = await eventRepo.GetOne(eventId);
+            return mapper.Map<WorkEventForWorkCardDTO>(workevent2);
         }
         private async Task<bool> WorkerTimeCheck(List<WmanUser> assignedUsers, DateTime startDate , DateTime finishDate)
         {

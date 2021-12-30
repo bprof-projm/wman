@@ -50,7 +50,7 @@ namespace Wman.Repository.Classes
         {
             var entity = await (from x in db.WorkEvent
                                 where x.Id == key
-                                select x).Include(x => x.AssignedUsers).FirstOrDefaultAsync();
+                                select x).Include(x => x.AssignedUsers).Include(x => x.ProofOfWorkPic).FirstOrDefaultAsync();
             return entity;
         }
 
