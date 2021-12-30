@@ -262,6 +262,12 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:Wman.WebAPI.Controllers.WorkerController.GetLoggedInWorkersWorkload">
+            <summary>
+            Return the workload of the currently logged in user
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Wman.WebAPI.Helpers.AllowAnonymous">
             <summary>
             This authorisation handler will bypass all requirements
