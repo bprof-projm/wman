@@ -30,7 +30,7 @@ namespace Wman.Data.DB_Models
         public ICollection<Label> Labels { get; set; }
         
         [JsonIgnore]
-        public ICollection<Pictures> ProofOfWorkPic { get; set; }
+        public ICollection<ProofOfWork> ProofOfWorkPic { get; set; }
         public virtual AddressHUN Address { get; set; }
         public DateTime WorkStartDate { get; set; }
         public DateTime WorkFinishDate { get; set; }
@@ -41,7 +41,7 @@ namespace Wman.Data.DB_Models
             AssignedUsers = new List<WmanUser>();
             this.Address = new AddressHUN();
             this.Labels = new List<Label>();
-            this.ProofOfWorkPic = new List<Pictures>();
+            this.ProofOfWorkPic = new List<ProofOfWork>();
         }
     }
 }
