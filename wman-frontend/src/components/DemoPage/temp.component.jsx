@@ -4,6 +4,7 @@ import PrintButton from "../Print-functionality/Print-button/print-button.compon
 import ProgressMenu from "../Worker-load/Progress-menu/progress-menu.component";
 import LabelsMenu from "../Labels/LabelMenu/labelMenu";
 import "./temp.styles.css";
+import EventDetails from "../eventDetails/eventDetails";
 
 export const TempPage = () => {
   return (
@@ -13,6 +14,7 @@ export const TempPage = () => {
       <br />
       <PrintButton />
       <br />
+      <EventDetails />
       <Logout />
     </div>
   );

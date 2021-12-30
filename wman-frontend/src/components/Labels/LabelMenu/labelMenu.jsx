@@ -33,13 +33,16 @@ const LabelsMenu = () => {
       .delete(`/DeleteLabel/` + param, {
         headers: { Authorization: `Bearer ${Cookies.get("auth")}` },
       })
-      .then((response) =>
+      .then((response) => {
+        if (param === editLabelId) {
+          setDisplayEditLabel(false);
+        }
         axios
           .get(`/GetAllLabel`, {
             headers: { Authorization: `Bearer ${Cookies.get("auth")}` },
           })
-          .then((response) => setLabels(response.data))
-      )
+          .then((response) => setLabels(response.data));
+      })
       .catch((error) => console.log(error));
   };
 
