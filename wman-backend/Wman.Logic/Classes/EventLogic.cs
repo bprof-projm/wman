@@ -259,7 +259,7 @@ namespace Wman.Logic.Classes
             {
                 throw new InvalidOperationException(WmanError.StatusFinished);
             }
-            if (workevent.ProofOfWorkPic != null)
+            if (workevent.ProofOfWorkPic.Count > 0)
             {
                 workevent.Status++;
             }
