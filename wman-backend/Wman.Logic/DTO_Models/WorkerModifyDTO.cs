@@ -1,23 +1,15 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Wman.Data.DB_Models;
 
 namespace Wman.Logic.DTO_Models
 {
-    public class UserDTO
+    public class WorkerModifyDTO
     {
-        [DataType(DataType.Text)]
-        [Required(AllowEmptyStrings = false)]
-        [StringLength(30, MinimumLength = 3)]
-        [RegularExpression(@"^[a-zA-Z0-9]+$")]
-        public string Username { get; set; }
-
         [DataType(DataType.EmailAddress)]
         [EmailAddress]
         [MaxLength(150)]
@@ -43,6 +35,10 @@ namespace Wman.Logic.DTO_Models
         [StringLength(15)]
         public string PhoneNumber { get; set; }
 
-        public PhotoDTO Picture { get; set; }
+        [DataType(DataType.Text)]
+        [StringLength(7)]
+        public string Role { get; set; }
+
+        public IFormFile Photo { get; set; }
     }
 }

@@ -23,15 +23,18 @@ namespace Wman.WebAPI.Controllers
     {
         IAuthLogic authLogic;
         DBSeed dBSeed;
+        IAdminLogic adminLogic;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="authLogic"></param>
         /// /// <param name="dBSeed"></param>
-        public AuthController(IAuthLogic authLogic, DBSeed dBSeed)
+        /// <param name="adminLogic"></param>
+        public AuthController(IAuthLogic authLogic, DBSeed dBSeed, IAdminLogic adminLogic)
         {
             this.authLogic = authLogic;
             this.dBSeed = dBSeed;
+            this.adminLogic = adminLogic;
         }
 
         /// <summary>
@@ -47,17 +50,6 @@ namespace Wman.WebAPI.Controllers
             return Ok(await authLogic.LoginUser(model));
         }
 
-        /// <summary>
-        /// Create a new user
-        /// </summary>
-        /// <param name="model">Login model</param>
-        /// <returns>ActionResult</returns>
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> CreateWorker([FromBody] RegisterDTO model)
-        {
-            return Ok(await authLogic.CreateWorker(model));
-        }
         /// <summary>
         /// Get a list of all users
         /// </summary>
@@ -84,45 +76,6 @@ namespace Wman.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Delete a user
-        /// </summary>
-        /// <param name="username">Username of the user to be deleted</param>
-        [HttpDelete("{username}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> DeleteUser(string username)
-        {
-            return Ok(await this.authLogic.DeleteUser(username));
-        }
-
-        /// <summary>
-        /// Update a user
-        /// </summary>
-        /// <param name="oldUsername">Prev. id</param>
-        /// <param name="pwd">Password of the user to be updated</param>
-        /// <param name="user">User to be updated</param>
-        [HttpPut("{oldUsername}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> UpdateUser(string oldUsername, string pwd, [FromBody] UserDTO user)
-        {
-            return Ok(await this.authLogic.UpdateUser(oldUsername, pwd, user));
-        }
-
-        /// <summary>
-        /// Set the role of a user, while removing any previous roles he had before
-        /// </summary>
-        /// <param name="username">Username of the user</param>
-        /// <param name="rolename">Name of the role(Admin/Manager/Worker)</param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("role/set")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> SetRole(string username, string rolename)
-        {
-            await this.authLogic.SetRoleOfUser(username, rolename);
-            return Ok();
-        }
-
-        /// <summary>
         /// Returns a list of users that have the provided role
         /// </summary>
         /// <param name="rolename">Name of the role</param>
@@ -134,6 +87,19 @@ namespace Wman.WebAPI.Controllers
         {
             return Ok(await this.authLogic.GetAllUsersOfRole(rolename));
         }
+        /// <summary>
+        /// Returns the role(s) assigned to the user. (Worker/Admin/Manager)
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns>Worker/Admin/Manager</returns>
+        [HttpGet]
+        [Route("userrole")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<string>>> RolesOfUser(string username)
+        {
+            return Ok(await this.authLogic.GetAllRolesOfUser(username));
+        }
+
         /// <summary>
         /// DEBUG Endpoint used to fill database with testing data. Used only for development purposes.
         /// </summary>

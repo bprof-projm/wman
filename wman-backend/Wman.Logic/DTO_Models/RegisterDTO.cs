@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -26,9 +27,12 @@ namespace Wman.Logic.DTO_Models
         [StringLength(20, MinimumLength = 5)]
         [Required(AllowEmptyStrings = false)]
         public string Password { get; set; }
+        [DataType(DataType.Text)]
+        [StringLength(7)]
+        [Required(AllowEmptyStrings = false)]
+        public string Role { get; set; }
 
         [DataType(DataType.Text)]
-
         [StringLength(30)]
         public string Firstname { get; set; }
 
@@ -38,5 +42,6 @@ namespace Wman.Logic.DTO_Models
         [DataType(DataType.PhoneNumber)]
         [StringLength(15)] 
         public string PhoneNumber { get; set; }
+        public IFormFile Photo { get; set; }
     }
 }
