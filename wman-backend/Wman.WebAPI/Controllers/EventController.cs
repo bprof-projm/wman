@@ -113,7 +113,11 @@ namespace Wman.WebAPI.Controllers
                 await eventLogic.UpdateEvent(updateEvent);
                 return Ok();
         }
-
-
+        [HttpPut("/StatusUpdater")]
+        public async Task<ActionResult<WorkEventForWorkCardDTO>> UpdateEvent(int eventID)
+        {
+            var workevent = await eventLogic.StatusUpdater(eventID);
+            return Ok(workevent);
+        }
     }
 }
