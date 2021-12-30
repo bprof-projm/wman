@@ -23,6 +23,7 @@ namespace Wman.Logic.Helpers
         public static string WrongColor = "The color should be in hexadecimal format";
         public static string PhotoNotFound = "Photo not found";
         public static string NotHisBusiness = "The currently logged in user is not assigned to the requested event";
-
+        public static string StatusFinished = "This event have already been finished";
+        public static string StatusPowMissing = "This event can not be finished until you provide the proof of work photo(s)";
     }
 }

@@ -12,7 +12,7 @@ namespace Wman.Data.DB_Models
 {
     public enum Status
     {
-        awaiting, started, finished
+        awaiting, started, proofawait, finished
     }
     public class WorkEvent
     {
