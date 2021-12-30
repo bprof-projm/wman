@@ -23,14 +23,16 @@ namespace Wman.Logic.Classes
         IPicturesRepo picturesRepo;
         IMapper mapper;
         IWorkEventRepo workEventRepo;
+        IProofOfWorkRepo proofOfWorkRepo;
 
-        public PhotoLogic(IPhotoService photoService, UserManager<WmanUser> userManager, IPicturesRepo picturesRepo, IMapper mapper, IWorkEventRepo workEventRepo)
+        public PhotoLogic(IPhotoService photoService, UserManager<WmanUser> userManager, IPicturesRepo picturesRepo, IMapper mapper, IWorkEventRepo workEventRepo, IProofOfWorkRepo proofOfWorkRepo)
         {
             _photoService = photoService;
             this.userManager = userManager;
             this.picturesRepo = picturesRepo;
             this.mapper = mapper;
             this.workEventRepo = workEventRepo;
+            this.proofOfWorkRepo = proofOfWorkRepo;
         }
 
         public async Task<PhotoDTO> AddProfilePhoto(string userName, IFormFile file)
@@ -145,17 +147,16 @@ namespace Wman.Logic.Classes
             {
                 throw new ArgumentException(result.Error.Message);
             }
-            var UploadedPicture = new Pictures
+            var UploadedPicture = new ProofOfWork
             {
                 Url = result.SecureUrl.AbsoluteUri,
                 CloudPhotoID = result.PublicId,
-                PicturesType = PicturesType.ProofOfWorkPic,
                 WorkEventID = eventID,
-                WmanUser = null
+                WorkEvents = selectedEvent
 
             };
             selectedEvent.ProofOfWorkPic.Add(UploadedPicture);
-            await picturesRepo.Add(UploadedPicture);
+            await proofOfWorkRepo.Add(UploadedPicture);
 
             List<ProofOfWorkDTO> photoResult = new List<ProofOfWorkDTO>();
             foreach (var item in selectedEvent.ProofOfWorkPic)
@@ -172,7 +173,7 @@ namespace Wman.Logic.Classes
                 throw new NotFoundException(WmanError.EventNotFound);
             }
 
-            var selectedPhoto = await (from x in picturesRepo.GetAll()
+            var selectedPhoto = await (from x in proofOfWorkRepo.GetAll()
                                        where x.CloudPhotoID == cloudCloudPhotoID
                                        select x).FirstOrDefaultAsync();
             if (selectedPhoto == null)
@@ -183,7 +184,7 @@ namespace Wman.Logic.Classes
             await _photoService.DeleteProfilePhotoAsync(cloudCloudPhotoID);
 
             // remove picture data from db
-            await picturesRepo.Delete(selectedPhoto.Id);
+            await proofOfWorkRepo.Delete(selectedPhoto.Id);
 
         }
     }
