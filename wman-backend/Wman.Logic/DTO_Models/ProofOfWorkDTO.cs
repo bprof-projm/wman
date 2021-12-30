@@ -10,5 +10,6 @@ namespace Wman.Logic.DTO_Models
     {
         public string CloudPhotoID { get; set; }
         public string Url { get; set; }
+        public int WorkEventID { get; set; }
     }
 }

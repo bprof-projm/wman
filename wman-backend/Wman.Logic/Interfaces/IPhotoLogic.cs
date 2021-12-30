@@ -13,5 +13,7 @@ namespace Wman.Logic.Interfaces
         Task<PhotoDTO> AddProfilePhoto(string userName, IFormFile file);
         Task RemoveProfilePhoto(string userName);
         Task<PhotoDTO> UpdateProfilePhoto(string userName, IFormFile file);
+        Task<List<ProofOfWorkDTO>> AddProofOfWorkPhoto(int eventID, IFormFile file);
+        Task RemoveProofOfWorkPhoto(int eventID, string cloudCloudPhotoID);
     }
 }

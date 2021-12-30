@@ -132,7 +132,7 @@ namespace Wman.Logic.Classes
             var photoResult = mapper.Map<PhotoDTO>(selectedUser.ProfilePicture);
             return photoResult;
         }
-        public async Task<List<PhotoDTO>> AddProofOfWorkPhoto(int eventID, IFormFile file)
+        public async Task<List<ProofOfWorkDTO>> AddProofOfWorkPhoto(int eventID, IFormFile file)
         {
             var selectedEvent = await workEventRepo.GetOne(eventID);
             if (selectedEvent == null)
@@ -150,16 +150,17 @@ namespace Wman.Logic.Classes
                 Url = result.SecureUrl.AbsoluteUri,
                 CloudPhotoID = result.PublicId,
                 PicturesType = PicturesType.ProofOfWorkPic,
-                WorkEventID = eventID
+                WorkEventID = eventID,
+                WmanUser = null
 
             };
             selectedEvent.ProofOfWorkPic.Add(UploadedPicture);
             await picturesRepo.Add(UploadedPicture);
 
-            List<PhotoDTO> photoResult = new List<PhotoDTO>();
+            List<ProofOfWorkDTO> photoResult = new List<ProofOfWorkDTO>();
             foreach (var item in selectedEvent.ProofOfWorkPic)
             {
-                photoResult.Add(mapper.Map<PhotoDTO>(item));
+                photoResult.Add(mapper.Map<ProofOfWorkDTO>(item));
             }
             return photoResult;
         }

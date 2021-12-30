@@ -18,6 +18,7 @@ namespace Wman.Logic.DTO_Models
         public AddressHUNDTO Address { get; set; }
         public DateTime WorkStartDate { get; set; }
         public DateTime WorkFinishDate { get; set; }
+        public List<ProofOfWorkDTO> ProofOfWorks { get; set; }
         public Status Status { get; set; }
     }
 }

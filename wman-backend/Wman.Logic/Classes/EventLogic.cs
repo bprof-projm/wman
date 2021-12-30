@@ -351,6 +351,26 @@ namespace Wman.Logic.Classes
                 throw new InvalidOperationException(WmanError.EventDateInvalid);
             }
         }
+        public async Task StatusUpdater(int eventId)
+        {
+            var workevent = await eventRepo.GetOne(eventId);
+            if (workevent.Status != Status.proofawait)
+            {
+                workevent.Status++;
+            }
+            if (workevent.Status == Status.finished)
+            {
+                throw new InvalidOperationException(WmanError.StatusFinished);
+            }
+            if (workevent.ProofOfWorkPic != null)
+            {
+                workevent.Status++;
+            }
+            else
+            {
+                throw new InvalidOperationException(WmanError.StatusPowMissing);
+            }
+        }
         private async Task<bool> WorkerTimeCheck(List<WmanUser> assignedUsers, DateTime startDate , DateTime finishDate)
         {
             if (assignedUsers.Count > 0)
