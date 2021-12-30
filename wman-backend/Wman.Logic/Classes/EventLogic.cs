@@ -73,7 +73,7 @@ namespace Wman.Logic.Classes
                     StringEscapeHandling = StringEscapeHandling.Default,
                     Converters = { new Newtonsoft.Json.Converters.StringEnumConverter() }
                 });
-                if (DateTime.Now.Year == notifyEvent.EstimatedStartDate.Year && DateTime.Now.Month == notifyEvent.EstimatedStartDate.Month && DateTime.Now.Day == notifyEvent.EstimatedStartDate.Year)
+                if (DateTime.Now.Year == notifyEvent.EstimatedStartDate.Year && DateTime.Now.Month == notifyEvent.EstimatedStartDate.Month && DateTime.Now.Day == notifyEvent.EstimatedStartDate.Day)
                 {
                     await _notifyHub.NotifyWorkerAboutEventForToday(selectedUser.UserName, k);
                 }
@@ -125,7 +125,7 @@ namespace Wman.Logic.Classes
                     StringEscapeHandling = StringEscapeHandling.Default,
                     Converters = { new Newtonsoft.Json.Converters.StringEnumConverter() }
                 });
-                if (DateTime.Now.Year == notifyEvent.EstimatedStartDate.Year && DateTime.Now.Month == notifyEvent.EstimatedStartDate.Month && DateTime.Now.Day == notifyEvent.EstimatedStartDate.Year)
+                if (DateTime.Now.Year == notifyEvent.EstimatedStartDate.Year && DateTime.Now.Month == notifyEvent.EstimatedStartDate.Month && DateTime.Now.Day == notifyEvent.EstimatedStartDate.Day)
                 {
                     await _notifyHub.NotifyWorkerAboutEventForToday(item.UserName, k);
                 }
@@ -191,10 +191,20 @@ namespace Wman.Logic.Classes
             }
             workevent.JobDescription = newWorkEvent.JobDescription;
             workevent.Address = mapper.Map<AddressHUN>(newWorkEvent.Address);
+            
+            bool movedToAnotherDayFromCurrent = false;
+
             if (newWorkEvent.EstimatedStartDate < newWorkEvent.EstimatedFinishDate && newWorkEvent.EstimatedStartDate.Day == newWorkEvent.EstimatedFinishDate.Day)
             {
-                if (await WorkerTimeCheck(workevent.AssignedUsers.ToList(),newWorkEvent.EstimatedStartDate, newWorkEvent.EstimatedFinishDate))
+                if (await WorkerTimeCheck(workevent.AssignedUsers.ToList(), newWorkEvent.EstimatedStartDate, newWorkEvent.EstimatedFinishDate))
                 {
+                    if (workevent.EstimatedStartDate.Date == DateTime.Today)
+                    {
+                        if (newWorkEvent.EstimatedStartDate.Date != DateTime.Today)
+                        {
+                            movedToAnotherDayFromCurrent = true;
+                        }
+                    }
                     workevent.EstimatedStartDate = newWorkEvent.EstimatedStartDate;
                     workevent.EstimatedFinishDate = newWorkEvent.EstimatedFinishDate;
                 }
@@ -221,9 +231,15 @@ namespace Wman.Logic.Classes
             });
             foreach (var item in notifyEvent.AssignedUsers)
             {
-                if (DateTime.Now.Year == notifyEvent.EstimatedStartDate.Year && DateTime.Now.Month == notifyEvent.EstimatedStartDate.Month && DateTime.Now.Day == notifyEvent.EstimatedStartDate.Year)
+                if (movedToAnotherDayFromCurrent)
                 {
+                    await _notifyHub.NotifyWorkerAboutEventChangeFromCurrentToOther(item.UserName, k);
+                }
+                else if (DateTime.Now.Year == notifyEvent.EstimatedStartDate.Year && DateTime.Now.Month == notifyEvent.EstimatedStartDate.Month && DateTime.Now.Day == notifyEvent.EstimatedStartDate.Day)
+                {
+
                     await _notifyHub.NotifyWorkerAboutEventChangeForToday(item.UserName, k);
+
                 }
                 await _notifyHub.NotifyWorkerAboutEventChange(item.UserName, k);
                 await _email.WorkEventUpdated(notifyEvent, item);
@@ -262,7 +278,15 @@ namespace Wman.Logic.Classes
             {
                 var result = mapper.Map<WorkEvent>(newWorkEvent);
                 var workEventInDb = await eventRepo.GetOneWithTracking(Id);
-
+                bool movedToAnotherDayFromCurrent = false;
+   
+                if (workEventInDb.EstimatedStartDate.Date == DateTime.Today)
+                {
+                    if (result.EstimatedStartDate.Date != DateTime.Today)
+                    {
+                        movedToAnotherDayFromCurrent = true;
+                    }
+                }
                 workEventInDb.EstimatedStartDate = result.EstimatedStartDate;
                 workEventInDb.EstimatedFinishDate = result.EstimatedFinishDate;
                 
@@ -305,9 +329,15 @@ namespace Wman.Logic.Classes
                     
                     foreach (var item in notifyEvent.AssignedUsers)
                     {
-                        if (DateTime.Now.Year == notifyEvent.EstimatedStartDate.Year && DateTime.Now.Month == notifyEvent.EstimatedStartDate.Month && DateTime.Now.Day == notifyEvent.EstimatedStartDate.Year)
+                        if (movedToAnotherDayFromCurrent)
                         {
+                            await _notifyHub.NotifyWorkerAboutEventChangeFromCurrentToOther(item.UserName, k);
+                        }
+                        else if (DateTime.Now.Year == notifyEvent.EstimatedStartDate.Year && DateTime.Now.Month == notifyEvent.EstimatedStartDate.Month && DateTime.Now.Day == notifyEvent.EstimatedStartDate.Day)
+                        {
+
                             await _notifyHub.NotifyWorkerAboutEventChangeForToday(item.UserName, k);
+
                         }
                         await _notifyHub.NotifyWorkerAboutEventChange(item.UserName, k);
                         await _email.WorkEventUpdated(notifyEvent, item);

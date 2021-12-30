@@ -94,7 +94,22 @@ namespace Wman.Logic.Services
 
             }
         }
+        public async Task NotifyWorkerAboutEventChangeFromCurrentToOther(string user, string we)
+        {
+            try
+            {
+                if (Clients != null)
+                {
+                    await Clients.User(user).SendAsync("EventChangedFromTodayToNotToday", we);
+                }
 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+            }
+        }
     }
     
 }
