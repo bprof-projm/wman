@@ -248,7 +248,7 @@ namespace Wman.Logic.Classes
                 throw new InvalidOperationException(WmanError.EventDateInvalid);
             }
         }
-        public async Task StatusUpdater(int eventId)
+        public async Task<WorkEventForWorkCardDTO> StatusUpdater(int eventId)
         {
             var workevent = await eventRepo.GetOne(eventId);
             if (workevent.Status != Status.proofawait)
@@ -267,6 +267,7 @@ namespace Wman.Logic.Classes
             {
                 throw new InvalidOperationException(WmanError.StatusPowMissing);
             }
+            return mapper.Map<WorkEventForWorkCardDTO>(workevent);
         }
         private async Task<bool> WorkerTimeCheck(List<WmanUser> assignedUsers, DateTime startDate , DateTime finishDate)
         {
