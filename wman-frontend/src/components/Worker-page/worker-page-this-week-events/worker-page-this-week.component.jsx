@@ -7,33 +7,44 @@ import axios from "axios";
 const WorkerThisWeek = () => {
     const token = Cookies.get("auth");
     const decoded = jwt_decode(token);
+
     const [calendarEvents, setCalendarEvents] = useState([]);
 
     useEffect(() => {
-        axios.get(`/CalendarEvent/GetCurrentDayEvents`)
+        axios.get(`/CalendarEvent/GetCurrentWeekEvents`)
             .then(response => setCalendarEvents(response.data))
-            .then(sort())
             .catch(error => alert(error))
     }, [axios]);
+
 
     const filteredEvents = calendarEvents.filter(
         event => event.assignedUsers.map(assigned => assigned.username).includes(decoded.sub));
 
-    const showEmptyMessage = (filteredEvents.length === 0);
+    const mondayEvents = filteredEvents.filter(event => isItThisDay(event, "Mon"));
+    const tuesdayEvents = filteredEvents.filter(event => isItThisDay(event, "Tue"));
+    const wednesdayEvents = filteredEvents.filter(event => isItThisDay(event, "Wed"));
+    const thursdayEvents = filteredEvents.filter(event => isItThisDay(event, "Thu"));
+    const fridayEvents = filteredEvents.filter(event => isItThisDay(event, "Fri"));
+    const saturdayEvents = filteredEvents.filter(event => isItThisDay(event, "Sat"));
+    const sundayEvents = filteredEvents.filter(event => isItThisDay(event, "Sun"));
 
-    function sort(){
-        if (showEmptyMessage === false) {
+    function isItThisDay(eventToExamine, dayYouWant) {
 
-            const today = new Date(filteredEvents[0].estimatedStartDate);
-            const dayName = today.toString().split(' ')[0];
-            console.log(dayName); //Mon,Tue,Wed,Thu,Fri,Sat,Sun
+        const today = new Date(eventToExamine.estimatedStartDate);
+        const dayName = today.toString().split(' ')[0];
+        console.log(dayName); //Mon,Tue,Wed,Thu,Fri,Sat,Sun
 
-            if (dayName == 'Wed') {
-                const wednesdayEvents = 'valami'
-            }
-
+        if (dayName == dayYouWant) {
+            return true;
+        }
+        else {
+            
+            console.log(dayYouWant + " not good");
+            return false;
+            
         }
     }
+    
 
 
     return (
@@ -42,47 +53,57 @@ const WorkerThisWeek = () => {
                 <div className="week-day">
                     Monday
                     <div className="weekday-events">
-                        list of the events of the day
+                        {(mondayEvents.length ===  0)
+                            ? <div><h2>There are no jobs for today, go home! </h2> <br /> </div>
+                            : mondayEvents.map(event => <div key={event.id}>{event.jobDescription}</div>)}
                     </div>
                 </div>
                 <div className="week-day">
                     Tuesday
                     <div className="weekday-events">
-                        list of the events of the day
+                        {(tuesdayEvents.length ===  0)
+                            ? <div><h2>There are no jobs for today, go home! </h2> <br /> </div>
+                            : tuesdayEvents.map(event => <div key={event.id}>{event.jobDescription}</div>)}
                     </div>
                 </div>
                 <div className="week-day">
                     Wednesday
                     <div className="weekday-events">
-                        list of the events of the day
-                        {showEmptyMessage
+                        {(wednesdayEvents.length ===  0)
                             ? <div><h2>There are no jobs for today, go home! </h2> <br /> </div>
-                            : <div>{wednesdayEvents[0]}</div>}
-                            {sort()}
+                            : wednesdayEvents.map(event => <div key={event.id}>{event.jobDescription}</div>)}
                     </div>
                 </div>
                 <div className="week-day">
                     Thursday
                     <div className="weekday-events">
-                        list of the events of the day
+                        {(thursdayEvents.length ===  0)
+                            ? <div><h2>There are no jobs for today, go home! </h2> <br /> </div>
+                            : thursdayEvents.map(event => <div key={event.id}>{event.jobDescription}</div>)}
                     </div>
                 </div>
                 <div className="week-day">
                     Friday
                     <div className="weekday-events">
-                        list of the events of the day
+                        {(fridayEvents.length ===  0)
+                            ? <div><h2>There are no jobs for today, go home! </h2> <br /> </div>
+                            : fridayEvents.map(event => <div key={event.id}>{event.jobDescription}</div>)}
                     </div>
                 </div>
                 <div className="week-day">
                     Saturday
                     <div className="weekday-events">
-                        list of the events of the day
+                        {(saturdayEvents.length ===  0)
+                            ? <div><h2>There are no jobs for today, go home! </h2> <br /> </div>
+                            : saturdayEvents.map(event => <div key={event.id}>{event.jobDescription}</div>)}
                     </div>
                 </div>
                 <div className="week-day">
                     Sunday
                     <div className="weekday-events">
-                        list of the events of the day
+                        {(sundayEvents.length ===  0)
+                            ? <div><h2>There are no jobs for today, go home! </h2> <br /> </div>
+                            : sundayEvents.map(event => <div key={event.id}>{event.jobDescription}</div>)}
                     </div>
                 </div>
             </div>
