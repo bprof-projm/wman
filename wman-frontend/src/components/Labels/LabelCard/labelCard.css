@@ -1,0 +1,29 @@
+.label-card-container {
+  display: flex;
+}
+
+.label-card {
+  background-color: rgb(235, 234, 255);
+  border: 1px solid rgb(240, 220, 220);
+  border-radius: 20px;
+  width: 80%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 55px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transform: translateZ(0);
+  transition: transform 0.25s ease-out;
+}
+
+.label-card:hover {
+  transform: scale(1.05);
+}
+.card-name {
+  text-align: center;
+}
+
+.card-delete {
+  margin-top: 8px;
+  margin-left: 10px;
+}
