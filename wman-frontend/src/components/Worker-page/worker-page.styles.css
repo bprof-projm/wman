@@ -7,15 +7,19 @@
     height: 12vh;
 }
 .select-intervall Button{
-    width: 45vw;
+    width: 40vw;
     height: 10vh;
-    background-color: rgb(202, 193, 255);
-    border: 1px solid rgb(240, 220, 220);
+    background: transparent;
+    border: 1px solid #006AFF;
     border-radius:20px;  
-    transform: translateZ(0);
-    transition: transform 0.25s ease-out;
-  
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.1s ease-out;
 }
 .select-intervall Button:hover{
-    transform: scale(1.05);
+    color: white;    
+    background-color: #006AFF;
+}
+.select-intervall Button:active{
+    transform: scale(0.9); 
 }

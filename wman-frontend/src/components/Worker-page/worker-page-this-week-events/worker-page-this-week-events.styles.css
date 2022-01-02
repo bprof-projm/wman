@@ -1,21 +1,27 @@
-.events-of-the-week{
-}
-
 .week-day{
-    background-color: rgb(202, 193, 255);
+    background: rgb(248,248,255);
+    background: linear-gradient(90deg, rgba(248,248,255,1) 0%, rgba(51,131,241,1) 50%, rgba(248,248,255,1) 100%);    color: rgb(255, 255, 255);
+    font-size: larger;
     width: 90vw;
     margin-top: 1vh;
     margin-left: 5vw;
-    border-radius: 20px;
     text-align: center;
     font-weight: bolder;
-    min-height:15vh;
 }
-.weekday-events{
-    background-color:rgb(231, 230, 255);    
+.weekday-events{       
+    color: white;
+    background-color: ghostwhite;
     font-weight: normal;
-    width: 89vw;
-    min-height:11vh; 
-    border-radius: 15px;
+    width: 100%;
     margin:auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 1vh;
+    cursor: pointer;
+}
+@media screen and (max-width:600px) {
+ .weekday-events{
+     display: block;
+ }  
 }

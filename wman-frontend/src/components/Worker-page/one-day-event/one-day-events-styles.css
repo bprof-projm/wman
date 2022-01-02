@@ -1,33 +1,36 @@
 body{
-    background-color: ghostwhite;
+    background-color:#3383f1;
 }
 
 .one-event table{
-    width: 45vw;
+    width: 44vw;
     border-collapse: collapse;
     border-radius: 20px;
     overflow: hidden;
-    background-color:rgb(235, 234, 255);  
+    color: white;
+    background-color:#3383f1;}
+
+
+.one-event th, tr{    
+    text-align: center;
+    font-weight: normal;
+    background-color:#3383f1;
+}
+.one-event th{    
+    width: 50%;
 }
 
 .one-event-tables:hover{
-    transform: scale(1.05);
+    transform: scale(1.02);
 }
 
-.one-event-tables{
-    
-    background-color:rgb(235, 234, 255);
+.one-event-tables{    
+    background-color:#3383f1;
     border-radius: 20px;
     transform: translateZ(0);
     transition: transform 0.25s ease-out;  
 }
 
-.one-event th, tr{
-    
-    text-align: center;
-    font-weight: normal;
-    background-color:rgb(235, 234, 255);
-}
 .one-event{
     margin-top: 1vh;
 }

@@ -22,14 +22,15 @@ const OneDayEvents = (event) => {
                         <th>Start:</th>
                         <th>{event.event.estimatedStartDate}</th>
                     </tr>
+                    <tr>
+                        <th>Finish:</th>
+                        <th>{event.event.estimatedFinishDate}</th>
+                    </tr>
                 </table>
 
                 {show ?
                     <table>
-                        <tr>
-                            <th>Finish:</th>
-                            <th>{event.event.estimatedFinishDate}</th>
-                        </tr>
+
                         <tr>
                             <th colSpan='2'><b>Address:</b></th>
                         </tr>
@@ -53,6 +54,12 @@ const OneDayEvents = (event) => {
                         <tr>
                             <th>Floor door:</th>
                             <th>{event.event.address.floorDoor}</th>
+                        </tr>
+                        <tr>
+                            <th colSpan='2'><b>Labels:</b></th>
+                        </tr>
+                        <tr>
+                            <th colSpan='2'><b>Ide kéne majd a label card komponensnek megadni a labaleket ha be lesz mergelve</b></th>
                         </tr>
 
                     </table>

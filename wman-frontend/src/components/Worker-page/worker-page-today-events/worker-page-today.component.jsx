@@ -6,7 +6,6 @@ import axios from "axios";
 import { SmileTwoTone } from '@ant-design/icons';
 import "./worker-page-today.styles.css"
 import OneDayEvents from "../one-day-event/one-day-events.component";
-import { uuid } from 'uuidv4';
 
 
 const WorkerToday = () => {
@@ -41,7 +40,7 @@ const WorkerToday = () => {
                 <div className="one-day">
                     {showEmptyMessage
                         ? <div><h2>There are no jobs for today, go home! </h2> <br /> <h1><SmileTwoTone twoToneColor="lightgreen" /></h1></div>
-                        : filteredEvents.map(oneEvent => <OneDayEvents key={uuid()} event={oneEvent} />)}
+                        : filteredEvents.map(oneEvent => <OneDayEvents key={oneEvent.id} event={oneEvent} />)}
                         {sort()}
                 </div>
             </div>
