@@ -110,6 +110,22 @@ namespace Wman.Logic.Services
 
             }
         }
+        public async Task NotifyWorkerAboutOtherWorkerStateChange(string user, string we)
+        {
+            try
+            {
+                if (Clients != null)
+                {
+                    await Clients.User(user).SendAsync("EventStateChanged", we);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+            }
+        }
     }
     
 }

@@ -351,7 +351,7 @@ namespace Wman.Logic.Classes
                 throw new InvalidOperationException(WmanError.EventDateInvalid);
             }
         }
-        public async Task<WorkEventForWorkCardDTO> StatusUpdater(int eventId)
+        public async Task<WorkEventForWorkCardDTO> StatusUpdater(int eventId, string username)
         {
             var workevent = await eventRepo.GetOneWithTracking(eventId);
 
@@ -359,12 +359,51 @@ namespace Wman.Logic.Classes
             {
                 throw new InvalidOperationException(WmanError.StatusFinished);
             }
-            if (Status.proofawait == workevent.Status && workevent.ProofOfWorkPic.Count==0)
+            if (Status.proofawait == workevent.Status && workevent.ProofOfWorkPic.Count == 0)
             {
                 throw new InvalidOperationException(WmanError.StatusPowMissing);
             }
+            // TODO: Innentől átadni.
+            switch (workevent.Status)
+            {
+                // awaiting ről startedra
+                case Status.awaiting:
+                    workevent.WorkStartDate = DateTime.Now;
+                    break;
+                //  startedról proof awaitre
+                case Status.started:
+                    break;
+                // Proof awaitről finishedre
+                case Status.proofawait:
+                    workevent.WorkFinishDate = DateTime.Now;
+                    break;
+                case Status.finished:
+                    // MIKOR ÁLJON LE proof? vagy finished?
+                    break;
+                default:
+                    break;
+            }
             workevent.Status++;
             await eventRepo.SaveDatabase();
+
+            var notifyEvent = await eventRepo.GetOne(eventId);
+            var n = mapper.Map<WorkEventForWorkCardDTO>(notifyEvent);
+            var k = Newtonsoft.Json.JsonConvert.SerializeObject(n, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                StringEscapeHandling = StringEscapeHandling.Default,
+                Converters = { new Newtonsoft.Json.Converters.StringEnumConverter() }
+            });
+            foreach (var item in notifyEvent.AssignedUsers)
+            {
+                if (item.UserName != username)
+                {
+                    await _notifyHub.NotifyWorkerAboutOtherWorkerStateChange(item.UserName, k);
+                }
+
+            }
+
+
             var workevent2 = await eventRepo.GetOne(eventId);
             return mapper.Map<WorkEventForWorkCardDTO>(workevent2);
         }
