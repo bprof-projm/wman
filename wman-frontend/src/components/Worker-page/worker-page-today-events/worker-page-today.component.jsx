@@ -18,6 +18,7 @@ const WorkerToday = () => {
     useEffect(() => {
         axios.get(`/CalendarEvent/GetCurrentDayEvents`)
             .then(response => setCalendarEvents(response.data))
+            .then(sort())
             .catch(error => alert(error))
     }, [axios]);
 
@@ -26,13 +27,22 @@ const WorkerToday = () => {
 
     const showEmptyMessage = (filteredEvents.length === 0);
 
+    function sort(){
+        if (showEmptyMessage === false) {
+
+            const today = new Date(filteredEvents[0].estimatedStartDate);
+            const dayName = today.toString().split(' ')[0];
+            console.log(dayName); //Mon,Tue,Wed,Thu,Fri,Sat,Sun
+        }
+    }
     return (
         <div>
             <div className="events-of-the-day">
                 <div className="one-day">
-                    {showEmptyMessage 
-                        ? <div><h2>There are no jobs for today, go home! </h2> <br/> <h1><SmileTwoTone twoToneColor="lightgreen"/></h1></div> 
-                        : filteredEvents.map(oneEvent => <OneDayEvents key ={uuid()} event = {oneEvent}/>)}
+                    {showEmptyMessage
+                        ? <div><h2>There are no jobs for today, go home! </h2> <br /> <h1><SmileTwoTone twoToneColor="lightgreen" /></h1></div>
+                        : filteredEvents.map(oneEvent => <OneDayEvents key={uuid()} event={oneEvent} />)}
+                        {sort()}
                 </div>
             </div>
         </div>

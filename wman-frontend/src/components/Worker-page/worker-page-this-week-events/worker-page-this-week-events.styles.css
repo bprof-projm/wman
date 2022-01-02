@@ -7,11 +7,15 @@
     margin-top: 1vh;
     margin-left: 5vw;
     border-radius: 20px;
-    
-    height:20vh;
+    text-align: center;
+    font-weight: bolder;
+    min-height:15vh;
 }
 .weekday-events{
-    background-color:rgb(235, 234, 255);
-    
-    height:10vh;
+    background-color:rgb(231, 230, 255);    
+    font-weight: normal;
+    width: 89vw;
+    min-height:11vh; 
+    border-radius: 15px;
+    margin:auto;
 }
