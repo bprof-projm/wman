@@ -35,7 +35,7 @@ namespace Wman.Test.Builders.LogicBuilders
 
         public static List<AddressHUN> GetAddresses()
         {
-            List<AddressHUN> addressList = new List<AddressHUN>();
+            List<AddressHUN> addressList = new();
 
             addressList.Add(new AddressHUN
             {
@@ -72,11 +72,10 @@ namespace Wman.Test.Builders.LogicBuilders
 
         public static List<WorkEvent> GetWorkEvents()
         {
-            List<WorkEvent> eventList = new List<WorkEvent>();
+            List<WorkEvent> eventList = new();
 
             eventList.Add(new WorkEvent
             {
-                Id=0,
                 JobDescription = "PizzaDobálóKretén",
                 EstimatedStartDate = DateTime.UtcNow,
                 EstimatedFinishDate = DateTime.UtcNow.AddMinutes(20),
@@ -87,7 +86,6 @@ namespace Wman.Test.Builders.LogicBuilders
 
             eventList.Add(new WorkEvent
             {
-                Id = 1,
                 JobDescription = "NoggerFagyi",
                 EstimatedStartDate = DateTime.UtcNow.AddDays(-1),
                 EstimatedFinishDate = DateTime.UtcNow.AddDays(-1).AddMinutes(40),
@@ -98,7 +96,6 @@ namespace Wman.Test.Builders.LogicBuilders
 
             eventList.Add(new WorkEvent
             {
-                Id = 2,
                 JobDescription = "Allahmashhallah",
                 EstimatedStartDate = DateTime.UtcNow.AddDays(7),
                 EstimatedFinishDate = DateTime.UtcNow.AddDays(7).AddMinutes(40),
@@ -109,10 +106,19 @@ namespace Wman.Test.Builders.LogicBuilders
 
             eventList.Add(new WorkEvent
             {
-                Id = 3,
+                JobDescription = "Boombliallahkutarvashmir",
+                EstimatedStartDate = DateTime.UtcNow.AddDays(20),
+                EstimatedFinishDate = DateTime.UtcNow.AddDays(20).AddMinutes(40),
+                WorkStartDate = new DateTime(2021, 10, 10),
+                WorkFinishDate = new DateTime(2021, 10, 12),
+                Status = Status.finished
+            });
+
+            eventList.Add(new WorkEvent
+            {
                 JobDescription = "Boombliallahkutarvashmir",
                 EstimatedStartDate = new DateTime(2021, 10, 10),
-                EstimatedFinishDate = new DateTime(2021, 10, 12),
+                EstimatedFinishDate = new DateTime(2021, 10, 10),
                 WorkStartDate = new DateTime(2021, 10, 10),
                 WorkFinishDate = new DateTime(2021, 10, 12),
                 Status = Status.finished

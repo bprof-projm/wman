@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.Classes;
+using Wman.Repository.Interfaces;
 using Wman.Test.Builders;
 using Wman.Test.Builders.LogicBuilders;
 
@@ -19,11 +20,17 @@ namespace Wman.Test.Tests
 
         private List<WmanUser> users;
 
+        private Mock<IWorkEventRepo> eventRepo;
+        private List<WorkEvent> eventList;
+
         [SetUp]
         public void SetUp()
         {
             this.users = UserManagerBuilder.GetWmanUsers();
-            UserLogicBuilder.AssignWorkEvents(this.users);
+            this.eventList = EventLogicBuilder.GetWorkEvents();
+            UserLogicBuilder.AssignWorkEvents(this.users, this.eventList);
+
+            this.eventRepo = EventLogicBuilder.GetEventRepo(this.eventList);
             this.userManager = UserManagerBuilder.GetUserManager(this.users);
 
             this.mapper = MapperBuilder.GetMapper();
@@ -33,7 +40,7 @@ namespace Wman.Test.Tests
         public async Task GetWorkLoads_ReturnsRepoProperly_SuccessfulOperation()
         {
             //Arrange
-            UserLogic userLogic = new(this.userManager.Object, this.mapper);
+            UserLogic userLogic = new(this.userManager.Object, this.mapper, this.eventRepo.Object);
 
             //Act
             var call = await userLogic.GetWorkLoads();
@@ -48,7 +55,7 @@ namespace Wman.Test.Tests
         public async Task GetWorkLoads_WithParameters_ReturnsRepoProperly_SuccessfulOperation()
         {
             //Arrange
-            UserLogic userLogic = new(this.userManager.Object, this.mapper);
+            UserLogic userLogic = new(this.userManager.Object, this.mapper, this.eventRepo.Object);
             List<string> usernames = new() { users[0].UserName, users[1].UserName };
 
             //Act
@@ -64,7 +71,7 @@ namespace Wman.Test.Tests
         public async Task WorkEventsOfUser_ReturnsWorkEventProperly()
         {
             //Arrange
-            UserLogic userLogic = new(this.userManager.Object, this.mapper);
+            UserLogic userLogic = new(this.userManager.Object, this.mapper, this.eventRepo.Object);
             string usernameToTest = users[0].UserName;
 
             //Act
