@@ -3,13 +3,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
 using Wman.Logic.Helpers;
 using Wman.Logic.Interfaces;
+using Wman.Repository.Interfaces;
 
 namespace Wman.Logic.Classes
 {
@@ -17,10 +20,13 @@ namespace Wman.Logic.Classes
     {
         UserManager<WmanUser> userManager;
         IMapper mapper;
-        public UserLogic(UserManager<WmanUser> userManager, IMapper mapper)
+        IWorkEventRepo eventRepo;
+        //EventRepo eventRepo;
+        public UserLogic(UserManager<WmanUser> userManager, IMapper mapper, IWorkEventRepo eventRepo)
         {
             this.userManager = userManager;
             this.mapper = mapper;
+            this.eventRepo = eventRepo;
         }
         public async Task<IEnumerable<WorkloadDTO>> GetWorkLoads(IEnumerable<string> usernames)
         {
@@ -94,22 +100,18 @@ namespace Wman.Logic.Classes
             return output;
         }
 
-        public async Task<IEnumerable<AssignedEventDTO>> WorkEventsOfUser(string username)
+        public async Task<WorkEventForWorkCardDTO> GetEventDetailsForWorker(string username, int id)
         {
-            var selectedUser = await userManager.Users
-                .Where(x => x.UserName == username)
-                .Include(y => y.WorkEvents)
-                .ThenInclude(z => z.Address)
-                .AsNoTracking()
-                .SingleOrDefaultAsync();
-            if (selectedUser == null)
+            var job = await eventRepo.GetOne(id);
+            if (job == null)
             {
-                throw new NotFoundException(WmanError.UserNotFound);
+                throw new NotFoundException(WmanError.EventNotFound);
             }
-            var output = selectedUser.WorkEvents;
-            var testResult = mapper.Map<IEnumerable<AssignedEventDTO>>(output);
-
-            return testResult;
+            if (job.AssignedUsers.Where(x => x.UserName == username).SingleOrDefault() != null)
+            {
+                return mapper.Map<WorkEventForWorkCardDTO>(job);
+            }
+            throw new InvalidOperationException(WmanError.NotHisBusiness);
         }
 
         private double CalculateLoad(WmanUser user)
@@ -153,6 +155,5 @@ namespace Wman.Logic.Classes
         {
             return works.Where(x => x.EstimatedStartDate.Day >= selectedMonth.Day && x.EstimatedStartDate.Year == selectedMonth.Year && x.EstimatedStartDate.Month == selectedMonth.Month && x.WorkStartDate == DateTime.MinValue);
         }
-
     }
 }

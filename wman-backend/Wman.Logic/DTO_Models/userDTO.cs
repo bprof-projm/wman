@@ -39,6 +39,10 @@ namespace Wman.Logic.DTO_Models
         [StringLength(30)]
         public string Lastname { get; set; }
 
+        [DataType(DataType.PhoneNumber)]
+        [StringLength(15)]
+        public string PhoneNumber { get; set; }
+
         public PhotoDTO Picture { get; set; }
     }
 }
