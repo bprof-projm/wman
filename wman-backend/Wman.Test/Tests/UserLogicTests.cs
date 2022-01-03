@@ -67,6 +67,22 @@ namespace Wman.Test.Tests
             this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Exactly(usernames.Count()));
         }
 
+        [Test]
+        public async Task GetEventDetailsForWorker_ReturnsWorkEventProperly()
+        {
+            //Arrange
+            UserLogic userLogic = new(this.userManager.Object, this.mapper, this.eventRepo.Object);
+            string usernameToTest = users[0].UserName;
+            int idOfWorkEvent = eventList[0].Id;
+
+            //Act
+            var call = await userLogic.GetEventDetailsForWorker(usernameToTest, idOfWorkEvent);
+
+            //Assert
+            Assert.That(call.Id == users[0].WorkEvents.ElementAt(0).Id);
+            this.eventRepo.Verify(x => x.GetOne(It.IsAny<int>()), Times.Once);
+        }
+
         /*
          * DEPRECATED METHODS
         [Test]

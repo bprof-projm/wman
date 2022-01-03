@@ -30,7 +30,6 @@ namespace Wman.Test.Tests
             this.users = UserManagerBuilder.GetWmanUsers();
             this.userManager = UserManagerBuilder.GetUserManagerWithFalseRoleCheck(this.users); 
             this.mapper = MapperBuilder.GetMapper();
-
             
             this.photoLogic = AdminLogicBuilder.PhotoLogicFactory(this.userManager.Object,this.mapper);
         }
@@ -123,6 +122,7 @@ namespace Wman.Test.Tests
             this.userManager.Verify(x => x.CreateAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
             this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
             //DeleteWorkforce
+            this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Exactly(2));
             this.userManager.Verify(x => x.DeleteAsync(It.IsAny<WmanUser>()), Times.Exactly(2));
         }
 
