@@ -37,24 +37,14 @@ namespace Wman.Test.Tests
         }
 
         [Test]
-        public async Task LoginUser_TokenGranted_OnNewlyCreatedUser()
+        public async Task LoginUser_TokenGranted()
         {
             //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
 
-            RegisterDTO user = new()
-            {
-                Username = "fogvaratartottGyik",
-                Email = "maszkosfutocsiga@gmail.com",
-                Password = "miAR3dV2Sf0s",
-                Firstname = "Kronikus",
-                Lastname = "VeszettMacska",
-            };
-
-            LoginDTO model = new() { LoginName = user.Email, Password = user.Password };
+            LoginDTO model = new() { LoginName = users[0].Email, Password = "random" };
 
             //Act
-            var akarmi = await authLogic.CreateWorker(user);
             var result = await authLogic.LoginUser(model);
 
             //Assert
@@ -99,6 +89,58 @@ namespace Wman.Test.Tests
 
             this.userManager.Verify(x => x.Users, Times.Once);
         }
+
+        [Test]
+        public async Task GetAllRolesOfUser_Returns4Roles()
+        {
+            //Arrange
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
+
+            //Act
+            var result = await authLogic.GetAllRolesOfUser(users[2].UserName);
+
+            //Assert
+            Assert.AreEqual(4, result.Count());
+            
+            this.userManager.Verify(x => x.FindByNameAsync(It.IsAny<string>()), Times.Once);
+            this.userManager.Verify(x => x.GetRolesAsync(It.IsAny<WmanUser>()), Times.Once);
+        }
+
+        [Test]
+        public async Task GetAllUsersOfRole_Returns3Users()
+        {
+            //Arrange
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
+
+            //Act
+            var result = await authLogic.GetAllUsersOfRole("Test");
+
+            //Assert
+            Assert.AreEqual(3, result.Count);
+
+            this.userManager.Verify(x => x.GetUsersInRoleAsync(It.IsAny<string>()), Times.Once);
+            this.roleManager.Verify(x => x.RoleExistsAsync(It.IsAny<string>()), Times.Once);
+        }
+
+        [Test]
+        public async Task SetRoleOfUser_ExistingUser_SuccessfulOperation()
+        {
+            //Arrange
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
+
+            //Act
+            var result = authLogic.SetRoleOfUser(users[2].UserName, "Debug");
+
+            //Assert
+            Assert.True(result.IsCompleted);
+
+            this.userManager.Verify(x => x.FindByNameAsync(It.IsAny<string>()), Times.Once);
+            this.userManager.Verify(x => x.GetRolesAsync(It.IsAny<WmanUser>()), Times.Once);
+            this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
+        }
+
+        /*
+         TEST CASES FOR DEPRECATED METHODS
 
         [Test]
         public async Task CreateWorker_SucceededCreation()
@@ -189,38 +231,6 @@ namespace Wman.Test.Tests
         }
 
         [Test]
-        public async Task GetAllRolesOfUser_Returns4Roles()
-        {
-            //Arrange
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
-
-            //Act
-            var result = await authLogic.GetAllRolesOfUser(users[2].UserName);
-
-            //Assert
-            Assert.AreEqual(4, result.Count());
-            
-            this.userManager.Verify(x => x.FindByNameAsync(It.IsAny<string>()), Times.Once);
-            this.userManager.Verify(x => x.GetRolesAsync(It.IsAny<WmanUser>()), Times.Once);
-        }
-
-        [Test]
-        public async Task GetAllUsersOfRole_Returns3Users()
-        {
-            //Arrange
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
-
-            //Act
-            var result = await authLogic.GetAllUsersOfRole("Test");
-
-            //Assert
-            Assert.AreEqual(3, result.Count);
-
-            this.userManager.Verify(x => x.GetUsersInRoleAsync(It.IsAny<string>()), Times.Once);
-            this.roleManager.Verify(x => x.RoleExistsAsync(It.IsAny<string>()), Times.Once);
-        }
-
-        [Test]
         public async Task UpdateUser_SucceededUpdate_ExistingUser()
         {
             //Arrange
@@ -245,26 +255,6 @@ namespace Wman.Test.Tests
             this.userManager.Verify(x => x.Users, Times.Once);
             this.userManager.Verify(x => x.UpdateAsync(It.IsAny<WmanUser>()), Times.Once);
         }
-
-        [Test]
-        public async Task SetRoleOfUser_ExistingUser_SuccessfulOperation()
-        {
-            //Arrange
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
-
-            //Act
-            var result = authLogic.SetRoleOfUser(users[2].UserName, "Debug");
-
-            //Assert
-            Assert.True(result.IsCompleted);
-
-            this.userManager.Verify(x => x.FindByNameAsync(It.IsAny<string>()), Times.Once);
-            this.userManager.Verify(x => x.GetRolesAsync(It.IsAny<WmanUser>()), Times.Once);
-            this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
-        }
-
-        /*
-         TEST CASES FOR DEPRECATED METHODS
 
         [Test]
         public async Task RemoveUserFromRole_RemovesSuccessfully()
