@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -83,6 +84,24 @@ namespace Wman.Test.Tests
             this.eventRepo.Verify(x => x.GetOne(It.IsAny<int>()), Times.Once);
         }
 
+        [Test]
+        public async Task GetMonthlyStats_ReturnsStatsProperly()
+        {
+            //Arrange
+            UserLogic userLogic = new(this.userManager.Object, this.mapper, this.eventRepo.Object);
+            string usernameToTest = users[0].UserName;
+            DateTime inYear = new DateTime(2021, 10, 10);
+
+            //Act
+            var call = await userLogic.GetMonthlyStats(usernameToTest, inYear);
+
+            //Assert
+            Assert.That(call.Username == usernameToTest);
+
+            this.userManager.Verify(x => x.Users, Times.Once);
+        }
+
+        
         /*
          * DEPRECATED METHODS
         [Test]
