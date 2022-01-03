@@ -138,7 +138,6 @@ namespace Wman.Test.Tests
         /*
          TEST CASES FOR DEPRECATED METHODS
 
-
         [Test]
         public async Task UpdateUser_SucceededUpdate_ExistingUser()
         {

@@ -118,13 +118,43 @@ namespace Wman.Test.Tests
             Assert.True(result.Succeeded);
             Assert.AreEqual(2, users.Count);
 
-            //CreateWorker
+            //CreateWorkforce
             this.userManager.Verify(x => x.Users, Times.Exactly(3)); //3 because of 2 DeleteUser calls and 1 CreateWorker
             this.userManager.Verify(x => x.CreateAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
             this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
-            //DeleteUser
+            //DeleteWorkforce
             this.userManager.Verify(x => x.DeleteAsync(It.IsAny<WmanUser>()), Times.Exactly(2));
+        }
 
+        [Test]
+        public async Task UpdateWorkforce_UpdateExistingUser_SuccessfulOperation()
+        {
+            //Arrange
+            AdminLogic adminLogic = new(this.userManager.Object, this.photoLogic, this.mapper);
+
+            WorkerModifyDTO user = new()
+            {
+                Email = "maszkosfutocsiga@gmail.com",
+                Firstname = "Kronikus",
+                Lastname = "VeszettMacska",
+                PhoneNumber = "0690123455",
+                Role="Worker"
+            };
+
+            string helper = users[0].UserName;
+
+            //Act
+            var result = await adminLogic.UpdateWorkforce(helper,  user);
+
+            //Assert
+            Assert.That(result.Succeeded);
+
+            this.userManager.Verify(x => x.Users, Times.Once);
+            this.userManager.Verify(x => x.UpdateAsync(It.IsAny<WmanUser>()), Times.Once);
+            this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
+            this.userManager.Verify(x => x.GetRolesAsync(It.IsAny<WmanUser>()), Times.Once);
+            this.userManager.Verify(x => x.RemoveFromRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
+            this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
         }
     }
 }
