@@ -66,7 +66,8 @@ namespace Wman.Test.Tests
             this.userManager.Verify(x => x.Users, Times.Once);
             this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Exactly(usernames.Count()));
         }
-
+        /*
+         * DEPRECATED METHODS
         [Test]
         public async Task WorkEventsOfUser_ReturnsWorkEventProperly()
         {
@@ -80,6 +81,6 @@ namespace Wman.Test.Tests
             //Assert
             Assert.That(call.ElementAt(0).Id == users[0].WorkEvents.ElementAt(0).Id);
             this.userManager.Verify(x => x.Users, Times.Once);
-        }
+        }*/
     }
 }
