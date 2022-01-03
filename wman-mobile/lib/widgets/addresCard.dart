@@ -160,10 +160,17 @@ class AddressCard extends StatelessWidget {
             //   "\nOptional: ${address.floorDoor}",
             // ),
             Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: ElevatedButton(
-                onPressed: _viewOnMap,
-                child: const Text('Go to location'),
+              padding: const EdgeInsets.only(top: 10, bottom: 10),
+              child: Transform.scale(
+                scale: 1.w < 1
+                    ? 1
+                    : 1.w > 1.5
+                        ? 1.5
+                        : 1.w,
+                child: ElevatedButton(
+                  onPressed: _viewOnMap,
+                  child: const Text('Go to location'),
+                ),
               ),
             ),
           ],

@@ -650,13 +650,30 @@ class WorkListState extends State<WorkList> {
                           ],
                         ),
                   Container(
-                    padding: EdgeInsets.only(bottom: 20.h, left: 10.w),
+                    padding: EdgeInsets.only(
+                        bottom: 25.h < 25
+                            ? 25
+                            : 25.h > 35
+                                ? 35
+                                : 25.h,
+                        left: 15.w < 15
+                            ? 15
+                            : 15.w > 25
+                                ? 25
+                                : 15.w),
                     alignment: Alignment.bottomLeft,
-                    child: FloatingActionButton(
-                      elevation: 3,
-                      onPressed: _delKey,
-                      child: const Icon(Icons.logout),
-                      tooltip: "Logout",
+                    child: Transform.scale(
+                      scale: 1.w < 0.8
+                          ? 0.8
+                          : 1.w > 1.3
+                              ? 1.3
+                              : 1.w,
+                      child: FloatingActionButton(
+                        elevation: 3,
+                        onPressed: _delKey,
+                        child: const Icon(Icons.logout),
+                        tooltip: "Logout",
+                      ),
                     ),
                   ),
                   // Container(

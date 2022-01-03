@@ -8,11 +8,27 @@ import 'package:wman_mobile/widgets/login.dart';
 import 'package:wman_mobile/widgets/workCard_detail.dart';
 import 'package:wman_mobile/widgets/work_list.dart';
 import 'package:http/http.dart' as http;
+import 'package:desktop_window/desktop_window.dart';
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
+
+// Future testWindowFunctions() async {
+//   Size size = await DesktopWindow.getWindowSize();
+//   print(size);
+//   await DesktopWindow.setWindowSize(Size(600, 1000));
+
+//   await DesktopWindow.setMinWindowSize(Size(600, 1000));
+//   await DesktopWindow.setMaxWindowSize(Size(600, 1000));
+
+//   await DesktopWindow.resetMaxWindowSize();
+//   await DesktopWindow.toggleFullScreen();
+//   bool isFullScreen = await DesktopWindow.getFullScreen();
+//   await DesktopWindow.setFullScreen(true);
+//   await DesktopWindow.setFullScreen(false);
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -67,6 +83,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // For testing a certain screen size use, this on windows. (smallest width tested is 300px)
+    // if (Platform.isWindows) DesktopWindow.setWindowSize(Size(300, 500));
     return token == null ? Login() : WorkList();
     // return Login();
   }

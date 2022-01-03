@@ -178,6 +178,14 @@ class _WorkCardDetailState extends State<WorkCardDetail> {
 
   @override
   Widget build(BuildContext context) {
+    double _cardTitleSize() {
+      return 27.w < 25
+          ? 20
+          : 27.w > 40
+              ? 40
+              : 27.w;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: FittedBox(child: Text(_workdata.jobDescription)),
@@ -266,11 +274,7 @@ class _WorkCardDetailState extends State<WorkCardDetail> {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: Colors.black,
-                                              fontSize: 30.w < 30
-                                                  ? 30
-                                                  : 30.w > 40
-                                                      ? 40
-                                                      : 30.w),
+                                              fontSize: _cardTitleSize()),
                                         ),
                                         Divider(
                                             color:
@@ -305,11 +309,7 @@ class _WorkCardDetailState extends State<WorkCardDetail> {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: Colors.black,
-                                              fontSize: 30.w < 30
-                                                  ? 30
-                                                  : 30.w > 40
-                                                      ? 40
-                                                      : 30.w),
+                                              fontSize: _cardTitleSize()),
                                         ),
                                         Divider(
                                             color:
@@ -340,11 +340,7 @@ class _WorkCardDetailState extends State<WorkCardDetail> {
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.black,
-                                                fontSize: 30.w < 30
-                                                    ? 30
-                                                    : 30.w > 40
-                                                        ? 40
-                                                        : 30.w),
+                                                fontSize: _cardTitleSize()),
                                           ),
                                           Divider(
                                               color:
@@ -377,11 +373,7 @@ class _WorkCardDetailState extends State<WorkCardDetail> {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: Colors.black,
-                                              fontSize: 30.w < 30
-                                                  ? 30
-                                                  : 30.w > 40
-                                                      ? 40
-                                                      : 30.w),
+                                              fontSize: _cardTitleSize()),
                                         ),
                                         Divider(
                                             color:
@@ -414,30 +406,49 @@ class _WorkCardDetailState extends State<WorkCardDetail> {
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
                                           Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                'Proof of work pictures',
+                                                'Proof of work photos',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.black,
-                                                    fontSize: 30.w < 30
-                                                        ? 30
-                                                        : 30.w > 40
-                                                            ? 40
-                                                            : 30.w),
+                                                    fontSize: _cardTitleSize()),
                                               ),
                                               if (_workdata.status ==
                                                       "proofawait" &&
                                                   _workdata.proofOfWorkPic
                                                       .isNotEmpty)
-                                                Switch(
-                                                  activeColor: Colors.red,
-                                                  value: _deleteMode,
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      _deleteMode = value;
-                                                    });
-                                                  },
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 5, right: 20),
+                                                  child: SizedBox(
+                                                    width: 20.w < 20
+                                                        ? 20
+                                                        : 20.w > 30
+                                                            ? 30
+                                                            : 20.w,
+                                                    child: Transform.scale(
+                                                      scale: 1.w < 0.7
+                                                          ? 0.7
+                                                          : 1.w > 1.5
+                                                              ? 1.5
+                                                              : 1.w,
+                                                      child: Switch(
+                                                        activeColor: Colors.red,
+                                                        inactiveThumbColor:
+                                                            Colors.teal[100],
+                                                        value: _deleteMode,
+                                                        onChanged: (value) {
+                                                          setState(() {
+                                                            _deleteMode = value;
+                                                          });
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
                                             ],
                                           ),
@@ -474,33 +485,54 @@ class _WorkCardDetailState extends State<WorkCardDetail> {
                                                       : false,
                                                   _proofPicturesChanged),
                                           if (_workdata.status == "proofawait")
-                                            Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                ElevatedButton(
-                                                  child: Row(
-                                                    children: [
-                                                      Icon(Icons.camera_alt),
-                                                    ],
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  Transform.scale(
+                                                    scale: 1.w < 1
+                                                        ? 1
+                                                        : 1.w > 1.7
+                                                            ? 1.7
+                                                            : 1.w,
+                                                    child: ElevatedButton(
+                                                      child: Row(
+                                                        children: [
+                                                          Icon(
+                                                              Icons.camera_alt),
+                                                        ],
+                                                      ),
+                                                      onPressed: () async {
+                                                        await _photoFromCamera();
+                                                      },
+                                                    ),
                                                   ),
-                                                  onPressed: () async {
-                                                    await _photoFromCamera();
-                                                  },
-                                                ),
-                                                ElevatedButton(
-                                                  child: Row(
-                                                    children: [
-                                                      Icon(Icons.image_rounded),
-                                                    ],
+                                                  Transform.scale(
+                                                    scale: 1.w < 1
+                                                        ? 1
+                                                        : 1.w > 1.7
+                                                            ? 1.7
+                                                            : 1.w,
+                                                    child: ElevatedButton(
+                                                      child: Row(
+                                                        children: [
+                                                          Icon(Icons
+                                                              .image_rounded),
+                                                        ],
+                                                      ),
+                                                      onPressed: () async {
+                                                        await _photoFromGalery();
+                                                      },
+                                                    ),
                                                   ),
-                                                  onPressed: () async {
-                                                    await _photoFromGalery();
-                                                  },
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                         ],
                                       ),
@@ -520,8 +552,8 @@ class _WorkCardDetailState extends State<WorkCardDetail> {
                           child: SizedBox(
                             height: 80.w < 40
                                 ? 40
-                                : 80.w > 100
-                                    ? 100
+                                : 80.w > 90
+                                    ? 90
                                     : 80.w,
                             width: double.infinity,
                             child: ElevatedButton(

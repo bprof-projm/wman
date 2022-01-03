@@ -68,13 +68,13 @@ class ProofPictureScrollerState extends State<ProofPictureScroller> {
             child: CircularProgressIndicator(),
           )
         : Container(
-            // height: 100.w < 100
-            //     ? 100
-            //     : 100.w > 200
-            //         ? 200
-            //         : 100.w,
-            height: 140,
-            padding: EdgeInsets.all(5.w),
+            // height: 140,
+            height: 140.w < 140
+                ? 140
+                : 140.w > 200
+                    ? 200
+                    : 140.w,
+            padding: EdgeInsets.all(5),
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.all(1),
@@ -82,8 +82,16 @@ class ProofPictureScrollerState extends State<ProofPictureScroller> {
                 return Stack(
                   children: [
                     SizedBox(
-                      height: 200,
-                      width: 175,
+                      height: 200.w < 200
+                          ? 200
+                          : 200.w > 300
+                              ? 300
+                              : 200.w,
+                      width: 175.w < 175
+                          ? 175
+                          : 175.w > 275
+                              ? 275
+                              : 175.w,
                       child: DecoratedBox(
                         decoration: BoxDecoration(
                           image: DecorationImage(
@@ -96,20 +104,37 @@ class ProofPictureScrollerState extends State<ProofPictureScroller> {
                       ),
                     ),
                     if (widget._deleteMode)
-                      Positioned(
-                        left: 10,
+                      Container(
+                        height: 40.w < 40
+                            ? 40
+                            : 40.w > 60
+                                ? 60
+                                : 40.w,
+                        padding: EdgeInsets.only(left: 5),
                         child: FadeIn(
                           duration: Duration(seconds: 1),
                           curve: Curves.easeInExpo,
                           child: SizedBox(
-                            height: 40,
-                            width: 40,
+                            height: 40.w < 40
+                                ? 40
+                                : 40.w > 60
+                                    ? 60
+                                    : 40.w,
+                            width: 40.w < 40
+                                ? 40
+                                : 40.w > 60
+                                    ? 60
+                                    : 40.w,
                             child: FloatingActionButton(
                               backgroundColor: Colors.red,
                               elevation: 1,
                               child: Icon(
                                 Icons.delete,
-                                size: 25,
+                                size: 25.w < 25
+                                    ? 25
+                                    : 25.w > 40
+                                        ? 40
+                                        : 25.w,
                               ),
                               onPressed: () async {
                                 await _deleteProofPic(

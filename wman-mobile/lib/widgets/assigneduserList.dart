@@ -41,10 +41,37 @@ class AssignedUserList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const TextStyle propertyTextStyle =
-        TextStyle(fontWeight: FontWeight.normal, fontSize: 18);
-    const TextStyle valueTextStyle =
-        TextStyle(fontWeight: FontWeight.bold, fontSize: 17);
+    TextStyle propertyTextStyle = TextStyle(
+        fontWeight: FontWeight.normal,
+        fontSize: 18.w < 40
+            ? 8
+            : 18.w > 210
+                ? 21
+                : 18.w);
+    TextStyle valueTextStyle = TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 17.w < 13
+          ? 13
+          : 17.w > 18
+              ? 20
+              : 17.w,
+    );
+    double _iconBoxSize() {
+      return 40.w < 35
+          ? 35
+          : 40.w > 60
+              ? 60
+              : 40.w;
+    }
+
+    double _iconSize() {
+      return 25.w < 25
+          ? 25
+          : 25.w > 30
+              ? 30
+              : 25.w;
+    }
+
     return Expanded(
       child: ListView.builder(
         itemBuilder: (ctx, userIndex) {
@@ -98,12 +125,21 @@ class AssignedUserList extends StatelessWidget {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          assignedUsers[userIndex].firstname +
-                              ' ' +
-                              assignedUsers[userIndex].lastname,
-                          style: valueTextStyle,
-                          textAlign: TextAlign.center,
+                        SizedBox(
+                          width: 100.w < 50
+                              ? 50
+                              : 100.w > 200
+                                  ? 200
+                                  : 100.w,
+                          child: Text(
+                            assignedUsers[userIndex].firstname +
+                                '\n' +
+                                assignedUsers[userIndex].lastname,
+                            // "Alessandro\nBlaineWolfeschlegelsteinhausenbergerdorffaaaaaaaaaaaa",
+                            style: valueTextStyle,
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ],
                     ),
@@ -111,11 +147,7 @@ class AssignedUserList extends StatelessWidget {
                     Row(
                       children: [
                         SizedBox(
-                          width: 40.w < 40
-                              ? 40
-                              : 40.w > 60
-                                  ? 60
-                                  : 40.w,
+                          width: _iconBoxSize(),
                           child: RawMaterialButton(
                             onPressed: () => _sendMail(
                                 assignedUsers[userIndex].email,
@@ -123,55 +155,35 @@ class AssignedUserList extends StatelessWidget {
                             fillColor: Colors.red,
                             child: Icon(
                               Icons.email,
-                              size: 30.w < 30
-                                  ? 30
-                                  : 30.w > 40
-                                      ? 40
-                                      : 30.w,
+                              size: _iconSize(),
                               color: Colors.white,
                             ),
                             shape: CircleBorder(),
                           ),
                         ),
                         SizedBox(
-                          width: 40.w < 40
-                              ? 40
-                              : 40.w > 60
-                                  ? 60
-                                  : 40.w,
+                          width: _iconBoxSize(),
                           child: RawMaterialButton(
                             onPressed: () =>
                                 _sendSms(assignedUsers[userIndex].phoneNumber),
                             fillColor: Colors.green,
                             child: Icon(
                               Icons.sms,
-                              size: 30.w < 30
-                                  ? 30
-                                  : 30.w > 40
-                                      ? 40
-                                      : 30.w,
+                              size: _iconSize(),
                               color: Colors.white,
                             ),
                             shape: CircleBorder(),
                           ),
                         ),
                         SizedBox(
-                          width: 40.w < 40
-                              ? 40
-                              : 40.w > 60
-                                  ? 60
-                                  : 40.w,
+                          width: _iconBoxSize(),
                           child: RawMaterialButton(
                             onPressed: () => _callPhoneNumber(
                                 assignedUsers[userIndex].phoneNumber),
                             fillColor: Colors.blue,
                             child: Icon(
                               Icons.phone,
-                              size: 30.w < 30
-                                  ? 30
-                                  : 30.w > 40
-                                      ? 40
-                                      : 30.w,
+                              size: _iconSize(),
                               color: Colors.white,
                             ),
                             shape: CircleBorder(),

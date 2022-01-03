@@ -29,6 +29,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  #--spacer--
+  desktop_window: ^0.4.0
+  #--spacer--
   jwt_decode: ^0.3.1
   dio: ^4.0.4
   #signalr_client: ^0.1.6
