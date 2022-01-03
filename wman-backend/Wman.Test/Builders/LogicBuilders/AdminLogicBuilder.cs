@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using Moq;
 using Wman.Data.DB_Models;
 using Wman.Logic.Classes;
 

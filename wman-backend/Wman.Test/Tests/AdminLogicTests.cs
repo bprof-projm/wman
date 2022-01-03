@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
@@ -27,10 +28,38 @@ namespace Wman.Test.Tests
         public void Setup()
         {
             this.users = UserManagerBuilder.GetWmanUsers();
-            this.userManager = UserManagerBuilder.GetUserManager(this.users);
+            this.userManager = UserManagerBuilder.GetUserManagerWithFalseRoleCheck(this.users); 
             this.mapper = MapperBuilder.GetMapper();
 
+            
             this.photoLogic = AdminLogicBuilder.PhotoLogicFactory(this.userManager.Object,this.mapper);
+        }
+
+        [Test]
+        public async Task CreateWorkForce_FailedCreation_EmailAlreadyInRepo()
+        {
+            //Arrange
+            AdminLogic adminLogic = new(this.userManager.Object, this.photoLogic, this.mapper);
+            RegisterDTO user = new()
+            {
+                Username = "fogvaratartottGyik",
+                Email = "sanyesz@gmail.com",
+                Password = "miAR35V2S50s",
+                Firstname = "Kronikus",
+                Lastname = "VeszettMacska",
+                PhoneNumber = "0690123456",
+                Role = "Worker"
+            };
+
+            //Act
+            async Task testDelegate() => await adminLogic.CreateWorkforce(user);
+
+            //Assert
+            Assert.ThrowsAsync<InvalidOperationException>(testDelegate);
+
+            this.userManager.Verify(x => x.Users, Times.Once);
+            this.userManager.Verify(x => x.CreateAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Never);
+            this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Never);
         }
 
         [Test]
@@ -42,7 +71,7 @@ namespace Wman.Test.Tests
             {
                 Username = "fogvaratartottGyik",
                 Email = "maszkosfutocsiga@gmail.com",
-                Password = "miAR3dV2Sf0s",
+                Password = "miAR35V2S50s",
                 Firstname = "Kronikus",
                 Lastname = "VeszettMacska",
                 PhoneNumber = "0690123456",
@@ -59,6 +88,42 @@ namespace Wman.Test.Tests
             this.userManager.Verify(x => x.Users, Times.Once);
             this.userManager.Verify(x => x.CreateAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
             this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
+        }
+
+        [Test]
+        public async Task DeleteWorkforce_SucceededDeletion_OnRecentlyCreatedUserAndByName()
+        {
+            //Arrange
+            AdminLogic adminLogic = new(this.userManager.Object, this.photoLogic, this.mapper);
+            RegisterDTO user = new()
+            {
+                Username = "Test012",
+                Email = "maszkosfutocsiga@gmail.com",
+                Password = "miAR35V2S50s",
+                Firstname = "Kronikus",
+                Lastname = "VeszettMacska",
+                PhoneNumber = "0690123456",
+                Role = "Worker"
+            };
+
+            //Act
+            await adminLogic.CreateWorkforce(user);
+
+            //we have 4 users in the repo right now
+            var result = await adminLogic.DeleteWorkforce(user.Username);
+            var result2 = await adminLogic.DeleteWorkforce("ArnoldBalValla");
+
+            //Assert
+            //Should be 2 users in the repo after 2 deletions
+            Assert.True(result.Succeeded);
+            Assert.AreEqual(2, users.Count);
+
+            //CreateWorker
+            this.userManager.Verify(x => x.Users, Times.Exactly(3)); //3 because of 2 DeleteUser calls and 1 CreateWorker
+            this.userManager.Verify(x => x.CreateAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
+            this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
+            //DeleteUser
+            this.userManager.Verify(x => x.DeleteAsync(It.IsAny<WmanUser>()), Times.Exactly(2));
 
         }
     }
