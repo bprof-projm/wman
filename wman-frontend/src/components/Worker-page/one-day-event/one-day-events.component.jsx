@@ -53,24 +53,24 @@ const OneDayEvents = (event) => {
                             </th>
                         </tr>
                         <tr>
-                            <th>Floor door:</th>
-                            <th>{event.event.address.floorDoor}</th>
+                            {(event.event.address.floorDoor === null) ? null : <th>Floor door:</th>}
+                            {(event.event.address.floorDoor === null) ? null : <th>{event.event.address.floorDoor}</th>}                           
+                            
                         </tr>
                         <tr>
-                            <th colSpan='2'><b>Labels:</b></th>
-                        </tr>
-                        <tr >
-                            <th className="label-container" colSpan='2'>
-                                {event.event.labels.map(label => <OneLabel
-                                    key={label.id}
-                                    name={label.content}
-                                    backgroundColor={label.backgroundColor}
-                                    textColor={label.textColor}
-                                />)}
-                            </th>
-                        </tr>
+                            {(event.event.labels.length === 0) ? null : <th colSpan='2'><b>Labels:</b></th>}
+                            
+                        </tr>                       
 
                     </table>
+                    : null}
+                {show ?
+                    <div className="label-container">{event.event.labels.map(label => <OneLabel
+                        key={label.id}
+                        name={label.content}
+                        backgroundColor={label.backgroundColor}
+                        textColor={label.textColor}
+                    />)}</div>
                     : null}
             </div>
         </div>
