@@ -34,20 +34,15 @@ const WorkerThisWeek = () => {
     function isItThisDay(eventToExamine, dayYouWant) {
 
         const today = new Date(eventToExamine.estimatedStartDate);
-        const dayName = today.toString().split(' ')[0];
-        console.log(dayName); //Mon,Tue,Wed,Thu,Fri,Sat,Sun
+        const dayName = today.toString().split(' ')[0]; //Mon,Tue,Wed,Thu,Fri,Sat,Sun
 
         if (dayName == dayYouWant) {
             return true;
         }
         else {
-            
-            console.log(dayYouWant + " not good");
-            return false;
-            
+            return false;            
         }
     }   
-
 
     return (
         <div>
