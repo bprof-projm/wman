@@ -1,0 +1,17 @@
+.searchbox {
+  display: flex;
+}
+
+.colorPickerBtn {
+  margin: auto;
+}
+
+.submitBtn {
+  margin-top: 20px;
+}
+
+.addNewLabelBtn {
+  margin-top: 20px;
+  margin-left: 35px;
+  margin-bottom: 20px;
+}

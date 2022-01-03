@@ -4,30 +4,59 @@
         <name>Wman.WebAPI</name>
     </assembly>
     <members>
+        <member name="T:Wman.WebAPI.Controllers.AdminController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AdminController.#ctor(Wman.Logic.Interfaces.IAuthLogic,Wman.Logic.Interfaces.IAdminLogic)">
+            <summary>
+            
+            </summary>
+            <param name="authLogic"></param>
+            <param name="adminLogic"></param>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AdminController.CreateWorkforce(Wman.Logic.DTO_Models.RegisterDTO)">
+            <summary>
+            Create a new workforce
+            </summary>
+            <param name="model"></param>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AdminController.ModifyWorkForce(System.String,Wman.Logic.DTO_Models.WorkerModifyDTO)">
+            <summary>
+            Edit an existing workforce
+            </summary>
+            <param name="username"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AdminController.DeleteWorkforce(System.String)">
+            <summary>
+            Delete a workforce
+            </summary>
+            <param name="username"></param>
+            <returns></returns>
+        </member>
         <member name="T:Wman.WebAPI.Controllers.AuthController">
             <summary>
             Auth controller
             </summary>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.#ctor(Wman.Logic.Interfaces.IAuthLogic,Wman.Logic.Helpers.DBSeed)">
+        <member name="M:Wman.WebAPI.Controllers.AuthController.#ctor(Wman.Logic.Interfaces.IAuthLogic,Wman.Logic.Helpers.DBSeed,Wman.Logic.Interfaces.IAdminLogic)">
             <summary>
             
             </summary>
             <param name="authLogic"></param>
             /// <param name="dBSeed"></param>
+            <param name="adminLogic"></param>
         </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.Login(Wman.Logic.DTO_Models.LoginDTO)">
             <summary>
             Login
             </summary>
             <param name="model">Login details</param>
-        </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.CreateWorker(Wman.Logic.DTO_Models.RegisterDTO)">
-            <summary>
-            Create a new user
-            </summary>
-            <param name="model">Login model</param>
-            <returns>ActionResult</returns>
         </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.GetAllUsers">
             <summary>
@@ -42,34 +71,19 @@
             <param name="username"></param>
             <returns></returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.DeleteUser(System.String)">
-            <summary>
-            Delete a user
-            </summary>
-            <param name="username">Username of the user to be deleted</param>
-        </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.UpdateUser(System.String,System.String,Wman.Logic.DTO_Models.UserDTO)">
-            <summary>
-            Update a user
-            </summary>
-            <param name="oldUsername">Prev. id</param>
-            <param name="pwd">Password of the user to be updated</param>
-            <param name="user">User to be updated</param>
-        </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.SetRole(System.String,System.String)">
-            <summary>
-            Set the role of a user, while removing any previous roles he had before
-            </summary>
-            <param name="username">Username of the user</param>
-            <param name="rolename">Name of the role(Admin/Manager/Worker)</param>
-            <returns></returns>
-        </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.UsersOfRole(System.String)">
             <summary>
             Returns a list of users that have the provided role
             </summary>
             <param name="rolename">Name of the role</param>
             <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AuthController.RolesOfUser(System.String)">
+            <summary>
+            Returns the role(s) assigned to the user. (Worker/Admin/Manager)
+            </summary>
+            <param name="username"></param>
+            <returns>Worker/Admin/Manager</returns>
         </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.PopulateDB">
             <summary>
@@ -195,13 +209,6 @@
             </summary>
             <returns>WorkLoadDTO</returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.UserController.GetAssignedEventsOfUser(System.String)">
-            <summary>
-            Get all the events to which a selected user is assigned to
-            </summary>
-            <param name="username">Username of the searched user</param>
-            <returns>A collection of events that are assigned to the specified user</returns>
-        </member>
         <member name="M:Wman.WebAPI.Controllers.UserController.CalculateStats(System.String,System.DateTime)">
             <summary>
             Calculate the workload stats of a selected user, in the specified year
@@ -223,37 +230,17 @@
             <param name="toDate"></param>
             <returns></returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.WorkerController.GetAvaliableEventsForMyself">
-            <summary>
-            Get all the events avaliable to the currently logged in user
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Wman.WebAPI.Controllers.WorkerController.GetAvaliableEventsToday">
-            <summary>
-            Lists all the workevents avaliable to the currently logged in user today
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Wman.WebAPI.Controllers.WorkerController.GetAvaliableEventsThisWeek">
-            <summary>
-            Lists all the workevents avaliable to the currently logged in user this week
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Wman.WebAPI.Controllers.WorkerController.GetAvaliableEventsSpecific(System.DateTime,System.DateTime)">
-            <summary>
-            Lists all the workevents avaliable to the currently logged in user, within the specified time interval
-            </summary>
-            <param name="start"></param>
-            <param name="finish"></param>
-            <returns></returns>
-        </member>
         <member name="M:Wman.WebAPI.Controllers.WorkerController.GetEventDetailsForMyself(System.Int32)">
             <summary>
             Get event details (Only works on the ones assigned to the currently logged in user)
             </summary>
             <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.WorkerController.GetLoggedInWorkersWorkload">
+            <summary>
+            Return the workload of the currently logged in user
+            </summary>
             <returns></returns>
         </member>
         <member name="T:Wman.WebAPI.Helpers.AllowAnonymous">

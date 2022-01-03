@@ -47,7 +47,9 @@ namespace Wman.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             string signingKey = Configuration.GetValue<string>("SigningKey");
+            services.AddSingleton<NotifyHub>();
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
+            services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
             services.AddControllers(x => x.Filters.Add(new ApiExceptionFilter()));
             services.AddTransient<IAuthLogic, AuthLogic>();
             services.AddTransient<ICalendarEventLogic, CalendarEventLogic>();
@@ -57,6 +59,7 @@ namespace Wman.WebAPI
             services.AddTransient<ILabelLogic, LabelLogic>();
             services.AddTransient<IAllInWorkEventLogic, AllInWorkEventLogic>();
             services.AddTransient<IPhotoLogic, PhotoLogic>();
+            services.AddTransient<IAdminLogic, AdminLogic>();
             services.AddControllers().AddJsonOptions(options =>
           options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             //services.AddSingleton(Configuration);
@@ -70,6 +73,8 @@ namespace Wman.WebAPI
             services.AddTransient<ILabelRepo, LabelRepo>();
             services.AddTransient<IAddressRepo, AddressRepo>();
             services.AddTransient<IPhotoService, PhotoService>();
+            services.AddTransient<IEmailService, EmailService>();
+            
             services.AddSwaggerGen(c =>
             {
                 //c.DescribeAllEnumsAsStrings();
@@ -142,6 +147,23 @@ namespace Wman.WebAPI
                     ValidIssuer = "http://www.security.org",
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey))
                 };
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+
+                        // If the request is for our hub...
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            (path.StartsWithSegments("/notify")))
+                        {
+                            // Read the token out of the query string
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
             services.AddAuthorization(options =>
             {
@@ -161,7 +183,7 @@ namespace Wman.WebAPI
             });
 
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
-
+            services.AddSignalR();
 
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -190,6 +212,10 @@ namespace Wman.WebAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<NotifyHub>("/notify", opt =>
+                {
+
+                });
             });
         }
 

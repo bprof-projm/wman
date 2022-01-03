@@ -52,19 +52,6 @@ namespace Wman.WebAPI.Controllers
             return Ok(await userLogic.GetWorkLoads());
         }
 
-
-        /// <summary>
-        /// Get all the events to which a selected user is assigned to
-        /// </summary>
-        /// <param name="username">Username of the searched user</param>
-        /// <returns>A collection of events that are assigned to the specified user</returns>
-        [HttpGet]
-        [Route("workEvents")]
-        public async Task<ActionResult<ICollection<AssignedEventDTO>>> GetAssignedEventsOfUser(string username)
-        {
-            var result = await userLogic.WorkEventsOfUser(username);
-            return Ok(result);
-        }
         /// <summary>
         /// Calculate the workload stats of a selected user, in the specified year
         /// </summary>

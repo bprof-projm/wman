@@ -67,32 +67,32 @@ namespace Wman.Logic.Classes
             switch (day)
             {
                 case DayOfWeek.Sunday:
-                    lastDayOfTheWeek = time;
+                    lastDayOfTheWeek = time + TimeSpan.FromDays(1);
                     firstDayOfTheWeek = time - TimeSpan.FromDays(6);
                     break;
                 case DayOfWeek.Monday:
                     firstDayOfTheWeek = time;
-                    lastDayOfTheWeek = time + TimeSpan.FromDays(6);
+                    lastDayOfTheWeek = time + TimeSpan.FromDays(7);
                     break;
                 case DayOfWeek.Tuesday:
                     firstDayOfTheWeek = time - TimeSpan.FromDays(1);
-                    lastDayOfTheWeek = time + TimeSpan.FromDays(5);
+                    lastDayOfTheWeek = time + TimeSpan.FromDays(6);
                     break;
                 case DayOfWeek.Wednesday:
                     firstDayOfTheWeek = time - TimeSpan.FromDays(2);
-                    lastDayOfTheWeek = time + TimeSpan.FromDays(4);
+                    lastDayOfTheWeek = time + TimeSpan.FromDays(5);
                     break;
                 case DayOfWeek.Thursday:
                     firstDayOfTheWeek = time - TimeSpan.FromDays(3);
-                    lastDayOfTheWeek = time + TimeSpan.FromDays(3);
+                    lastDayOfTheWeek = time + TimeSpan.FromDays(4);
                     break;
                 case DayOfWeek.Friday:
                     firstDayOfTheWeek = time - TimeSpan.FromDays(4);
-                    lastDayOfTheWeek = time + TimeSpan.FromDays(2);
+                    lastDayOfTheWeek = time + TimeSpan.FromDays(3);
                     break;
                 case DayOfWeek.Saturday:
                     firstDayOfTheWeek = time - TimeSpan.FromDays(5);
-                    lastDayOfTheWeek = time + TimeSpan.FromDays(1);
+                    lastDayOfTheWeek = time + TimeSpan.FromDays(2);
                     break;
                 default:
                     break;
@@ -100,12 +100,14 @@ namespace Wman.Logic.Classes
 
 
             var events = await(from x in workEventRepo.GetAll()
-                          where x.EstimatedStartDate.DayOfYear >= firstDayOfTheWeek.DayOfYear && x.EstimatedStartDate.DayOfYear <=lastDayOfTheWeek.DayOfYear && x.EstimatedStartDate.Year == DateTime.Today.Year
-                               select x).ToListAsync();
+                          where x.EstimatedStartDate >= firstDayOfTheWeek && x.EstimatedStartDate < lastDayOfTheWeek
+                          select x).ToListAsync();
+
             if (await userManager.IsInRoleAsync(user, "worker"))
             {
                 events = events.Where(x => x.AssignedUsers.Any(x => x.UserName == username)).ToList();
             }
+
             return mapper.Map<List<WorkEventForWorkCardDTO>>(events);
 
         }
@@ -156,7 +158,17 @@ namespace Wman.Logic.Classes
                     {
                         time = time.AddDays(3);
                     }
-                    return week == CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(time, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday) && time.Year == DateTime.Today.Year;
+
+                    var neededWeek = CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(time, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+
+                    if (week >= 52)
+                    {
+                        return week == neededWeek && (time.Year == DateTime.Now.Year || (time.Year == DateTime.Now.Year + 1 && time.Month == DateTime.Now.AddMonths(1).Month));
+                    }
+                    else
+                    {
+                        return week == neededWeek && time.Year == DateTime.Now.Year;
+                    }
 
                 });
                 if (await userManager.IsInRoleAsync(user, "worker"))
@@ -200,7 +212,7 @@ namespace Wman.Logic.Classes
                 throw new NotFoundException(WmanError.UserNotFound);
             }
             var events =await (from x in workEventRepo.GetAll()
-                          where x.EstimatedStartDate.DayOfYear >= firstDayOfTheWeek.DayOfYear && x.EstimatedStartDate.DayOfYear <= lastDayOfTheWeek.DayOfYear && x.EstimatedStartDate.Year == DateTime.Today.Year
+                          where x.EstimatedStartDate >= firstDayOfTheWeek && x.EstimatedStartDate < lastDayOfTheWeek.AddDays(1)
                                select x).ToListAsync();
             if (await userManager.IsInRoleAsync(user, "worker"))
             {

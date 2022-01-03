@@ -15,12 +15,6 @@ namespace Wman.Logic.Interfaces
 
         Task<IEnumerable<UserDTO>> GetAllUsers();
 
-        Task<IdentityResult> CreateWorker(RegisterDTO login);
-
-        Task<IdentityResult> DeleteUser(string uname);
-
-        Task<IdentityResult> UpdateUser(string oldUsername, string pwd, UserDTO newUser);
-
         Task<TokenModel> LoginUser(LoginDTO login);
 
         Task<IEnumerable<string>> GetAllRolesOfUser(string username);

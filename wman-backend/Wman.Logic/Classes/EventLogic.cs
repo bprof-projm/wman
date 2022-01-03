@@ -1,15 +1,18 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
 using Wman.Logic.Helpers;
 using Wman.Logic.Interfaces;
+using Wman.Logic.Services;
 using Wman.Repository.Interfaces;
 
 namespace Wman.Logic.Classes
@@ -20,12 +23,19 @@ namespace Wman.Logic.Classes
         IMapper mapper;
         IAddressRepo address;
         UserManager<WmanUser> userManager;
-        public EventLogic(IWorkEventRepo eventRepo, IMapper mapper, IAddressRepo address, UserManager<WmanUser> userManager)
+        private readonly IHubContext<NotifyHub> _hub;
+        private NotifyHub _notifyHub;
+        private IEmailService _email;
+
+        public EventLogic(IWorkEventRepo eventRepo, IMapper mapper, IAddressRepo address, UserManager<WmanUser> userManager, IHubContext<NotifyHub> hub, NotifyHub notifyHub , IEmailService email)
         {
             this.eventRepo = eventRepo;
             this.mapper = mapper;
             this.address = address;
             this.userManager = userManager;
+            _hub = hub;
+            _notifyHub = notifyHub;
+            _email = email;
         }
 
         public async Task AssignUser(int eventID, string username)
@@ -55,6 +65,20 @@ namespace Wman.Logic.Classes
             {
                 selectedEvent.AssignedUsers.Add(selectedUser);
                 await this.eventRepo.Update(eventID, selectedEvent);
+                var notifyEvent = await eventRepo.GetOne(eventID);
+                var n = mapper.Map<WorkEventForWorkCardDTO>(notifyEvent);
+                var k = Newtonsoft.Json.JsonConvert.SerializeObject(n, new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    StringEscapeHandling = StringEscapeHandling.Default,
+                    Converters = { new Newtonsoft.Json.Converters.StringEnumConverter() }
+                });
+                if (DateTime.Now.Year == notifyEvent.EstimatedStartDate.Year && DateTime.Now.Month == notifyEvent.EstimatedStartDate.Month && DateTime.Now.Day == notifyEvent.EstimatedStartDate.Day)
+                {
+                    await _notifyHub.NotifyWorkerAboutEventForToday(selectedUser.UserName, k);
+                }
+                await _notifyHub.NotifyWorkerAboutEvent(selectedUser.UserName, k);
+                await _email.AssigedToWorkEvent(notifyEvent, selectedUser);
             }
         }
 
@@ -89,10 +113,24 @@ namespace Wman.Logic.Classes
                     okUsers.Add(selectedUser);
                 }
             }
+            var notifyEvent = await eventRepo.GetOne(eventID);
             foreach (var item in okUsers)
             {
                 selectedEvent.AssignedUsers.Add(item);
                 await this.eventRepo.Update(eventID, selectedEvent);
+                var n = mapper.Map<WorkEventForWorkCardDTO>(notifyEvent);
+                var k = Newtonsoft.Json.JsonConvert.SerializeObject(n, new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    StringEscapeHandling = StringEscapeHandling.Default,
+                    Converters = { new Newtonsoft.Json.Converters.StringEnumConverter() }
+                });
+                if (DateTime.Now.Year == notifyEvent.EstimatedStartDate.Year && DateTime.Now.Month == notifyEvent.EstimatedStartDate.Month && DateTime.Now.Day == notifyEvent.EstimatedStartDate.Day)
+                {
+                    await _notifyHub.NotifyWorkerAboutEventForToday(item.UserName, k);
+                }
+                await _notifyHub.NotifyWorkerAboutEvent(item.UserName, k);
+                await _email.AssigedToWorkEvent(notifyEvent, item);
             }
         }
 
@@ -153,10 +191,20 @@ namespace Wman.Logic.Classes
             }
             workevent.JobDescription = newWorkEvent.JobDescription;
             workevent.Address = mapper.Map<AddressHUN>(newWorkEvent.Address);
+            
+            bool movedToAnotherDayFromCurrent = false;
+
             if (newWorkEvent.EstimatedStartDate < newWorkEvent.EstimatedFinishDate && newWorkEvent.EstimatedStartDate.Day == newWorkEvent.EstimatedFinishDate.Day)
             {
-                if (await WorkerTimeCheck(workevent.AssignedUsers.ToList(),newWorkEvent.EstimatedStartDate, newWorkEvent.EstimatedFinishDate))
+                if (await WorkerTimeCheck(workevent.AssignedUsers.ToList(), newWorkEvent.EstimatedStartDate, newWorkEvent.EstimatedFinishDate))
                 {
+                    if (workevent.EstimatedStartDate.Date == DateTime.Today)
+                    {
+                        if (newWorkEvent.EstimatedStartDate.Date != DateTime.Today)
+                        {
+                            movedToAnotherDayFromCurrent = true;
+                        }
+                    }
                     workevent.EstimatedStartDate = newWorkEvent.EstimatedStartDate;
                     workevent.EstimatedFinishDate = newWorkEvent.EstimatedFinishDate;
                 }
@@ -173,6 +221,30 @@ namespace Wman.Logic.Classes
             workevent.Status = newWorkEvent.Status;
 
             await eventRepo.SaveDatabase();
+            var notifyEvent = await eventRepo.GetOne(workevent.Id);
+            var n = mapper.Map<WorkEventForWorkCardDTO>(notifyEvent);
+            var k = Newtonsoft.Json.JsonConvert.SerializeObject(n, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                StringEscapeHandling = StringEscapeHandling.Default,
+                Converters = { new Newtonsoft.Json.Converters.StringEnumConverter() }
+            });
+            foreach (var item in notifyEvent.AssignedUsers)
+            {
+                if (movedToAnotherDayFromCurrent)
+                {
+                    await _notifyHub.NotifyWorkerAboutEventChangeFromCurrentToOther(item.UserName, k);
+                }
+                else if (DateTime.Now.Year == notifyEvent.EstimatedStartDate.Year && DateTime.Now.Month == notifyEvent.EstimatedStartDate.Month && DateTime.Now.Day == notifyEvent.EstimatedStartDate.Day)
+                {
+
+                    await _notifyHub.NotifyWorkerAboutEventChangeForToday(item.UserName, k);
+
+                }
+                await _notifyHub.NotifyWorkerAboutEventChange(item.UserName, k);
+                await _email.WorkEventUpdated(notifyEvent, item);
+            }
+            
         }
 
         public async Task<ICollection<UserDTO>> GetAllAssignedUsers(int id)
@@ -206,7 +278,15 @@ namespace Wman.Logic.Classes
             {
                 var result = mapper.Map<WorkEvent>(newWorkEvent);
                 var workEventInDb = await eventRepo.GetOneWithTracking(Id);
-
+                bool movedToAnotherDayFromCurrent = false;
+   
+                if (workEventInDb.EstimatedStartDate.Date == DateTime.Today)
+                {
+                    if (result.EstimatedStartDate.Date != DateTime.Today)
+                    {
+                        movedToAnotherDayFromCurrent = true;
+                    }
+                }
                 workEventInDb.EstimatedStartDate = result.EstimatedStartDate;
                 workEventInDb.EstimatedFinishDate = result.EstimatedFinishDate;
                 
@@ -238,10 +318,33 @@ namespace Wman.Logic.Classes
                     {
                         throw new InvalidOperationException(WmanError.UserIsBusy);
                     }
+                    var notifyEvent = await eventRepo.GetOne(Id);
+                    var n = mapper.Map<WorkEventForWorkCardDTO>(notifyEvent);
+                    var k = Newtonsoft.Json.JsonConvert.SerializeObject(n, new JsonSerializerSettings
+                    {
+                        ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                        StringEscapeHandling = StringEscapeHandling.Default,
+                        Converters = { new Newtonsoft.Json.Converters.StringEnumConverter() }
+                    });
+                    
+                    foreach (var item in notifyEvent.AssignedUsers)
+                    {
+                        if (movedToAnotherDayFromCurrent)
+                        {
+                            await _notifyHub.NotifyWorkerAboutEventChangeFromCurrentToOther(item.UserName, k);
+                        }
+                        else if (DateTime.Now.Year == notifyEvent.EstimatedStartDate.Year && DateTime.Now.Month == notifyEvent.EstimatedStartDate.Month && DateTime.Now.Day == notifyEvent.EstimatedStartDate.Day)
+                        {
 
+                            await _notifyHub.NotifyWorkerAboutEventChangeForToday(item.UserName, k);
+
+                        }
+                        await _notifyHub.NotifyWorkerAboutEventChange(item.UserName, k);
+                        await _email.WorkEventUpdated(notifyEvent, item);
+                    }
 
                 }
-                await eventRepo.Update(Id, workEventInDb);
+                
             }
             else
             {

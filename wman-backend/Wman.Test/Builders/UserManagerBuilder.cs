@@ -50,6 +50,7 @@ namespace Wman.Test.Builders
                 LastName = "Hurutos",
                 SecurityStamp = Guid.NewGuid().ToString()
             });
+
             users.Add(new WmanUser
             {
                 Id = 1,
@@ -59,6 +60,7 @@ namespace Wman.Test.Builders
                 LastName = "Süni",
                 SecurityStamp = Guid.NewGuid().ToString()
             });
+
             users.Add(new WmanUser
             {
                 Id = 2,
