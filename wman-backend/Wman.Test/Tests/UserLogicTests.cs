@@ -66,6 +66,7 @@ namespace Wman.Test.Tests
             this.userManager.Verify(x => x.Users, Times.Once);
             this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Exactly(usernames.Count()));
         }
+
         /*
          * DEPRECATED METHODS
         [Test]
