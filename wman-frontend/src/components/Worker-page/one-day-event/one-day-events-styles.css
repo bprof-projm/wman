@@ -1,5 +1,5 @@
 body{
-    background-color:#3383f1;
+    background-color:rgb(255, 255, 255);
 }
 
 .one-event table{
@@ -7,15 +7,18 @@ body{
     border-collapse: collapse;
     border-radius: 20px;
     overflow: hidden;
-    color: white;
-    background-color:#3383f1;}
-
-
+    color: rgb(26, 2, 133);
+    background-color:rgb(255, 255, 255);
+}
+.label-container{
+    display: flex;
+}
 .one-event th, tr{    
     text-align: center;
     font-weight: normal;
-    background-color:#3383f1;
+    background-color:rgb(255, 255, 255);
 }
+
 .one-event th{    
     width: 50%;
 }
@@ -25,7 +28,7 @@ body{
 }
 
 .one-event-tables{    
-    background-color:#3383f1;
+    background-color:rgb(255, 255, 255);
     border-radius: 20px;
     transform: translateZ(0);
     transition: transform 0.25s ease-out;  
@@ -33,12 +36,16 @@ body{
 
 .one-event{
     margin-top: 1vh;
+    box-shadow: inset -1px 3px 8px 5px #979797, 2px 5px 16px 0px #858585, 5px 5px 15px 5px rgba(105, 105, 105, 0);
+    border-radius: 20px;
 }
+
+
 @media screen and (max-width:600px) {
  .one-event table{
      width: 80vw;
  }  
  .one-event{
      align-content: center;
- }
+ } 
 }

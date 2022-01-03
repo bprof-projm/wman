@@ -1,16 +1,16 @@
 .week-day{
     background: rgb(248,248,255);
-    background: linear-gradient(90deg, rgba(248,248,255,1) 0%, rgba(51,131,241,1) 50%, rgba(248,248,255,1) 100%);    color: rgb(255, 255, 255);
+    background: linear-gradient(90deg, rgba(248,248,255,1) 15%, rgb(103, 162, 245) 50%, rgba(248,248,255,1) 85%);    color: rgb(255, 255, 255);
     font-size: larger;
     width: 90vw;
     margin-top: 1vh;
     margin-left: 5vw;
     text-align: center;
     font-weight: bolder;
+    padding: 1vh;
 }
 .weekday-events{       
-    color: white;
-    background-color: ghostwhite;
+    color: rgb(190, 222, 248);
     font-weight: normal;
     width: 100%;
     margin:auto;
@@ -19,6 +19,13 @@
     justify-content: space-around;
     margin-top: 1vh;
     cursor: pointer;
+}
+.weekday-events h2{
+    color: rgb(5, 5, 5);
+    background-color:rgb(255, 255, 255);
+    box-shadow: 1px 3px 3px #979797, 2px 5px 6px 0px #858585, 5px 5px 5px 5px rgba(105, 105, 105, 0);
+    border-radius: 20px;
+    padding: 10px
 }
 @media screen and (max-width:600px) {
  .weekday-events{

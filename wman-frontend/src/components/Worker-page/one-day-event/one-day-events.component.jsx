@@ -1,4 +1,5 @@
 import react, { useState } from "react";
+import OneLabel from "../one-label.component.jsx/one-label.component";
 import "./one-day-events-styles.css"
 const OneDayEvents = (event) => {
 
@@ -58,8 +59,15 @@ const OneDayEvents = (event) => {
                         <tr>
                             <th colSpan='2'><b>Labels:</b></th>
                         </tr>
-                        <tr>
-                            <th colSpan='2'><b>Ide kéne majd a label card komponensnek megadni a labaleket ha be lesz mergelve</b></th>
+                        <tr >
+                            <th className="label-container" colSpan='2'>
+                                {event.event.labels.map(label => <OneLabel
+                                    key={label.id}
+                                    name={label.content}
+                                    backgroundColor={label.backgroundColor}
+                                    textColor={label.textColor}
+                                />)}
+                            </th>
                         </tr>
 
                     </table>
