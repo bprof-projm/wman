@@ -94,7 +94,7 @@ namespace Wman.Logic.Classes
                         ProfilePicUrl = profileUrl
                     });
                 }
-                
+
             }
 
             return output;
@@ -114,23 +114,63 @@ namespace Wman.Logic.Classes
             throw new InvalidOperationException(WmanError.NotHisBusiness);
         }
 
-        private double CalculateLoad(WmanUser user)
+        public async Task<MonthlyStatsDTO> GetMonthlyStats(string username, DateTime inYear)
         {
-            var selectedDate = DateTime.Now;
+            var user = await userManager.Users
+                .Include(y => y.WorkEvents)
+                .Include(z => z.ProfilePicture)
+                .AsNoTracking()
+                .Where(x => x.UserName == username)
+                .SingleOrDefaultAsync();
+            if (user == null)
+            {
+                throw new NotFoundException(WmanError.UserNotFound);
+            }
+            var selectedYearsJobs = user.WorkEvents.Where(x => x.EstimatedStartDate.Year == inYear.Year);
+            WorkloadWithHoursDTO workLoadWithHours;
+            var output = new MonthlyStatsDTO();
+            output.UserID = user.Id;
+            output.Username = user.UserName;
+            if (user.ProfilePicture != null)
+            {
+                output.ProfilePicUrl = user.ProfilePicture.Url;
+            }
+            for (int i = 1; i < 13; i++)
+            {
+                var hours = 0.0;
+                var workloadPercent = 0.0;
+                var thisMonthJobs = selectedYearsJobs.Where(x => x.EstimatedStartDate.Month == i);
+                foreach (var item in thisMonthJobs)
+                {
+                    if (item.WorkStartDate != DateTime.MinValue && item.WorkFinishDate != DateTime.MinValue)
+                    {
+                        hours += (item.WorkFinishDate - item.WorkStartDate).TotalHours;
+                    }
+                }
+                workloadPercent = this.CalculateLoadSpecific(user, new DateTime(inYear.Year, i, 1));
+                workLoadWithHours = new WorkloadWithHoursDTO();
+                workLoadWithHours.Hours = Convert.ToInt32(hours);
+                workLoadWithHours.WorkloadPercent = Convert.ToInt32(workloadPercent);
+                output.MonthlyStats.Add(CultureInfo.InvariantCulture.DateTimeFormat.GetMonthName(i), workLoadWithHours);
+            }
+            return output;
+        }
+
+        private double CalculateLoadSpecific(WmanUser user, DateTime selectedDate)
+        {
             var beforeToday = WorksBeforeToday(user.WorkEvents, selectedDate);
             var fromToday = RemainingWorks(user.WorkEvents, selectedDate);
-
             TimeSpan tsBeforeToday = TimeSpan.Zero;
             TimeSpan tsFromToday = TimeSpan.Zero;
 
             foreach (var item in beforeToday)
             {
                 if (item.WorkFinishDate != DateTime.MinValue && item.WorkStartDate != DateTime.MinValue)
-                {
+                { // normal case
                     tsBeforeToday += (item.WorkFinishDate - item.WorkStartDate);
                 }
                 else
-                {
+                { //incorrect case
                     tsFromToday += (item.EstimatedFinishDate - item.EstimatedStartDate); //Work finish/start date is not valid, but it should already be. Assuming still in progress, and adding it to the remaining work pool
                 }
             }
@@ -138,13 +178,25 @@ namespace Wman.Logic.Classes
             {
                 if (item.EstimatedFinishDate != DateTime.MinValue && item.EstimatedStartDate != DateTime.MinValue)
                 {
-                    tsFromToday += (item.EstimatedFinishDate - item.EstimatedStartDate);
+                    if (item.WorkFinishDate == DateTime.MinValue || item.WorkStartDate == DateTime.MinValue) //If either of the actual work start/finish dates are invalid, use the estimated values instead
+                    { // normal case
+                        tsFromToday += (item.EstimatedFinishDate - item.EstimatedStartDate);
+                    }
+                    else
+                    { //incorrect case
+                        tsBeforeToday += (item.WorkFinishDate - item.WorkStartDate);
+                    }
+
                 }
             }
 
             TimeSpan tsSUM = tsBeforeToday + tsFromToday;
             var hoursInMonth = DateTime.DaysInMonth(selectedDate.Year, selectedDate.Month) * 8;
             return (tsSUM.TotalHours / hoursInMonth) * 100;
+        }
+        private double CalculateLoad(WmanUser user)
+        {
+            return CalculateLoadSpecific(user, DateTime.Now);
         }
         private IEnumerable<WorkEvent> WorksBeforeToday(IEnumerable<WorkEvent> works, DateTime selectedMonth)
         {
@@ -153,7 +205,8 @@ namespace Wman.Logic.Classes
 
         private IEnumerable<WorkEvent> RemainingWorks(IEnumerable<WorkEvent> works, DateTime selectedMonth)
         {
-            return works.Where(x => x.EstimatedStartDate.Day >= selectedMonth.Day && x.EstimatedStartDate.Year == selectedMonth.Year && x.EstimatedStartDate.Month == selectedMonth.Month && x.WorkStartDate == DateTime.MinValue);
+
+            return works.Where(x => x.EstimatedStartDate.Day >= selectedMonth.Day && x.EstimatedStartDate.Year == selectedMonth.Year && x.EstimatedStartDate.Month == selectedMonth.Month);
         }
     }
 }

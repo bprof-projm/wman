@@ -13,5 +13,6 @@ namespace Wman.Logic.Interfaces
         public Task<IEnumerable<WorkloadDTO>> GetWorkLoads(IEnumerable<string> usernames);
         public Task<IEnumerable<WorkloadDTO>> GetWorkLoads();
         Task<WorkEventForWorkCardDTO> GetEventDetailsForWorker(string username, int id);
+        Task<MonthlyStatsDTO> GetMonthlyStats(string username, DateTime year);
     }
 }
