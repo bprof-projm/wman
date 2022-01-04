@@ -363,22 +363,17 @@ namespace Wman.Logic.Classes
             {
                 throw new InvalidOperationException(WmanError.StatusPowMissing);
             }
-            // TODO: Innentől átadni.
             switch (workevent.Status)
             {
-                // awaiting ről startedra
                 case Status.awaiting:
                     workevent.WorkStartDate = DateTime.Now;
                     break;
-                //  startedról proof awaitre
                 case Status.started:
                     break;
-                // Proof awaitről finishedre
                 case Status.proofawait:
                     workevent.WorkFinishDate = DateTime.Now;
                     break;
                 case Status.finished:
-                    // MIKOR ÁLJON LE proof? vagy finished?
                     break;
                 default:
                     break;
