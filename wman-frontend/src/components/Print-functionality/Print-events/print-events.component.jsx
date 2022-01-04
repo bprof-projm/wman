@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Cascader } from 'antd';
-import jwt_decode from 'jwt-decode';
+import { Button } from 'antd';
 import axios from 'axios';
 import DocumentToPrint from '../Document-to-print/document-to-print.component';
-import Cookies from "js-cookie";
 import './print-events.styles.css';
+import { PrinterOutlined } from '@ant-design/icons';
 
 const PrintEvents = () => {
     const [users, setUsers] = useState([]);
@@ -31,6 +30,10 @@ const PrintEvents = () => {
     const filteredEvents = calendarEvents.filter(
         event => event.assignedUsers.map(assigned => assigned.username).includes(searched)
     );
+    const printWindow = ()=>{
+        window.print();
+    }
+
     return (
         <div className='print-events'>
             <div className='print-events-prewiew'>
@@ -46,7 +49,8 @@ const PrintEvents = () => {
                     {users.map(user =>
                         <option key={user.userID} value={user.username}>{user.username}</option>
                     )}
-                </select>
+                </select>                
+                <Button shape='circle' icon={<PrinterOutlined />} text="Print" onClick ={printWindow}/>
             </div>
         </div>
     )
