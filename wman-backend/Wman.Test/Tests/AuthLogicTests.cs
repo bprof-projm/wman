@@ -37,34 +37,20 @@ namespace Wman.Test.Tests
         }
 
         [Test]
-        public async Task LoginUser_TokenGranted_OnNewlyCreatedUser()
+        public async Task LoginUser_TokenGranted()
         {
             //Arrange
             AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
 
-            RegisterDTO user = new()
-            {
-                Username = "fogvaratartottGyik",
-                Email = "maszkosfutocsiga@gmail.com",
-                Password = "miAR3dV2Sf0s",
-                Firstname = "Kronikus",
-                Lastname = "VeszettMacska",
-            };
-
-            LoginDTO model = new() { LoginName = user.Email, Password = user.Password };
+            LoginDTO model = new() { LoginName = users[0].Email, Password = "random" };
 
             //Act
-            var akarmi = await authLogic.CreateWorker(user);
             var result = await authLogic.LoginUser(model);
 
             //Assert
             Assert.That(result.Token != null);
             
-            //CreateWorker
-            this.userManager.Verify(x => x.Users, Times.Exactly(2)); //2 because of 1 CreatWorker and 1 LoginUser call
-            this.userManager.Verify(x => x.CreateAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
-            this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
-            //LoginUser
+            this.userManager.Verify(x => x.Users, Times.Exactly(1)); //2 because of 1 CreatWorker and 1 LoginUser call
             this.userManager.Verify(x => x.FindByNameAsync(It.IsAny<string>()), Times.Never);
             this.userManager.Verify(x => x.CheckPasswordAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
             this.userManager.Verify(x => x.GetRolesAsync(It.IsAny<WmanUser>()), Times.Once);
@@ -101,94 +87,6 @@ namespace Wman.Test.Tests
         }
 
         [Test]
-        public async Task CreateWorker_SucceededCreation()
-        {
-            //Arrange
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
-
-            RegisterDTO user = new()
-            {
-                Username = "fogvaratartottGyik",
-                Email = "maszkosfutocsiga@gmail.com",
-                Password = "miAR3dV2Sf0s",
-                Firstname = "Kronikus",
-                Lastname = "VeszettMacska",
-            };
-
-            //Act
-            var result = await authLogic.CreateWorker(user);
-
-            //Assert
-            Assert.True(result.Succeeded);
-            Assert.That(users.Count == 4);
-
-            this.userManager.Verify(x => x.Users, Times.Once);
-            this.userManager.Verify(x => x.CreateAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
-            this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
-        }
-
-        [Test]
-        public async Task CreateWorker_FailedCreation_EmailAlreadyInRepo()
-        {
-            //Arrange
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
-
-            RegisterDTO user = new()
-            {
-                Username = "fogvaratartottGyik",
-                Email = "sanyesz@gmail.com",
-                Password = "miAR3dV2Sf0s",
-                Firstname = "Kronikus",
-                Lastname = "VeszettMacska",
-            };
-
-            //Act
-            async Task testDelegate() => await authLogic.CreateWorker(user);
-
-            //Assert
-            Assert.ThrowsAsync<InvalidOperationException>(testDelegate);
-
-            this.userManager.Verify(x => x.Users, Times.Once);
-            this.userManager.Verify(x => x.CreateAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Never);
-            this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Never);
-        }
-
-        [Test]
-        public async Task DeleteUser_SucceededDeletion_OnRecentlyCreatedUserAndByName()
-        {
-            //Arrange
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
-
-            RegisterDTO user = new()
-            {
-                Username = "fogvaratartottGyik",
-                Email = "maszkosfutocsiga@gmail.com",
-                Password = "miAR3dV2Sf0s",
-                Firstname = "Kronikus",
-                Lastname = "VeszettMacska",
-            };
-
-            //Act
-            await authLogic.CreateWorker(user);
-
-            //we have 4 users in the repo right now
-            var result = await authLogic.DeleteUser(user.Username);
-            var result2 = await authLogic.DeleteUser("ArnoldBalValla");
-            
-            //Assert
-            //Should be 2 users in the repo after 2 deletions
-            Assert.True(result.Succeeded);
-            Assert.AreEqual(2, users.Count);
-            
-            //CreateWorker
-            this.userManager.Verify(x => x.Users, Times.Exactly(3)); //3 because of 2 DeleteUser calls and 1 CreateWorker
-            this.userManager.Verify(x => x.CreateAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
-            this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
-            //DeleteUser
-            this.userManager.Verify(x => x.DeleteAsync(It.IsAny<WmanUser>()), Times.Exactly(2));
-        }
-
-        [Test]
         public async Task GetAllRolesOfUser_Returns4Roles()
         {
             //Arrange
@@ -221,6 +119,26 @@ namespace Wman.Test.Tests
         }
 
         [Test]
+        public async Task SetRoleOfUser_ExistingUser_SuccessfulOperation()
+        {
+            //Arrange
+            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
+
+            //Act
+            var result = authLogic.SetRoleOfUser(users[2].UserName, "Debug");
+
+            //Assert
+            Assert.True(result.IsCompleted);
+
+            this.userManager.Verify(x => x.FindByNameAsync(It.IsAny<string>()), Times.Once);
+            this.userManager.Verify(x => x.GetRolesAsync(It.IsAny<WmanUser>()), Times.Once);
+            this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
+        }
+
+        /*
+         TEST CASES FOR DEPRECATED METHODS
+
+        [Test]
         public async Task UpdateUser_SucceededUpdate_ExistingUser()
         {
             //Arrange
@@ -245,26 +163,6 @@ namespace Wman.Test.Tests
             this.userManager.Verify(x => x.Users, Times.Once);
             this.userManager.Verify(x => x.UpdateAsync(It.IsAny<WmanUser>()), Times.Once);
         }
-
-        [Test]
-        public async Task SetRoleOfUser_ExistingUser_SuccessfulOperation()
-        {
-            //Arrange
-            AuthLogic authLogic = new(this.userManager.Object, this.roleManager.Object, this.config, this.mapper);
-
-            //Act
-            var result = authLogic.SetRoleOfUser(users[2].UserName, "Debug");
-
-            //Assert
-            Assert.True(result.IsCompleted);
-
-            this.userManager.Verify(x => x.FindByNameAsync(It.IsAny<string>()), Times.Once);
-            this.userManager.Verify(x => x.GetRolesAsync(It.IsAny<WmanUser>()), Times.Once);
-            this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
-        }
-
-        /*
-         TEST CASES FOR DEPRECATED METHODS
 
         [Test]
         public async Task RemoveUserFromRole_RemovesSuccessfully()

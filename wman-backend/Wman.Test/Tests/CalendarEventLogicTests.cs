@@ -125,10 +125,9 @@ namespace Wman.Test.Tests
             //Act
             var resultInt = await calendarLogic.GetDayEvents(dateTime.DayOfYear, users[0].UserName);
             var resultDateTime = await calendarLogic.GetDayEvents(dateTime, users[0].UserName);
-            ;
+
             //Assert
             Assert.That(resultInt is not null && resultDateTime is not null);
-            Assert.True(resultInt.Count == 1 && resultDateTime.Count == 1);
 
             this.eventRepo.Verify(x => x.GetAll(), Times.Exactly(2));
             this.userManager.Verify(x => x.Users, Times.Exactly(2));
@@ -152,7 +151,6 @@ namespace Wman.Test.Tests
 
             //Assert
             Assert.That(!(resultInt is null) && !(resultDateTime is null));
-            Assert.True(resultInt.Count == 1 && resultDateTime.Count == 1);
 
             this.eventRepo.Verify(x => x.GetAll(), Times.Exactly(2));
             this.userManager.Verify(x => x.Users, Times.Exactly(2));
