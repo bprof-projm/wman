@@ -16,16 +16,15 @@ const WorkerToday = () => {
     const [calendarEvents, setCalendarEvents] = useState([]);
     const [workload, setWorkLoad] = useState();
 
-
     useEffect(() => {
         axios.get(`/Worker/myworkload`)
-            .then(response => setWorkLoad(response.data))
+            .then(response => setWorkLoad(response.data[0]))
             .catch(error => alert(error))
     }, [axios]);
 
     useEffect(() => {
         axios.get(`/CalendarEvent/GetCurrentDayEvents`)
-            .then(response => setCalendarEvents(response.data))            
+            .then(response => setCalendarEvents(response.data))
             .catch(error => alert(error))
     }, [axios]);
 
@@ -34,19 +33,20 @@ const WorkerToday = () => {
         event => event.assignedUsers.map(assigned => assigned.username).includes(decoded.sub));
 
     const showEmptyMessage = (filteredEvents.length === 0);
-    
 
     return (
         <div>
             <div className="events-of-the-day">
-                {(showEmptyMessage)
-                    ? null
-                    : <ProgressCard
-                        key={workload.userID}
-                        src={workload.profilePicUrl}
-                        name={workload.username}
-                        percent={workload.percent} />                        
+                <div className="my-workload">
+                    {(showEmptyMessage)
+                        ? null
+                        : <ProgressCard
+                            key={workload.userID}
+                            src={workload.profilePicUrl}
+                            name={workload.username}
+                            percent={workload.percent} />
                     }
+                </div>
 
                 <div className="one-day">
                     {showEmptyMessage
