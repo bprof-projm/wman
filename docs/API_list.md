@@ -1,43 +1,70 @@
 List of APIs
 ==
 
-| Method |                                               URI                                               |      Request body       |         Return object          |           Role           | Description |
-| :----: | :---------------------------------------------------------------------------------------------: | :---------------------: | :----------------------------: | :----------------------: | :---------: |
-|  PUT   |                                           /Auth/login                                           |    `LoginViewModel`     |            `Token`             |            -             |     Provides the login feature.     |
-|  GET   |                                            /Auth/all                                            |            -            |      `ICollection<User>`       |         `Admin`          |     Returns the list of every user.     |
-|  GET   |                               /Auth/username?username=`{string}`                                |            -            |             `User`             |     `Admin, Manager`     |     Returns a user specified by their username.     |
-|  GET   |                     /Auth/role/set?username=`{string}`&rolename=`{string}`                      |            -            |               -                |         `Admin`          |     Sets the role of a user and removes the previous roles they had.     |
-|  GET   |                             /Auth/role/members?rolename=`{string}`                              |            -            |      `ICollection<User>`       |         `Admin`          |     Returns the list of users that are in the specified role.     |
-|  GET   |                                            /Auth/db                                             |            -            |               -                |            -             |     Fills the database with test data.     |
-|  GET   |                               /CalendarEvent/GetCurrentDayEvents                                |            -            |    `ICollection<WorkCard>`     | `Admin, Manager, Worker` |     Returns today's workevents as a list.     |
-|  GET   |                               /CalendarEvent/GetCurrentWeekEvents                               |            -            |    `ICollection<WorkCard>`     | `Admin, Manager, Worker` |     Returns the actual week's workevents as a list.     |
-|  GET   |                               /CalendarEvent/GetDayEvents/`{int}`                               |            -            |    `ICollection<WorkCard>`     | `Admin, Manager, Worker` |     Returns the specified day's workevents as a list. The `int` value should be the day number of the year.     |
-|  GET   |                              /CalendarEvent/GetWeekEvents/`{int}`                               |            -            |    `ICollection<WorkCard>`     | `Admin, Manager, Worker` |     Returns the specified week's workevents as a list. The `int` value should be the week number of the year.     |
-|  GET   |                          /CalendarEvent/GetDayEvents?time=`2021-12-23`                          |            -            |    `ICollection<WorkCard>`     | `Admin, Manager, Worker` |     Returns the specified day's workevents as a list. The `time` value could be any DateTime format.     |
-|  GET   |      /CalendarEvent/GetWeekEvents?startEventDate=`2021-12-01`&finishEventDate=`2021-12-31`      |            -            |    `ICollection<WorkCard>`     | `Admin, Manager, Worker` |     Returns the list of the workevents between the specified time intervals. The `startEventDate` and `finishEventDate` values could be any DateTime format.     |
-|  GET   |                                 /CalendarEvent/WorkCard/`{int}`                                 |            -            |           `WorkCard`           | `Admin, Manager, Worker` |     Returns every data of the specified workevent containing labels, workers, address etc. The `int` value should be the workevent's `ID`.     |
-|  POST  |                                          /CreateEvent                                           |       `WorkEvent`       |               -                |        `Manager`         |     Creates a workevent declared in the request body.      |
-| DELETE |                                      /DeleteEvent/`{int}`                                       |            -            |               -                |     `Admin, Manager`     |     Deletes a specified workevent. The `int` value should be the workevent's `ID`.     |
-|  PUT   |                                        /DnDEvent/`{int}`                                        |        `DnDTime`        |               -                |     `Admin, Manager`     |     Modifies the specified workevent's `estimatedStartDate` and `estimatedFinishDate` according to the `DnDTime` values. The `int` value should be the workevent's `ID`.     |
-|  POST  |                        /Event/assign?eventid=`{int}`&userName=`{string}`                        |            -            |               -                |     `Admin, Manager`     |     Assigns a specific user to a specific workevent. The `int` value should be the workevent's `ID` and the `string` value should be the user's username.     |
-|  POST  |                                /Event/massAssign?eventid=`{int}`                                | `ICollection<username>` |               -                |     `Admin, Manager`     |     Assigns the users declared in the request body to a specific workevent. The `int` value should be the workevent's `ID`.     |
-|  PUT   |                                          /UpdateEvent                                           |    `WorkEventWithID`    |               -                |     `Admin, Manager`     |     Modifies the workevent declared in the request body.     |
-|  POST  |                                          /CreateLabel                                           |       `NewLabel`        |               -                |        `Manager`         |     Creates a label declared in the request body.     |
-|  GET   |                                          /GetAllLabel                                           |            -            |      `ICollection<Label>`      |        `Manager`         |     Returns every label as a list.     |
-|  PUT   |                                      /UpdateLabel/`{int}`                                       |       `NewLabel`        |               -                |        `Manager`         |     Modifies the label declared in the request body. The `int` value should be the label's `ID`.     |
-|  POST  |                     /AssignLabelToWorkEvent?eventId=`{int}`&labelId=`{int}`                     |            -            |               -                |        `Manager`         |     Assigns a specific label to a specific workevent. The first `int` value should be the workevent's `ID` and the second `int` value should be the label's `ID`.     |
-| DELETE |                                      /DeleteLabel/`{int}`                                       |            -            |               -                |        `Manager`         |     Deletes a specified label. The `int` value should be the label's `ID`.     |
-|  POST  |                               /Photo/AddProfilePhoto/`{string}`                               |       Image file        |            `Photo`             | `Admin, Manager, Worker` |     Adds a profile picture to the specified user. The `string` value should be the user's username.     |
-| DELETE |                             /Photo/RemoveProfilePhoto/`{string}`                              |            -            |               -                | `Admin, Manager, Worker` |     Removes the profile picture of the specified user. The `string` value should be the user's username.     |
-|  PUT   |                             /Photo/UpdateProfilePhoto/`{string}`                              |       Image file        |            `Photo`             | `Admin, Manager, Worker` |     Modifies the profile picture of the specified user. The `string` value should be the user's username.     |
-|  GET   | /User/workload/range?usernames=`{string}`&usernames=`{string}`&usernames=`{string}` |            -            |    `ICollection<Workload>`     |     `Admin, Manager`     |     Returns the list of workloads related to the specified users. The `string` values should be the usernames of the users.      |
-|  GET   |                                         /User/workload                                          |            -            |    `ICollection<Workload>`     |     `Admin, Manager`     |     Returns the list of workloads of every user.     |
-|  GET   |                             /User/workEvents?username=`{string}`                              |            -            | `ICollection<WorkEventWithID>` |     `Admin, Manager`     |     Returns every workevent as a list that assigned to the specified user. The `string` value should be the user's username.      |
-|  GET   |           /GetWorkersAvailablityAtSpecTime?fromDate=`2021-12-28`&toDate=`2021-12-31`            |            -            |      `ICollection<User>`       | `Admin, Manager, Worker` |     Returns the users (workers) as a list that available between the specified dates. The `fromDate` and `toDate` values could be any DateTime format.      |
+| Method |                                          URI                                          |       Request body        |      Return object      |           Role           |                                                                                                                                                               Description                                                                                                                                                                |
+| :----: | :-----------------------------------------------------------------------------------: | :-----------------------: | :---------------------: | :----------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|  POST  |                                     /Admin/Create                                     |    `RegisterViewModel`    |            -            |         `Admin`          |                                                                                                        Creates a new workforce (Manager or Worker). The `RegisterViewModel` should be bound using form-data in the request body.                                                                                                         |
+|  PUT   |                               /Admin/Modify/`{string}`                                | `WorkerModifierViewModel` |    `IdentityResult`     |         `Admin`          |                                                                Edits an existing workforce (Manager or Worker). The `WorkerModifierViewModel` should be bound using form-data in the request body. The `string` value should be the username of the workforce to modify.                                                                 |
+| DELETE |                           /Admin/Delete?username=`{string}`                           |             -             |    `IdentityResult`     |         `Admin`          |                                                                                                              Deletes a workforce (Manager or Worker). The `string` value should be the username of the workforce to delete.                                                                                                              |
+|  PUT   |                                      /Auth/login                                      |     `LoginViewModel`      |         `Token`         |            -             |                                                                                                                                                       Provides the login feature.                                                                                                                                                        |
+|  GET   |                                       /Auth/all                                       |             -             |   `ICollection<User>`   |         `Admin`          |                                                                                                                                                     Returns the list of every user.                                                                                                                                                      |
+|  GET   |                          /Auth/username?username=`{string}`                           |             -             |         `User`          |     `Admin, Manager`     |                                                                                                                                               Returns a user specified by their username.                                                                                                                                                |
+|  GET   |                        /Auth/role/members?rolename=`{string}`                         |             -             |   `ICollection<User>`   |         `Admin`          |                                                                                                                                        Returns the list of users that are in the specified role.                                                                                                                                         |
+|  GET   |                          /Auth/userrole?username=`{string}`                           |             -             |  `ICollection<string>`  |            -             |                                                                                                        Returns the list of roles that are assigned to the specified user. The `string` value in the query should be the username.                                                                                                        |
+|  GET   |                                       /Auth/db                                        |             -             |            -            |            -             |                                                           Fills the database with test data. It contains 6 users such as one Admin, two Managers and 3 Workers (usernames=[`admin`, `manager1`, `manager2`, `worker1`, `worker2`, `worker3`]). For further info ask @pop-simon                                                           |
+|  GET   |                          /CalendarEvent/GetCurrentDayEvents                           |             -             | `ICollection<WorkCard>` | `Admin, Manager, Worker` |                                                                     If the logged in user is a Manager or an Admin then returns every workevents of today as a list. If the logged in user is a Worker then it returns every assigned workevents of today as a list.                                                                     |
+|  GET   |                          /CalendarEvent/GetCurrentWeekEvents                          |             -             | `ICollection<WorkCard>` | `Admin, Manager, Worker` |                                                           If the logged in user is a Manager or an Admin then returns every workevents of the actual week as a list. If the logged in user is a Worker then it returns every assigned workevents of the actual week as a list.                                                           |
+|  GET   |                          /CalendarEvent/GetDayEvents/`{int}`                          |             -             | `ICollection<WorkCard>` | `Admin, Manager, Worker` |                              If the logged in user is a Manager or an Admin then returns every workevents of the specified day as a list. If the logged in user is a Worker then it returns every assigned workevents of the specified day as a list. The `int` value should be the day number of the year.                              |
+|  GET   |                         /CalendarEvent/GetWeekEvents/`{int}`                          |             -             | `ICollection<WorkCard>` | `Admin, Manager, Worker` |                            If the logged in user is a Manager or an Admin then returns every workevents of the specified week as a list. If the logged in user is a Worker then it returns every assigned workevents of the specified week as a list. The `int` value should be the week number of the year.                             |
+|  GET   |                     /CalendarEvent/GetDayEvents?time=`2021-12-23`                     |             -             | `ICollection<WorkCard>` | `Admin, Manager, Worker` |                                 If the logged in user is a Manager or an Admin then returns every workevents of the specified day as a list. If the logged in user is a Worker then it returns every assigned workevents of the specified day as a list. The `time` value could be any DateTime format.                                  |
+|  GET   | /CalendarEvent/GetWeekEvents?startEventDate=`2021-12-01`&finishEventDate=`2021-12-31` |             -             | `ICollection<WorkCard>` | `Admin, Manager, Worker` | If the logged in user is a Manager or an Admin then returns every workevents between the specified time intervals as a list. If the logged in user is a Worker then it returns every assigned workevents between the specified time intervals as a list. The `startEventDate` and `finishEventDate` values could be any DateTime format. |
+|  GET   |                            /CalendarEvent/WorkCard/`{int}`                            |             -             |       `WorkCard`        | `Admin, Manager, Worker` |                                                                                                  Returns every data of the specified workevent containing labels, workers, address etc. The `int` value should be the workevent's `ID`.                                                                                                  |
+|  POST  |                                     /CreateEvent                                      |        `WorkEvent`        |            -            |        `Manager`         |                                                                                                                                            Creates a workevent declared in the request body.                                                                                                                                             |
+| DELETE |                                 /DeleteEvent/`{int}`                                  |             -             |            -            |     `Admin, Manager`     |                                                                                                                              Deletes a specified workevent. The `int` value should be the workevent's `ID`.                                                                                                                              |
+|  PUT   |                                   /DnDEvent/`{int}`                                   |         `DnDTime`         |            -            |     `Admin, Manager`     |                                                                                   Modifies the specified workevent's `estimatedStartDate` and `estimatedFinishDate` according to the `DnDTime` values. The `int` value should be the workevent's `ID`.                                                                                   |
+|  POST  |                   /Event/assign?eventid=`{int}`&userName=`{string}`                   |             -             |            -            |     `Admin, Manager`     |                                                                                          Assigns a specific user to a specific workevent. The `int` value should be the workevent's `ID` and the `string` value should be the user's username.                                                                                           |
+|  POST  |                           /Event/massAssign?eventid=`{int}`                           |  `ICollection<username>`  |            -            |     `Admin, Manager`     |                                                                                                         Assigns the users declared in the request body to a specific workevent. The `int` value should be the workevent's `ID`.                                                                                                          |
+|  PUT   |                                     /UpdateEvent                                      |     `WorkEventWithID`     |            -            |     `Admin, Manager`     |                                                                                                                                           Modifies the workevent declared in the request body.                                                                                                                                           |
+|  POST  |                                     /CreateLabel                                      |        `NewLabel`         |            -            |        `Manager`         |                                                                                                                                              Creates a label declared in the request body.                                                                                                                                               |
+|  GET   |                                     /GetAllLabel                                      |             -             |  `ICollection<Label>`   |        `Manager`         |                                                                                                                                                      Returns every label as a list.                                                                                                                                                      |
+|  PUT   |                                 /UpdateLabel/`{int}`                                  |        `NewLabel`         |            -            |        `Manager`         |                                                                                                                       Modifies the label declared in the request body. The `int` value should be the label's `ID`.                                                                                                                       |
+|  POST  |                /AssignLabelToWorkEvent?eventId=`{int}`&labelId=`{int}`                |             -             |            -            |        `Manager`         |                                                                                      Assigns a specific label to a specific workevent. The first `int` value should be the workevent's `ID` and the second `int` value should be the label's `ID`.                                                                                       |
+| DELETE |                                 /DeleteLabel/`{int}`                                  |             -             |            -            |        `Manager`         |                                                                                                                                  Deletes a specified label. The `int` value should be the label's `ID`.                                                                                                                                  |
+|  POST  |                           /Photo/AddProfilePhoto/`{string}`                           |        Image file         |         `Photo`         | `Admin, Manager, Worker` |                                                                                                                     Adds a profile picture to the specified user. The `string` value should be the user's username.                                                                                                                      |
+| DELETE |                         /Photo/RemoveProfilePhoto/`{string}`                          |             -             |            -            | `Admin, Manager, Worker` |                                                                                                                   Removes the profile picture of the specified user. The `string` value should be the user's username.                                                                                                                   |
+|  PUT   |                         /Photo/UpdateProfilePhoto/`{string}`                          |        Image file         |         `Photo`         | `Admin, Manager, Worker` |                                                                                                                  Modifies the profile picture of the specified user. The `string` value should be the user's username.                                                                                                                   |
+|  GET   |  /User/workload/range?usernames=`{string}`&usernames=`{string}`&usernames=`{string}`  |             -             | `ICollection<Workload>` |     `Admin, Manager`     |                                                                                                         Returns the list of workloads related to the specified users. The `string` values should be the usernames of the users.                                                                                                          |
+|  GET   |                                    /User/workload                                     |             -             | `ICollection<Workload>` |     `Admin, Manager`     |                                                                                                                                               Returns the list of workloads of every user.                                                                                                                                               |
+|  GET   |                  /User/stats?username=`{string}`&date=`{2021-12-01}`                  |             -             |     `MonthlyStats`      |     `Admin, Manager`     |                  Returns the workloads of the specified user. The workload contains the 12 months of a year and the related working hours and workload percent. The `{string}` value should be the user's username and the `date` value could be any DateTime format. The `date` value must contain the year component.                  |
+|  GET   |      /GetWorkersAvailablityAtSpecTime?fromDate=`2021-12-28`&toDate=`2021-12-31`       |             -             |   `ICollection<User>`   | `Admin, Manager, Worker` |                                                                                            Returns the users (workers) as a list that available between the specified dates. The `fromDate` and `toDate` values could be any DateTime format.                                                                                            |
+|  GET   |                            /Worker/eventdetail?id=`{int}`                             |             -             |       `WorkCard`        | `Admin, Manager, Worker` |                                                                                                         Returns the specified workevent if it is assigned to the logged in user. The `int` value should be the workevent's `ID`.                                                                                                         |
+|  GET   |                                  /Worker/myworkload                                   |             -             |       `Workload`        | `Admin, Manager, Worker` |                                                                                                                                               Returns the workload of the logged in user.                                                                                                                                                |
 &nbsp;
 
 Models
 ==
+
+`RegisterViewModel` as JSON
+```json
+{
+    "username": "string",
+    "email": "user@example.com",
+    "password": "string",
+    "role": "string",
+    "firstname": "string",
+    "lastname": "string",
+    "phonenumber": "string",
+    "photo": "binary-string"
+}
+```
+
+`IdentityResult` as JSON
+```json
+{
+  "succeeded": true,
+  "errors": []
+}
+```
 
 `LoginViewModel` as JSON
 ```json
@@ -190,5 +217,64 @@ Models
     "username": "string",
     "profilePicUrl": "string",
     "percent": 0
+}
+```
+
+`MonthlyStats` as JSON
+```json
+{
+  "userID": 4,
+  "username": "worker1",
+  "profilePicUrl": "https://res.cloudinary.com/wmanproj/image/upload/v1640774841/default_profile_picture.png",
+  "monthlyStats": {
+    "January": {
+      "hours": 0,
+      "workloadPercent": 0
+    },
+    "February": {
+      "hours": 0,
+      "workloadPercent": 0
+    },
+    "March": {
+      "hours": 0,
+      "workloadPercent": 0
+    },
+    "April": {
+      "hours": 0,
+      "workloadPercent": 0
+    },
+    "May": {
+      "hours": 0,
+      "workloadPercent": 0
+    },
+    "June": {
+      "hours": 0,
+      "workloadPercent": 0
+    },
+    "July": {
+      "hours": 0,
+      "workloadPercent": 0
+    },
+    "August": {
+      "hours": 0,
+      "workloadPercent": 0
+    },
+    "September": {
+      "hours": 0,
+      "workloadPercent": 0
+    },
+    "October": {
+      "hours": 0,
+      "workloadPercent": 0
+    },
+    "November": {
+      "hours": 0,
+      "workloadPercent": 0
+    },
+    "December": {
+      "hours": 6,
+      "workloadPercent": 7
+    }
+  }
 }
 ```

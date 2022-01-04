@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using NUnit.Framework;
@@ -36,7 +35,6 @@ namespace Wman.Test.Tests
 
             this.users = UserManagerBuilder.GetWmanUsers();
             this.userManager = UserManagerBuilder.GetUserManager(users);
-
 
             this.pictureList = PhotoLogicBuilder.GetPictures();
             this.picturesRepo = PhotoLogicBuilder.GetPicturesRepo(pictureList);

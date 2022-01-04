@@ -209,6 +209,14 @@
             </summary>
             <returns>WorkLoadDTO</returns>
         </member>
+        <member name="M:Wman.WebAPI.Controllers.UserController.CalculateStats(System.String,System.DateTime)">
+            <summary>
+            Calculate the workload stats of a selected user, in the specified year
+            </summary>
+            <param name="username"></param>
+            <param name="date">Datetime, containing the year we're filtering to</param>
+            <returns></returns>
+        </member>
         <member name="T:Wman.WebAPI.Controllers.WorkerController">
             <summary>
             

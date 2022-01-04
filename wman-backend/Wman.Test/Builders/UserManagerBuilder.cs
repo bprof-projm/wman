@@ -29,6 +29,7 @@ namespace Wman.Test.Builders
             mgr.Setup(x => x.CheckPasswordAsync(It.IsAny<WmanUser>(), It.IsAny<string>())).ReturnsAsync(true);
 
             mgr.Setup(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>())).ReturnsAsync(true);
+            
             mgr.Setup(x => x.GetRolesAsync(It.IsAny<WmanUser>())).ReturnsAsync(new List<string> {
                 "Admin", "Debug", "Manager", "Worker" });
 
@@ -36,7 +37,12 @@ namespace Wman.Test.Builders
 
             return mgr;
         }
-
+        public static Mock<UserManager<WmanUser>> GetUserManagerWithFalseRoleCheck(List<WmanUser> userList)
+        {
+            var helper = GetUserManager(userList);
+            helper.Setup(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>())).ReturnsAsync(false);
+            return helper;
+        }
         public static List<WmanUser> GetWmanUsers()
         {
             List<WmanUser> users = new List<WmanUser>();

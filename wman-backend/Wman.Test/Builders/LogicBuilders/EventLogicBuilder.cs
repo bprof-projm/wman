@@ -1,9 +1,12 @@
-﻿using MockQueryable.Moq;
+﻿using Microsoft.AspNetCore.SignalR;
+using MockQueryable.Moq;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Wman.Data.DB_Models;
+using Wman.Logic.Services;
 using Wman.Repository.Interfaces;
 
 namespace Wman.Test.Builders.LogicBuilders
@@ -31,6 +34,25 @@ namespace Wman.Test.Builders.LogicBuilders
             eventRepo.Setup(x => x.GetOneWithTracking(It.IsAny<int>())).ReturnsAsync(eventList[0]);
 
             return eventRepo;
+        }
+
+        public static Mock<IHubContext<NotifyHub>> GetHubContext()
+        {
+            return new Mock<IHubContext<NotifyHub>>();
+        }
+
+        public static NotifyHub GetNotifyHub()
+        {
+            return new NotifyHub();
+        }
+
+        public static Mock<IEmailService> GetEmailService()
+        {
+            var mock = new Mock<IEmailService>();
+
+            mock.Setup(x => x.AssigedToWorkEvent(It.IsAny<WorkEvent>(), It.IsAny<WmanUser>())).Returns(Task.CompletedTask);
+            mock.Setup(x => x.WorkEventUpdated(It.IsAny<WorkEvent>(), It.IsAny<WmanUser>())).Returns(Task.CompletedTask);
+            return mock;
         }
 
         public static List<AddressHUN> GetAddresses()

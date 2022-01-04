@@ -1,8 +1,10 @@
 import React, { useState, useEffect, setState } from "react";
-import { Form, Input, Button, Select, DatePicker } from "antd";
+import { Form, Input, Button, DatePicker } from "antd";
 import "antd/dist/antd.css";
 import "./eventDetails.css";
 import moment from "moment";
+import Select from "react-select";
+import Cookies from "js-cookie";
 
 const { RangePicker } = DatePicker;
 const axios = require("axios").default;
@@ -19,9 +21,26 @@ const EventDetails = ({ workerEventId, workerEvent }) => {
   const [floorDoor, setFloorDoor] = useState(null);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [selectedOption, setSelectedOption] = useState([]);
+  const [options, setOptions] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`/GetAllLabel`, {
+        headers: { Authorization: `Bearer ${Cookies.get("auth")}` },
+      })
+      .then((response) => {
+        const ops = response.data.map((res) => ({
+          value: res.id,
+          label: res.content,
+        }));
+        console.log(ops);
+        setOptions(ops); /*  setOptions(response.data) */
+      })
+      .catch((error) => console.log(error));
+  }, [, axios]);
 
   const onFinish = (e) => {
-    console.log(e);
+    console.log(labelSelector.value);
     const data = {
       jobDescription: e.description,
       estimatedStartDate: e.rangePicker[0]._d.toJSON(),
@@ -60,12 +79,12 @@ const EventDetails = ({ workerEventId, workerEvent }) => {
     }
   };
 
-  //tesztelési szempont miatt hardCodeolni kellett a workerEvent értékét mert tomi mégmindig nincs kész a calendarral
-  //, ezt később ki kell szedni és a komponens meghívásánál meg kell hívni a getWorkerEventet és átadni a workerEventet paraméterként
+  // tesztelési szempont miatt hardCodeolni kellett a workerEvent értékét mert tomi mégmindig nincs kész a calendarral
+  // , ezt később ki kell szedni és a komponens meghívásánál meg kell hívni a getWorkerEventet és átadni a workerEventet paraméterként
   workerEvent = {
-    jobDescription: "heee",
-    estimatedStartDate: "2021-11-12T19:06:21.053Z",
-    estimatedFinishDate: "2021-11-12T20:06:21.053Z",
+    jobDescription: "React fejlesztés",
+    estimatedStartDate: "2021-11-26T19:06:21.053Z",
+    estimatedFinishDate: "2021-11-26T20:06:21.053Z",
     date: ["2021-11-12T19:06:21.053Z", "2021-11-12T20:06:21.053Z"],
     address: {
       city: "city",
@@ -77,8 +96,30 @@ const EventDetails = ({ workerEventId, workerEvent }) => {
     status: "awaiting",
   };
 
+  const SelectorOnChange = (e) => {
+    setSelectedOption(e.value);
+  };
+
+  const AddLabel = () => {
+    axios
+      .post(
+        `/AssignLabelToWorkEvent?eventId=` +
+          1 /*  workerEventId */ + //itt most hardcodeolva van az event id , ha kész a fooldal, dinamikus lesz
+          "&labelId=" +
+          selectedOption,
+        {
+          headers: { Authorization: `Bearer ${Cookies.get("auth")}` },
+        }
+      )
+      .then((response) => {
+        const filtered = options.map((op) => {
+          op.value !== selectedOption ? op : null;
+        });
+        console.log(filtered);
+      });
+  };
+
   if (workerEvent) {
-    console.log(workerEvent.jobDescription);
     return (
       <div className="card-container">
         <div className="card">
@@ -108,7 +149,7 @@ const EventDetails = ({ workerEventId, workerEvent }) => {
             </Form.Item>
 
             <Form.Item
-              label="RangePicker"
+              label="From-To"
               {...rangeConfig}
               name="rangePicker"
               rules={[
@@ -185,16 +226,31 @@ const EventDetails = ({ workerEventId, workerEvent }) => {
             </Form.Item>
 
             <Form.Item label="Button">
-              <Button type="primary" htmlType="submit">
-                Button
+              <Button type="primary" className="editEventBtn" htmlType="submit">
+                Edit
               </Button>
             </Form.Item>
           </Form>
         </div>
+        <div className="card">
+          <Select
+            name="labelSelector"
+            options={options}
+            onChange={SelectorOnChange}
+          />
+
+          <Button
+            onClick={AddLabel}
+            className="addLabelButton"
+            type="primary"
+            htmlType="submit"
+          >
+            Add
+          </Button>
+        </div>
       </div>
     );
   } else {
-    console.log("create");
     return (
       <div className="card-container">
         <div className="card">
@@ -237,7 +293,7 @@ const EventDetails = ({ workerEventId, workerEvent }) => {
 
             <Form.Item label="Button">
               <Button type="primary" htmlType="submit">
-                Button
+                Create
               </Button>
             </Form.Item>
           </Form>

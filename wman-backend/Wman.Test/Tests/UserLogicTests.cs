@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -68,6 +69,42 @@ namespace Wman.Test.Tests
         }
 
         [Test]
+        public async Task GetEventDetailsForWorker_ReturnsWorkEventProperly()
+        {
+            //Arrange
+            UserLogic userLogic = new(this.userManager.Object, this.mapper, this.eventRepo.Object);
+            string usernameToTest = users[0].UserName;
+            int idOfWorkEvent = eventList[0].Id;
+
+            //Act
+            var call = await userLogic.GetEventDetailsForWorker(usernameToTest, idOfWorkEvent);
+
+            //Assert
+            Assert.That(call.Id == users[0].WorkEvents.ElementAt(0).Id);
+            this.eventRepo.Verify(x => x.GetOne(It.IsAny<int>()), Times.Once);
+        }
+
+        [Test]
+        public async Task GetMonthlyStats_ReturnsStatsProperly()
+        {
+            //Arrange
+            UserLogic userLogic = new(this.userManager.Object, this.mapper, this.eventRepo.Object);
+            string usernameToTest = users[0].UserName;
+            DateTime inYear = new DateTime(2021, 10, 10);
+
+            //Act
+            var call = await userLogic.GetMonthlyStats(usernameToTest, inYear);
+
+            //Assert
+            Assert.That(call.Username == usernameToTest);
+
+            this.userManager.Verify(x => x.Users, Times.Once);
+        }
+
+        
+        /*
+         * DEPRECATED METHODS
+        [Test]
         public async Task WorkEventsOfUser_ReturnsWorkEventProperly()
         {
             //Arrange
@@ -80,6 +117,6 @@ namespace Wman.Test.Tests
             //Assert
             Assert.That(call.ElementAt(0).Id == users[0].WorkEvents.ElementAt(0).Id);
             this.userManager.Verify(x => x.Users, Times.Once);
-        }
+        }*/
     }
 }
