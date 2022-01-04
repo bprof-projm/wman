@@ -1,6 +1,8 @@
 import react, { useState } from "react";
 import OneLabel from "../one-label.component.jsx/one-label.component";
 import "./one-day-events-styles.css"
+import Moment from "react-moment";
+
 const OneDayEvents = (event) => {
 
     const [show, setShow] = useState(false);
@@ -21,11 +23,13 @@ const OneDayEvents = (event) => {
                     </tr>
                     <tr>
                         <th>Start:</th>
-                        <th>{event.event.estimatedStartDate}</th>
+                        <th>
+                            <Moment format="YYYY.MM.DD. HH:MM">{event.event.estimatedStartDate}</Moment>
+                        </th>
                     </tr>
                     <tr>
                         <th>Finish:</th>
-                        <th>{event.event.estimatedFinishDate}</th>
+                        <th> <Moment format="YYYY.MM.DD. HH:MM">{event.event.estimatedFinishDate}</Moment></th>
                     </tr>
                 </table>
 
@@ -54,13 +58,13 @@ const OneDayEvents = (event) => {
                         </tr>
                         <tr>
                             {(event.event.address.floorDoor === null) ? null : <th>Floor door:</th>}
-                            {(event.event.address.floorDoor === null) ? null : <th>{event.event.address.floorDoor}</th>}                           
-                            
+                            {(event.event.address.floorDoor === null) ? null : <th>{event.event.address.floorDoor}</th>}
+
                         </tr>
                         <tr>
                             {(event.event.labels.length === 0) ? null : <th colSpan='2'><b>Labels:</b></th>}
-                            
-                        </tr>                       
+
+                        </tr>
 
                     </table>
                     : null}

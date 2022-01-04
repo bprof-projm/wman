@@ -13,7 +13,10 @@ body{
 .label-container{
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: center;
     flex-wrap: wrap;
+    margin: auto;
 }
 .one-event th, tr{    
     text-align: center;
