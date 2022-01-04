@@ -24,12 +24,14 @@ const OneDayEvents = (event) => {
                     <tr>
                         <th>Start:</th>
                         <th>
-                            <Moment format="YYYY.MM.DD. HH:MM">{event.event.estimatedStartDate}</Moment>
+                            <Moment format="YYYY.MM.DD. HH:mm">{event.event.estimatedStartDate}</Moment>
                         </th>
                     </tr>
                     <tr>
                         <th>Finish:</th>
-                        <th> <Moment format="YYYY.MM.DD. HH:MM">{event.event.estimatedFinishDate}</Moment></th>
+                        <th>
+                            <Moment format="YYYY.MM.DD. HH:mm">{event.event.estimatedFinishDate}</Moment>
+                        </th>
                     </tr>
                 </table>
 
