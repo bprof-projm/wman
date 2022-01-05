@@ -34,9 +34,8 @@
 }
 
 .editEventBtn {
-  margin-bottom: 10px;
+  margin: auto;
 }
-
 .labelErrorMessage {
   color: red;
   margin-bottom: 0;

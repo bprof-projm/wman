@@ -163,7 +163,6 @@ const EventDetails = ({ workerEventId, workerEvent }) => {
       });
   };
   const AddWorker = () => {
-    console.log(selectedWorkerOption);
     axios
       .post(
         `Event/massAssign?eventid=3` /*  + workerEventId */,
@@ -284,7 +283,7 @@ const EventDetails = ({ workerEventId, workerEvent }) => {
               <Input />
             </Form.Item>
 
-            <Form.Item label="Button">
+            <Form.Item>
               <Button type="primary" className="editEventBtn" htmlType="submit">
                 Edit
               </Button>
