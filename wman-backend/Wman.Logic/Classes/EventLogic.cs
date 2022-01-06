@@ -376,7 +376,8 @@ namespace Wman.Logic.Classes
                 case Status.finished:
                     break;
                 default:
-                    break;
+                    throw new InvalidOperationException(WmanError.StatusWrong);
+                    
             }
             workevent.Status++;
             await eventRepo.SaveDatabase();

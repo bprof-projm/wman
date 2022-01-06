@@ -28,5 +28,6 @@ namespace Wman.Logic.Helpers
         public static string CantCreateAdmin = "Admins cannot be created/edited using this api!";
         public static string StatusFinished = "This event have already been finished";
         public static string StatusPowMissing = "This event can not be finished until you provide the proof of work photo(s)";
+        public static string StatusWrong = "This event is in fact the DEVIL";
     }
 }
