@@ -1,0 +1,12 @@
+.logo {
+    float: left;
+    width: 120px;
+    height: 31px;
+    color: white;
+    margin-right: 24px;
+    font-size: xx-large;
+}
+
+.site-layout .site-layout-background {
+    height: 100%;
+}

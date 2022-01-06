@@ -13,6 +13,7 @@ const Container = styled.div`
 
   dispaly: flex;
   flex-direction: column;
+  height: 89vh;
 `;
 const Title = styled.h3`
   padding: 8px;
@@ -23,7 +24,7 @@ const TaskList = styled.div`
   transition: background-color 0.2s ease;
   background-color: ${(props) => (props.isDraggingOver ? "skyblue" : "white")};
   flex-grow: 1;
-  height: 88vh;
+  height: 83vh;
 `;
 
 class ColumnComponent extends Component {
