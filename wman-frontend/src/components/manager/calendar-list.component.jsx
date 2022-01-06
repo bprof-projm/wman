@@ -3,17 +3,22 @@ import ReactDOM from "react-dom";
 import ColumnComponent from "./column.component.jsx";
 import { DragDropContext } from "react-beautiful-dnd";
 import styled from "styled-components";
+import { Layout, Menu } from "antd";
+import "./calendar-list.styles.css";
+
+const { Header, Content, Footer } = Layout;
 
 const Container = styled.div`
-  height: 99vh;
+  height: 100%;
   display: flex;
 `;
 
 class CalendarListComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { initialData: initialData, currentWeek: [] };
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = { initialData: initialData, currentWeek: [] };
+  // }
+  state = initialData;
 
   onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -82,35 +87,62 @@ class CalendarListComponent extends Component {
     this.setState(newState);
   };
 
-  generateListOfCurrentWeek() {
-    let curr = new Date();
-    let week = [];
+  // generateListOfCurrentWeek() {
+  //   let curr = new Date();
+  //   let week = [];
 
-    for (let i = 1; i <= 7; i++) {
-      let first = curr.getDate() - curr.getDay() + i;
-      let day = new Date(curr.setDate(first)).toISOString().slice(0, 10);
-      week.push(day);
-    }
+  //   for (let i = 1; i <= 7; i++) {
+  //     let first = curr.getDate() - curr.getDay() + i;
+  //     let day = new Date(curr.setDate(first)).toISOString().slice(0, 10);
+  //     week.push(day);
+  //   }
 
-    this.setState({ currentWeek: week });
-  }
+  //   this.setState({ currentWeek: week });
+  // }
 
   render() {
     return (
-      <DragDropContext onDragEnd={this.onDragEnd}>
-        <Container>
-          {this.state.columnOrder.map((columnId) => {
-            const column = this.state.columns[columnId];
-            const tasks = column.taskIds.map(
-              (taskId) => this.state.tasks[taskId]
-            );
+      <Layout>
+        <Header style={{ position: "fixed", zIndex: 1, width: "100%" }}>
+          <div className="logo">Wman</div>
+          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
+            <Menu.Item key="1">nav 1</Menu.Item>
+            <Menu.Item key="2">nav 2</Menu.Item>
+            <Menu.Item key="3">nav 3</Menu.Item>
+          </Menu>
+        </Header>
+        <Content
+          className="site-layout"
+          style={{ padding: "0 50px", marginTop: 64 }}
+        >
+          <div
+            className="site-layout-background"
+            style={{ padding: 24, minHeight: 380 }}
+          >
+            <DragDropContext onDragEnd={this.onDragEnd}>
+              <Container>
+                {this.state.columnOrder.map((columnId) => {
+                  const column = this.state.columns[columnId];
+                  const tasks = column.taskIds.map(
+                    (taskId) => this.state.tasks[taskId]
+                  );
 
-            return (
-              <ColumnComponent key={column.id} column={column} tasks={tasks} />
-            );
-          })}
-        </Container>
-      </DragDropContext>
+                  return (
+                    <ColumnComponent
+                      key={column.id}
+                      column={column}
+                      tasks={tasks}
+                    />
+                  );
+                })}
+              </Container>
+            </DragDropContext>
+          </div>
+        </Content>
+        {/* <Footer style={{ textAlign: "center" }}>
+          Ant Design ©2018 Created by Ant UED
+        </Footer> */}
+      </Layout>
     );
   }
 }
