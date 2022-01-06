@@ -4,6 +4,9 @@ import './progress-card.styles.css'
 
 //props needed: src, name, percent (workload)
 const ProgressCard = (props) => {
+    if( props.src == ""){
+        props.src = "../../../avatar-logo/wman_profpic_placeholder.png"
+    }
     return (
         <div className="progress-card-container">
             <div className="card-avatar">

@@ -14,13 +14,7 @@ const WorkerToday = () => {
     const token = Cookies.get("auth");
     const decoded = jwt_decode(token);
     const [calendarEvents, setCalendarEvents] = useState([]);
-    const [workload, setWorkLoad] = useState();
 
-    useEffect(() => {
-        axios.get(`/Worker/myworkload`)
-            .then(response => setWorkLoad(response.data[0]))
-            .catch(error => alert(error))
-    }, [axios]);
 
     useEffect(() => {
         axios.get(`/CalendarEvent/GetCurrentDayEvents`)
@@ -36,17 +30,7 @@ const WorkerToday = () => {
 
     return (
         <div>
-            <div className="events-of-the-day">
-                <div className="my-workload">
-                    {(showEmptyMessage)
-                        ? null
-                        : <ProgressCard
-                            key={workload.userID}
-                            src={workload.profilePicUrl}
-                            name={workload.username}
-                            percent={workload.percent} />
-                    }
-                </div>
+            <div className="events-of-the-day">                
 
                 <div className="one-day">
                     {showEmptyMessage
