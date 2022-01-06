@@ -23,3 +23,10 @@
 .select-intervall Button:active{
     transform: scale(0.9); 
 }
+.logout{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin-top:1vh;
+}

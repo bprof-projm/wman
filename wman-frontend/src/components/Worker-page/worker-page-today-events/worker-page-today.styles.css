@@ -4,6 +4,8 @@
 }
 .events-of-the-day h1{
     font-size: 25vw;
+    align-items: center;
+    justify-content: center;
 }
 body{
     background-color: ghostwhite;
@@ -15,6 +17,10 @@ body{
     margin-top: 1vh;
     cursor: pointer;
 }
+.my-workload{
+    width: 30vw ;
+    margin: auto;
+}
 
 @media screen and (max-width:600px) {
     .one-day{
@@ -22,4 +28,7 @@ body{
         flex-direction: column;
         margin: auto;
     }  
+    .my-workload{
+        width: 40vw;
+    }
    }
