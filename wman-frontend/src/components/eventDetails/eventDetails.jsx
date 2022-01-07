@@ -12,6 +12,21 @@ const rangeConfig = {
   rules: [{ type: "array", required: true, message: "Please select time!" }],
 };
 const EventDetails = ({ workerEventId, workerEvent }) => {
+  workerEvent = {
+    jobDescription: "React fejlesztés",
+    estimatedStartDate: "2021-11-26T19:06:21.053Z",
+    estimatedFinishDate: "2021-11-26T20:06:21.053Z",
+    date: ["2021-11-12T19:06:21.053Z", "2021-11-12T20:06:21.053Z"],
+    address: {
+      city: "city",
+      street: "street",
+      zipCode: "1022",
+      buildingNumber: "3",
+      floorDoor: "",
+    },
+    status: "awaiting",
+  };
+
   const [componentSize, setComponentSize] = useState("default");
   const [description, setDescription] = useState(null);
   const [city, setCity] = useState(null);
@@ -19,10 +34,14 @@ const EventDetails = ({ workerEventId, workerEvent }) => {
   const [zipCode, setZipCode] = useState(null);
   const [buildingNumber, setBuildingNumber] = useState(null);
   const [floorDoor, setFloorDoor] = useState(null);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [selectedOption, setSelectedOption] = useState([]);
-  const [options, setOptions] = useState([]);
+  const [startDate, setStartDate] = useState(workerEvent.estimatedStartDate);
+  const [endDate, setEndDate] = useState(workerEvent.estimatedFinishDate);
+  const [selectedLabelOption, setSelectedLabelOption] = useState([]);
+  const [labelOptions, setLabelOptions] = useState([]);
+  const [selectedWorkerOption, setSelectedWorkerOption] = useState([]);
+  const [workerOptions, setWorkerOptions] = useState([]);
+  const [showLabelErrorMessage, setShowLabeLErrorMessage] = useState(null);
+  const [showWorkerErrorMessage, setShowWorkerErrorMessage] = useState(null);
   useEffect(() => {
     axios
       .get(`/GetAllLabel`, {
@@ -34,13 +53,34 @@ const EventDetails = ({ workerEventId, workerEvent }) => {
           label: res.content,
         }));
         console.log(ops);
-        setOptions(ops); /*  setOptions(response.data) */
+        setLabelOptions(ops); /*  setOptions(response.data) */
       })
       .catch((error) => console.log(error));
   }, [, axios]);
 
+  useEffect(() => {
+    axios
+      .get(
+        `/GetWorkersAvailablityAtSpecTime?fromDate=` +
+          startDate +
+          `&toDate=` +
+          endDate,
+        {
+          headers: { Authorization: `Bearer ${Cookies.get("auth")}` },
+        }
+      )
+      .then((response) => {
+        const ops = response.data.map((res) => ({
+          value: res.username,
+          label: res.username,
+        }));
+        console.log(ops);
+        setWorkerOptions(ops);
+      })
+      .catch((error) => console.log(error));
+  }, [endDate]);
+
   const onFinish = (e) => {
-    console.log(labelSelector.value);
     const data = {
       jobDescription: e.description,
       estimatedStartDate: e.rangePicker[0]._d.toJSON(),
@@ -81,41 +121,58 @@ const EventDetails = ({ workerEventId, workerEvent }) => {
 
   // tesztelési szempont miatt hardCodeolni kellett a workerEvent értékét mert tomi mégmindig nincs kész a calendarral
   // , ezt később ki kell szedni és a komponens meghívásánál meg kell hívni a getWorkerEventet és átadni a workerEventet paraméterként
-  workerEvent = {
-    jobDescription: "React fejlesztés",
-    estimatedStartDate: "2021-11-26T19:06:21.053Z",
-    estimatedFinishDate: "2021-11-26T20:06:21.053Z",
-    date: ["2021-11-12T19:06:21.053Z", "2021-11-12T20:06:21.053Z"],
-    address: {
-      city: "city",
-      street: "street",
-      zipCode: "1022",
-      buildingNumber: "3",
-      floorDoor: "",
-    },
-    status: "awaiting",
-  };
 
   const SelectorOnChange = (e) => {
-    setSelectedOption(e.value);
+    setSelectedLabelOption(e.value);
+    setShowLabeLErrorMessage(null);
   };
 
-  const AddLabel = () => {
+  const workerSelectorOnChange = (e) => {
+    console.log(e);
+    const uNames = e.map((worker) => worker.value);
+    console.log(uNames);
+    setSelectedWorkerOption(uNames);
+    setShowWorkerErrorMessage(null);
+  };
+
+  const RangePickerOnChange = (e) => {
+    console.log(e);
+    setStartDate(e[0]._d.toJSON());
+    setEndDate(e[1]._d.toJSON());
+  };
+
+  const AddLabel = async () => {
     axios
       .post(
         `/AssignLabelToWorkEvent?eventId=` +
-          1 /*  workerEventId */ + //itt most hardcodeolva van az event id , ha kész a fooldal, dinamikus lesz
+          2 /*  workerEventId */ + //itt most hardcodeolva van az event id , ha kész a fooldal, dinamikus lesz
           "&labelId=" +
-          selectedOption,
+          selectedLabelOption,
         {
           headers: { Authorization: `Bearer ${Cookies.get("auth")}` },
         }
       )
       .then((response) => {
-        const filtered = options.map((op) => {
-          op.value !== selectedOption ? op : null;
+        const filtered = labelOptions.map((op) => {
+          op.value !== selectedLabelOption ? op : null;
         });
-        console.log(filtered);
+        setShowLabeLErrorMessage(null);
+      })
+      .catch((e) => {
+        setShowLabeLErrorMessage("show");
+      });
+  };
+  const AddWorker = () => {
+    axios
+      .post(
+        `Event/massAssign?eventid=3` /*  + workerEventId */,
+        selectedWorkerOption,
+        {
+          headers: { Authorization: `Bearer ${Cookies.get("auth")}` },
+        }
+      )
+      .catch((e) => {
+        setShowWorkerErrorMessage("show");
       });
   };
 
@@ -165,6 +222,7 @@ const EventDetails = ({ workerEventId, workerEvent }) => {
               ]}
             >
               <RangePicker
+                onChange={RangePickerOnChange}
                 defaultValue={[
                   moment(workerEvent.estimatedStartDate, "YYYY-MM-DD HH:mm:ss"),
                   moment(
@@ -177,7 +235,7 @@ const EventDetails = ({ workerEventId, workerEvent }) => {
               />
             </Form.Item>
 
-            <Form.Item label="Address"></Form.Item>
+            <label className="addressLabel">Address</label>
             <Form.Item
               label="City"
               name="city"
@@ -225,7 +283,7 @@ const EventDetails = ({ workerEventId, workerEvent }) => {
               <Input />
             </Form.Item>
 
-            <Form.Item label="Button">
+            <Form.Item>
               <Button type="primary" className="editEventBtn" htmlType="submit">
                 Edit
               </Button>
@@ -233,12 +291,40 @@ const EventDetails = ({ workerEventId, workerEvent }) => {
           </Form>
         </div>
         <div className="card">
+          Assign Workers
           <Select
             name="labelSelector"
-            options={options}
+            options={workerOptions}
+            onChange={workerSelectorOnChange}
+            isMulti
+            closeMenuOnSelect={false}
+          />
+          {showWorkerErrorMessage ? (
+            <p className="labelErrorMessage">
+              This worker is already assigned to this event
+            </p>
+          ) : null}
+          <Button
+            onClick={AddWorker}
+            className="addLabelButton"
+            type="primary"
+            htmlType="submit"
+          >
+            Add
+          </Button>
+        </div>
+        <div className="card">
+          Add Labels
+          <Select
+            name="labelSelector"
+            options={labelOptions}
             onChange={SelectorOnChange}
           />
-
+          {showLabelErrorMessage ? (
+            <p className="labelErrorMessage">
+              This label is already assigned to this event
+            </p>
+          ) : null}
           <Button
             onClick={AddLabel}
             className="addLabelButton"

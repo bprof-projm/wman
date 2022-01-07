@@ -9,8 +9,8 @@
   width: 80%;
   padding-top: 10px;
   padding-bottom: 10px;
-  padding-left: 55px;
   margin-bottom: 10px;
+  text-align: center;
   cursor: pointer;
   transform: translateZ(0);
   transition: transform 0.25s ease-out;
@@ -20,7 +20,7 @@
   transform: scale(1.05);
 }
 .card-name {
-  text-align: center;
+  margin: auto;
 }
 
 .card-delete {

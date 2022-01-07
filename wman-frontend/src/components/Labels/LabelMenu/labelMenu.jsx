@@ -98,7 +98,6 @@ const LabelsMenu = () => {
       content: e.Content,
     };
 
-    console.log(data);
     axios
       .put(`/UpdateLabel/` + editLabelId, data, {
         headers: { Authorization: `Bearer ${Cookies.get("auth")}` },
@@ -121,8 +120,6 @@ const LabelsMenu = () => {
       color: addLabelBackgroundColor,
       content: e.Content,
     };
-
-    console.log(data);
     axios
       .post(`/CreateLabel`, data, {
         headers: { Authorization: `Bearer ${Cookies.get("auth")}` },
