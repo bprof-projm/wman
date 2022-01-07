@@ -8,5 +8,8 @@ Chosen technologies in project WMAN
 `React`
 - Node.js v14.17.6 required (at initialization this was the LTS version)
 
+## Mobile
+`Flutter`
+
 ## Database
 `For development local MSSQL`
