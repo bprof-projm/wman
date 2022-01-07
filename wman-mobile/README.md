@@ -1,16 +1,39 @@
-# wman_mobile
+# WMAN Mobile
+<p align="center">
+<img src="./assets/wman_logo_teal.png" alt="wman logo" style="height: 200px; width: 200px;"/>
+</p>
 
-A new Flutter project.
+### Installation
 
-## Getting Started
+It requires flutter. For installation do the following:
+For Windows go here:
 
-This project is a starting point for a Flutter application.
+[https://docs.flutter.dev/get-started/install/windows](https://docs.flutter.dev/get-started/install/windows)
 
-A few resources to get you started if this is your first Flutter project:
+After the installation run the command:
+`flutter doctor`
+Make sure that all the dependencies are installed especially Android studio and the Android SDK.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+### Connecting an Android Device
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+If you are using a physical Android device:
+Running on localhost you need to port forward 5001 to 5001 using ADB.
+For ADB go here:
+
+[https://developer.android.com/studio/releases/platform-tools](https://developer.android.com/studio/releases/platform-tools)
+
+To port forward run the following command:
+`adb reverse tcp:5001 tcp:5001`
+
+ Also make sure to enable USB debugging on your device in the Developer settings.
+
+After connecting your device make sure it is available:
+`flutter devices`
+
+### Running the app
+For running  use the following commands:
+
+1. `flutter pub get`
+2. `flutter run`
+
+(you can use  the handler `-d` to select a certain device)
