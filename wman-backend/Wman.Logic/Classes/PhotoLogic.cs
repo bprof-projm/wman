@@ -22,14 +22,19 @@ namespace Wman.Logic.Classes
         UserManager<WmanUser> userManager;
         IPicturesRepo picturesRepo;
         IMapper mapper;
+        IWorkEventRepo workEventRepo;
+        IProofOfWorkRepo proofOfWorkRepo;
 
-        public PhotoLogic(IPhotoService photoService, UserManager<WmanUser> userManager, IPicturesRepo picturesRepo, IMapper mapper)
+        public PhotoLogic(IPhotoService photoService, UserManager<WmanUser> userManager, IPicturesRepo picturesRepo, IMapper mapper, IWorkEventRepo workEventRepo, IProofOfWorkRepo proofOfWorkRepo)
         {
             _photoService = photoService;
             this.userManager = userManager;
             this.picturesRepo = picturesRepo;
             this.mapper = mapper;
+            this.workEventRepo = workEventRepo;
+            this.proofOfWorkRepo = proofOfWorkRepo;
         }
+
         public async Task<PhotoDTO> AddProfilePhoto(string userName, IFormFile file)
         {
             var selectedUser = await (from x in userManager.Users
@@ -128,6 +133,59 @@ namespace Wman.Logic.Classes
 
             var photoResult = mapper.Map<PhotoDTO>(selectedUser.ProfilePicture);
             return photoResult;
+        }
+        public async Task<List<ProofOfWorkDTO>> AddProofOfWorkPhoto(int eventID, IFormFile file)
+        {
+            var selectedEvent = await workEventRepo.GetOne(eventID);
+            if (selectedEvent == null)
+            {
+                throw new NotFoundException(WmanError.EventNotFound);
+            }
+
+            var result = await _photoService.AddProofOfWorkPhotoAsync(file);
+            if (result.Error != null)
+            {
+                throw new ArgumentException(result.Error.Message);
+            }
+            var UploadedPicture = new ProofOfWork
+            {
+                Url = result.SecureUrl.AbsoluteUri,
+                CloudPhotoID = result.PublicId,
+                WorkEventID = eventID,
+                WorkEvents = selectedEvent
+
+            };
+            selectedEvent.ProofOfWorkPic.Add(UploadedPicture);
+            await proofOfWorkRepo.Add(UploadedPicture);
+
+            List<ProofOfWorkDTO> photoResult = new List<ProofOfWorkDTO>();
+            foreach (var item in selectedEvent.ProofOfWorkPic)
+            {
+                photoResult.Add(mapper.Map<ProofOfWorkDTO>(item));
+            }
+            return photoResult;
+        }
+        public async Task RemoveProofOfWorkPhoto(int eventID, string cloudCloudPhotoID)
+        {
+            var selectedEvent = await workEventRepo.GetOne(eventID);
+            if (selectedEvent == null)
+            {
+                throw new NotFoundException(WmanError.EventNotFound);
+            }
+
+            var selectedPhoto = await (from x in proofOfWorkRepo.GetAll()
+                                       where x.CloudPhotoID == cloudCloudPhotoID
+                                       select x).FirstOrDefaultAsync();
+            if (selectedPhoto == null)
+            {
+                throw new NotFoundException(WmanError.PhotoNotFound);
+            }
+
+            await _photoService.DeleteProfilePhotoAsync(cloudCloudPhotoID);
+
+            // remove picture data from db
+            await proofOfWorkRepo.Delete(selectedPhoto.Id);
+
         }
     }
 }

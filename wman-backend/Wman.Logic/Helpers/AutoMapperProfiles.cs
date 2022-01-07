@@ -34,6 +34,7 @@ namespace Wman.Logic.Helpers
                 .ForMember(dest => dest.BackgroundColor, x => x.MapFrom(src => src.Color))
                 .ForMember(dest => dest.TextColor, x => x.MapFrom(src => LabelLogic.InverseColor(src.Color)));
             CreateMap<Pictures, PhotoDTO>();
+            CreateMap<ProofOfWork, ProofOfWorkDTO>().ReverseMap();
         }
     }
 }

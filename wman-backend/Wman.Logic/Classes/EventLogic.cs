@@ -351,6 +351,58 @@ namespace Wman.Logic.Classes
                 throw new InvalidOperationException(WmanError.EventDateInvalid);
             }
         }
+        public async Task<WorkEventForWorkCardDTO> StatusUpdater(int eventId, string username)
+        {
+            var workevent = await eventRepo.GetOneWithTracking(eventId);
+
+            if (Status.finished == workevent.Status)
+            {
+                throw new InvalidOperationException(WmanError.StatusFinished);
+            }
+            if (Status.proofawait == workevent.Status && workevent.ProofOfWorkPic.Count == 0)
+            {
+                throw new InvalidOperationException(WmanError.StatusPowMissing);
+            }
+            switch (workevent.Status)
+            {
+                case Status.awaiting:
+                    workevent.WorkStartDate = DateTime.Now;
+                    break;
+                case Status.started:
+                    break;
+                case Status.proofawait:
+                    workevent.WorkFinishDate = DateTime.Now;
+                    break;
+                case Status.finished:
+                    break;
+                default:
+                    throw new InvalidOperationException(WmanError.StatusWrong);
+                    
+            }
+            workevent.Status++;
+            await eventRepo.SaveDatabase();
+
+            var notifyEvent = await eventRepo.GetOne(eventId);
+            var n = mapper.Map<WorkEventForWorkCardDTO>(notifyEvent);
+            var k = Newtonsoft.Json.JsonConvert.SerializeObject(n, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                StringEscapeHandling = StringEscapeHandling.Default,
+                Converters = { new Newtonsoft.Json.Converters.StringEnumConverter() }
+            });
+            foreach (var item in notifyEvent.AssignedUsers)
+            {
+                if (item.UserName != username)
+                {
+                    await _notifyHub.NotifyWorkerAboutOtherWorkerStateChange(item.UserName, k);
+                }
+
+            }
+
+
+            var workevent2 = await eventRepo.GetOne(eventId);
+            return mapper.Map<WorkEventForWorkCardDTO>(workevent2);
+        }
         private async Task<bool> WorkerTimeCheck(List<WmanUser> assignedUsers, DateTime startDate , DateTime finishDate)
         {
             if (assignedUsers.Count > 0)

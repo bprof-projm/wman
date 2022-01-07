@@ -67,7 +67,7 @@ namespace Wman.WebAPI
             //services.AddSingleton<IAuthorizationHandler, AllowAnonymous>(); //Uncommenting this will disable auth, for debugging purposes.
 #endif
 
-
+            services.AddTransient<IProofOfWorkRepo, ProofOfWorkRepo>();
             services.AddTransient<IWorkEventRepo, WorkEventRepo>();
             services.AddTransient<IPicturesRepo, PicturesRepo>();
             services.AddTransient<ILabelRepo, LabelRepo>();

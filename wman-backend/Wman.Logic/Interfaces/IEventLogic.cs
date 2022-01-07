@@ -21,5 +21,6 @@ namespace Wman.Logic.Interfaces
         Task<ICollection<UserDTO>> GetAllAssignedUsers(int eventID);
 
         Task MassAssignUser(int eventID, ICollection<string> usernames);
+        Task<WorkEventForWorkCardDTO> StatusUpdater(int eventId, string username);
     }
 }

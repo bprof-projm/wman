@@ -47,5 +47,17 @@ namespace Wman.WebAPI.Controllers
                 var result = await photoLogic.UpdateProfilePhoto(userName, file);
                 return Ok(result);
         }
+        [HttpPost("AddProofOfWorkPhoto/{eventId}")]
+        public async Task<ActionResult<PhotoDTO>> AddProofOfWorkPhoto(int eventId, IFormFile file)
+        {
+            var result = await photoLogic.AddProofOfWorkPhoto(eventId, file);
+            return Ok(result);
+        }
+        [HttpDelete("RemoveProofOfWorkPhoto")]
+        public async Task<ActionResult> RemoveProofOfWorkPhoto(int eventId,string cloudCloudPhotoID)
+        {
+            await photoLogic.RemoveProofOfWorkPhoto(eventId,cloudCloudPhotoID);
+            return Ok();
+        }
     }
 }

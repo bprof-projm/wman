@@ -40,5 +40,6 @@ namespace Wman.Data
         public virtual DbSet<Label> Label { get; set; }
         public virtual DbSet<AddressHUN> Address { get; set; }
         public virtual DbSet<Pictures> Picture { get; set; }
+        public virtual DbSet<ProofOfWork> ProofOfWork { get; set; }
     }
 }
