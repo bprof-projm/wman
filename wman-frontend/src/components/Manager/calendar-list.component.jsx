@@ -2,8 +2,14 @@ import React, { Component, useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import ColumnComponent from "./column.component.jsx";
 import { DragDropContext } from "react-beautiful-dnd";
-import styled from "styled-components";
+import PrintButton from "../Print-functionality/Print-button/print-button.component";
+import ProgressMenu from "../Worker-load/Progress-menu/progress-menu.component";
+import LabelsMenu from "../Labels/LabelMenu/labelMenu";
+import EventDetails from "../eventDetails/eventDetails";
+import { Logout } from "../Logout/logout.component";
 import { Layout, Menu } from "antd";
+
+import styled from "styled-components";
 import "./calendar-list.styles.css";
 
 const { Header, Content, Footer } = Layout;
@@ -102,47 +108,63 @@ class CalendarListComponent extends Component {
 
   render() {
     return (
-      <Layout>
-        <Header style={{ position: "fixed", zIndex: 1, width: "100%" }}>
-          <div className="logo">Wman</div>
-          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
-            <Menu.Item key="1">nav 1</Menu.Item>
-            <Menu.Item key="2">nav 2</Menu.Item>
-            <Menu.Item key="3">nav 3</Menu.Item>
-          </Menu>
-        </Header>
-        <Content
-          className="site-layout"
-          style={{ padding: "0 50px", marginTop: 64 }}
-        >
-          <div
-            className="site-layout-background"
-            style={{ padding: 24, minHeight: 380 }}
-          >
-            <DragDropContext onDragEnd={this.onDragEnd}>
-              <Container>
-                {this.state.columnOrder.map((columnId) => {
-                  const column = this.state.columns[columnId];
-                  const tasks = column.taskIds.map(
-                    (taskId) => this.state.tasks[taskId]
-                  );
+      <div>
+        <Layout>
+          <Header style={{ position: "fixed", zIndex: 1, width: "100%" }}>
+            <div className="logo">Wman</div>
+            {/* <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["1"]}>
+              <Menu.Item key="1">nav 1</Menu.Item>
+              <Menu.Item key="2">nav 2</Menu.Item>
+              <Menu.Item key="3">nav 3</Menu.Item>
+            </Menu> */}
+            <div className="logoutButton">
+              <Logout />
+            </div>
+          </Header>
 
-                  return (
-                    <ColumnComponent
-                      key={column.id}
-                      column={column}
-                      tasks={tasks}
-                    />
-                  );
-                })}
-              </Container>
-            </DragDropContext>
+          <div className="progressMenu">
+            <ProgressMenu />
           </div>
-        </Content>
-        {/* <Footer style={{ textAlign: "center" }}>
-          Ant Design ©2018 Created by Ant UED
-        </Footer> */}
-      </Layout>
+          <div className="labelsMenu">
+            <LabelsMenu />
+          </div>
+          <div className="printButton">
+            <PrintButton />
+          </div>
+
+          <Content
+            className="site-layout"
+            style={{ padding: "0 50px", marginTop: 64 }}
+          >
+            <div
+              className="site-layout-background"
+              style={{ padding: 24, minHeight: 380 }}
+            >
+              <DragDropContext onDragEnd={this.onDragEnd}>
+                <Container>
+                  {this.state.columnOrder.map((columnId) => {
+                    const column = this.state.columns[columnId];
+                    const tasks = column.taskIds.map(
+                      (taskId) => this.state.tasks[taskId]
+                    );
+
+                    return (
+                      <ColumnComponent
+                        key={column.id}
+                        column={column}
+                        tasks={tasks}
+                      />
+                    );
+                  })}
+                </Container>
+              </DragDropContext>
+            </div>
+          </Content>
+          {/* <Footer style={{ textAlign: "center" }}>
+            Ant Design ©2018 Created by Ant UED
+          </Footer> */}
+        </Layout>
+      </div>
     );
   }
 }
