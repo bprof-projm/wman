@@ -27,6 +27,12 @@ namespace Wman.Test.Tests
 
         private IFormFile file;
 
+        private List<ProofOfWork> proofList;
+        private Mock<IProofOfWorkRepo> proofOfWorkRepo;
+
+        private Mock<IWorkEventRepo> eventRepo;
+        private List<WorkEvent> eventList;
+
         [SetUp]
         public void SetUp()
         {
@@ -40,13 +46,19 @@ namespace Wman.Test.Tests
             this.picturesRepo = PhotoLogicBuilder.GetPicturesRepo(pictureList);
             
             this.file = FormFileBuilder.GetFormFile();
+
+            this.proofList = PhotoLogicBuilder.GetProofList();
+            this.proofOfWorkRepo = PhotoLogicBuilder.GetProofOfWorkRepo(proofList);
+
+            this.eventList = EventLogicBuilder.GetWorkEvents();
+            this.eventRepo = EventLogicBuilder.GetEventRepo(eventList);
         }
 
         [Test]
         public async Task AddProfilePhoto_AddNewPhoto_SuccessfulOperation()
         {
             //Arrange
-            PhotoLogic photoLogic = new(this.photoService.Object, this.userManager.Object, this.picturesRepo.Object, this.mapper);
+            PhotoLogic photoLogic = new(this.photoService.Object, this.userManager.Object, this.picturesRepo.Object, this.mapper, this.eventRepo.Object, this.proofOfWorkRepo.Object);
 
             //Act
             var call = await photoLogic.AddProfilePhoto(users[0].UserName, file);
@@ -62,7 +74,7 @@ namespace Wman.Test.Tests
         public async Task RemoveProfilePhoto_RemovedExistingPhoto_Successful()
         {
             //Arrange
-            PhotoLogic photoLogic = new(this.photoService.Object, this.userManager.Object, this.picturesRepo.Object, this.mapper);
+            PhotoLogic photoLogic = new(this.photoService.Object, this.userManager.Object, this.picturesRepo.Object, this.mapper, this.eventRepo.Object, this.proofOfWorkRepo.Object);
 
             //Act
             await photoLogic.RemoveProfilePhoto(users[0].UserName);
@@ -77,7 +89,7 @@ namespace Wman.Test.Tests
         public async Task UpdateProfilePhoto_UpdateExistingPhoto_Successful()
         {
             //Arrange
-            PhotoLogic photoLogic = new(this.photoService.Object, this.userManager.Object, this.picturesRepo.Object, this.mapper);
+            PhotoLogic photoLogic = new(this.photoService.Object, this.userManager.Object, this.picturesRepo.Object, this.mapper, this.eventRepo.Object, this.proofOfWorkRepo.Object);
 
             //Act
             var call = await photoLogic.UpdateProfilePhoto(users[0].UserName, file);
