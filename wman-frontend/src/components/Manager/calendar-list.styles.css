@@ -10,3 +10,19 @@
 .site-layout .site-layout-background {
     height: 100%;
 }
+.progressMenu{
+    position: absolute;
+    margin-top: 70px;
+}
+.labelsMenu{
+    position: absolute;
+    margin-top: 105px;
+}
+.printButton{
+    position: absolute;
+    margin-top: 140px;
+}
+
+.logoutButton{
+    float: right;
+}
