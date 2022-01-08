@@ -5,26 +5,26 @@ import { Droppable } from "react-beautiful-dnd";
 
 const Container = styled.div`
   margin: 8px;
-  border: 1px solid lightgray;
   border-radius: 2px;
   width: calc(100% / 7);
-  background-color: ${(props) =>
-    props.droppableId === "column-6" ? "skyblue" : "lightgrey"};
 
   dispaly: flex;
   flex-direction: column;
   height: 89vh;
+  overflow: auto;
 `;
 const Title = styled.h3`
-  padding: 8px;
   text-align: center;
+  font-size: 22px;
+  font-weight: bold;
 `;
 const TaskList = styled.div`
-  padding: 8px;
+  padding: 10px;
   transition: background-color 0.2s ease;
-  background-color: ${(props) => (props.isDraggingOver ? "skyblue" : "white")};
+  background-color: rgb(245, 246, 248);
   flex-grow: 1;
   height: 83vh;
+  border-radius: 16px;
 `;
 
 class ColumnComponent extends Component {

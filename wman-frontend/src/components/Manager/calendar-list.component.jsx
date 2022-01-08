@@ -163,7 +163,11 @@ class CalendarListComponent extends Component {
 
           <Content
             className="site-layout"
-            style={{ padding: "0 50px", marginTop: 64 }}
+            style={{
+              padding: "0 50px",
+              marginTop: 64,
+              backgroundColor: "white",
+            }}
           >
             <div
               className="site-layout-background"
