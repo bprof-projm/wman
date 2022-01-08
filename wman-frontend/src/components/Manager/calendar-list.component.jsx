@@ -19,6 +19,29 @@ const Container = styled.div`
   height: 100%;
   display: flex;
 `;
+const HeaderItems = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+const HeaderItemsRightSide = styled.div`
+  display: flex;
+  align-items: center;
+
+  & button {
+    margin-right: 10px;
+    color: white;
+  }
+
+  & button:hover,
+  & button:active,
+  & button:focus {
+    color: #1890ff;
+  }
+`;
+const HeaderItemsLeftSide = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
 const getEventsForDay = (events, day) => {
   return events
@@ -141,25 +164,17 @@ class CalendarListComponent extends Component {
         <Layout>
           <Header style={{ position: "fixed", zIndex: 1, width: "100%" }}>
             <div className="logo">Wman</div>
-            {/* <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["1"]}>
-              <Menu.Item key="1">nav 1</Menu.Item>
-              <Menu.Item key="2">nav 2</Menu.Item>
-              <Menu.Item key="3">nav 3</Menu.Item>
-            </Menu> */}
-            <div className="logoutButton">
-              <Logout />
-            </div>
+            <HeaderItems>
+              <HeaderItemsRightSide>
+                <ProgressMenu />
+                <LabelsMenu />
+                <PrintButton />
+              </HeaderItemsRightSide>
+              <HeaderItemsLeftSide>
+                <Logout />
+              </HeaderItemsLeftSide>
+            </HeaderItems>
           </Header>
-
-          <div className="progressMenu">
-            <ProgressMenu />
-          </div>
-          <div className="labelsMenu">
-            <LabelsMenu />
-          </div>
-          <div className="printButton">
-            <PrintButton />
-          </div>
 
           <Content
             className="site-layout"

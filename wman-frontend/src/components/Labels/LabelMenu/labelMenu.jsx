@@ -162,7 +162,9 @@ const LabelsMenu = () => {
 
   return (
     <div>
-      <Button shape="circle" icon={<TagsOutlined />} onClick={showMenu} />
+      <Button type="text" icon={<TagsOutlined />} onClick={showMenu}>
+        Labels
+      </Button>
 
       <Drawer
         title="Labels"
