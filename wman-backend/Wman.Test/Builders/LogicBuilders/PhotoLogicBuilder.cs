@@ -87,6 +87,10 @@ namespace Wman.Test.Builders.LogicBuilders
         {
             List<ProofOfWork> proofList = new();
 
+            proofList.Add(new ProofOfWork
+            {
+                Url=""
+            });
             return proofList;
         }
 
