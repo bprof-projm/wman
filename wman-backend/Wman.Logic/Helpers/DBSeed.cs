@@ -14,22 +14,16 @@ namespace Wman.Logic.Helpers
     public class DBSeed
     {
         IWorkEventRepo eventRepo;
-        IMapper mapper;
         IAddressRepo addressRepo;
-        IPicturesRepo picRepo;
         ILabelRepo labelRepo;
         UserManager<WmanUser> userManager;
-        wmanDb db;
 
-        public DBSeed(IWorkEventRepo eventRepo, IMapper mapper, IAddressRepo addressRepo, UserManager<WmanUser> userManager, IPicturesRepo picRepo, ILabelRepo labelRepo, wmanDb wmanDb)
+        public DBSeed(IWorkEventRepo eventRepo, IAddressRepo addressRepo, UserManager<WmanUser> userManager, ILabelRepo labelRepo)
         {
             this.eventRepo = eventRepo;
-            this.mapper = mapper;
             this.addressRepo = addressRepo;
             this.userManager = userManager;
-            this.picRepo = picRepo;
             this.labelRepo = labelRepo;
-            this.db = wmanDb;
         }
 
         /// <summary>
@@ -37,21 +31,10 @@ namespace Wman.Logic.Helpers
         /// </summary>
         public void PopulateDB()
         {
-#if DEBUG
             AddLabels();
             AddUsers();
             AddAddress();
-            AddProfilePicture();
             AddEvents();
-
-#else
-        throw new InvalidOperationException("API is not running in debug mode!");
-#endif
-        }
-
-        public void clearDB()
-        {
-            throw new NotImplementedException();
         }
 
         private void AddUsers()
@@ -359,22 +342,6 @@ namespace Wman.Logic.Helpers
                 Street = "Áprily Lajos tér",
                 BuildingNumber = "5"
             }).Wait();
-        }
-
-        private void AddProfilePicture()
-        {
-            foreach (var user in userManager.Users)
-            {
-                Pictures profPic = new()
-                {
-                    Name = "Default profile picture",
-                    CloudPhotoID = "default_profile_picture",
-                    Url = "https://res.cloudinary.com/wmanproj/image/upload/v1640774841/default_profile_picture.png",
-                    WmanUser = user,
-                    PicturesType = PicturesType.ProfilePic
-                };
-                picRepo.Add(profPic);
-            }
         }
 
         private void AddLabels()

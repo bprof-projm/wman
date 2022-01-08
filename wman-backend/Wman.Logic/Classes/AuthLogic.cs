@@ -62,7 +62,7 @@ namespace Wman.Logic.Classes
             }
             else if (model.LoginName != null)
             {
-                user = await userManager.FindByNameAsync(model.LoginName);
+                user = await userManager.Users.FirstOrDefaultAsync(name => model.LoginName == name.UserName);
             }
             if (user == null)
             {

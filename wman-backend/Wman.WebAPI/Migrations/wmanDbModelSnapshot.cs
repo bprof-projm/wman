@@ -80,6 +80,12 @@ namespace Wman.WebAPI.Migrations
                             Id = 3,
                             Name = "Worker",
                             NormalizedName = "WORKER"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "SystemAdmin",
+                            NormalizedName = "SYSTEMADMIN"
                         });
                 });
 
@@ -163,6 +169,13 @@ namespace Wman.WebAPI.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            RoleId = 4
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
@@ -359,6 +372,25 @@ namespace Wman.WebAPI.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "15630978-ac85-4d89-bdb4-29138a178cc0",
+                            Email = "random@mail.com",
+                            EmailConfirmed = false,
+                            FirstName = "System",
+                            LastName = "Admin",
+                            LockoutEnabled = false,
+                            PasswordHash = "AQAAAAEAACcQAAAAEOeEJCB0dxrmeIrSpGtmoc4mJ5UgeUnAc/I87SdRcFMSVdXrV63ugNx3txQCpbG36A==",
+                            PhoneNumber = "+1234567890",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "a83c4f29-a91e-4398-aac7-01f77e9d3f28",
+                            TwoFactorEnabled = false,
+                            UserName = "sysadmin"
+                        });
                 });
 
             modelBuilder.Entity("Wman.Data.DB_Models.WorkEvent", b =>
