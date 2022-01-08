@@ -1,13 +1,26 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
+import { Card, Avatar, Tooltip } from "antd";
+import Label from "../Labels/Label";
+import Moment from "react-moment";
 
-const Container = styled.div`
-  border: 1px solid lightgray;
-  border-radius: 2px;
-  padding: 8px;
-  margin-bottom: 8px;
-  background-color: ${(props) => (props.isDragging ? "lightgreen" : "white")};
+import "./event.styles.css";
+
+// const Container = styled.div`
+//   border: 1px solid lightgray;
+//   border-radius: 2px;
+//   padding: 8px;
+//   margin-bottom: 8px;
+//   background-color: ${(props) => (props.isDragging ? "lightgreen" : "white")};
+// `;
+const { Meta } = Card;
+
+const LabelList = styled.div`
+  margin-bottom: 15px;
+  & span {
+    margin-bottom: 8px;
+  }
 `;
 
 class Event extends Component {
@@ -18,14 +31,55 @@ class Event extends Component {
         index={this.props.index}
       >
         {(provided, snapshot) => (
-          <Container
+          <div
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             ref={provided.innerRef}
             isDragging={snapshot.isDragging}
           >
-            {this.props.event.jobDescription}
-          </Container>
+            <Card className="cardEvent">
+              <Meta
+                title={this.props.event.jobDescription}
+                description={
+                  <>
+                    <Moment format="HH:mm">
+                      {this.props.event.estimatedStartDate}
+                    </Moment>
+                    <span> - </span>
+                    <Moment format="HH:mm">
+                      {this.props.event.estimatedFinishDate}
+                    </Moment>
+                  </>
+                }
+                style={{ "margin-bottom": "15px" }}
+              />
+              <LabelList>
+                {this.props.event.labels.map((label) => (
+                  <Label
+                    key={label.id}
+                    name={label.content}
+                    backgroundColor={label.backgroundColor}
+                    textColor={label.textColor}
+                  />
+                ))}
+              </LabelList>
+              <Meta
+                avatar={
+                  <Avatar.Group
+                    maxCount={2}
+                    maxStyle={{
+                      color: "#f56a00",
+                      backgroundColor: "#fde3cf",
+                    }}
+                  >
+                    {this.props.event.assignedUsers.map((user) => (
+                      <Avatar src={user.profilePicture.url} />
+                    ))}
+                  </Avatar.Group>
+                }
+              />
+            </Card>
+          </div>
         )}
       </Draggable>
     );
