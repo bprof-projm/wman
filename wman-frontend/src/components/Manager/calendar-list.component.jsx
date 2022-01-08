@@ -251,7 +251,7 @@ const initialData = {
       eventIds: [],
     },
     sunday: {
-      id: "column-7",
+      id: "sunday",
       title: "Sunday",
       eventIds: [],
     },
