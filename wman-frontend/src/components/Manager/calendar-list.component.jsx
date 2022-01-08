@@ -1,23 +1,30 @@
-import React, { Component, useState, useEffect } from "react";
-import ReactDOM from "react-dom";
+import React, { Component } from "react";
 import ColumnComponent from "./column.component.jsx";
 import { DragDropContext } from "react-beautiful-dnd";
 import PrintButton from "../Print-functionality/Print-button/print-button.component";
 import ProgressMenu from "../Worker-load/Progress-menu/progress-menu.component";
 import LabelsMenu from "../Labels/LabelMenu/labelMenu";
-import EventDetails from "../eventDetails/eventDetails";
 import { Logout } from "../Logout/logout.component";
-import { Layout, Menu } from "antd";
+import { Layout, Button } from "antd";
 import axios from "axios";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 
 import styled from "styled-components";
 import "./calendar-list.styles.css";
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 
+const SiteLayout = styled(Content)`
+  padding: 24px 50px;
+  margin-top: 64px;
+  min-height: 380px;
+  display: flex;
+  background-color: white;
+`;
 const Container = styled.div`
   height: 100%;
   display: flex;
+  width: 100%;
 `;
 const HeaderItems = styled.div`
   display: flex;
@@ -50,10 +57,6 @@ const getEventsForDay = (events, day) => {
 };
 
 class CalendarListComponent extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = { initialData: initialData, currentWeek: [] };
-  // }
   state = initialData;
 
   componentDidMount() {
@@ -176,41 +179,28 @@ class CalendarListComponent extends Component {
             </HeaderItems>
           </Header>
 
-          <Content
-            className="site-layout"
-            style={{
-              padding: "0 50px",
-              marginTop: 64,
-              backgroundColor: "white",
-            }}
-          >
-            <div
-              className="site-layout-background"
-              style={{ padding: 24, minHeight: 380 }}
-            >
-              <DragDropContext onDragEnd={this.onDragEnd}>
-                <Container>
-                  {Object.keys(this.state.columns).map((columnId) => {
-                    const column = this.state.columns[columnId];
-                    const events = column.eventIds.map(
-                      (eventId) => this.state.events[eventId]
-                    );
+          <SiteLayout>
+            <Button shape="circle" size="large" icon={<LeftOutlined />} />
+            <DragDropContext onDragEnd={this.onDragEnd}>
+              <Container>
+                {Object.keys(this.state.columns).map((columnId) => {
+                  const column = this.state.columns[columnId];
+                  const events = column.eventIds.map(
+                    (eventId) => this.state.events[eventId]
+                  );
 
-                    return (
-                      <ColumnComponent
-                        key={column.id}
-                        column={column}
-                        events={events}
-                      />
-                    );
-                  })}
-                </Container>
-              </DragDropContext>
-            </div>
-          </Content>
-          {/* <Footer style={{ textAlign: "center" }}>
-            Ant Design ©2018 Created by Ant UED
-          </Footer> */}
+                  return (
+                    <ColumnComponent
+                      key={column.id}
+                      column={column}
+                      events={events}
+                    />
+                  );
+                })}
+              </Container>
+            </DragDropContext>
+            <Button shape="circle" size="large" icon={<RightOutlined />} />
+          </SiteLayout>
         </Layout>
       </div>
     );

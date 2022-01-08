@@ -4,7 +4,7 @@ import Event from "./event.component.jsx";
 import { Droppable } from "react-beautiful-dnd";
 
 const Container = styled.div`
-  margin: 8px;
+  margin: 0 8px 8px 8px;
   border-radius: 2px;
   width: calc(100% / 7);
 
