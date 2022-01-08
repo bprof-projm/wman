@@ -56,25 +56,7 @@ class CalendarListComponent extends Component {
     //TODO: order columns based on time
 
     if (start === finish) {
-      const newEventIds = Array.from(start.eventIds);
-      newEventIds.splice(source.index, 1);
-      newEventIds.splice(destination.index, 0, draggableId);
-
-      const newColumn = {
-        ...start,
-        eventIds: newEventIds,
-      };
-
-      const newState = {
-        ...this.state,
-        columns: {
-          ...this.state.columns,
-          [newColumn.id]: newColumn,
-        },
-      };
-
-      this.setState(newState);
-      return;
+      return; //Disable moving cards inside column
     }
 
     //Moving from one list to another
