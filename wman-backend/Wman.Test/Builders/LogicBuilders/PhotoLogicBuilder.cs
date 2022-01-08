@@ -71,12 +71,35 @@ namespace Wman.Test.Builders.LogicBuilders
             return pictureList;
         }
 
+        public static Mock<IProofOfWorkRepo> GetProofOfWorkRepo(List<ProofOfWork> proofList)
+        {
+            var repo = new Mock<IProofOfWorkRepo>();
+            var mock = proofList.AsQueryable().BuildMock();
+
+            repo.Setup(x => x.GetAll()).Returns(mock.Object);
+            repo.Setup(x => x.GetOne(It.IsAny<int>())).ReturnsAsync(proofList[0]);
+
+            return repo;
+        }
+
+        public static List<ProofOfWork> GetProofList() //just to avoid potential argument exception errors, doesnt serve much purpose
+        {
+            List<ProofOfWork> proofList = new();
+
+            proofList.Add(new ProofOfWork
+            {
+                Url=""
+            });
+            return proofList;
+        }
+
         public static Mock<IPhotoService> GetPhotoService()
         {
             var mock = new Mock<IPhotoService>();
 
             mock.Setup(x => x.AddProfilePhotoAsync(It.IsAny<IFormFile>())).Returns(TaskImageUploadHelper);
             mock.Setup(x => x.DeleteProfilePhotoAsync(It.IsAny<string>())).Returns(TaskDeletionHelper);
+            mock.Setup(x => x.AddProofOfWorkPhotoAsync(It.IsAny<IFormFile>())).Returns(TaskImageUploadHelper);
 
             return mock;
         }
