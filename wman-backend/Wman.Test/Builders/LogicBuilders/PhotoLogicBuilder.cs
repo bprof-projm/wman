@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.Services;
-using Wman.Repository.Classes;
 using Wman.Repository.Interfaces;
 
 namespace Wman.Test.Builders.LogicBuilders
@@ -83,7 +82,7 @@ namespace Wman.Test.Builders.LogicBuilders
             return repo;
         }
 
-        public static List<ProofOfWork> GetProofList()
+        public static List<ProofOfWork> GetProofList() //just to avoid potential argument exception errors, doesnt serve much purpose
         {
             List<ProofOfWork> proofList = new();
 
@@ -100,6 +99,7 @@ namespace Wman.Test.Builders.LogicBuilders
 
             mock.Setup(x => x.AddProfilePhotoAsync(It.IsAny<IFormFile>())).Returns(TaskImageUploadHelper);
             mock.Setup(x => x.DeleteProfilePhotoAsync(It.IsAny<string>())).Returns(TaskDeletionHelper);
+            mock.Setup(x => x.AddProofOfWorkPhotoAsync(It.IsAny<IFormFile>())).Returns(TaskImageUploadHelper);
 
             return mock;
         }
