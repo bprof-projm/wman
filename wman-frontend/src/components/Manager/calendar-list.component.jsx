@@ -8,6 +8,7 @@ import LabelsMenu from "../Labels/LabelMenu/labelMenu";
 import EventDetails from "../eventDetails/eventDetails";
 import { Logout } from "../Logout/logout.component";
 import { Layout, Menu } from "antd";
+import axios from "axios";
 
 import styled from "styled-components";
 import "./calendar-list.styles.css";
@@ -19,12 +20,22 @@ const Container = styled.div`
   display: flex;
 `;
 
+const getEventsForDay = (events, day) => {
+  return events
+    .filter((event) => new Date(event.estimatedStartDate).getDay() === day)
+    .map((event) => event.id);
+};
+
 class CalendarListComponent extends Component {
   // constructor(props) {
   //   super(props);
   //   this.state = { initialData: initialData, currentWeek: [] };
   // }
   state = initialData;
+
+  componentDidMount() {
+    this.fetchEvents();
+  }
 
   onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -45,13 +56,13 @@ class CalendarListComponent extends Component {
     //TODO: order columns based on time
 
     if (start === finish) {
-      const newTaskIds = Array.from(start.taskIds);
-      newTaskIds.splice(source.index, 1);
-      newTaskIds.splice(destination.index, 0, draggableId);
+      const newEventIds = Array.from(start.eventIds);
+      newEventIds.splice(source.index, 1);
+      newEventIds.splice(destination.index, 0, draggableId);
 
       const newColumn = {
         ...start,
-        taskIds: newTaskIds,
+        eventIds: newEventIds,
       };
 
       const newState = {
@@ -67,18 +78,18 @@ class CalendarListComponent extends Component {
     }
 
     //Moving from one list to another
-    const startTaskIds = Array.from(start.taskIds);
-    startTaskIds.splice(source.index, 1);
+    const startEventIds = Array.from(start.eventIds);
+    startEventIds.splice(source.index, 1);
     const newStart = {
       ...start,
-      taskIds: startTaskIds,
+      eventIds: startEventIds,
     };
 
-    const finishTaskIds = Array.from(finish.taskIds);
-    finishTaskIds.splice(destination.index, 0, draggableId);
+    const finishEventIds = Array.from(finish.eventIds);
+    finishEventIds.splice(destination.index, 0, draggableId);
     const newFinish = {
       ...finish,
-      taskIds: finishTaskIds,
+      eventIds: finishEventIds,
     };
 
     const newState = {
@@ -93,18 +104,54 @@ class CalendarListComponent extends Component {
     this.setState(newState);
   };
 
-  // generateListOfCurrentWeek() {
-  //   let curr = new Date();
-  //   let week = [];
-
-  //   for (let i = 1; i <= 7; i++) {
-  //     let first = curr.getDate() - curr.getDay() + i;
-  //     let day = new Date(curr.setDate(first)).toISOString().slice(0, 10);
-  //     week.push(day);
-  //   }
-
-  //   this.setState({ currentWeek: week });
-  // }
+  fetchEvents = async () => {
+    this.setState({ loading: true });
+    const events = await axios
+      .get(`/CalendarEvent/GetCurrentWeekEvents`)
+      .then((response) => response.data);
+    this.setState({ loading: false });
+    this.setState({
+      events: events.reduce(
+        (groupedEvents, event) => ({
+          ...groupedEvents,
+          [event.id]: event,
+        }),
+        {}
+      ),
+    });
+    this.setState((state) => ({
+      columns: {
+        monday: {
+          ...state.columns.monday,
+          eventIds: getEventsForDay(events, 1),
+        },
+        tuesday: {
+          ...state.columns.tuesday,
+          eventIds: getEventsForDay(events, 2),
+        },
+        wednesday: {
+          ...state.columns.wednesday,
+          eventIds: getEventsForDay(events, 3),
+        },
+        thursday: {
+          ...state.columns.thursday,
+          eventIds: getEventsForDay(events, 4),
+        },
+        friday: {
+          ...state.columns.friday,
+          eventIds: getEventsForDay(events, 5),
+        },
+        saturday: {
+          ...state.columns.saturday,
+          eventIds: getEventsForDay(events, 6),
+        },
+        sunday: {
+          ...state.columns.sunday,
+          eventIds: getEventsForDay(events, 0),
+        },
+      },
+    }));
+  };
 
   render() {
     return (
@@ -142,17 +189,17 @@ class CalendarListComponent extends Component {
             >
               <DragDropContext onDragEnd={this.onDragEnd}>
                 <Container>
-                  {this.state.columnOrder.map((columnId) => {
+                  {Object.keys(this.state.columns).map((columnId) => {
                     const column = this.state.columns[columnId];
-                    const tasks = column.taskIds.map(
-                      (taskId) => this.state.tasks[taskId]
+                    const events = column.eventIds.map(
+                      (eventId) => this.state.events[eventId]
                     );
 
                     return (
                       <ColumnComponent
                         key={column.id}
                         column={column}
-                        tasks={tasks}
+                        events={events}
                       />
                     );
                   })}
@@ -170,64 +217,45 @@ class CalendarListComponent extends Component {
 }
 
 const initialData = {
-  tasks: {
-    "task-1": { id: "task-1", content: "task" },
-    "task-2": { id: "task-2", content: "task2" },
-    "task-3": { id: "task-3", content: "task3" },
-    "task-4": { id: "task-4", content: "task4" },
-  },
+  loading: false,
+  events: {},
   columns: {
-    "column-1": {
-      id: "column-1",
+    monday: {
+      id: "monday",
       title: "Monday",
-      taskIds: ["task-1", "task-2", "task-3", "task-4"],
+      eventIds: [],
     },
-
-    "column-2": {
-      id: "column-2",
+    tuesday: {
+      id: "tuesday",
       title: "Tuesday",
-      taskIds: [],
+      eventIds: [],
     },
-
-    "column-3": {
-      id: "column-3",
+    wednesday: {
+      id: "wednesday",
       title: "Wednesday",
-      taskIds: [],
+      eventIds: [],
     },
-
-    "column-4": {
-      id: "column-4",
+    thursday: {
+      id: "thursday",
       title: "Thursday",
-      taskIds: [],
+      eventIds: [],
     },
-
-    "column-5": {
-      id: "column-5",
+    friday: {
+      id: "friday",
       title: "Friday",
-      taskIds: [],
+      eventIds: [],
     },
-
-    "column-6": {
-      id: "column-6",
+    saturday: {
+      id: "saturday",
       title: "Saturday",
-      taskIds: [],
+      eventIds: [],
     },
-
-    "column-7": {
+    sunday: {
       id: "column-7",
       title: "Sunday",
-      taskIds: [],
+      eventIds: [],
     },
   },
-  columnOrder: [
-    "column-1",
-    "column-2",
-    "column-3",
-    "column-4",
-    "column-5",
-    "column-6",
-    "column-7",
-  ],
 };
 
 export default CalendarListComponent;

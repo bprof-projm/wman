@@ -10,10 +10,13 @@ const Container = styled.div`
   background-color: ${(props) => (props.isDragging ? "lightgreen" : "white")};
 `;
 
-class TaskComponent extends Component {
+class Event extends Component {
   render() {
     return (
-      <Draggable draggableId={this.props.task.id} index={this.props.index}>
+      <Draggable
+        draggableId={String(this.props.event.id)}
+        index={this.props.index}
+      >
         {(provided, snapshot) => (
           <Container
             {...provided.draggableProps}
@@ -21,7 +24,7 @@ class TaskComponent extends Component {
             ref={provided.innerRef}
             isDragging={snapshot.isDragging}
           >
-            {this.props.task.content}
+            {this.props.event.jobDescription}
           </Container>
         )}
       </Draggable>
@@ -29,4 +32,4 @@ class TaskComponent extends Component {
   }
 }
 
-export default TaskComponent;
+export default Event;

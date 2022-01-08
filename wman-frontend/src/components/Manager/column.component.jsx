@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import Task from "./task.component.jsx";
+import Event from "./event.component.jsx";
 import { Droppable } from "react-beautiful-dnd";
 
 const Container = styled.div`
@@ -39,8 +39,8 @@ class ColumnComponent extends Component {
               {...provided.droppableProps}
               isDraggingOver={snapshot.isDraggingOver}
             >
-              {this.props.tasks.map((task, index) => (
-                <Task key={task.id} task={task} index={index} />
+              {this.props.events.map((event, index) => (
+                <Event key={event.id} event={event} index={index} />
               ))}
               {provided.placeholder}
             </TaskList>
