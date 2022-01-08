@@ -41,22 +41,22 @@ export const NormalLoginForm = () => {
   };
 
   const navigateUser = (user) => {
-    console.log(user)
-    axios.get(`/Auth/userrole?username=${user}`, { headers: { 'Authorization': `Bearer ${Cookies.get("auth")}` } })
+    console.log(user);
+    axios
+      .get(`/Auth/userrole?username=${user}`, {
+        headers: { Authorization: `Bearer ${Cookies.get("auth")}` },
+      })
       .then((response) => {
-        if (response.data[0] == 'Manager') {
-          history.push("/");
-        }
-        else if (response.data[0] == 'Worker') {
-          history.push("/worker")
-        }
-        else{
-          alert("something went wrong, check the navigateUser function!")
+        if (response.data[0] == "Manager") {
+          history.push("/calendar");
+        } else if (response.data[0] == "Worker") {
+          history.push("/worker");
+        } else {
+          alert("something went wrong, check the navigateUser function!");
         }
       })
-      .catch(error => console.log(error));
-
-  }
+      .catch((error) => console.log(error));
+  };
 
   return (
     <div className="login-background" style={{ height: "100vh" }}>
