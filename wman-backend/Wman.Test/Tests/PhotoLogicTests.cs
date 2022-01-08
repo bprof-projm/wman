@@ -117,5 +117,20 @@ namespace Wman.Test.Tests
             this.photoService.Verify(x => x.AddProofOfWorkPhotoAsync(It.IsAny<FormFile>()), Times.Once);
             this.proofOfWorkRepo.Verify(x => x.Add(It.IsAny<ProofOfWork>()), Times.Once);
         }
+
+        [Test]
+        public async Task RemoveProofOfWorkPhoto_SuccessfulRemoval()
+        {
+            //Arrange
+            PhotoLogic photoLogic = new(this.photoService.Object, this.userManager.Object, this.picturesRepo.Object, this.mapper, this.eventRepo.Object, this.proofOfWorkRepo.Object);
+
+            //Act
+            var call = photoLogic.RemoveProofOfWorkPhoto(eventList[0].Id, pictureList[0].CloudPhotoID);
+
+            //Assert
+            this.eventRepo.Verify(x => x.GetOne(It.IsAny<int>()), Times.Once);
+            this.photoService.Verify(x => x.DeleteProfilePhotoAsync(It.IsAny<string>()), Times.Once);
+            this.proofOfWorkRepo.Verify(x => x.Delete(It.IsAny<int>()), Times.Once);
+        }
     }
 }
