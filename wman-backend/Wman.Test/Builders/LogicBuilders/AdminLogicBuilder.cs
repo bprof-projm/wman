@@ -13,8 +13,13 @@ namespace Wman.Test.Builders.LogicBuilders
             var picturesRepo = PhotoLogicBuilder.GetPicturesRepo(pictureList);
             var photoService = PhotoLogicBuilder.GetPhotoService();
 
+            var workeventList = EventLogicBuilder.GetWorkEvents();
+            var workeventRepo = EventLogicBuilder.GetEventRepo(workeventList);
 
-            return new PhotoLogic(photoService.Object, userManager, picturesRepo.Object, mapper);
+            var prooflist = PhotoLogicBuilder.GetProofList();
+            var proofOfWorkRepo = PhotoLogicBuilder.GetProofOfWorkRepo(prooflist);
+
+            return new PhotoLogic(photoService.Object, userManager, picturesRepo.Object, mapper, workeventRepo.Object, proofOfWorkRepo.Object);
         }
     }
 }

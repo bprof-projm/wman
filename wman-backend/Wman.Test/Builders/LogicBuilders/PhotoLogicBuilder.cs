@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.Services;
+using Wman.Repository.Classes;
 using Wman.Repository.Interfaces;
 
 namespace Wman.Test.Builders.LogicBuilders
@@ -69,6 +70,24 @@ namespace Wman.Test.Builders.LogicBuilders
             });
 
             return pictureList;
+        }
+
+        public static Mock<IProofOfWorkRepo> GetProofOfWorkRepo(List<ProofOfWork> proofList)
+        {
+            var repo = new Mock<IProofOfWorkRepo>();
+            var mock = proofList.AsQueryable().BuildMock();
+
+            repo.Setup(x => x.GetAll()).Returns(mock.Object);
+            repo.Setup(x => x.GetOne(It.IsAny<int>())).ReturnsAsync(proofList[0]);
+
+            return repo;
+        }
+
+        public static List<ProofOfWork> GetProofList()
+        {
+            List<ProofOfWork> proofList = new();
+
+            return proofList;
         }
 
         public static Mock<IPhotoService> GetPhotoService()
