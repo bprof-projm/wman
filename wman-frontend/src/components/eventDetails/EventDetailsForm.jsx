@@ -29,8 +29,9 @@ function tagRender(props) {
 const EventDetailsForm = ({ form, initialValues, labels }) => {
   const [workers, setWorkers] = useState([]);
   const fetchWorkers = async (from, to) => {
-    const fromDate = moment(from).format("YYYY-MM-DDTHH:MM");
-    const toDate = moment(to).format("YYYY-MM-DDTHH:MM");
+    console.log(from, to)
+    const fromDate = encodeURIComponent(moment(from).format());
+    const toDate = encodeURIComponent(moment(to).format());
 
     return axios
       .get(
@@ -80,7 +81,7 @@ const EventDetailsForm = ({ form, initialValues, labels }) => {
           showTime
           format={"YYYY-MM-DD HH:mm"}
           showTime={{ format: "HH:mm" }}
-          onChange={([from, to]) => fetchWorkers(from, to)}
+          onChange={values => values ? fetchWorkers(values[0], values[1]) : setWorkers([])}
         />
       </Form.Item>
 
