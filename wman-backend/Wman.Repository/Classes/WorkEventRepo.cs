@@ -66,6 +66,7 @@ namespace Wman.Repository.Classes
             oldWorkEvent.EstimatedStartDate = element.EstimatedStartDate;
             oldWorkEvent.EstimatedFinishDate = element.EstimatedFinishDate;
             oldWorkEvent.AssignedUsers = element.AssignedUsers;
+            oldWorkEvent.Address = element.Address;
             await this.db.SaveChangesAsync();
         }
     }
