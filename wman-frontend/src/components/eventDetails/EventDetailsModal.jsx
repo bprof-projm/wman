@@ -3,91 +3,8 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import EventDetailsForm from "./EventDetailsForm";
+import axios from 'axios';
 
-const eventData = {
-  id: 7,
-  jobDescription: "Example event #6",
-  estimatedStartDate: "2022-01-05T07:00:00",
-  estimatedFinishDate: "2022-01-05T09:00:00",
-  assignedUsers: [
-    {
-      username: "worker1",
-      email: "sulaiman.eklund@gmail.com",
-      firstname: "Sulaiman",
-      lastname: "Eklund",
-      profilePicture: {
-        cloudPhotoID: "default_profile_picture",
-        url: "https://res.cloudinary.com/wmanproj/image/upload/v1640774841/default_profile_picture.png",
-        wManUserID: 4,
-      },
-      phoneNumber: "+3489717652",
-    },
-    {
-      username: "worker2",
-      email: "delfred@mail.com",
-      firstname: "Delma",
-      lastname: "Fredriksson",
-      profilePicture: {
-        cloudPhotoID: "default_profile_picture",
-        url: "https://res.cloudinary.com/wmanproj/image/upload/v1640774841/default_profile_picture.png",
-        wManUserID: 5,
-      },
-      phoneNumber: "+6287419537",
-    },
-  ],
-  labels: [
-    {
-      id: 1,
-      backgroundColor: "#E70000",
-      textColor: "#18ffff",
-      content: "ASAP",
-    },
-    {
-      id: 2,
-      backgroundColor: "#2986CC",
-      textColor: "#d67933",
-      content: "Plumber required",
-    },
-    {
-      id: 3,
-      backgroundColor: "#8FCE00",
-      textColor: "#7031ff",
-      content: "Gasfitter required",
-    },
-  ],
-  address: {
-    city: "Budapest",
-    street: "Bécsi út",
-    zipCode: 1034,
-    buildingNumber: "104-108.",
-    floorDoor: null,
-  },
-  workStartDate: "2022-01-05T07:30:00",
-  workFinishDate: "2022-01-05T10:00:00",
-  proofOfWorkPic: [],
-  status: "finished",
-};
-
-const labels = [
-  {
-    id: 1,
-    backgroundColor: "#E70000",
-    textColor: "#18ffff",
-    content: "ASAP",
-  },
-  {
-    id: 2,
-    backgroundColor: "#2986CC",
-    textColor: "#d67933",
-    content: "Plumber required",
-  },
-  {
-    id: 3,
-    backgroundColor: "#8FCE00",
-    textColor: "#7031ff",
-    content: "Gasfitter required",
-  },
-];
 const workers = [
   {
     username: "worker1",
@@ -135,18 +52,26 @@ const EventDetailsModal = ({ eventId, onClose }) => {
   const [eventDetails, setEventDetails] = useState(initialState.eventDetails);
   const [loading, setLoading] = useState(initialState.loading);
   const [openForm, setOpenForm] = useState(initialState.openForm);
+  const [availableLabels, setAvailableLabels] = useState([])
 
   const [form] = Form.useForm();
 
   useEffect(async () => {
-    //fetch event data
+    setLoading(true);
+
+    const requests = [
+      axios.get('/GetAllLabel').then(res => res.data),
+    ]
+
     if (eventId) {
-      setLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      setLoading(false);
-      setEventDetails(eventData);
+      requests.push(axios.get(`/CalendarEvent/WorkCard/${eventId}`).then(res => res.data));
     }
 
+    const [labels, event] = await Promise.all(requests)
+
+    if (event) setEventDetails(event);
+    setAvailableLabels(labels);
+    setLoading(false);
     setOpenForm(true);
   }, []);
 
@@ -204,7 +129,7 @@ const EventDetailsModal = ({ eventId, onClose }) => {
         <EventDetailsForm
           form={form}
           initialValues={eventDetails}
-          labels={labels}
+          labels={availableLabels}
           workers={workers}
         />
       )}
