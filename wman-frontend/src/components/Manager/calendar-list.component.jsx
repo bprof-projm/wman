@@ -286,6 +286,7 @@ class CalendarListComponent extends Component {
                       key={column.id}
                       column={column}
                       events={events}
+                      onCardClick={eventId => this.setState({ modalVisible: true, eventId })}
                     />
                   );
                 })}
@@ -300,7 +301,7 @@ class CalendarListComponent extends Component {
           </SiteLayout>
         </Layout>
         {this.state.modalVisible && (
-          <EventDetailsModal onClose={() => this.setState({ modalVisible: false, eventId: null })} />
+          <EventDetailsModal eventId={this.state.eventId} onClose={() => this.setState({ modalVisible: false, eventId: null })} />
         )}
       </div>
     );

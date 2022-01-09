@@ -42,7 +42,7 @@ class ColumnComponent extends Component {
               isDraggingOver={snapshot.isDraggingOver}
             >
               {this.props.events.map((event, index) => (
-                <Event key={event.id} event={event} index={index} />
+                <Event key={event.id} event={event} index={index} onCardClick={this.props.onCardClick} />
               ))}
               {provided.placeholder}
             </TaskList>

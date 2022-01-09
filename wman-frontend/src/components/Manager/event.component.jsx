@@ -37,7 +37,7 @@ class Event extends Component {
             ref={provided.innerRef}
             isDragging={snapshot.isDragging}
           >
-            <Card className="cardEvent">
+            <Card className="cardEvent" onClick={() => this.props.onCardClick(this.props.event.id)}>
               <Meta
                 title={this.props.event.jobDescription}
                 description={
