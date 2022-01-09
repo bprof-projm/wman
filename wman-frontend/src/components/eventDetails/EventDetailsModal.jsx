@@ -5,33 +5,6 @@ import styled from "styled-components";
 import EventDetailsForm from "./EventDetailsForm";
 import axios from "axios";
 
-const workers = [
-  {
-    username: "worker1",
-    email: "sulaiman.eklund@gmail.com",
-    firstname: "Sulaiman",
-    lastname: "Eklund",
-    profilePicture: {
-      cloudPhotoID: "default_profile_picture",
-      url: "https://res.cloudinary.com/wmanproj/image/upload/v1640774841/default_profile_picture.png",
-      wManUserID: 4,
-    },
-    phoneNumber: "+3489717652",
-  },
-  {
-    username: "worker2",
-    email: "delfred@mail.com",
-    firstname: "Delma",
-    lastname: "Fredriksson",
-    profilePicture: {
-      cloudPhotoID: "default_profile_picture",
-      url: "https://res.cloudinary.com/wmanproj/image/upload/v1640774841/default_profile_picture.png",
-      wManUserID: 5,
-    },
-    phoneNumber: "+6287419537",
-  },
-];
-
 const SpinnerContainer = styled.div`
   width: 100%;
   display: flex;
@@ -119,7 +92,7 @@ const EventDetailsModal = ({ eventId, onClose, onSuccess }) => {
             if (id) {
               await axios.put("/UpdateEvent", { id, ...data });
             } else {
-              id = await axios.post("/CreateEvent", data);
+              id = await axios.post("/CreateEvent", data).then(res => res.data);
             }
 
             const newLabels = values.labels.filter((id) =>
@@ -166,7 +139,6 @@ const EventDetailsModal = ({ eventId, onClose, onSuccess }) => {
           form={form}
           initialValues={eventDetails}
           labels={availableLabels}
-          workers={workers}
         />
       )}
     </Modal>
