@@ -6,7 +6,9 @@ export default function Label(props) {
     <Tag
       className="labelOnCard"
       color={props.backgroundColor}
-      //   onClick={props.showEditLabel(props.name, props.backgroundColor, props.id)}
+      onMouseDown={props.onPreventMouseDown}
+      closable={props.closable}
+      onClose={props.onClose}
     >
       {props.name}
     </Tag>

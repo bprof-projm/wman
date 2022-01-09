@@ -13,6 +13,7 @@ import {
   PlusCircleFilled,
 } from "@ant-design/icons";
 import moment from "moment";
+import EventDetailsModal from "../eventDetails/EventDetailsModal.jsx";
 
 import styled from "styled-components";
 import "./calendar-list.styles.css";
@@ -77,6 +78,50 @@ const UserMenu = () => {
       <Logout />
     </UserMenuContent>
   );
+};
+
+const initialData = {
+  week: null,
+  modalVisible: false,
+  eventId: null,
+  events: {},
+  columns: {
+    monday: {
+      id: "monday",
+      title: "Monday",
+      eventIds: [],
+    },
+    tuesday: {
+      id: "tuesday",
+      title: "Tuesday",
+      eventIds: [],
+    },
+    wednesday: {
+      id: "wednesday",
+      title: "Wednesday",
+      eventIds: [],
+    },
+    thursday: {
+      id: "thursday",
+      title: "Thursday",
+      eventIds: [],
+    },
+    friday: {
+      id: "friday",
+      title: "Friday",
+      eventIds: [],
+    },
+    saturday: {
+      id: "saturday",
+      title: "Saturday",
+      eventIds: [],
+    },
+    sunday: {
+      id: "sunday",
+      title: "Sunday",
+      eventIds: [],
+    },
+  },
 };
 
 class CalendarListComponent extends Component {
@@ -206,6 +251,7 @@ class CalendarListComponent extends Component {
                   type="primary"
                   shape="round"
                   icon={<PlusCircleFilled />}
+                  onClick={() => this.setState({ modalVisible: true, eventId: null })}
                 >
                   Create event
                 </Button>
@@ -253,51 +299,14 @@ class CalendarListComponent extends Component {
             />
           </SiteLayout>
         </Layout>
+        {this.state.modalVisible && (
+          <EventDetailsModal onClose={() => this.setState({ modalVisible: false, eventId: null })} />
+        )}
       </div>
     );
   }
 }
 
-const initialData = {
-  week: null,
-  events: {},
-  columns: {
-    monday: {
-      id: "monday",
-      title: "Monday",
-      eventIds: [],
-    },
-    tuesday: {
-      id: "tuesday",
-      title: "Tuesday",
-      eventIds: [],
-    },
-    wednesday: {
-      id: "wednesday",
-      title: "Wednesday",
-      eventIds: [],
-    },
-    thursday: {
-      id: "thursday",
-      title: "Thursday",
-      eventIds: [],
-    },
-    friday: {
-      id: "friday",
-      title: "Friday",
-      eventIds: [],
-    },
-    saturday: {
-      id: "saturday",
-      title: "Saturday",
-      eventIds: [],
-    },
-    sunday: {
-      id: "sunday",
-      title: "Sunday",
-      eventIds: [],
-    },
-  },
-};
+
 
 export default CalendarListComponent;
