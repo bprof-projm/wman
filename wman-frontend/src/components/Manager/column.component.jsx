@@ -29,9 +29,11 @@ const TaskList = styled.div`
 
 class ColumnComponent extends Component {
   render() {
+    const { date, title } = this.props.column;
+
     return (
       <Container>
-        <Title>{this.props.column.title}</Title>
+        <Title>{`${date} • ${title}`}</Title>
         <Droppable droppableId={this.props.column.id}>
           {(provided, snapshot) => (
             <TaskList

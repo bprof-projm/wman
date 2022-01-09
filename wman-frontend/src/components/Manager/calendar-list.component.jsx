@@ -130,30 +130,37 @@ class CalendarListComponent extends Component {
       columns: {
         monday: {
           ...state.columns.monday,
+          date: moment().day(1).isoWeek(week).format('D'),
           eventIds: getEventsForDay(events, 1),
         },
         tuesday: {
           ...state.columns.tuesday,
+          date: moment().day(2).isoWeek(week).format('D'),
           eventIds: getEventsForDay(events, 2),
         },
         wednesday: {
           ...state.columns.wednesday,
+          date: moment().day(3).isoWeek(week).format('D'),
           eventIds: getEventsForDay(events, 3),
         },
         thursday: {
           ...state.columns.thursday,
+          date: moment().day(4).isoWeek(week).format('D'),
           eventIds: getEventsForDay(events, 4),
         },
         friday: {
           ...state.columns.friday,
+          date: moment().day(5).isoWeek(week).format('D'),
           eventIds: getEventsForDay(events, 5),
         },
         saturday: {
           ...state.columns.saturday,
+          date: moment().day(6).isoWeek(week).format('D'),
           eventIds: getEventsForDay(events, 6),
         },
         sunday: {
           ...state.columns.sunday,
+          date: moment().day(7).isoWeek(week).format('D'),
           eventIds: getEventsForDay(events, 0),
         },
       },
