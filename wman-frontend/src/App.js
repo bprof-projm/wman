@@ -5,6 +5,7 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 
 import { NormalLoginForm } from "./components/Login/login.component.jsx";
 import Cookies from "js-cookie";
@@ -18,8 +19,10 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   const token = Cookies.get("auth");
   if (token) {
     axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+    const decoded = jwt_decode(token);
+    const username = decoded.sub;
     return (
-      <Route {...rest} render={(props) => <Component {...rest} {...props} />} />
+      <Route {...rest} render={(props) => <Component {...rest} {...props} username={username} />} />
     );
   }
   return <Redirect to="/login" />;

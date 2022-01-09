@@ -72,18 +72,8 @@ const getEventsForDay = (events, day) => {
     .map((event) => event.id);
 };
 
-const userName = "John Doe"; //TODO: fetch from api
-
-const UserMenu = () => {
-  return (
-    <UserMenuContent>
-      <p>{userName}</p>
-      <Logout />
-    </UserMenuContent>
-  );
-};
-
 const initialData = {
+  user: {},
   year: new Date().getFullYear(),
   week: null,
   modalVisible: false,
@@ -132,8 +122,18 @@ class CalendarListComponent extends Component {
   state = initialData;
 
   componentDidMount() {
+    this.fetchUsername();
     this.fetchEvents(moment().isoWeek());
   }
+
+  getUserMenu = () => {
+    return (
+      <UserMenuContent>
+        <p>{this.state.user.firstname + ' ' + this.state.user.lastname}</p>
+        <Logout />
+      </UserMenuContent>
+    );
+  };
 
   onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -203,6 +203,13 @@ class CalendarListComponent extends Component {
       .then(() => message.success('Event successfully moved'))
       .catch(() => message.error("Can not move event"));
   };
+
+  fetchUsername = () => {
+    axios
+      .get(`/Auth/username?username=${this.props.username}`)
+      .then(res => res.data)
+      .then(user => this.setState({ user }));
+  }
 
   fetchEvents = async (week) => {
     let year = this.state.year;
@@ -293,10 +300,10 @@ class CalendarListComponent extends Component {
                 >
                   Create event
                 </Button>
-                <Popover placement="bottomRight" content={<UserMenu />}>
+                <Popover placement="bottomRight" content={this.getUserMenu()}>
                   <Avatar
                     src={`https://eu.ui-avatars.com/api?name=${encodeURIComponent(
-                      userName
+                      this.state.user.firstname + ' ' + this.state.user.lastname
                     )}`}
                   />
                 </Popover>
