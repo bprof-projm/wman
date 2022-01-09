@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, DatePicker, Typography, Select, Tag, Space } from "antd";
 import moment from "moment";
 import Label from "../Labels/Label";
 import Avatar from "antd/lib/avatar/avatar";
+import axios from "axios";
 
 const { RangePicker } = DatePicker;
 
@@ -25,12 +26,31 @@ function tagRender(props) {
   );
 }
 
-const EventDetailsForm = ({ form, initialValues, labels, workers }) => {
+const EventDetailsForm = ({ form, initialValues, labels }) => {
+  const [workers, setWorkers] = useState([]);
+  const fetchWorkers = async (from, to) => {
+    const fromDate = moment(from).format("YYYY-MM-DDTHH:MM");
+    const toDate = moment(to).format("YYYY-MM-DDTHH:MM");
+
+    return axios
+      .get(
+        `/GetWorkersAvailablityAtSpecTime?fromDate=${fromDate}&toDate=${toDate}`
+      )
+      .then((res) => setWorkers(res.data));
+  };
+
+  useEffect(() => {
+    const value = form.getFieldValue("rangePicker");
+    if (value) {
+      const [start, finish] = value;
+      fetchWorkers(start, finish).then(() => {
+        setWorkers((workers) => workers.concat(initialValues.assignedUsers));
+      });
+    }
+  }, []);
+
   return (
-    <Form
-      form={form}
-      layout="vertical"
-    >
+    <Form form={form} layout="vertical">
       <Form.Item
         label="Description"
         name="jobDescription"
@@ -60,6 +80,7 @@ const EventDetailsForm = ({ form, initialValues, labels, workers }) => {
           showTime
           format={"YYYY-MM-DD HH:mm"}
           showTime={{ format: "HH:mm" }}
+          onChange={([from, to]) => fetchWorkers(from, to)}
         />
       </Form.Item>
 
@@ -86,7 +107,11 @@ const EventDetailsForm = ({ form, initialValues, labels, workers }) => {
         label="Workers"
         initialValue={initialValues.assignedUsers.map((l) => l.username)}
       >
-        <Select mode="multiple" showArrow>
+        <Select
+          mode="multiple"
+          showArrow
+          notFoundContent="There are no available workers in this time range"
+        >
           {workers.map((worker) => (
             <Option key={worker.id} value={worker.username}>
               <Space>
