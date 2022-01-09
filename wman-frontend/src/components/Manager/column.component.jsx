@@ -18,7 +18,7 @@ const Title = styled.h3`
   font-weight: bold;
 `;
 const TaskList = styled.div`
-  padding: 10px;
+  padding: 12px;
   transition: background-color 0.2s ease;
   background-color: rgb(245, 246, 248);
   flex-grow: 1;

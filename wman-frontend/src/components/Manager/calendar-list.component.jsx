@@ -21,7 +21,7 @@ import "./calendar-list.styles.css";
 const { Header, Content } = Layout;
 
 const SiteLayout = styled(Content)`
-  padding: 24px 50px;
+  padding: 24px 10px;
   margin-top: 64px;
   min-height: 380px;
   display: flex;
