@@ -6,7 +6,7 @@ import ProgressMenu from "../Worker-load/Progress-menu/progress-menu.component";
 import LabelsMenu from "../Labels/LabelMenu/labelMenu";
 import { Logout } from "../Logout/logout.component";
 import axios from "axios";
-import { Layout, Button, Avatar, Popover } from "antd";
+import { Layout, Button, Avatar, Popover, message } from "antd";
 import {
   LeftOutlined,
   RightOutlined,
@@ -179,6 +179,22 @@ class CalendarListComponent extends Component {
     };
 
     this.setState(newState);
+
+    axios
+      .put(`/DnDEvent/${draggableId}`, {
+        estimatedStartDate: `${moment(
+          this.state.events[draggableId].estimatedStartDate
+        )
+          .date(finish.date)
+          .format()}`,
+        estimatedFinishDate: `${moment(
+          this.state.events[draggableId].estimatedFinishDate
+        )
+          .date(finish.date)
+          .format()}`,
+      })
+      .then(() => message.success('Event successfully moved'))
+      .catch(() => message.error("Can not move event"));
   };
 
   fetchEvents = async (week) => {
