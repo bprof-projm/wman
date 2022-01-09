@@ -39,7 +39,7 @@ namespace Wman.Repository.Classes
         {
             var entity = await (from x in db.Label
                           where x.Id == key
-                          select x).FirstOrDefaultAsync();
+                          select x).Include(x => x.WorkEvents).FirstOrDefaultAsync();
             return entity;
         }
 

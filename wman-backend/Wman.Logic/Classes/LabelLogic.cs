@@ -92,6 +92,38 @@ namespace Wman.Logic.Classes
             await labelRepo.SaveDatabase();
         }
 
+        public async Task MassAssignLabelToWorkEvent(int eventId, ICollection<int> labelIds)
+        {
+            var selectedEvent = await eventRepo.GetOneWithTracking(eventId);
+            if (selectedEvent == null)
+            {
+                throw new NotFoundException(WmanError.EventNotFound);
+            }
+
+            List<Label> labels = new();
+            foreach (var labelId in labelIds)
+            {
+                var label = await labelRepo.GetOne(labelId);
+                labels.Add(label);
+            }
+
+            if (labels.Contains(null))
+            {
+                throw new NotFoundException(WmanError.LabelNotFound);
+            }
+
+            foreach (var label in labels)
+            {
+                if (label.WorkEvents.Contains(selectedEvent))
+                {
+                    throw new InvalidOperationException(WmanError.LabelAlreadyAssigned);
+                }
+                label.WorkEvents.Add(selectedEvent);
+            }
+
+            await labelRepo.SaveDatabase();
+        }
+
         public async Task DeleteLabel(int Id)
         {
             if (await labelRepo.GetOne(Id) != null)

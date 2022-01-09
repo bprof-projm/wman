@@ -46,6 +46,12 @@ namespace Wman.WebAPI.Controllers
                 await labelLogic.AssignLabelToWorkEvent(eventId, labelId);
                 return Ok();
         }
+        [HttpPost("/MassAssignLabelToWorkEvent")]
+        public async Task<ActionResult> MassAssignLabelToWorkEvent(int eventId, ICollection<int> labelIds)
+        {
+            await labelLogic.MassAssignLabelToWorkEvent(eventId, labelIds);
+            return Ok();
+        }
         [HttpDelete("/DeleteLabel/{Id}")]
         public async Task<ActionResult> DeleteLabel(int Id)
         {
