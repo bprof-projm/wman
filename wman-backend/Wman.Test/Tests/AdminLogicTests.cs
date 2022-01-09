@@ -122,7 +122,7 @@ namespace Wman.Test.Tests
             this.userManager.Verify(x => x.CreateAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
             this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
             //DeleteWorkforce
-            this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Exactly(2));
+            this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Exactly(4));
             this.userManager.Verify(x => x.DeleteAsync(It.IsAny<WmanUser>()), Times.Exactly(2));
         }
 
@@ -151,7 +151,7 @@ namespace Wman.Test.Tests
 
             this.userManager.Verify(x => x.Users, Times.Once);
             this.userManager.Verify(x => x.UpdateAsync(It.IsAny<WmanUser>()), Times.Once);
-            this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
+            this.userManager.Verify(x => x.IsInRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Exactly(2));
             this.userManager.Verify(x => x.GetRolesAsync(It.IsAny<WmanUser>()), Times.Once);
             this.userManager.Verify(x => x.RemoveFromRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
             this.userManager.Verify(x => x.AddToRoleAsync(It.IsAny<WmanUser>(), It.IsAny<string>()), Times.Once);
