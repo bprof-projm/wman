@@ -134,7 +134,7 @@ namespace Wman.Logic.Classes
             }
         }
 
-        public async Task CreateEvent(CreateEventDTO workEvent)
+        public async Task<int> CreateEvent(CreateEventDTO workEvent)
         {
             if (workEvent.EstimatedStartDate < workEvent.EstimatedFinishDate && workEvent.EstimatedStartDate.Day == workEvent.EstimatedFinishDate.Day)
             {
@@ -151,7 +151,7 @@ namespace Wman.Logic.Classes
                     result.Address = find;
                 }
 
-                await eventRepo.Add(result);
+                return await eventRepo.AddEventReturnsId(result);
             }
             else
             {

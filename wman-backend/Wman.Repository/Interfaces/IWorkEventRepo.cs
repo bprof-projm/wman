@@ -22,5 +22,7 @@ namespace Wman.Repository.Interfaces
         /// <param name="key"></param>
         /// <returns></returns>
         public Task<WorkEvent> GetOneWithTracking(int key);
+
+        public Task<int> AddEventReturnsId(WorkEvent element);
     }
 }
