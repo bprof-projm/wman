@@ -8,6 +8,7 @@ import { Logout } from "../Logout/logout.component";
 import { Layout, Button } from "antd";
 import axios from "axios";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import moment from "moment";
 
 import styled from "styled-components";
 import "./calendar-list.styles.css";
@@ -60,7 +61,7 @@ class CalendarListComponent extends Component {
   state = initialData;
 
   componentDidMount() {
-    this.fetchEvents();
+    this.fetchEvents(moment().isoWeek());
   }
 
   onDragEnd = (result) => {
@@ -112,13 +113,13 @@ class CalendarListComponent extends Component {
     this.setState(newState);
   };
 
-  fetchEvents = async () => {
-    this.setState({ loading: true });
+  fetchEvents = async (week) => {
     const events = await axios
-      .get(`/CalendarEvent/GetCurrentWeekEvents`)
+      .get(`/CalendarEvent/GetWeekEvents/${week}`)
       .then((response) => response.data);
-    this.setState({ loading: false });
-    this.setState({
+
+    this.setState((state) => ({
+      week,
       events: events.reduce(
         (groupedEvents, event) => ({
           ...groupedEvents,
@@ -126,8 +127,6 @@ class CalendarListComponent extends Component {
         }),
         {}
       ),
-    });
-    this.setState((state) => ({
       columns: {
         monday: {
           ...state.columns.monday,
@@ -180,7 +179,7 @@ class CalendarListComponent extends Component {
           </Header>
 
           <SiteLayout>
-            <Button shape="circle" size="large" icon={<LeftOutlined />} />
+            <Button shape="circle" size="large" icon={<LeftOutlined />} onClick={() => this.fetchEvents(this.state.week - 1)}/>
             <DragDropContext onDragEnd={this.onDragEnd}>
               <Container>
                 {Object.keys(this.state.columns).map((columnId) => {
@@ -199,7 +198,7 @@ class CalendarListComponent extends Component {
                 })}
               </Container>
             </DragDropContext>
-            <Button shape="circle" size="large" icon={<RightOutlined />} />
+            <Button shape="circle" size="large" icon={<RightOutlined />} onClick={() => this.fetchEvents(this.state.week + 1)} />
           </SiteLayout>
         </Layout>
       </div>
@@ -208,7 +207,7 @@ class CalendarListComponent extends Component {
 }
 
 const initialData = {
-  loading: false,
+  week: null,
   events: {},
   columns: {
     monday: {
