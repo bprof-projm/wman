@@ -10,8 +10,8 @@ using Wman.Data;
 namespace Wman.WebAPI.Migrations
 {
     [DbContext(typeof(wmanDb))]
-    [Migration("20211113000726_initdb2")]
-    partial class initdb2
+    [Migration("20220108222730_final")]
+    partial class final
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -82,6 +82,12 @@ namespace Wman.WebAPI.Migrations
                             Id = 3,
                             Name = "Worker",
                             NormalizedName = "WORKER"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "SystemAdmin",
+                            NormalizedName = "SYSTEMADMIN"
                         });
                 });
 
@@ -165,6 +171,13 @@ namespace Wman.WebAPI.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            RoleId = 4
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
@@ -184,21 +197,6 @@ namespace Wman.WebAPI.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("PicturesWorkEvent", b =>
-                {
-                    b.Property<int>("ProofOfWorkPicId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WorkEventsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProofOfWorkPicId", "WorkEventsId");
-
-                    b.HasIndex("WorkEventsId");
-
-                    b.ToTable("PicturesWorkEvent");
                 });
 
             modelBuilder.Entity("Wman.Data.DB_Models.AddressHUN", b =>
@@ -279,6 +277,32 @@ namespace Wman.WebAPI.Migrations
                     b.ToTable("Picture");
                 });
 
+            modelBuilder.Entity("Wman.Data.DB_Models.ProofOfWork", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CloudPhotoID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WorkEventID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkEventID");
+
+                    b.ToTable("ProofOfWork");
+                });
+
             modelBuilder.Entity("Wman.Data.DB_Models.WmanUser", b =>
                 {
                     b.Property<int>("Id")
@@ -350,6 +374,25 @@ namespace Wman.WebAPI.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "15630978-ac85-4d89-bdb4-29138a178cc0",
+                            Email = "random@mail.com",
+                            EmailConfirmed = false,
+                            FirstName = "System",
+                            LastName = "Admin",
+                            LockoutEnabled = false,
+                            PasswordHash = "AQAAAAEAACcQAAAAEOeEJCB0dxrmeIrSpGtmoc4mJ5UgeUnAc/I87SdRcFMSVdXrV63ugNx3txQCpbG36A==",
+                            PhoneNumber = "+1234567890",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "a83c4f29-a91e-4398-aac7-01f77e9d3f28",
+                            TwoFactorEnabled = false,
+                            UserName = "sysadmin"
+                        });
                 });
 
             modelBuilder.Entity("Wman.Data.DB_Models.WorkEvent", b =>
@@ -371,6 +414,9 @@ namespace Wman.WebAPI.Migrations
                     b.Property<string>("JobDescription")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("PicturesId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -383,6 +429,8 @@ namespace Wman.WebAPI.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
+
+                    b.HasIndex("PicturesId");
 
                     b.ToTable("WorkEvent");
                 });
@@ -468,21 +516,6 @@ namespace Wman.WebAPI.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PicturesWorkEvent", b =>
-                {
-                    b.HasOne("Wman.Data.DB_Models.Pictures", null)
-                        .WithMany()
-                        .HasForeignKey("ProofOfWorkPicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Wman.Data.DB_Models.WorkEvent", null)
-                        .WithMany()
-                        .HasForeignKey("WorkEventsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Wman.Data.DB_Models.Pictures", b =>
                 {
                     b.HasOne("Wman.Data.DB_Models.WmanUser", "WmanUser")
@@ -494,11 +527,24 @@ namespace Wman.WebAPI.Migrations
                     b.Navigation("WmanUser");
                 });
 
+            modelBuilder.Entity("Wman.Data.DB_Models.ProofOfWork", b =>
+                {
+                    b.HasOne("Wman.Data.DB_Models.WorkEvent", null)
+                        .WithMany("ProofOfWorkPic")
+                        .HasForeignKey("WorkEventID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Wman.Data.DB_Models.WorkEvent", b =>
                 {
                     b.HasOne("Wman.Data.DB_Models.AddressHUN", "Address")
                         .WithMany("WorkEvents")
                         .HasForeignKey("AddressId");
+
+                    b.HasOne("Wman.Data.DB_Models.Pictures", null)
+                        .WithMany("WorkEvents")
+                        .HasForeignKey("PicturesId");
 
                     b.Navigation("Address");
                 });
@@ -523,9 +569,19 @@ namespace Wman.WebAPI.Migrations
                     b.Navigation("WorkEvents");
                 });
 
+            modelBuilder.Entity("Wman.Data.DB_Models.Pictures", b =>
+                {
+                    b.Navigation("WorkEvents");
+                });
+
             modelBuilder.Entity("Wman.Data.DB_Models.WmanUser", b =>
                 {
                     b.Navigation("ProfilePicture");
+                });
+
+            modelBuilder.Entity("Wman.Data.DB_Models.WorkEvent", b =>
+                {
+                    b.Navigation("ProofOfWorkPic");
                 });
 #pragma warning restore 612, 618
         }

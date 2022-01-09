@@ -139,7 +139,7 @@ namespace Wman.Logic.Classes
             
         }
 
-        public async Task<List<WorkEventForWorkCardDTO>> GetWeekEvents(int week, string username)
+        public async Task<List<WorkEventForWorkCardDTO>> GetWeekEvents(int year, int week, string username)
         {
             var user = await userManager.Users
                 .Where(x => x.UserName == username)
@@ -148,7 +148,7 @@ namespace Wman.Logic.Classes
             {
                 throw new NotFoundException(WmanError.UserNotFound);
             }
-            if (week > 0 && week < 54)
+            if (week > 0 && week < 54 && year >= 0)
             {
                 var find = workEventRepo.GetAll().ToList().Where(x =>
                 {
@@ -163,11 +163,11 @@ namespace Wman.Logic.Classes
 
                     if (week >= 52)
                     {
-                        return week == neededWeek && (time.Year == DateTime.Now.Year || (time.Year == DateTime.Now.Year + 1 && time.Month == DateTime.Now.AddMonths(1).Month));
+                        return week == neededWeek && (time.Year == year || (time.Year == year + 1 && time.Month == new DateTime(year, 12, 1).AddMonths(1).Month));
                     }
                     else
                     {
-                        return week == neededWeek && time.Year == DateTime.Now.Year;
+                        return week == neededWeek && time.Year == year;
                     }
 
                 });

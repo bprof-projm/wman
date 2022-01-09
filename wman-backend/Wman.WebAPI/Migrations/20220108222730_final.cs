@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Wman.WebAPI.Migrations
 {
-    public partial class initdb2 : Migration
+    public partial class final : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -79,31 +79,6 @@ namespace Wman.WebAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Label", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "WorkEvent",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    JobDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EstimatedStartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EstimatedFinishDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AddressId = table.Column<int>(type: "int", nullable: true),
-                    WorkStartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    WorkFinishDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WorkEvent", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_WorkEvent_Address_AddressId",
-                        column: x => x.AddressId,
-                        principalTable: "Address",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -237,6 +212,38 @@ namespace Wman.WebAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "WorkEvent",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    JobDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EstimatedStartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EstimatedFinishDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AddressId = table.Column<int>(type: "int", nullable: true),
+                    WorkStartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    WorkFinishDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    PicturesId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkEvent", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WorkEvent_Address_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Address",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_WorkEvent_Picture_PicturesId",
+                        column: x => x.PicturesId,
+                        principalTable: "Picture",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LabelWorkEvent",
                 columns: table => new
                 {
@@ -255,6 +262,28 @@ namespace Wman.WebAPI.Migrations
                     table.ForeignKey(
                         name: "FK_LabelWorkEvent_WorkEvent_WorkEventsId",
                         column: x => x.WorkEventsId,
+                        principalTable: "WorkEvent",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProofOfWork",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CloudPhotoID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    WorkEventID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProofOfWork", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProofOfWork_WorkEvent_WorkEventID",
+                        column: x => x.WorkEventID,
                         principalTable: "WorkEvent",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -284,44 +313,26 @@ namespace Wman.WebAPI.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "PicturesWorkEvent",
-                columns: table => new
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
                 {
-                    ProofOfWorkPicId = table.Column<int>(type: "int", nullable: false),
-                    WorkEventsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PicturesWorkEvent", x => new { x.ProofOfWorkPicId, x.WorkEventsId });
-                    table.ForeignKey(
-                        name: "FK_PicturesWorkEvent_Picture_ProofOfWorkPicId",
-                        column: x => x.ProofOfWorkPicId,
-                        principalTable: "Picture",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PicturesWorkEvent_WorkEvent_WorkEventsId",
-                        column: x => x.WorkEventsId,
-                        principalTable: "WorkEvent",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    { 1, null, "Admin", "ADMIN" },
+                    { 2, null, "Manager", "MANAGER" },
+                    { 3, null, "Worker", "WORKER" },
+                    { 4, null, "SystemAdmin", "SYSTEMADMIN" }
                 });
 
             migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 1, null, "Admin", "ADMIN" });
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { 1, 0, "15630978-ac85-4d89-bdb4-29138a178cc0", "random@mail.com", false, "System", "Admin", false, null, null, null, "AQAAAAEAACcQAAAAEOeEJCB0dxrmeIrSpGtmoc4mJ5UgeUnAc/I87SdRcFMSVdXrV63ugNx3txQCpbG36A==", "+1234567890", false, "a83c4f29-a91e-4398-aac7-01f77e9d3f28", false, "sysadmin" });
 
             migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 2, null, "Manager", "MANAGER" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 3, null, "Worker", "WORKER" });
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { 4, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -374,9 +385,9 @@ namespace Wman.WebAPI.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_PicturesWorkEvent_WorkEventsId",
-                table: "PicturesWorkEvent",
-                column: "WorkEventsId");
+                name: "IX_ProofOfWork_WorkEventID",
+                table: "ProofOfWork",
+                column: "WorkEventID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WmanUserWorkEvent_WorkEventsId",
@@ -387,6 +398,11 @@ namespace Wman.WebAPI.Migrations
                 name: "IX_WorkEvent_AddressId",
                 table: "WorkEvent",
                 column: "AddressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkEvent_PicturesId",
+                table: "WorkEvent",
+                column: "PicturesId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -410,7 +426,7 @@ namespace Wman.WebAPI.Migrations
                 name: "LabelWorkEvent");
 
             migrationBuilder.DropTable(
-                name: "PicturesWorkEvent");
+                name: "ProofOfWork");
 
             migrationBuilder.DropTable(
                 name: "WmanUserWorkEvent");
@@ -422,16 +438,16 @@ namespace Wman.WebAPI.Migrations
                 name: "Label");
 
             migrationBuilder.DropTable(
-                name: "Picture");
-
-            migrationBuilder.DropTable(
                 name: "WorkEvent");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Address");
 
             migrationBuilder.DropTable(
-                name: "Address");
+                name: "Picture");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

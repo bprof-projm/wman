@@ -12,7 +12,7 @@ namespace Wman.Logic.Interfaces
     {
         Task<List<WorkEventForWorkCardDTO>> GetCurrentWeekEvents(string username);
         Task<List<WorkEventForWorkCardDTO>> GetCurrentDayEvents(string username);
-        Task<List<WorkEventForWorkCardDTO>> GetWeekEvents(int week, string username);
+        Task<List<WorkEventForWorkCardDTO>> GetWeekEvents(int year, int week, string username);
         Task<List<WorkEventForWorkCardDTO>> GetDayEvents(int day, string username);
         Task<List<WorkEventForWorkCardDTO>> GetDayEvents(DateTime day, string username);
         Task<List<WorkEventForWorkCardDTO>> GetWeekEvents(DateTime firstDayOfTheWeek, DateTime lastDayOfTheWeek, string username);

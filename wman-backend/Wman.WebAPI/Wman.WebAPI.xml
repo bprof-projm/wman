@@ -44,12 +44,11 @@
             Auth controller
             </summary>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.#ctor(Wman.Logic.Interfaces.IAuthLogic,Wman.Logic.Helpers.DBSeed,Wman.Logic.Interfaces.IAdminLogic)">
+        <member name="M:Wman.WebAPI.Controllers.AuthController.#ctor(Wman.Logic.Interfaces.IAuthLogic,Wman.Logic.Interfaces.IAdminLogic)">
             <summary>
             
             </summary>
             <param name="authLogic"></param>
-            /// <param name="dBSeed"></param>
             <param name="adminLogic"></param>
         </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.Login(Wman.Logic.DTO_Models.LoginDTO)">
@@ -85,12 +84,6 @@
             <param name="username"></param>
             <returns>Worker/Admin/Manager</returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.PopulateDB">
-            <summary>
-            DEBUG Endpoint used to fill database with testing data. Used only for development purposes.
-            </summary>
-            <returns>200</returns>
-        </member>
         <member name="T:Wman.WebAPI.Controllers.CalendarEventController">
             <summary>
             CalendarEvent controller
@@ -121,7 +114,7 @@
             <param name="day"></param>
             <returns>CalendarWorkEventDTO</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Wman.WebAPI.Controllers.CalendarEventController.GetWeekEvents(System.Int32)" -->
+        <!-- Badly formed XML comment ignored for member "M:Wman.WebAPI.Controllers.CalendarEventController.GetWeekEvents(System.Int32,System.Int32)" -->
         <member name="M:Wman.WebAPI.Controllers.CalendarEventController.GetDayEvents(System.DateTime)">
             <summary>
             gets custom day events
@@ -184,6 +177,12 @@
             <param name="eventid">The ID of the event we'd like to add to</param>
             <param name="usernames">A list of string string usernames, which we'd like to assign to the event</param>
             <returns>A list of userDTOs, where the users could be assigned without date collision</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.SeedController.PopulateDB">
+            <summary>
+            Fill database with testing data. Used only for testing purposes.
+            </summary>
+            <returns>200</returns>
         </member>
         <member name="T:Wman.WebAPI.Controllers.UserController">
             <summary>

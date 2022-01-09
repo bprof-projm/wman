@@ -22,18 +22,15 @@ namespace Wman.WebAPI.Controllers
     public class AuthController : Controller
     {
         IAuthLogic authLogic;
-        DBSeed dBSeed;
         IAdminLogic adminLogic;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="authLogic"></param>
-        /// /// <param name="dBSeed"></param>
         /// <param name="adminLogic"></param>
-        public AuthController(IAuthLogic authLogic, DBSeed dBSeed, IAdminLogic adminLogic)
+        public AuthController(IAuthLogic authLogic, IAdminLogic adminLogic)
         {
             this.authLogic = authLogic;
-            this.dBSeed = dBSeed;
             this.adminLogic = adminLogic;
         }
 
@@ -98,19 +95,6 @@ namespace Wman.WebAPI.Controllers
         public async Task<ActionResult<IEnumerable<string>>> RolesOfUser(string username)
         {
             return Ok(await this.authLogic.GetAllRolesOfUser(username));
-        }
-
-        /// <summary>
-        /// DEBUG Endpoint used to fill database with testing data. Used only for development purposes.
-        /// </summary>
-        /// <returns>200</returns>
-        [HttpGet]
-        [Route("db")]
-
-        public async Task<ActionResult> PopulateDB()
-        {
-            dBSeed.PopulateDB();
-            return Ok();
         }
     }
 }
