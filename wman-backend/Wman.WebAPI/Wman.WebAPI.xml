@@ -114,7 +114,7 @@
             <param name="day"></param>
             <returns>CalendarWorkEventDTO</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Wman.WebAPI.Controllers.CalendarEventController.GetWeekEvents(System.Int32)" -->
+        <!-- Badly formed XML comment ignored for member "M:Wman.WebAPI.Controllers.CalendarEventController.GetWeekEvents(System.Int32,System.Int32)" -->
         <member name="M:Wman.WebAPI.Controllers.CalendarEventController.GetDayEvents(System.DateTime)">
             <summary>
             gets custom day events

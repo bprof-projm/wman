@@ -38,17 +38,17 @@ namespace Wman.Test.Tests
         }
 
         [Test]
-        [TestCase(-1)]
-        [TestCase(54)]
-        [TestCase(140)]
-        [TestCase(null)]
-        public async Task GetWeekEvents_IntParameter_InvalidParametersGiven_ExceptionExpected(int testInput)
+        [TestCase(-1, -1)]
+        [TestCase(2021, 54)]
+        [TestCase(null, 140)]
+        [TestCase(null, null)]
+        public async Task GetWeekEvents_IntParameter_InvalidParametersGiven_ExceptionExpected(int testYear, int testWeek)
         {
             //Arrange
             CalendarEventLogic calendarLogic = new(this.eventRepo.Object, this.mapper, this.userManager.Object);
 
             //Act
-            async Task testDelegate() => await calendarLogic.GetWeekEvents(testInput, users[0].UserName);
+            async Task testDelegate() => await calendarLogic.GetWeekEvents(testYear, testWeek, users[0].UserName);
 
             //Assert
             Assert.ThrowsAsync<ArgumentException>(testDelegate);
@@ -146,7 +146,7 @@ namespace Wman.Test.Tests
             int week = CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(lastDayOfTheWeek, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
 
             //Act
-            var resultInt = await calendarLogic.GetWeekEvents(week, users[0].UserName);
+            var resultInt = await calendarLogic.GetWeekEvents(lastDayOfTheWeek.Year, week, users[0].UserName);
             var resultDateTime = await calendarLogic.GetWeekEvents(firstDayOfWeek, lastDayOfTheWeek, users[0].UserName);
 
             //Assert
