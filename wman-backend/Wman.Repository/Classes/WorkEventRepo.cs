@@ -20,6 +20,14 @@ namespace Wman.Repository.Classes
             this.db = inDb;
             this.userManager = userManager;
         }
+
+        public async Task<int> AddEventReturnsId(WorkEvent element)
+        {
+            await this.db.AddAsync(element);
+            await this.db.SaveChangesAsync();
+            return element.Id;
+        }
+
         public async Task Add(WorkEvent element)
         {
             await this.db.AddAsync(element);
@@ -66,6 +74,7 @@ namespace Wman.Repository.Classes
             oldWorkEvent.EstimatedStartDate = element.EstimatedStartDate;
             oldWorkEvent.EstimatedFinishDate = element.EstimatedFinishDate;
             oldWorkEvent.AssignedUsers = element.AssignedUsers;
+            oldWorkEvent.Address = element.Address;
             await this.db.SaveChangesAsync();
         }
     }

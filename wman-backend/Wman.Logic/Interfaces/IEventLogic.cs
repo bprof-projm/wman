@@ -10,7 +10,7 @@ namespace Wman.Logic.Interfaces
 {
     public interface IEventLogic
     {
-        Task CreateEvent(CreateEventDTO workEvent);
+        Task<int> CreateEvent(CreateEventDTO workEvent);
         Task DeleteEvent(int Id);
         Task UpdateEvent(UpdateEventDTO newWorkEvent);
         Task<WorkEvent> GetEvent(int id);
