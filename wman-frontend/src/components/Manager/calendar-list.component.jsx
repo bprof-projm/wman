@@ -320,6 +320,10 @@ class CalendarListComponent extends Component {
         {this.state.modalVisible && (
           <EventDetailsModal
             eventId={this.state.eventId}
+            onSuccess={() => {
+              this.setState({ modalVisible: false, eventId: null });
+              this.fetchEvents(this.state.week);
+            }}
             onClose={() =>
               this.setState({ modalVisible: false, eventId: null })
             }

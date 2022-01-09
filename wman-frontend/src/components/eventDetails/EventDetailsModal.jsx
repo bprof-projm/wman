@@ -48,7 +48,7 @@ const initialState = {
   openForm: false,
 };
 
-const EventDetailsModal = ({ eventId, onClose }) => {
+const EventDetailsModal = ({ eventId, onClose, onSuccess }) => {
   const [eventDetails, setEventDetails] = useState(initialState.eventDetails);
   const [loading, setLoading] = useState(initialState.loading);
   const [openForm, setOpenForm] = useState(initialState.openForm);
@@ -145,7 +145,7 @@ const EventDetailsModal = ({ eventId, onClose }) => {
               );
             }
 
-            onClose();
+            onSuccess();
           } catch (err) {
             console.error(err)
             message.error("Failed to save event details");
