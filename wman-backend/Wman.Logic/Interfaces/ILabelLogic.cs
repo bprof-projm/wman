@@ -13,6 +13,7 @@ namespace Wman.Logic.Interfaces
         Task<List<ListLabelsDTO>> GetAllLabels();
         Task UpdateLabel(int Id, CreateLabelDTO NewLabel);
         Task AssignLabelToWorkEvent(int eventId, int labelId);
+        Task MassAssignLabelToWorkEvent(int eventId, ICollection<int> labelIds);
         Task DeleteLabel(int Id);
     }
 }
