@@ -123,7 +123,7 @@ namespace Wman.Logic.Helpers
             var labelList = new List<Label>();
             labelList.AddRange(labelRepo.GetAll());
 
-            int id = 0;
+            int id = 1;
 
             eventRepo.Add(new WorkEvent
             {
@@ -155,7 +155,7 @@ namespace Wman.Logic.Helpers
                 EstimatedFinishDate = DateTime.Today.AddHours(14),
                 Address = addresses.FirstOrDefault(x => x.Id == addresses[1].Id),
                 WorkStartDate = DateTime.Today.AddHours(9).AddMinutes(10),
-                Status = Status.awaiting,
+                Status = Status.started,
                 Labels = labelList.FindAll(x => x.Id == labelList[2].Id),
                 AssignedUsers = workers.FindAll(x => x.Id == workers[1].Id)
             }).Wait();
