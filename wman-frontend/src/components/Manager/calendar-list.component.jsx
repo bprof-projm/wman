@@ -63,9 +63,12 @@ const UserMenuContent = styled.div`
   text-align: center;
 `;
 
+const eventComparator = (a, b) => new Date(a.estimatedStartDate) < new Date(b.estimatedStartDate) ? -1 : 1;
+
 const getEventsForDay = (events, day) => {
   return events
     .filter((event) => new Date(event.estimatedStartDate).getDay() === day)
+    .sort(eventComparator)
     .map((event) => event.id);
 };
 
@@ -148,7 +151,6 @@ class CalendarListComponent extends Component {
 
     const start = this.state.columns[source.droppableId];
     const finish = this.state.columns[destination.droppableId];
-    //TODO: order columns based on time
 
     if (start === finish) {
       return; //Disable moving cards inside column
@@ -166,7 +168,12 @@ class CalendarListComponent extends Component {
     finishEventIds.splice(destination.index, 0, draggableId);
     const newFinish = {
       ...finish,
-      eventIds: finishEventIds,
+      eventIds: finishEventIds.sort((id1, id2) => {
+        const a = this.state.events[id1];
+        const b = this.state.events[id2];
+
+        return eventComparator(a, b);
+      }),
     };
 
     const newState = {
@@ -175,7 +182,7 @@ class CalendarListComponent extends Component {
         ...this.state.columns,
         [newStart.id]: newStart,
         [newFinish.id]: newFinish,
-      },
+      }
     };
 
     this.setState(newState);
