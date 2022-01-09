@@ -81,6 +81,7 @@ const UserMenu = () => {
 };
 
 const initialData = {
+  year: new Date().getFullYear(),
   week: null,
   modalVisible: false,
   eventId: null,
@@ -181,11 +182,23 @@ class CalendarListComponent extends Component {
   };
 
   fetchEvents = async (week) => {
+    let year = this.state.year;
+    const maxWeeksInYear = moment().year(year).isoWeeksInYear();
+    if (maxWeeksInYear < week) {
+      year += 1;
+      week = 1;
+    }
+    if (week < 1) {
+      year -= 1;
+      week = moment().year(year).isoWeeksInYear();
+    }
+
     const events = await axios
-      .get(`/CalendarEvent/GetWeekEvents/${week}`)
+      .get(`/CalendarEvent/GetWeekEvents/${year}/${week}`)
       .then((response) => response.data);
 
     this.setState((state) => ({
+      year,
       week,
       events: events.reduce(
         (groupedEvents, event) => ({
@@ -197,37 +210,37 @@ class CalendarListComponent extends Component {
       columns: {
         monday: {
           ...state.columns.monday,
-          date: moment().day(1).isoWeek(week).format("D"),
+          date: moment().year(year).day(1).isoWeek(week).format("D"),
           eventIds: getEventsForDay(events, 1),
         },
         tuesday: {
           ...state.columns.tuesday,
-          date: moment().day(2).isoWeek(week).format("D"),
+          date: moment().year(year).day(2).isoWeek(week).format("D"),
           eventIds: getEventsForDay(events, 2),
         },
         wednesday: {
           ...state.columns.wednesday,
-          date: moment().day(3).isoWeek(week).format("D"),
+          date: moment().year(year).day(3).isoWeek(week).format("D"),
           eventIds: getEventsForDay(events, 3),
         },
         thursday: {
           ...state.columns.thursday,
-          date: moment().day(4).isoWeek(week).format("D"),
+          date: moment().year(year).day(4).isoWeek(week).format("D"),
           eventIds: getEventsForDay(events, 4),
         },
         friday: {
           ...state.columns.friday,
-          date: moment().day(5).isoWeek(week).format("D"),
+          date: moment().year(year).day(5).isoWeek(week).format("D"),
           eventIds: getEventsForDay(events, 5),
         },
         saturday: {
           ...state.columns.saturday,
-          date: moment().day(6).isoWeek(week).format("D"),
+          date: moment().year(year).day(6).isoWeek(week).format("D"),
           eventIds: getEventsForDay(events, 6),
         },
         sunday: {
           ...state.columns.sunday,
-          date: moment().day(7).isoWeek(week).format("D"),
+          date: moment().year(year).day(7).isoWeek(week).format("D"),
           eventIds: getEventsForDay(events, 0),
         },
       },
@@ -251,7 +264,9 @@ class CalendarListComponent extends Component {
                   type="primary"
                   shape="round"
                   icon={<PlusCircleFilled />}
-                  onClick={() => this.setState({ modalVisible: true, eventId: null })}
+                  onClick={() =>
+                    this.setState({ modalVisible: true, eventId: null })
+                  }
                 >
                   Create event
                 </Button>
@@ -286,7 +301,9 @@ class CalendarListComponent extends Component {
                       key={column.id}
                       column={column}
                       events={events}
-                      onCardClick={eventId => this.setState({ modalVisible: true, eventId })}
+                      onCardClick={(eventId) =>
+                        this.setState({ modalVisible: true, eventId })
+                      }
                     />
                   );
                 })}
@@ -301,13 +318,16 @@ class CalendarListComponent extends Component {
           </SiteLayout>
         </Layout>
         {this.state.modalVisible && (
-          <EventDetailsModal eventId={this.state.eventId} onClose={() => this.setState({ modalVisible: false, eventId: null })} />
+          <EventDetailsModal
+            eventId={this.state.eventId}
+            onClose={() =>
+              this.setState({ modalVisible: false, eventId: null })
+            }
+          />
         )}
       </div>
     );
   }
 }
-
-
 
 export default CalendarListComponent;
