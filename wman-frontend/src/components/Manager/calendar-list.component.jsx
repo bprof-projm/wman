@@ -6,8 +6,12 @@ import ProgressMenu from "../Worker-load/Progress-menu/progress-menu.component";
 import LabelsMenu from "../Labels/LabelMenu/labelMenu";
 import { Logout } from "../Logout/logout.component";
 import axios from "axios";
-import { Layout, Button, Avatar, Popover, Menu } from "antd";
-import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import { Layout, Button, Avatar, Popover } from "antd";
+import {
+  LeftOutlined,
+  RightOutlined,
+  PlusCircleFilled,
+} from "@ant-design/icons";
 import moment from "moment";
 
 import styled from "styled-components";
@@ -31,7 +35,7 @@ const HeaderItems = styled.div`
   display: flex;
   justify-content: space-between;
 `;
-const HeaderItemsRightSide = styled.div`
+const HeaderItemsLeftSide = styled.div`
   display: flex;
   align-items: center;
 
@@ -46,9 +50,13 @@ const HeaderItemsRightSide = styled.div`
     color: #1890ff;
   }
 `;
-const HeaderItemsLeftSide = styled.div`
+const HeaderItemsRightSide = styled.div`
   display: flex;
   align-items: center;
+
+  & > * {
+    margin-left: 10px;
+  }
 `;
 const UserMenuContent = styled.div`
   text-align: center;
@@ -188,12 +196,19 @@ class CalendarListComponent extends Component {
           <Header style={{ position: "fixed", zIndex: 1, width: "100%" }}>
             <div className="logo">Wman</div>
             <HeaderItems>
-              <HeaderItemsRightSide>
+              <HeaderItemsLeftSide>
                 <ProgressMenu />
                 <LabelsMenu />
                 <PrintButton />
-              </HeaderItemsRightSide>
-              <HeaderItemsLeftSide>
+              </HeaderItemsLeftSide>
+              <HeaderItemsRightSide>
+                <Button
+                  type="primary"
+                  shape="round"
+                  icon={<PlusCircleFilled />}
+                >
+                  Create event
+                </Button>
                 <Popover placement="bottomRight" content={<UserMenu />}>
                   <Avatar
                     src={`https://eu.ui-avatars.com/api?name=${encodeURIComponent(
@@ -201,7 +216,7 @@ class CalendarListComponent extends Component {
                     )}`}
                   />
                 </Popover>
-              </HeaderItemsLeftSide>
+              </HeaderItemsRightSide>
             </HeaderItems>
           </Header>
 
