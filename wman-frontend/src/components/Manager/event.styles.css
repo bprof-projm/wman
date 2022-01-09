@@ -9,3 +9,12 @@
 .ant-card-body{
     padding: 10px !important;
 }
+
+.labelOnCard{
+    margin-bottom: 3px;
+    font-size: 9px;
+    margin-right: 3px;
+    padding: 0 10px;
+    font-weight: bold;
+    border-radius: 100px;
+}

@@ -60,6 +60,7 @@ class Event extends Component {
                     name={label.content}
                     backgroundColor={label.backgroundColor}
                     textColor={label.textColor}
+                    
                   />
                 ))}
               </LabelList>

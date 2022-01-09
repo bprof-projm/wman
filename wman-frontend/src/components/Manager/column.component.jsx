@@ -11,7 +11,6 @@ const Container = styled.div`
   dispaly: flex;
   flex-direction: column;
   height: 89vh;
-  overflow: auto;
 `;
 const Title = styled.h3`
   text-align: center;
@@ -25,6 +24,7 @@ const TaskList = styled.div`
   flex-grow: 1;
   height: 83vh;
   border-radius: 16px;
+  overflow: auto;
 `;
 
 class ColumnComponent extends Component {
