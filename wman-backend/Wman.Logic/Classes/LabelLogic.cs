@@ -114,6 +114,10 @@ namespace Wman.Logic.Classes
 
             foreach (var label in labels)
             {
+                if (label.WorkEvents.Contains(selectedEvent))
+                {
+                    throw new InvalidOperationException(WmanError.LabelAlreadyAssigned);
+                }
                 label.WorkEvents.Add(selectedEvent);
             }
 
