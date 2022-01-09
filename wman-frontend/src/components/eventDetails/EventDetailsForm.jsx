@@ -115,7 +115,16 @@ const EventDetailsForm = ({ form, initialValues, labels }) => {
           {workers.map((worker) => (
             <Option key={worker.id} value={worker.username}>
               <Space>
-                <Avatar size="small" src={worker.profilePicture.url} />
+                <Avatar
+                  size="small"
+                  src={
+                    worker.profilePicture
+                      ? worker.profilePicture.url
+                      : `https://eu.ui-avatars.com/api?name=${encodeURIComponent(
+                          worker.firstname + " " + worker.lastname
+                        )}`
+                  }
+                />
                 <span>{`${worker.firstname} ${worker.lastname}`}</span>
               </Space>
             </Option>

@@ -37,7 +37,10 @@ class Event extends Component {
             ref={provided.innerRef}
             isDragging={snapshot.isDragging}
           >
-            <Card className="cardEvent" onClick={() => this.props.onCardClick(this.props.event.id)}>
+            <Card
+              className="cardEvent"
+              onClick={() => this.props.onCardClick(this.props.event.id)}
+            >
               <Meta
                 title={this.props.event.jobDescription}
                 description={
@@ -60,7 +63,6 @@ class Event extends Component {
                     name={label.content}
                     backgroundColor={label.backgroundColor}
                     textColor={label.textColor}
-                    
                   />
                 ))}
               </LabelList>
@@ -74,7 +76,15 @@ class Event extends Component {
                     }}
                   >
                     {this.props.event.assignedUsers.map((user) => (
-                      <Avatar src={user.profilePicture.url} />
+                      <Avatar
+                        src={
+                          user.profilePicture
+                            ? user.profilePicture.url
+                            : `https://eu.ui-avatars.com/api?name=${encodeURIComponent(
+                                user.firstname + " " + user.lastname
+                              )}`
+                        }
+                      />
                     ))}
                   </Avatar.Group>
                 }
