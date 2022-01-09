@@ -18,3 +18,7 @@
     font-weight: bold;
     border-radius: 100px;
 }
+
+.ant-badge {
+    width: 100%;
+}
