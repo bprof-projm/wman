@@ -5,8 +5,8 @@ import PrintButton from "../Print-functionality/Print-button/print-button.compon
 import ProgressMenu from "../Worker-load/Progress-menu/progress-menu.component";
 import LabelsMenu from "../Labels/LabelMenu/labelMenu";
 import { Logout } from "../Logout/logout.component";
-import { Layout, Button } from "antd";
 import axios from "axios";
+import { Layout, Button, Avatar, Popover, Menu } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import moment from "moment";
 
@@ -50,11 +50,25 @@ const HeaderItemsLeftSide = styled.div`
   display: flex;
   align-items: center;
 `;
+const UserMenuContent = styled.div`
+  text-align: center;
+`;
 
 const getEventsForDay = (events, day) => {
   return events
     .filter((event) => new Date(event.estimatedStartDate).getDay() === day)
     .map((event) => event.id);
+};
+
+const userName = "John Doe"; //TODO: fetch from api
+
+const UserMenu = () => {
+  return (
+    <UserMenuContent>
+      <p>{userName}</p>
+      <Logout />
+    </UserMenuContent>
+  );
 };
 
 class CalendarListComponent extends Component {
@@ -130,37 +144,37 @@ class CalendarListComponent extends Component {
       columns: {
         monday: {
           ...state.columns.monday,
-          date: moment().day(1).isoWeek(week).format('D'),
+          date: moment().day(1).isoWeek(week).format("D"),
           eventIds: getEventsForDay(events, 1),
         },
         tuesday: {
           ...state.columns.tuesday,
-          date: moment().day(2).isoWeek(week).format('D'),
+          date: moment().day(2).isoWeek(week).format("D"),
           eventIds: getEventsForDay(events, 2),
         },
         wednesday: {
           ...state.columns.wednesday,
-          date: moment().day(3).isoWeek(week).format('D'),
+          date: moment().day(3).isoWeek(week).format("D"),
           eventIds: getEventsForDay(events, 3),
         },
         thursday: {
           ...state.columns.thursday,
-          date: moment().day(4).isoWeek(week).format('D'),
+          date: moment().day(4).isoWeek(week).format("D"),
           eventIds: getEventsForDay(events, 4),
         },
         friday: {
           ...state.columns.friday,
-          date: moment().day(5).isoWeek(week).format('D'),
+          date: moment().day(5).isoWeek(week).format("D"),
           eventIds: getEventsForDay(events, 5),
         },
         saturday: {
           ...state.columns.saturday,
-          date: moment().day(6).isoWeek(week).format('D'),
+          date: moment().day(6).isoWeek(week).format("D"),
           eventIds: getEventsForDay(events, 6),
         },
         sunday: {
           ...state.columns.sunday,
-          date: moment().day(7).isoWeek(week).format('D'),
+          date: moment().day(7).isoWeek(week).format("D"),
           eventIds: getEventsForDay(events, 0),
         },
       },
@@ -180,13 +194,24 @@ class CalendarListComponent extends Component {
                 <PrintButton />
               </HeaderItemsRightSide>
               <HeaderItemsLeftSide>
-                <Logout />
+                <Popover placement="bottomRight" content={<UserMenu />}>
+                  <Avatar
+                    src={`https://eu.ui-avatars.com/api?name=${encodeURIComponent(
+                      userName
+                    )}`}
+                  />
+                </Popover>
               </HeaderItemsLeftSide>
             </HeaderItems>
           </Header>
 
           <SiteLayout>
-            <Button shape="circle" size="large" icon={<LeftOutlined />} onClick={() => this.fetchEvents(this.state.week - 1)}/>
+            <Button
+              shape="circle"
+              size="large"
+              icon={<LeftOutlined />}
+              onClick={() => this.fetchEvents(this.state.week - 1)}
+            />
             <DragDropContext onDragEnd={this.onDragEnd}>
               <Container>
                 {Object.keys(this.state.columns).map((columnId) => {
@@ -205,7 +230,12 @@ class CalendarListComponent extends Component {
                 })}
               </Container>
             </DragDropContext>
-            <Button shape="circle" size="large" icon={<RightOutlined />} onClick={() => this.fetchEvents(this.state.week + 1)} />
+            <Button
+              shape="circle"
+              size="large"
+              icon={<RightOutlined />}
+              onClick={() => this.fetchEvents(this.state.week + 1)}
+            />
           </SiteLayout>
         </Layout>
       </div>
