@@ -6,7 +6,7 @@ import ProgressMenu from "../Worker-load/Progress-menu/progress-menu.component";
 import LabelsMenu from "../Labels/LabelMenu/labelMenu";
 import { Logout } from "../Logout/logout.component";
 import axios from "axios";
-import { Layout, Button, Avatar, Popover, message } from "antd";
+import { Layout, Button, Avatar, Popover, message, Typography } from "antd";
 import {
   LeftOutlined,
   RightOutlined,
@@ -19,12 +19,14 @@ import styled from "styled-components";
 import "./calendar-list.styles.css";
 
 const { Header, Content } = Layout;
+const { Title } = Typography;
 
 const SiteLayout = styled(Content)`
   padding: 24px 10px;
   margin-top: 64px;
   min-height: 380px;
   display: flex;
+  flex-direction: column;
   background-color: white;
 `;
 const Container = styled.div`
@@ -63,7 +65,8 @@ const UserMenuContent = styled.div`
   text-align: center;
 `;
 
-const eventComparator = (a, b) => new Date(a.estimatedStartDate) < new Date(b.estimatedStartDate) ? -1 : 1;
+const eventComparator = (a, b) =>
+  new Date(a.estimatedStartDate) < new Date(b.estimatedStartDate) ? -1 : 1;
 
 const getEventsForDay = (events, day) => {
   return events
@@ -75,7 +78,7 @@ const getEventsForDay = (events, day) => {
 const initialData = {
   user: {},
   year: new Date().getFullYear(),
-  week: null,
+  week: moment().isoWeek(),
   modalVisible: false,
   eventId: null,
   events: {},
@@ -129,7 +132,7 @@ class CalendarListComponent extends Component {
   getUserMenu = () => {
     return (
       <UserMenuContent>
-        <p>{this.state.user.firstname + ' ' + this.state.user.lastname}</p>
+        <p>{this.state.user.firstname + " " + this.state.user.lastname}</p>
         <Logout />
       </UserMenuContent>
     );
@@ -182,7 +185,7 @@ class CalendarListComponent extends Component {
         ...this.state.columns,
         [newStart.id]: newStart,
         [newFinish.id]: newFinish,
-      }
+      },
     };
 
     this.setState(newState);
@@ -200,16 +203,16 @@ class CalendarListComponent extends Component {
           .date(finish.date)
           .format()}`,
       })
-      .then(() => message.success('Event successfully moved'))
+      .then(() => message.success("Event successfully moved"))
       .catch(() => message.error("Can not move event"));
   };
 
   fetchUsername = () => {
     axios
       .get(`/Auth/username?username=${this.props.username}`)
-      .then(res => res.data)
-      .then(user => this.setState({ user }));
-  }
+      .then((res) => res.data)
+      .then((user) => this.setState({ user }));
+  };
 
   fetchEvents = async (week) => {
     let year = this.state.year;
@@ -303,7 +306,7 @@ class CalendarListComponent extends Component {
                 <Popover placement="bottomRight" content={this.getUserMenu()}>
                   <Avatar
                     src={`https://eu.ui-avatars.com/api?name=${encodeURIComponent(
-                      this.state.user.firstname + ' ' + this.state.user.lastname
+                      this.state.user.firstname + " " + this.state.user.lastname
                     )}`}
                   />
                 </Popover>
@@ -312,39 +315,46 @@ class CalendarListComponent extends Component {
           </Header>
 
           <SiteLayout>
-            <Button
-              shape="circle"
-              size="large"
-              icon={<LeftOutlined />}
-              onClick={() => this.fetchEvents(this.state.week - 1)}
-            />
-            <DragDropContext onDragEnd={this.onDragEnd}>
-              <Container>
-                {Object.keys(this.state.columns).map((columnId) => {
-                  const column = this.state.columns[columnId];
-                  const events = column.eventIds.map(
-                    (eventId) => this.state.events[eventId]
-                  );
+            <Title level={2}>{`${this.state.year}. ${moment()
+              .year(this.state.year)
+              .day(1)
+              .isoWeek(this.state.week)
+              .format("MMMM")}`}</Title>
+            <div style={{ display: "flex" }}>
+              <Button
+                shape="circle"
+                size="large"
+                icon={<LeftOutlined />}
+                onClick={() => this.fetchEvents(this.state.week - 1)}
+              />
+              <DragDropContext onDragEnd={this.onDragEnd}>
+                <Container>
+                  {Object.keys(this.state.columns).map((columnId) => {
+                    const column = this.state.columns[columnId];
+                    const events = column.eventIds.map(
+                      (eventId) => this.state.events[eventId]
+                    );
 
-                  return (
-                    <ColumnComponent
-                      key={column.id}
-                      column={column}
-                      events={events}
-                      onCardClick={(eventId) =>
-                        this.setState({ modalVisible: true, eventId })
-                      }
-                    />
-                  );
-                })}
-              </Container>
-            </DragDropContext>
-            <Button
-              shape="circle"
-              size="large"
-              icon={<RightOutlined />}
-              onClick={() => this.fetchEvents(this.state.week + 1)}
-            />
+                    return (
+                      <ColumnComponent
+                        key={column.id}
+                        column={column}
+                        events={events}
+                        onCardClick={(eventId) =>
+                          this.setState({ modalVisible: true, eventId })
+                        }
+                      />
+                    );
+                  })}
+                </Container>
+              </DragDropContext>
+              <Button
+                shape="circle"
+                size="large"
+                icon={<RightOutlined />}
+                onClick={() => this.fetchEvents(this.state.week + 1)}
+              />
+            </div>
           </SiteLayout>
         </Layout>
         {this.state.modalVisible && (
