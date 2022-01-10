@@ -138,7 +138,7 @@ class CalendarListComponent extends Component {
     );
   };
 
-  onDragEnd = (result) => {
+  onDragEnd = async (result) => {
     const { destination, source, draggableId } = result;
 
     if (!destination) {
@@ -179,6 +179,9 @@ class CalendarListComponent extends Component {
       }),
     };
 
+    // console.log(eventIds);
+    // console.log(finishEventIds);
+
     const newState = {
       ...this.state,
       columns: {
@@ -191,24 +194,34 @@ class CalendarListComponent extends Component {
     let curState = this.state;
     this.setState(newState);
 
-    axios
-      .put(`/DnDEvent/${draggableId}`, {
-        estimatedStartDate: `${moment(
-          this.state.events[draggableId].estimatedStartDate
-        )
-          .date(finish.date)
-          .format()}`,
-        estimatedFinishDate: `${moment(
-          this.state.events[draggableId].estimatedFinishDate
-        )
-          .date(finish.date)
-          .format()}`,
-      })
-      .then(() => message.success("Event successfully moved"))
-      .catch(() => {
-        message.error("Can not move event");
-        this.setState(curState);
-      });
+    //this.state.events ben frissiteni a mozgatni kivant event start es finish datumat
+
+    let eventSucces = false;
+
+    try {
+      await axios
+        .put(`/DnDEvent/${draggableId}`, {
+          estimatedStartDate: `${moment(
+            this.state.events[draggableId].estimatedStartDate
+          )
+            .date(finish.date)
+            .format()}`,
+          estimatedFinishDate: `${moment(
+            this.state.events[draggableId].estimatedFinishDate
+          )
+            .date(finish.date)
+            .format()}`,
+        })
+        .then(() => (eventSucces = true));
+    } catch (error) {
+      message.error("Can not move event");
+      this.setState(curState);
+    }
+
+    if (eventSucces) {
+      this.fetchEvents(this.state.week);
+      message.success("Event successfully moved");
+    }
   };
 
   fetchUsername = () => {
