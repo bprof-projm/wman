@@ -11,5 +11,6 @@
   left: 0px;
 }
 .colorPickBtn {
-  margin-left: 30;
+  display: flex;
+  margin: 0 auto;
 }
