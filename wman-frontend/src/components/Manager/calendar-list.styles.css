@@ -1,0 +1,34 @@
+.logoLeftSide {
+    float: left;
+    width: 120px;
+    height: 31px;
+    color: white;
+    margin-right: 24px;
+    font-size: xx-large;
+    display: flex;
+    flex-direction: row;
+}
+
+.site-layout .site-layout-background {
+    height: 100%;
+}
+.progressMenu{
+    position: absolute;
+    margin-top: 70px;
+}
+.labelsMenu{
+    position: absolute;
+    margin-top: 105px;
+}
+.printButton{
+    position: absolute;
+    margin-top: 140px;
+}
+
+.logoutButton{
+    float: right;
+}
+
+.ant-layout-header{
+    background: #009688 !important;
+}

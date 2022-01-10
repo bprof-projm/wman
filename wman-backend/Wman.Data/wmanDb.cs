@@ -1,16 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 
 namespace Wman.Data
 {
-    public class wmanDb : IdentityDbContext<WmanUser>
+    public class wmanDb : IdentityDbContext<WmanUser, IdentityRole<int>, int,
+   IdentityUserClaim<int>, IdentityUserRole<int>, IdentityUserLogin<int>,
+   IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         public wmanDb()
         {
@@ -33,12 +30,35 @@ namespace Wman.Data
         {
             base.OnModelCreating(modelBuilder);
 
-
-            modelBuilder.Entity<IdentityRole>().HasData(
-                new { Id = "0d301757-99d2-4253-aac2-39e298dd0ab7", Name = "Debug", NormalizedName = "DEBUG" }
+            modelBuilder.Entity<IdentityRole<int>>().HasData(
+                new { Id = 1, Name = "Admin", NormalizedName = "ADMIN" },
+                new { Id = 2, Name = "Manager", NormalizedName = "MANAGER" },
+                new { Id = 3, Name = "Worker", NormalizedName = "WORKER" },
+                new { Id = 4, Name = "SystemAdmin", NormalizedName = "SYSTEMADMIN" }
             );
-        }
-        public virtual DbSet<DB_Models.WorkEvent> WorkEvent { get; set; }
 
+            modelBuilder.Entity<WmanUser>().HasData(new WmanUser
+            {
+                Id = 1,
+                Email = "random@mail.com",
+                UserName = "sysadmin",
+                FirstName = "System",
+                LastName = "Admin",
+                PhoneNumber = "+1234567890",
+                SecurityStamp = System.Guid.NewGuid().ToString(),
+                PasswordHash = new PasswordHasher<WmanUser>().HashPassword(null, "verystrongpassw0rd!")
+            });
+
+            modelBuilder.Entity<IdentityUserRole<int>>().HasData(new IdentityUserRole<int>
+            {
+                RoleId = 4,
+                UserId = 1
+            });
+        }
+        public virtual DbSet<WorkEvent> WorkEvent { get; set; }
+        public virtual DbSet<Label> Label { get; set; }
+        public virtual DbSet<AddressHUN> Address { get; set; }
+        public virtual DbSet<Pictures> Picture { get; set; }
+        public virtual DbSet<ProofOfWork> ProofOfWork { get; set; }
     }
 }

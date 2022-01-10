@@ -1,0 +1,81 @@
+.login-background {
+  background: linear-gradient(-45deg, #fceb02, #e73c7e, #04232e, #499c89);
+  background-size: 400% 400%;
+  animation: gradient 20s ease infinite;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ant-col-rtl .login-form-forgot {
+  float: left;
+}
+
+.form-item {
+  border-radius: 5px;
+  box-shadow: none !important;
+}
+
+.login-container {
+  height: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 800px;
+  border-radius: 15px;
+  padding: 20px 20px 0px 20px;
+  background-color: rgba(255, 255, 255, 0.438);
+}
+
+.login-form {
+  width: 400px;
+  border-radius: 15px;
+  padding: 20px 20px 0px 20px;
+  background-color: rgba(255, 255, 255, 0.6);
+  position: relative;
+  right: 0px;
+  margin-right: 0;
+}
+
+.login-form-button {
+  width: 100%;
+  border-radius: 5px;
+  border-color: rgba(3, 159, 250, 0.5) !important;
+  box-shadow: none !important;
+  background-color: rgba(0, 0, 0, 0.7);
+  margin-bottom: 0;
+}
+
+.login-form-forgot {
+  float: right;
+}
+
+.logo-login {
+  font-size: 4em;
+  font-weight: bolder;
+  font-size: 70px;
+  color: white;
+  left: 0;
+  padding-left: 10px;
+  padding-right: 50px;
+}
+
+.logo-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.slogan {
+  padding-top: 20px;
+  font-size: 30px;
+  color: white;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.left {
+  height: 350px;
+  margin-top: 30px;
+}

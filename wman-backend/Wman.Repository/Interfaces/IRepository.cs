@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Wman.Repository
 {
@@ -17,7 +18,7 @@ namespace Wman.Repository
         /// </summary>
         /// <param name="key">identifier of the instance</param>
         /// <returns></returns>
-        TReturnType GetOne(TKeyType key);
+        Task<TReturnType> GetOne(TKeyType key);
 
         /// <summary>
         /// Gets all the objects in the repository
@@ -29,19 +30,20 @@ namespace Wman.Repository
         /// Add a new item to the repository
         /// </summary>
         /// <param name="element">The item to add</param>
-        void Add(TReturnType element);
+        Task Add(TReturnType element);
 
         /// <summary>
         /// Delete an item from the repository
         /// </summary>
         /// <param name="element">The item to be deleted</param>
-        void Delete(TKeyType element);
+        Task Delete(TKeyType element);
 
         /// <summary>
         /// Update an item in the repository
         /// </summary>
         /// <param name="oldKey">Old key of the item</param>
         /// <param name="element">Updated object</param>
-        void Update(TKeyType oldKey ,TReturnType element);
+        Task Update(TKeyType oldKey ,TReturnType element);
+        Task SaveDatabase();
     }
 }

@@ -1,0 +1,34 @@
+.events-of-the-day{
+    text-align: center;
+    align-items: center;
+}
+.events-of-the-day h1{
+    font-size: 25vw;
+    align-items: center;
+    justify-content: center;
+}
+body{
+    background-color: ghostwhite;
+}
+.one-day{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 1vh;
+    cursor: pointer;
+}
+.my-workload{
+    width: 30vw ;
+    margin: auto;
+}
+
+@media screen and (max-width:600px) {
+    .one-day{
+        width: 80vw;
+        flex-direction: column;
+        margin: auto;
+    }  
+    .my-workload{
+        width: 40vw;
+    }
+   }

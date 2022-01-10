@@ -4,23 +4,58 @@
         <name>Wman.WebAPI</name>
     </assembly>
     <members>
+        <member name="T:Wman.WebAPI.Controllers.AdminController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AdminController.#ctor(Wman.Logic.Interfaces.IAuthLogic,Wman.Logic.Interfaces.IAdminLogic)">
+            <summary>
+            
+            </summary>
+            <param name="authLogic"></param>
+            <param name="adminLogic"></param>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AdminController.CreateWorkforce(Wman.Logic.DTO_Models.RegisterDTO)">
+            <summary>
+            Create a new workforce
+            </summary>
+            <param name="model"></param>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AdminController.ModifyWorkForce(System.String,Wman.Logic.DTO_Models.WorkerModifyDTO)">
+            <summary>
+            Edit an existing workforce
+            </summary>
+            <param name="username"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.AdminController.DeleteWorkforce(System.String)">
+            <summary>
+            Delete a workforce
+            </summary>
+            <param name="username"></param>
+            <returns></returns>
+        </member>
         <member name="T:Wman.WebAPI.Controllers.AuthController">
             <summary>
             Auth controller
             </summary>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.#ctor(Wman.Logic.Interfaces.IAuthLogic)">
+        <member name="M:Wman.WebAPI.Controllers.AuthController.#ctor(Wman.Logic.Interfaces.IAuthLogic,Wman.Logic.Interfaces.IAdminLogic)">
             <summary>
             
             </summary>
             <param name="authLogic"></param>
+            <param name="adminLogic"></param>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.CreateUser(Wman.Logic.DTO_Models.UserDTO)">
+        <member name="M:Wman.WebAPI.Controllers.AuthController.Login(Wman.Logic.DTO_Models.LoginDTO)">
             <summary>
-            Create a new user
+            Login
             </summary>
-            <param name="model">Login model</param>
-            <returns>ActionResult</returns>
+            <param name="model">Login details</param>
         </member>
         <member name="M:Wman.WebAPI.Controllers.AuthController.GetAllUsers">
             <summary>
@@ -35,37 +70,200 @@
             <param name="username"></param>
             <returns></returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.DeleteUser(System.String)">
+        <member name="M:Wman.WebAPI.Controllers.AuthController.UsersOfRole(System.String)">
             <summary>
-            Delete a user
+            Returns a list of users that have the provided role
             </summary>
-            <param name="username">Id of the user to be deleted</param>
+            <param name="rolename">Name of the role</param>
+            <returns></returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.UpdateUser(System.String,Wman.Logic.DTO_Models.UserDTO)">
+        <member name="M:Wman.WebAPI.Controllers.AuthController.RolesOfUser(System.String)">
             <summary>
-            Update a user
+            Returns the role(s) assigned to the user. (Worker/Admin/Manager)
             </summary>
-            <param name="oldUsername">Prev. id</param>
-            <param name="user">User to be updated</param>
+            <param name="username"></param>
+            <returns>Worker/Admin/Manager</returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.AuthController.Login(Wman.Logic.DTO_Models.LoginDTO)">
+        <member name="T:Wman.WebAPI.Controllers.CalendarEventController">
             <summary>
-            Login/generate jwt token
+            CalendarEvent controller
             </summary>
-            <param name="model">Login details</param>
-            <returns>Hopefully a jwt token</returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.DemoController.HelloWorld">
+        <member name="M:Wman.WebAPI.Controllers.CalendarEventController.#ctor(Wman.Logic.Interfaces.ICalendarEventLogic,Wman.Logic.Interfaces.IAllInWorkEventLogic)">
             <summary>
-            HTTPGET test method
+            ctor
+            </summary>
+            <param name="calendarEvent"></param>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.CalendarEventController.GetCurrentDayEvents">
+            <summary>
+            gets events of today
+            </summary>
+            <returns>CalendarWorkEventDTO</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.CalendarEventController.GetCurrentWeekEvents">
+            <summary>
+            gets events from this week
+            </summary>
+            <returns>CalendarWorkEventDTO</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.CalendarEventController.GetDayEvents(System.Int32)">
+            <summary>
+            gets custom day events 
+            </summary>
+            <param name="day"></param>
+            <returns>CalendarWorkEventDTO</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Wman.WebAPI.Controllers.CalendarEventController.GetWeekEvents(System.Int32,System.Int32)" -->
+        <member name="M:Wman.WebAPI.Controllers.CalendarEventController.GetDayEvents(System.DateTime)">
+            <summary>
+            gets custom day events
+            </summary>
+            <param name="time"></param>
+            <returns>CalendarWorkEventDTO</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.CalendarEventController.GetWeekEvents(System.DateTime,System.DateTime)">
+            <summary>
+            gets custom week events
+            </summary>
+            <param name="startEventDate"></param>
+            <param name="finishEventDate"></param>
+            <returns>CalendarWorkEventDTO</returns>
+        </member>
+        <member name="T:Wman.WebAPI.Controllers.EventController">
+            <summary>
+            EventController
+            </summary>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.EventController.#ctor(Wman.Logic.Interfaces.IEventLogic,Wman.Logic.Interfaces.IAuthLogic)">
+            <summary>
+            ctor
+            </summary>
+            <param name="eventLogic"></param>
+            <param name="authLogic"></param>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.EventController.CreateEvent(Wman.Logic.DTO_Models.CreateEventDTO)">
+            <summary>
+            Creates an event from body
+            </summary>
+            <param name="workEvent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.EventController.DeleteEvent(System.Int32)">
+            <summary>
+            deletes an event
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.EventController.AssignUser(System.Int32,System.String)">
+            <summary>
+            Assign a user to a specific event
+            </summary>
+            <param name="eventid">The id of the event</param>
+            <param name="userName">username of the user</param>
+            <returns>HTTP response code</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.EventController.GetAll">
+            <summary>
+            Debug endpoint used for listing every workevent. Will not be avaliable in production.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.DemoController.test">
+        <member name="M:Wman.WebAPI.Controllers.EventController.MassAssignUsers(System.Int32,System.Collections.Generic.ICollection{System.String})">
             <summary>
-            HTTPPost test method
+            Assign multiple users at a time to a selected event.
             </summary>
-            <returns>OK</returns>
+            <param name="eventid">The ID of the event we'd like to add to</param>
+            <param name="usernames">A list of string string usernames, which we'd like to assign to the event</param>
+            <returns>A list of userDTOs, where the users could be assigned without date collision</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.SeedController.PopulateDB">
+            <summary>
+            Fill database with testing data. Used only for testing purposes.
+            </summary>
+            <returns>200</returns>
+        </member>
+        <member name="T:Wman.WebAPI.Controllers.UserController">
+            <summary>
+            UserController
+            </summary>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.UserController.#ctor(Wman.Logic.Interfaces.IUserLogic)">
+            <summary>
+            Ctor
+            </summary>
+            <param name="userLogic"></param>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.UserController.WorkloadRange(System.Collections.Generic.ICollection{System.String})">
+            <summary>
+            Calculate the workload of the users with the usernames provided in query
+            </summary>
+            <param name="usernames">A collection of usernames</param>
+            <returns>WorkLoadDTO</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.UserController.AllWorkloads">
+            <summary>
+            Calculate the workload of every single user
+            </summary>
+            <returns>WorkLoadDTO</returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.UserController.CalculateStats(System.String,System.DateTime)">
+            <summary>
+            Calculate the workload stats of a selected user, in the specified year
+            </summary>
+            <param name="username"></param>
+            <param name="date">Datetime, containing the year we're filtering to</param>
+            <returns></returns>
+        </member>
+        <member name="T:Wman.WebAPI.Controllers.WorkerController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.WorkerController.GetWorkersAtSpecTime(System.DateTime,System.DateTime)">
+            <summary>
+            
+            </summary>
+            <param name="fromDate"></param>
+            <param name="toDate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.WorkerController.GetEventDetailsForMyself(System.Int32)">
+            <summary>
+            Get event details (Only works on the ones assigned to the currently logged in user)
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.WorkerController.GetLoggedInWorkersWorkload">
+            <summary>
+            Return the workload of the currently logged in user
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Wman.WebAPI.Helpers.AllowAnonymous">
+            <summary>
+            This authorisation handler will bypass all requirements
+            </summary>
+        </member>
+        <member name="M:Wman.WebAPI.Helpers.AllowAnonymous.HandleAsync(Microsoft.AspNetCore.Authorization.AuthorizationHandlerContext)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Wman.WebAPI.Helpers.ApiExceptionFilter">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Wman.WebAPI.Helpers.ApiExceptionFilter.OnException(Microsoft.AspNetCore.Mvc.Filters.ExceptionContext)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
         </member>
     </members>
 </doc>

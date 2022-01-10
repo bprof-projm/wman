@@ -1,0 +1,29 @@
+.progress-card-container {
+  display:flex;  
+  align-items: center;
+  justify-content: space-around;
+  background-color:rgb(103, 162, 245);
+  border: 1px solid rgb(240, 220, 220);
+  border-radius:20px;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  cursor:pointer;
+  transform: translateZ(0);
+  transition: transform 0.25s ease-out;
+  align-content: center;
+  }
+  
+  .progress-card-container:hover {
+    transform: scale(1.05);
+  }
+  .card-name{ 
+    align-items:center ;
+    width:max-content;
+  }
+  .progress-card-container img{
+    border-radius: 50%;
+    width: 65px;
+    height: 65px;
+}
