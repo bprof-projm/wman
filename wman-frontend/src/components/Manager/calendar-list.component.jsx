@@ -188,6 +188,7 @@ class CalendarListComponent extends Component {
       },
     };
 
+    let curState = this.state;
     this.setState(newState);
 
     axios
@@ -204,7 +205,10 @@ class CalendarListComponent extends Component {
           .format()}`,
       })
       .then(() => message.success("Event successfully moved"))
-      .catch(() => message.error("Can not move event"));
+      .catch(() => {
+        message.error("Can not move event");
+        this.setState(curState);
+      });
   };
 
   fetchUsername = () => {
