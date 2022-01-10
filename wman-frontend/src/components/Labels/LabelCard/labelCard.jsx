@@ -18,7 +18,7 @@ const LabelCard = (props) => {
         )}
       >
         <div className="card-name">
-          <h4 style={{ color: props.textColor }}>{props.name}</h4>
+          <h4 style={{ color: "white" }}>{props.name}</h4>
         </div>
       </div>
       <Button
