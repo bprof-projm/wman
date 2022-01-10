@@ -22,14 +22,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 600px;
+  width: 800px;
   border-radius: 15px;
   padding: 20px 20px 0px 20px;
   background-color: rgba(255, 255, 255, 0.438);
 }
 
 .login-form {
-  width: 300px;
+  width: 400px;
   border-radius: 15px;
   padding: 20px 20px 0px 20px;
   background-color: rgba(255, 255, 255, 0.6);
@@ -64,6 +64,7 @@
 .logo-container {
   display: flex;
   flex-direction: row;
+  justify-content: center;
 }
 
 .slogan {
