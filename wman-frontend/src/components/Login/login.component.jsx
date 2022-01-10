@@ -48,7 +48,7 @@ export const NormalLoginForm = () => {
       })
       .then((response) => {
         if (response.data[0] == "Manager") {
-          history.push("/");
+          history.push("/calendar");
         } else if (response.data[0] == "Worker") {
           history.push("/worker");
         } else {
