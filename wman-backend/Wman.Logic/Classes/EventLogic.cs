@@ -343,6 +343,10 @@ namespace Wman.Logic.Classes
                     }
 
                 }
+                else
+                {
+                    await eventRepo.Update(Id, workEventInDb);
+                }
                 
             }
             else
