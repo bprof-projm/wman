@@ -10,11 +10,10 @@ const Container = styled.div`
 
   dispaly: flex;
   flex-direction: column;
-  height: 89vh;
 `;
 const Title = styled.h3`
   text-align: center;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: bold;
 `;
 const TaskList = styled.div`
