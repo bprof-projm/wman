@@ -272,7 +272,7 @@ namespace Wman.Test.Tests
             await eventLogic.CreateEvent(eventDTO);
 
             //Assert
-            this.eventRepo.Verify(x => x.Add(It.IsAny<WorkEvent>()), Times.Once);
+            this.eventRepo.Verify(x => x.AddEventReturnsId(It.IsAny<WorkEvent>()), Times.Once);
         }
     }
 }

@@ -134,7 +134,7 @@ namespace Wman.Logic.Classes
             }
         }
 
-        public async Task CreateEvent(CreateEventDTO workEvent)
+        public async Task<int> CreateEvent(CreateEventDTO workEvent)
         {
             if (workEvent.EstimatedStartDate < workEvent.EstimatedFinishDate && workEvent.EstimatedStartDate.Day == workEvent.EstimatedFinishDate.Day)
             {
@@ -151,7 +151,7 @@ namespace Wman.Logic.Classes
                     result.Address = find;
                 }
 
-                await eventRepo.Add(result);
+                return await eventRepo.AddEventReturnsId(result);
             }
             else
             {
@@ -196,7 +196,7 @@ namespace Wman.Logic.Classes
 
             if (newWorkEvent.EstimatedStartDate < newWorkEvent.EstimatedFinishDate && newWorkEvent.EstimatedStartDate.Day == newWorkEvent.EstimatedFinishDate.Day)
             {
-                if (await WorkerTimeCheck(workevent.AssignedUsers.ToList(), newWorkEvent.EstimatedStartDate, newWorkEvent.EstimatedFinishDate))
+                if (await WorkerTimeCheck(workevent, newWorkEvent.EstimatedStartDate, newWorkEvent.EstimatedFinishDate))
                 {
                     if (workevent.EstimatedStartDate.Date == DateTime.Today)
                     {
@@ -218,7 +218,6 @@ namespace Wman.Logic.Classes
             {
                 throw new InvalidOperationException(WmanError.EventDateInvalid);
             }
-            workevent.Status = newWorkEvent.Status;
 
             await eventRepo.SaveDatabase();
             var notifyEvent = await eventRepo.GetOne(workevent.Id);
@@ -293,8 +292,8 @@ namespace Wman.Logic.Classes
                 if (workEventInDb.AssignedUsers.Count > 0)
                 {
                     var eventssAtDnDTime =await (from x in eventRepo.GetAll()
-                                         where x.EstimatedStartDate >= result.EstimatedStartDate && x.EstimatedStartDate <= result.EstimatedFinishDate && x.EstimatedFinishDate >= result.EstimatedStartDate && x.EstimatedFinishDate <= result.EstimatedFinishDate
-                                         select x).ToListAsync();
+                                                 where x.EstimatedStartDate <= result.EstimatedFinishDate && x.EstimatedFinishDate >= result.EstimatedStartDate
+                                                 select x).ToListAsync();
                     
                     List<int> dnDUserIds = new List<int>();
                     foreach (var item in workEventInDb.AssignedUsers)
@@ -343,6 +342,10 @@ namespace Wman.Logic.Classes
                         await _email.WorkEventUpdated(notifyEvent, item);
                     }
 
+                }
+                else
+                {
+                    await eventRepo.Update(Id, workEventInDb);
                 }
                 
             }
@@ -403,15 +406,15 @@ namespace Wman.Logic.Classes
             var workevent2 = await eventRepo.GetOne(eventId);
             return mapper.Map<WorkEventForWorkCardDTO>(workevent2);
         }
-        private async Task<bool> WorkerTimeCheck(List<WmanUser> assignedUsers, DateTime startDate , DateTime finishDate)
+        private async Task<bool> WorkerTimeCheck(WorkEvent workEvent, DateTime startDate , DateTime finishDate)
         {
-            if (assignedUsers.Count > 0)
+            if (workEvent.AssignedUsers.Count > 0)
             {
                 var eventsAtUpdateTime = await(from x in eventRepo.GetAll()
-                                             where x.EstimatedStartDate <= finishDate && x.EstimatedFinishDate >= startDate
+                                             where x.EstimatedStartDate <= finishDate && x.EstimatedFinishDate >= startDate && x.Id != workEvent.Id
                                                select x).ToListAsync();
                 List<int> UpdateUserIds = new List<int>();
-                foreach (var item in assignedUsers)
+                foreach (var item in workEvent.AssignedUsers)
                 {
                     UpdateUserIds.Add(item.Id);
                 }

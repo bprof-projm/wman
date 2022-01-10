@@ -40,8 +40,7 @@ namespace Wman.WebAPI.Controllers
         [Authorize(Roles = "Manager")]
         public async Task<ActionResult> CreateEvent([FromBody] CreateEventDTO workEvent)
         {
-                await eventLogic.CreateEvent(workEvent);
-                return Ok();
+                return Ok(await eventLogic.CreateEvent(workEvent));
         }
 
         /// <summary>

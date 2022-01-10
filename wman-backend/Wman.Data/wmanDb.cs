@@ -33,8 +33,27 @@ namespace Wman.Data
             modelBuilder.Entity<IdentityRole<int>>().HasData(
                 new { Id = 1, Name = "Admin", NormalizedName = "ADMIN" },
                 new { Id = 2, Name = "Manager", NormalizedName = "MANAGER" },
-                new { Id = 3, Name = "Worker", NormalizedName = "WORKER" }
+                new { Id = 3, Name = "Worker", NormalizedName = "WORKER" },
+                new { Id = 4, Name = "SystemAdmin", NormalizedName = "SYSTEMADMIN" }
             );
+
+            modelBuilder.Entity<WmanUser>().HasData(new WmanUser
+            {
+                Id = 1,
+                Email = "random@mail.com",
+                UserName = "sysadmin",
+                FirstName = "System",
+                LastName = "Admin",
+                PhoneNumber = "+1234567890",
+                SecurityStamp = System.Guid.NewGuid().ToString(),
+                PasswordHash = new PasswordHasher<WmanUser>().HashPassword(null, "verystrongpassw0rd!")
+            });
+
+            modelBuilder.Entity<IdentityUserRole<int>>().HasData(new IdentityUserRole<int>
+            {
+                RoleId = 4,
+                UserId = 1
+            });
         }
         public virtual DbSet<WorkEvent> WorkEvent { get; set; }
         public virtual DbSet<Label> Label { get; set; }

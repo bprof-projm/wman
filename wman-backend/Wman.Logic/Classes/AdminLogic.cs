@@ -32,7 +32,7 @@ namespace Wman.Logic.Classes
             {
                 throw new NotFoundException(WmanError.UserNotFound);
             }
-            if (await userManager.IsInRoleAsync(user, "Admin"))
+            if (await userManager.IsInRoleAsync(user, "Admin") || await userManager.IsInRoleAsync(user, "SystemAdmin"))
             {
                 throw new InvalidOperationException(WmanError.NotAWorkforce);
             }
@@ -80,7 +80,7 @@ namespace Wman.Logic.Classes
             {
                 throw new NotFoundException(WmanError.UserNotFound);
             }
-            if (await userManager.IsInRoleAsync(user, "Admin"))
+            if (await userManager.IsInRoleAsync(user, "Admin") || await userManager.IsInRoleAsync(user, "SystemAdmin"))
             {
                 throw new InvalidOperationException(WmanError.NotAWorkforce);
             }
@@ -96,7 +96,7 @@ namespace Wman.Logic.Classes
 
         public async Task<IdentityResult> CreateWorkforce(RegisterDTO model)
         {
-            if (model.Role.ToLower() == "admin")
+            if (model.Role.ToLower().Contains("admin"))
             {
                 throw new InvalidOperationException(WmanError.CantCreateAdmin);
             }
