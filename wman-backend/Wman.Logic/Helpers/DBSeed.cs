@@ -168,7 +168,7 @@ namespace Wman.Logic.Helpers
                 Address = addresses.FirstOrDefault(x => x.Id == addresses[3].Id),
                 Status = Status.awaiting,
                 Labels = labelList.FindAll(x => x.Id == labelList[2].Id),
-                AssignedUsers = workers.FindAll(x => x.Id != workers[0].Id)
+                AssignedUsers = workers.FindAll(x => x.Id == workers[2].Id)
             }).Wait();
 
             eventRepo.Add(new WorkEvent

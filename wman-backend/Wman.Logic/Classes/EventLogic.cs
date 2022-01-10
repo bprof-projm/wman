@@ -292,8 +292,8 @@ namespace Wman.Logic.Classes
                 if (workEventInDb.AssignedUsers.Count > 0)
                 {
                     var eventssAtDnDTime =await (from x in eventRepo.GetAll()
-                                         where x.EstimatedStartDate >= result.EstimatedStartDate && x.EstimatedStartDate <= result.EstimatedFinishDate && x.EstimatedFinishDate >= result.EstimatedStartDate && x.EstimatedFinishDate <= result.EstimatedFinishDate
-                                         select x).ToListAsync();
+                                                 where x.EstimatedStartDate <= result.EstimatedFinishDate && x.EstimatedFinishDate >= result.EstimatedStartDate
+                                                 select x).ToListAsync();
                     
                     List<int> dnDUserIds = new List<int>();
                     foreach (var item in workEventInDb.AssignedUsers)
