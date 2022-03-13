@@ -10,7 +10,7 @@ namespace Wman.Logic.DTO_Models
     {
         public string WorkerName { get; set; }
         public string JobDesc { get; set; }
-        public AddressHUNDTO JobLocation { get; set; }
+        public string JobLocation { get; set; }
         public DateTime JobStart { get; set; }
         public DateTime JobEnd { get; set; }
 

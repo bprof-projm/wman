@@ -441,6 +441,12 @@ namespace Wman.Logic.Classes
             {
                 return true;
             }
-        } 
+        }
+
+        public async Task<ICollection<WorkEvent>> GetAllCompleted()
+        {
+            var output = await eventRepo.GetAll().Where(x => x.Status == Status.finished).ToListAsync();
+            return output;
+        }
     }
 }
