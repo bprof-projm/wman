@@ -24,7 +24,7 @@ namespace Wman.Logic.Classes
 
         public async Task<ICollection<ManagerXlsModel>> getStats()
         {
-            var allCompleted = await eventLogic.getAllCompleted();
+            var allCompleted = await eventLogic.GetAllCompleted();
             var output = new List<ManagerXlsModel>();
 
             foreach (var item in allCompleted)

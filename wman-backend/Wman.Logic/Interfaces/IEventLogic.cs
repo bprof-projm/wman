@@ -22,6 +22,6 @@ namespace Wman.Logic.Interfaces
 
         Task MassAssignUser(int eventID, ICollection<string> usernames);
         Task<WorkEventForWorkCardDTO> StatusUpdater(int eventId, string username);
-        Task<ICollection<WorkEvent>> getAllCompleted();
+        Task<ICollection<WorkEvent>> GetAllCompleted();
     }
 }

@@ -27,14 +27,14 @@ namespace Wman.WebAPI.Controllers
 
         }
         /// <summary>
-        /// asdf
+        /// Endpoint to test the output of the upcoming xls export. Will be removed once excel exporting is implemented
         /// </summary>
-        /// <returns>asd1</returns>
+        /// <returns></returns>
         /// 
-        [HttpGet]
+        [HttpGet("testxls")]
         public async Task<ActionResult> test()
         {
-            return Ok("asdf");
+            return Ok(await this.managerLogic.getStats());
         }
     }
 }
