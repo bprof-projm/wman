@@ -18,10 +18,12 @@ namespace Wman.WebAPI.Controllers
     public class ManagerController : ControllerBase
     {
         IEventLogic eventLogic;
+        IManagerLogic managerLogic;
 
-        public ManagerController(IEventLogic eventLogic)
+        public ManagerController(IEventLogic eventLogic, IManagerLogic managerLogic)
         {
             this.eventLogic = eventLogic;
+            this.managerLogic = managerLogic;
 
         }
         /// <summary>
