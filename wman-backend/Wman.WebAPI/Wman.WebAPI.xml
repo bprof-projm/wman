@@ -183,6 +183,13 @@
             
             </summary>
         </member>
+        <member name="M:Wman.WebAPI.Controllers.ManagerController.#ctor(Wman.Logic.Interfaces.IEventLogic,Wman.Logic.Interfaces.IManagerLogic)">
+            <summary>
+            
+            </summary>
+            <param name="eventLogic"></param>
+            <param name="managerLogic"></param>
+        </member>
         <member name="M:Wman.WebAPI.Controllers.ManagerController.test">
             <summary>
             Endpoint to test the output of the upcoming xls export. Will be removed once excel exporting is implemented

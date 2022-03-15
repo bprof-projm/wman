@@ -38,5 +38,17 @@ namespace Wman.Data.DB_Models
         {
             this.WorkEvents = new List<WorkEvent>();
         }
+        public override string ToString()
+        {
+            string output = ZIPCode + " " +
+                   City + ", " +
+                   Street + " " +
+                   BuildingNumber;
+            if (!String.IsNullOrWhiteSpace(Floordoor))
+            {
+                output += " (" + Floordoor + ")";
+            }
+            return output;
+        }
     }
 }

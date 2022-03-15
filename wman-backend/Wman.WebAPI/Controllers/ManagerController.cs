@@ -19,7 +19,11 @@ namespace Wman.WebAPI.Controllers
     {
         IEventLogic eventLogic;
         IManagerLogic managerLogic;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="eventLogic"></param>
+        /// <param name="managerLogic"></param>
         public ManagerController(IEventLogic eventLogic, IManagerLogic managerLogic)
         {
             this.eventLogic = eventLogic;
