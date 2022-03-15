@@ -36,9 +36,9 @@ namespace Wman.WebAPI.Controllers
         /// <returns></returns>
         /// 
         [HttpGet("testxls")]
-        public async Task<ActionResult> test()
+        public async Task<ActionResult> TestThisMonth()
         {
-            return Ok(await this.managerLogic.getStats());
+            return Ok(await this.managerLogic.GetStats(DateTime.Now));
         }
     }
 }

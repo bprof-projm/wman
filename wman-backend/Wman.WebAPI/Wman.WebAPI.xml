@@ -190,7 +190,7 @@
             <param name="eventLogic"></param>
             <param name="managerLogic"></param>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.ManagerController.test">
+        <member name="M:Wman.WebAPI.Controllers.ManagerController.TestThisMonth">
             <summary>
             Endpoint to test the output of the upcoming xls export. Will be removed once excel exporting is implemented
             </summary>

@@ -12,22 +12,20 @@ namespace Wman.Logic.Classes
 {
     public class ManagerLogic : IManagerLogic
     {
-        UserManager<WmanUser> userManager;
         IEventLogic eventLogic;
 
-
-        public ManagerLogic(UserManager<WmanUser> userManager, IEventLogic eventLogic)
+        public ManagerLogic(IEventLogic eventLogic)
         {
-            this.userManager = userManager;
             this.eventLogic = eventLogic;
         }
 
-        public async Task<ICollection<ManagerXlsModel>> getStats()
+        public async Task<ICollection<ManagerXlsModel>> GetStats(DateTime input)
         {
             var allCompleted = await eventLogic.GetAllCompleted();
+            var thisMonth = allCompleted.Where(x => x.WorkFinishDate.Year == input.Year && x.WorkFinishDate.Month == input.Month);
             var output = new List<ManagerXlsModel>();
 
-            foreach (var job in allCompleted)
+            foreach (var job in thisMonth)
             {
                 foreach (var person in job.AssignedUsers)
                 {

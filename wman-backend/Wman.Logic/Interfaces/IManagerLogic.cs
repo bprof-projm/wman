@@ -10,6 +10,6 @@ namespace Wman.Logic.Interfaces
 {
     public interface IManagerLogic
     {
-        Task<ICollection<ManagerXlsModel>> getStats();
+        Task<ICollection<ManagerXlsModel>> GetStats(DateTime month);
     }
 }
