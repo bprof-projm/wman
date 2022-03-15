@@ -27,17 +27,20 @@ namespace Wman.Logic.Classes
             var allCompleted = await eventLogic.GetAllCompleted();
             var output = new List<ManagerXlsModel>();
 
-            foreach (var item in allCompleted)
+            foreach (var job in allCompleted)
             {
-                output.Add(new ManagerXlsModel //TODO: Still wip
+                foreach (var person in job.AssignedUsers)
                 {
-                    JobDesc = item.JobDescription,
-                    JobLocation = this.address2string(item.Address),
-                    JobStart = item.WorkStartDate,
-                    JobEnd = item.WorkFinishDate,
-                    WorkerName = "debug"
-                    
-                });
+                    output.Add(new ManagerXlsModel
+                    {
+                        JobDesc = job.JobDescription,
+                        JobLocation = this.address2string(job.Address),
+                        JobStart = job.WorkStartDate,
+                        JobEnd = job.WorkFinishDate,
+                        WorkerName = person.LastName + " " + person.FirstName
+
+                    });
+                }
             }
             return output;
         }
