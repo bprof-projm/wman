@@ -8,8 +8,8 @@ using Wman.Logic.DTO_Models;
 
 namespace Wman.Logic.Interfaces
 {
-    public interface IManagerLogic
+    public interface IStatsLogic
     {
-        Task<ICollection<ManagerXlsModel>> GetStats(DateTime month);
+        Task<ICollection<StatsXlsModel>> GetStats(DateTime month);
     }
 }

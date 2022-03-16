@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Wman.Logic.DTO_Models
 {
-    public class ManagerXlsModel
+    public class StatsXlsModel
     {
         public string WorkerName { get; set; }
         public string JobDesc { get; set; }

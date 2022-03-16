@@ -183,7 +183,7 @@
             
             </summary>
         </member>
-        <member name="M:Wman.WebAPI.Controllers.ManagerController.#ctor(Wman.Logic.Interfaces.IEventLogic,Wman.Logic.Interfaces.IManagerLogic)">
+        <member name="M:Wman.WebAPI.Controllers.ManagerController.#ctor(Wman.Logic.Interfaces.IEventLogic,Wman.Logic.Interfaces.IStatsLogic)">
             <summary>
             
             </summary>
