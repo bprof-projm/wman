@@ -441,6 +441,6 @@ namespace Wman.Logic.Classes
             {
                 return true;
             }
-        } 
+        }
     }
 }
