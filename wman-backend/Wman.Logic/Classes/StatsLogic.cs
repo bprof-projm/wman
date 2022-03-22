@@ -17,10 +17,12 @@ namespace Wman.Logic.Classes
     public class StatsLogic : IStatsLogic
     {
         IWorkEventRepo eventRepo;
+        IFileRepo fileRepo;
 
-        public StatsLogic(IWorkEventRepo eventRepo)
+        public StatsLogic(IWorkEventRepo eventRepo, IFileRepo fileRepo)
         {
             this.eventRepo = eventRepo;
+            this.fileRepo = fileRepo;
         }
 
         public async Task<ICollection<StatsXlsModel>> GetStats(DateTime input)
@@ -55,6 +57,7 @@ namespace Wman.Logic.Classes
             var filename = "JobStat_";
             var currentdate = DateTime.Now.ToString("yyyy_MM_dd");
             filename += currentdate + ".xlsx";
+
             using (var workbook = new XLWorkbook())
             {
                 var sheet = workbook.Worksheets.Add("ManagerStats");
@@ -73,12 +76,12 @@ namespace Wman.Logic.Classes
                     sheet.Cell(rowIndex, 4).Value = item.JobStart;
                     sheet.Cell(rowIndex, 5).Value = item.JobEnd;
                 }
-
-                using (var fileStream = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write))
+                using (var ms = new MemoryStream())
                 {
-                    workbook.SaveAs(fileStream);
-                    fileStream.Close();
+                    workbook.SaveAs(ms);
+                    await fileRepo.Create(filename, ms);
                 }
+                
             }
 
         }
