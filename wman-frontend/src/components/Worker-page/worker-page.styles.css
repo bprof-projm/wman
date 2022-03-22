@@ -1,24 +1,19 @@
 .select-intervall{
     display:flex;
     flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    background-color: ghostwhite;
-    height: 12vh;
 }
 .select-intervall Button{
-    width: 40vw;
-    height: 10vh;
     background: transparent;
-    border: 1px solid #006AFF;
-    border-radius:20px;  
+    color: ghostwhite;
+    border: 1px solid #00dcc7;
+    border-radius:7px;  
     cursor: pointer;
     text-decoration: none;
     transition: 0.1s ease-out;
+    margin-left: 1vw;
 }
 .select-intervall Button:hover{
-    color: white;    
-    background-color: #006AFF;
+    color: #00dcc7;
 }
 .select-intervall Button:active{
     transform: scale(0.9); 
@@ -29,4 +24,9 @@
     justify-content: space-around;
     align-items: center;
     margin-top:1vh;
+}
+.worker-avatar-popover{
+    position: absolute;
+    left:95vw;
+    top:2vh;
 }
