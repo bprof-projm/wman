@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using ClosedXML.Excel;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,7 +47,23 @@ namespace Wman.Logic.Classes
                     });
                 }
             }
+            await this.makexls();
             return output;
+        }
+        public async Task makexls()
+        {
+            using (var workbook = new XLWorkbook())
+            {
+                var sheet = workbook.Worksheets.Add("test");
+                sheet.Cell(1, 1).Value = "Hello world";
+
+                using (var fileStream = new FileStream("asd.xlsx", FileMode.OpenOrCreate, FileAccess.Write))
+                {
+                    workbook.SaveAs(fileStream);
+                    fileStream.Close();
+                }
+            }
+
         }
     }
 }
