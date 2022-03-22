@@ -55,9 +55,9 @@ namespace Wman.Logic.Services
             htmlContent = htmlContent.Replace("SubjectDynamicValue", $"XLS generated at: {File.GetLastWriteTime(path)}");
             htmlContent = htmlContent.Replace("MessageDynamicValue", $"Please find the generated statistics attached below");
 
-            await SendEmailWithAttachment(user.Email, $"Manager statistics", htmlContent, path);
+            await SendEmail(user.Email, $"Manager statistics", htmlContent, path);
         }
-        private async Task SendEmailWithAttachment(string toAddress, string subject, string htmlContent, string filePath) 
+        private async Task SendEmail(string toAddress, string subject, string htmlContent, string filePath = "") 
         {
             SmtpClient smtpClient = new SmtpClient(config.Value.SmtpHost, config.Value.SmtpPort);
 
@@ -86,10 +86,6 @@ namespace Wman.Logic.Services
 
             mail.IsBodyHtml = true;
             await smtpClient.SendMailAsync(mail);
-        }
-        private async Task SendEmail(string toAddress, string subject, string htmlContent)
-        {
-            await this.SendEmailWithAttachment(toAddress, subject, htmlContent, null);
         }
     }
 }
