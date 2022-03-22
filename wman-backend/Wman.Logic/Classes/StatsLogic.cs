@@ -47,17 +47,34 @@ namespace Wman.Logic.Classes
                     });
                 }
             }
-            await this.makexls();
+            await this.makexls(output);
             return output;
         }
-        public async Task makexls()
+        public async Task makexls(List<StatsXlsModel> input)
         {
+            var filename = "JobStat_";
+            var currentdate = DateTime.Now.ToString("yyyy_MM_dd");
+            filename += currentdate + ".xlsx";
             using (var workbook = new XLWorkbook())
             {
-                var sheet = workbook.Worksheets.Add("test");
-                sheet.Cell(1, 1).Value = "Hello world";
+                var sheet = workbook.Worksheets.Add("ManagerStats");
+                var rowIndex = 1;
+                sheet.Cell(rowIndex, 1).Value = "Worker's name";
+                sheet.Cell(rowIndex, 2).Value = "Job Description";
+                sheet.Cell(rowIndex, 3).Value = "Location";
+                sheet.Cell(rowIndex, 4).Value = "Started at";
+                sheet.Cell(rowIndex, 5).Value = "Finished at";
+                foreach (var item in input)
+                {
+                    rowIndex++;
+                    sheet.Cell(rowIndex, 1).Value = item.WorkerName;
+                    sheet.Cell(rowIndex, 2).Value = item.JobDesc;
+                    sheet.Cell(rowIndex, 3).Value = item.JobLocation;
+                    sheet.Cell(rowIndex, 4).Value = item.JobStart;
+                    sheet.Cell(rowIndex, 5).Value = item.JobEnd;
+                }
 
-                using (var fileStream = new FileStream("asd.xlsx", FileMode.OpenOrCreate, FileAccess.Write))
+                using (var fileStream = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write))
                 {
                     workbook.SaveAs(fileStream);
                     fileStream.Close();
