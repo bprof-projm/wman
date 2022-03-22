@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using Wman.Data.DB_Models;
@@ -47,7 +48,7 @@ namespace Wman.Logic.Services
                 we.Address.ZIPCode + ", " + we.Address.City + "<br>" + we.Address.Street +" " + we.Address.BuildingNumber + $" {we.Address.Floordoor}");
             await SendEmail(user.Email, $"The {we.JobDescription} event has been modified!", htmlContent);
         }
-        private async Task SendEmail(string toAddress, string subject, string htmlContent) 
+        private async Task SendEmailWithAttachment(string toAddress, string subject, string htmlContent, string filePath) 
         {
             SmtpClient smtpClient = new SmtpClient(config.Value.SmtpHost, config.Value.SmtpPort);
 
@@ -56,6 +57,16 @@ namespace Wman.Logic.Services
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtpClient.EnableSsl = true;
             MailMessage mail = new MailMessage();
+
+            if (!String.IsNullOrWhiteSpace(filePath))
+            {
+                Attachment data = new Attachment(filePath, MediaTypeNames.Application.Octet);
+                ContentDisposition disposition = data.ContentDisposition;
+                disposition.CreationDate = File.GetCreationTime(filePath);
+                disposition.ModificationDate = File.GetLastWriteTime(filePath);
+                disposition.ReadDate = File.GetLastAccessTime(filePath);
+                mail.Attachments.Add(data);
+            }
 
             //Setting From , To and CC
             mail.From = new MailAddress(config.Value.SmtpAddress);
@@ -66,6 +77,10 @@ namespace Wman.Logic.Services
 
             mail.IsBodyHtml = true;
             await smtpClient.SendMailAsync(mail);
+        }
+        private async Task SendEmail(string toAddress, string subject, string htmlContent)
+        {
+            await this.SendEmailWithAttachment(toAddress, subject, htmlContent, null);
         }
     }
 }
