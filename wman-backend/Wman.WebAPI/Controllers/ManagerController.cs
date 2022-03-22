@@ -18,16 +18,16 @@ namespace Wman.WebAPI.Controllers
     public class ManagerController : ControllerBase
     {
         IEventLogic eventLogic;
-        IStatsLogic managerLogic;
+        IStatsLogic statsLogic;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="eventLogic"></param>
-        /// <param name="managerLogic"></param>
-        public ManagerController(IEventLogic eventLogic, IStatsLogic managerLogic)
+        /// <param name="statsLogic"></param>
+        public ManagerController(IEventLogic eventLogic, IStatsLogic statsLogic)
         {
             this.eventLogic = eventLogic;
-            this.managerLogic = managerLogic;
+            this.statsLogic = statsLogic;
 
         }
         /// <summary>
@@ -38,7 +38,13 @@ namespace Wman.WebAPI.Controllers
         [HttpGet("testxls")]
         public async Task<ActionResult> TestThisMonth()
         {
-            return Ok(await this.managerLogic.GetStats(DateTime.Now));
+            return Ok(await this.statsLogic.GetStats(DateTime.Now));
+        }
+        [HttpGet("testemail")]
+        public async Task<ActionResult> testEmail(string username)
+            {
+            await this.statsLogic.SendEmails(username);
+            return Ok();
         }
     }
 }

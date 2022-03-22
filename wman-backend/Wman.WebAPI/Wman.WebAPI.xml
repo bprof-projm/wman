@@ -188,7 +188,7 @@
             
             </summary>
             <param name="eventLogic"></param>
-            <param name="managerLogic"></param>
+            <param name="statsLogic"></param>
         </member>
         <member name="M:Wman.WebAPI.Controllers.ManagerController.TestThisMonth">
             <summary>

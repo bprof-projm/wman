@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Wman.Data.DB_Models;
 using Wman.Logic.DTO_Models;
 using Wman.Logic.Interfaces;
+using Wman.Logic.Services;
 using Wman.Repository.Interfaces;
 
 namespace Wman.Logic.Classes
@@ -20,13 +21,16 @@ namespace Wman.Logic.Classes
         IWorkEventRepo eventRepo;
         IFileRepo fileRepo;
         IConfiguration configuration;
-
+        IEmailService emailService;
+        UserManager<WmanUser> userManager;
         public StatsLogic(IWorkEventRepo eventRepo, IFileRepo fileRepo,
-            IConfiguration configuration)
+            IConfiguration configuration, IEmailService emailService, UserManager<WmanUser> userManager)
         {
             this.eventRepo = eventRepo;
             this.fileRepo = fileRepo;
             this.configuration = configuration;
+            this.emailService = emailService;
+            this.userManager = userManager;
         }
 
         public async Task<ICollection<StatsXlsModel>> GetStats(DateTime input)
@@ -58,23 +62,7 @@ namespace Wman.Logic.Classes
         }
         public async Task makexls(List<StatsXlsModel> input)
         {
-            var currentdate = DateTime.Now.ToString("yyyy_MM_dd");
-            var filename = "JobStat_" + currentdate + ".xlsx";
-
-            string path = configuration.GetValue<string>("OutputDir");
-            if (String.IsNullOrWhiteSpace(path))
-            {
-                path = filename;
-            }
-            else if (path.EndsWith('/') || path.EndsWith(@"\"))
-            {
-                path = path + filename;
-            }
-            else
-            {
-                path += "/";
-                path = path + filename;
-            }
+            
             using (var workbook = new XLWorkbook())
             {
                 var sheet = workbook.Worksheets.Add("ManagerStats");
@@ -99,11 +87,42 @@ namespace Wman.Logic.Classes
                 using (var ms = new MemoryStream())
                 {
                     workbook.SaveAs(ms);
-                    await fileRepo.Create(path, ms);
+                    await fileRepo.Create(this.GetFullPath(), ms);
                 }
                 
             }
 
         }
+        public async Task SendEmails(string username)
+        {
+            var user = await userManager.Users.Where(x => x.UserName == username).SingleOrDefaultAsync();
+            await emailService.SendXls(user, this.GetFullPath());
+        }
+        private string GetFullPath()
+        {
+            return this.GetFullPath(DateTime.Now);
+        }
+        private string GetFullPath(DateTime input)
+        {
+            var currentdate = DateTime.Now.ToString("yyyy_MM_dd");
+            var filename = "JobStat_" + currentdate + ".xlsx";
+
+            string path = configuration.GetValue<string>("OutputDir");
+            if (String.IsNullOrWhiteSpace(path))
+            {
+                path = filename;
+            }
+            else if (path.EndsWith('/') || path.EndsWith(@"\"))
+            {
+                path = path + filename;
+            }
+            else
+            {
+                path += "/";
+                path = path + filename;
+            }
+            return path;
+        }
     }
+    
 }

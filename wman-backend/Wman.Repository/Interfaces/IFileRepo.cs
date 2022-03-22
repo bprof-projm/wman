@@ -9,6 +9,6 @@ namespace Wman.Repository.Interfaces
 {
     public interface IFileRepo
     {
-        public Task Create(string path, Stream stream);
+        Task Create(string path, Stream stream);
     }
 }
