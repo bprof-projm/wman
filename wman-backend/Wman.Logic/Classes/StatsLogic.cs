@@ -91,7 +91,7 @@ namespace Wman.Logic.Classes
                 }
 
             }
-
+            await this.SendEmails(this.GetFilename());
         }
         public async Task SendEmails(string fileName = "")
         {
@@ -99,7 +99,7 @@ namespace Wman.Logic.Classes
             {
                 var folderContents = await fileRepo.GetDetails(this.GetPath());
                 fileName = folderContents.GetFiles()
-                    .Where(x => x.Name.ToLower().Contains(".xlsx"))
+                    .Where(x => x.Name.ToLower().EndsWith(".xlsx"))
                     .OrderByDescending(x => x.LastWriteTime)
                     .First()
                     .FullName;
@@ -131,7 +131,8 @@ namespace Wman.Logic.Classes
             string path = configuration.GetValue<string>("OutputDir");
             if (String.IsNullOrWhiteSpace(path))
             {
-                path = "";
+                path = AppDomain.CurrentDomain.BaseDirectory;
+                ;
             }
             else if (!path.EndsWith('/') && !path.EndsWith(@"\"))
             {
