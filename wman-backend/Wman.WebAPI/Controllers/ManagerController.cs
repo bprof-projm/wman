@@ -35,21 +35,21 @@ namespace Wman.WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         /// 
-        [HttpGet("testxls")]
-        public async Task<ActionResult> TestThisMonth()
+        [HttpGet("GenerateXls")]
+        public async Task<ActionResult> StatsThisMonth()
         {
             return Ok(await this.statsLogic.GetStats(DateTime.Now));
         }
 
         /// <summary>
-        /// 
+        /// Endpoint used for sending the xls stats to all the managers. 
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="filename">Name of the .xlsx. If left empty, the latest one is used</param>
         /// <returns></returns>
-        [HttpGet("testemail")]
-        public async Task<ActionResult> testEmail(string path)
+        [HttpGet("sendemails")]
+        public async Task<ActionResult> SendEmails(string filename)
             {
-            await this.statsLogic.SendEmails(path);
+            await this.statsLogic.SendEmails(filename);
             return Ok();
         }
     }
