@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Excel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,11 +19,14 @@ namespace Wman.Logic.Classes
     {
         IWorkEventRepo eventRepo;
         IFileRepo fileRepo;
+        IConfiguration configuration;
 
-        public StatsLogic(IWorkEventRepo eventRepo, IFileRepo fileRepo)
+        public StatsLogic(IWorkEventRepo eventRepo, IFileRepo fileRepo,
+            IConfiguration configuration)
         {
             this.eventRepo = eventRepo;
             this.fileRepo = fileRepo;
+            this.configuration = configuration;
         }
 
         public async Task<ICollection<StatsXlsModel>> GetStats(DateTime input)
@@ -54,10 +58,23 @@ namespace Wman.Logic.Classes
         }
         public async Task makexls(List<StatsXlsModel> input)
         {
-            var filename = "JobStat_";
             var currentdate = DateTime.Now.ToString("yyyy_MM_dd");
-            filename += currentdate + ".xlsx";
+            var filename = "JobStat_" + currentdate + ".xlsx";
 
+            string path = configuration.GetValue<string>("OutputDir");
+            if (String.IsNullOrWhiteSpace(path))
+            {
+                path = filename;
+            }
+            else if (path.EndsWith('/') || path.EndsWith(@"\"))
+            {
+                path = path + filename;
+            }
+            else
+            {
+                path += "/";
+                path = path + filename;
+            }
             using (var workbook = new XLWorkbook())
             {
                 var sheet = workbook.Worksheets.Add("ManagerStats");
@@ -75,11 +92,14 @@ namespace Wman.Logic.Classes
                     sheet.Cell(rowIndex, 3).Value = item.JobLocation;
                     sheet.Cell(rowIndex, 4).Value = item.JobStart;
                     sheet.Cell(rowIndex, 5).Value = item.JobEnd;
+                    sheet.Row(1).Cells().Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                    sheet.Row(1).Cells().Style.Font.SetBold();
                 }
+                sheet.Columns().AdjustToContents();
                 using (var ms = new MemoryStream())
                 {
                     workbook.SaveAs(ms);
-                    await fileRepo.Create(filename, ms);
+                    await fileRepo.Create(path, ms);
                 }
                 
             }
