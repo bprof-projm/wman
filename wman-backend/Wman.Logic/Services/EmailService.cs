@@ -51,8 +51,8 @@ namespace Wman.Logic.Services
         public async Task SendXls(WmanUser user, string path)
         {
             string htmlContent = File.ReadAllText("./Assets/managerEmail.html");
-            htmlContent = htmlContent.Replace("NameDynamicValue", $"Dear Mr/Mrs.{user.LastName}");
-            htmlContent = htmlContent.Replace("SubjectDynamicValue", $"XLS generated at: xxx");
+            htmlContent = htmlContent.Replace("NameDynamicValue", $"Dear Mr/Mrs. {user.LastName}");
+            htmlContent = htmlContent.Replace("SubjectDynamicValue", $"XLS generated at: {File.GetLastWriteTime(path)}");
             htmlContent = htmlContent.Replace("MessageDynamicValue", $"Please find the generated statistics attached below");
 
             await SendEmailWithAttachment(user.Email, $"Manager statistics", htmlContent, path);
