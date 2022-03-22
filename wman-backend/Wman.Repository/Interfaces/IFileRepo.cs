@@ -10,5 +10,6 @@ namespace Wman.Repository.Interfaces
     public interface IFileRepo
     {
         Task Create(string path, Stream stream);
+        Task<DirectoryInfo> GetDetails(string path);
     }
 }

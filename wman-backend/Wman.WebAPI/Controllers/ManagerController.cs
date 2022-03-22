@@ -40,10 +40,16 @@ namespace Wman.WebAPI.Controllers
         {
             return Ok(await this.statsLogic.GetStats(DateTime.Now));
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         [HttpGet("testemail")]
-        public async Task<ActionResult> testEmail(string username)
+        public async Task<ActionResult> testEmail(string path)
             {
-            await this.statsLogic.SendEmails(username);
+            await this.statsLogic.SendEmails(path);
             return Ok();
         }
     }

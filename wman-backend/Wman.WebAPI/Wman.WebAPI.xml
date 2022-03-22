@@ -197,6 +197,13 @@
             <returns></returns>
             
         </member>
+        <member name="M:Wman.WebAPI.Controllers.ManagerController.testEmail(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
         <member name="M:Wman.WebAPI.Controllers.SeedController.PopulateDB">
             <summary>
             Fill database with testing data. Used only for testing purposes.

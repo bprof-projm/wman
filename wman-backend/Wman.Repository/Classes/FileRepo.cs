@@ -19,5 +19,9 @@ namespace Wman.Repository.Classes
                 fileStream.Close();
             }
         }
+        public async Task<DirectoryInfo> GetDetails(string path)
+        {
+            return new DirectoryInfo(path);
+        }
     }
 }

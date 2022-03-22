@@ -62,7 +62,7 @@ namespace Wman.Logic.Classes
         }
         public async Task makexls(List<StatsXlsModel> input)
         {
-            
+
             using (var workbook = new XLWorkbook())
             {
                 var sheet = workbook.Worksheets.Add("ManagerStats");
@@ -87,42 +87,58 @@ namespace Wman.Logic.Classes
                 using (var ms = new MemoryStream())
                 {
                     workbook.SaveAs(ms);
-                    await fileRepo.Create(this.GetFullPath(), ms);
+                    await fileRepo.Create(this.GetPath() + this.GetFilename(), ms);
                 }
-                
+
             }
 
         }
-        public async Task SendEmails(string username)
+        public async Task SendEmails(string fileName = "")
         {
-            var user = await userManager.Users.Where(x => x.UserName == username).SingleOrDefaultAsync();
-            await emailService.SendXls(user, this.GetFullPath());
-        }
-        private string GetFullPath()
-        {
-            return this.GetFullPath(DateTime.Now);
-        }
-        private string GetFullPath(DateTime input)
-        {
-            var currentdate = DateTime.Now.ToString("yyyy_MM_dd");
-            var filename = "JobStat_" + currentdate + ".xlsx";
-
-            string path = configuration.GetValue<string>("OutputDir");
-            if (String.IsNullOrWhiteSpace(path))
+            if (String.IsNullOrWhiteSpace(fileName)) //If no specific file is selected, assume the latest is needed
             {
-                path = filename;
-            }
-            else if (path.EndsWith('/') || path.EndsWith(@"\"))
-            {
-                path = path + filename;
+                var folderContents = await fileRepo.GetDetails(this.GetPath());
+                fileName = folderContents.GetFiles()
+                    .Where(x => x.Name.ToLower().Contains(".xlsx"))
+                    .OrderByDescending(x => x.LastWriteTime)
+                    .First()
+                    .FullName;
             }
             else
             {
+                fileName = GetPath() + fileName;
+            }
+
+            var managers = await userManager.GetUsersInRoleAsync("Manager");
+            foreach (var item in managers)
+            {
+                await emailService.SendXls(item, fileName);
+            }
+        }
+        private string GetFilename()
+        {
+            return this.GetFilename(DateTime.Now);
+        }
+        private string GetFilename(DateTime input)
+        {
+            var currentdate = input.ToString("yyyy_MM_dd");
+            var filename = "JobStat_" + currentdate + ".xlsx";
+            return filename;
+
+        }
+        private string GetPath()
+        {
+            string path = configuration.GetValue<string>("OutputDir");
+            if (String.IsNullOrWhiteSpace(path))
+            {
+                path = "";
+            }
+            else if (!path.EndsWith('/') && !path.EndsWith(@"\"))
+            {
                 path += "/";
-                path = path + filename;
             }
             return path;
         }
     }
-    
+
 }
