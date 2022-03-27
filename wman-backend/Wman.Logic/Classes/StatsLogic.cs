@@ -1,9 +1,11 @@
 ﻿using ClosedXML.Excel;
+using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -114,6 +116,22 @@ namespace Wman.Logic.Classes
             foreach (var item in managers)
             {
                 await emailService.SendXls(item, fileName);
+            }
+        }
+        public async void registerRecurringJob(string x)
+        {
+            if (!string.IsNullOrWhiteSpace(x))
+            {
+                var cronExpr = "0 12 1/INPUTVALUE * *";
+                cronExpr = cronExpr.Replace("INPUTVALUE", x);
+                RecurringJob.AddOrUpdate("scheduledXlsReport", () => this.GetStats(DateTime.Now), cronExpr);
+                Debug.WriteLine($"\n--- Scheduled xls generation&sending every {x} days starting from the 1st of the month!--- \n");
+            }
+            else
+            {
+                RecurringJob.RemoveIfExists("scheduledXlsReport");
+                Debug.WriteLine("\n--- No \"xlsSchedule\" tag found in appsettings.json, scheduled xls sending is disabled!--- ");
+                Debug.WriteLine("Valid example: \"xlsSchedule\": \"5\"\n");
             }
         }
         private string GetFilename()

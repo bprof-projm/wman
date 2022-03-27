@@ -12,5 +12,6 @@ namespace Wman.Logic.Interfaces
     {
         Task<ICollection<StatsXlsModel>> GetStats(DateTime month);
         Task SendEmails(string username);
+        void registerRecurringJob(string x);
     }
 }
