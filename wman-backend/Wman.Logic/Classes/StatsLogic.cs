@@ -80,9 +80,9 @@ namespace Wman.Logic.Classes
                     sheet.Cell(rowIndex, 3).Value = item.JobLocation;
                     sheet.Cell(rowIndex, 4).Value = item.JobStart;
                     sheet.Cell(rowIndex, 5).Value = item.JobEnd;
-                    sheet.Row(1).Cells().Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-                    sheet.Row(1).Cells().Style.Font.SetBold();
                 }
+                sheet.Row(1).Cells().Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                sheet.Row(1).Cells().Style.Font.SetBold();
                 sheet.Range(2, 4, sheet.LastRowUsed().RowNumber(), 5).Style.NumberFormat.Format = "yyyy.MM.dd. HH:mm";
                 sheet.Columns().AdjustToContents();
                 using (var ms = new MemoryStream())
