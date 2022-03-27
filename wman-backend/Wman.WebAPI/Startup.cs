@@ -73,6 +73,7 @@ namespace Wman.WebAPI
             services.AddTransient<IPicturesRepo, PicturesRepo>();
             services.AddTransient<ILabelRepo, LabelRepo>();
             services.AddTransient<IAddressRepo, AddressRepo>();
+            services.AddTransient<IFileRepo, FileRepo>();
             services.AddTransient<IPhotoService, PhotoService>();
             services.AddTransient<IEmailService, EmailService>();
             

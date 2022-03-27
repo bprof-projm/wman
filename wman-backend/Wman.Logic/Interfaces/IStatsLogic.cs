@@ -11,5 +11,6 @@ namespace Wman.Logic.Interfaces
     public interface IStatsLogic
     {
         Task<ICollection<StatsXlsModel>> GetStats(DateTime month);
+        Task SendEmails(string username);
     }
 }
