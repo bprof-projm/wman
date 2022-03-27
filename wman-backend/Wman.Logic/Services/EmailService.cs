@@ -28,11 +28,11 @@ namespace Wman.Logic.Services
             htmlContent = htmlContent.Replace("EstimatedStartDateDynamicValue", we.EstimatedStartDate.ToString("yyyy.MM.dd, HH:mm"));
             htmlContent = htmlContent.Replace("EstimatedFinishDateDynamicValue", we.EstimatedFinishDate.ToString("yyyy.MM.dd, HH:mm"));
             htmlContent = htmlContent.Replace("AddressDynamicValue", we.Address.Floordoor == null ?
-                we.Address.ZIPCode +", "+ we.Address.City + "<br>" + we.Address.Street + " " +  we.Address.BuildingNumber +
+                we.Address.ZIPCode + ", " + we.Address.City + "<br>" + we.Address.Street + " " + we.Address.BuildingNumber +
                 "" :
-                we.Address.ZIPCode + ", " + we.Address.City + "<br>" + we.Address.Street +" "+ we.Address.BuildingNumber + $" {we.Address.Floordoor}");
+                we.Address.ZIPCode + ", " + we.Address.City + "<br>" + we.Address.Street + " " + we.Address.BuildingNumber + $" {we.Address.Floordoor}");
             await SendEmail(user.Email, $"You have been assigned to {we.JobDescription} event!", htmlContent);
-            
+
         }
         public async Task WorkEventUpdated(WorkEvent we, WmanUser user)
         {
@@ -45,7 +45,7 @@ namespace Wman.Logic.Services
             htmlContent = htmlContent.Replace("AddressDynamicValue", we.Address.Floordoor == null ?
                 we.Address.ZIPCode + ", " + we.Address.City + "<br>" + we.Address.Street + " " + we.Address.BuildingNumber +
                 "" :
-                we.Address.ZIPCode + ", " + we.Address.City + "<br>" + we.Address.Street +" " + we.Address.BuildingNumber + $" {we.Address.Floordoor}");
+                we.Address.ZIPCode + ", " + we.Address.City + "<br>" + we.Address.Street + " " + we.Address.BuildingNumber + $" {we.Address.Floordoor}");
             await SendEmail(user.Email, $"The {we.JobDescription} event has been modified!", htmlContent);
         }
         public async Task SendXls(WmanUser user, string path)
@@ -57,7 +57,7 @@ namespace Wman.Logic.Services
 
             await SendEmail(user.Email, $"Manager statistics", htmlContent, path);
         }
-        private async Task SendEmail(string toAddress, string subject, string htmlContent, string filePath = "") 
+        private async Task SendEmail(string toAddress, string subject, string htmlContent, string filePath = "")
         {
             SmtpClient smtpClient = new SmtpClient(config.Value.SmtpHost, config.Value.SmtpPort);
 
@@ -86,6 +86,13 @@ namespace Wman.Logic.Services
 
             mail.IsBodyHtml = true;
             await smtpClient.SendMailAsync(mail);
+            if (mail.Attachments.Count > 0)
+            {
+                foreach (var attachment in mail.Attachments)
+                {
+                    attachment.Dispose();
+                }
+            }
         }
     }
 }
