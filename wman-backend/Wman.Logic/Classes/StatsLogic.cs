@@ -125,6 +125,7 @@ namespace Wman.Logic.Classes
                 var cronExpr = "0 12 1/INPUTVALUE * *";
                 cronExpr = cronExpr.Replace("INPUTVALUE", x);
                 RecurringJob.AddOrUpdate("scheduledXlsReport", () => this.GetStats(DateTime.Now), cronExpr);
+                await fileRepo.DeleteOldFiles(this.GetPath(), ".xlsx", DateTime.Now.AddMonths(-1)); //Delete every .xlsx file older than a month
                 Debug.WriteLine($"\n--- Scheduled xls generation&sending every {x} days starting from the 1st of the month!--- \n");
             }
             else

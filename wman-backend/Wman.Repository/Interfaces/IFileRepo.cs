@@ -11,5 +11,6 @@ namespace Wman.Repository.Interfaces
     {
         Task Create(string path, Stream stream);
         Task<DirectoryInfo> GetDetails(string path);
+        Task DeleteOldFiles(string path, string extension, DateTime olderThan);
     }
 }
