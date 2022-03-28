@@ -79,7 +79,7 @@ namespace Wman.WebAPI
             services.AddTransient<IFileRepo, FileRepo>();
             services.AddTransient<IPhotoService, PhotoService>();
             services.AddTransient<IEmailService, EmailService>();
-            
+
             services.AddSwaggerGen(c =>
             {
                 //c.DescribeAllEnumsAsStrings();
@@ -202,9 +202,9 @@ namespace Wman.WebAPI
             DisableGlobalLocks = true
         }));
 
-            // Add the processing server as IHostedService
             services.AddHangfireServer();
         }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IStatsLogic statsLogic)
         {
@@ -213,7 +213,9 @@ namespace Wman.WebAPI
                 app.UseDeveloperExceptionPage();
 
             }
+#if DEBUG
             app.UseHangfireDashboard();
+#endif
             app.UseSwagger();
             //app.UseStatusCodePages();
             app.UseSwaggerUI(c =>
@@ -232,12 +234,14 @@ namespace Wman.WebAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+#if DEBUG
                 endpoints.MapHangfireDashboard();
+#endif
                 endpoints.MapHub<NotifyHub>("/notify", opt =>
                 {
 
                 });
-            });   
+            });
             statsLogic.registerRecurringJob(Configuration.GetValue<string>("xlsSchedule"));
         }
 
