@@ -126,6 +126,23 @@ namespace Wman.Logic.Services
 
             }
         }
+
+        public async Task NotifyWorkerAboutWorkEventDelete(string user)
+        {
+            try
+            {
+                if (Clients != null)
+                {
+                    await Clients.User(user).SendAsync("EventDeleted");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+            }
+        }
     }
     
 }

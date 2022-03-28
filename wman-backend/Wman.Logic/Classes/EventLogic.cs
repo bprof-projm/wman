@@ -164,6 +164,11 @@ namespace Wman.Logic.Classes
         {
             var test = await this.GetEvent(Id);
             await eventRepo.Delete(Id);
+            foreach (var item in test.AssignedUsers)
+            {
+                await _notifyHub.NotifyWorkerAboutWorkEventDelete(item.UserName);
+            }
+            
         }
 
         public async Task<IQueryable<WorkEvent>> GetAllEvents()
