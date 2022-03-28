@@ -55,7 +55,7 @@ const LandingPage = () => {
       <Hero imageSrc={travel03} />
       <Slider
         imageSrc={travel01}
-        title={"Fuck you!"}
+        title={"Lorem Ipsum"}
         subtitle={
           "valami valami valami valami valami valami valami valami valami valami valami valami valami valami valami valami valami valami valami valami"
         }
@@ -63,7 +63,7 @@ const LandingPage = () => {
       />
       <Slider
         imageSrc={travel02}
-        title={"Fuck off!"}
+        title={"Lorem Ipsum"}
         subtitle={"valami valami valami valami valami"}
         flipped={true}
         id="services"
