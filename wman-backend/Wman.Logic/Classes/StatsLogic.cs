@@ -123,8 +123,8 @@ namespace Wman.Logic.Classes
             if (!int.TryParse(input, out _) || int.Parse(input) > 31) //No valid config value, use defaults
             {
                 RecurringJob.RemoveIfExists("scheduledXlsReport");
-                RecurringJob.AddOrUpdate("defaultCaseXls", () => this.GetStats(DateTime.Now.AddDays(-2)), Cron.Monthly); //No schedule provided, default is sending the prev. month's stats on the first day of current month
-                Debug.WriteLine("\n--- No valid \"xlsSchedule\" tag found in appsettings.json, using defaults (1st day of each month)!--- ");
+                RecurringJob.AddOrUpdate("defaultCaseXls", () => this.GetStats(DateTime.Now.AddDays(-2)), Cron.Monthly, TimeZoneInfo.Local); //No schedule provided, default is sending the prev. month's stats on the first day of current month
+                Debug.WriteLine("\n--- No valid \"xlsSchedule\" tag found in appsettings.json, using defaults (1st day of each month)!--- \n");
             }
             else if (int.Parse(input) <= 0) // 0 or less value, disable scheduled emails
             {
@@ -135,7 +135,7 @@ namespace Wman.Logic.Classes
             else //Valid value, schedule based on input (Every x days counting from the first of month)
             {
                 var cronExpr = $"0 12 1/{input} * *";
-                RecurringJob.AddOrUpdate("scheduledXlsReport", () => this.GetStats(DateTime.Now), cronExpr);
+                RecurringJob.AddOrUpdate("scheduledXlsReport", () => this.GetStats(DateTime.Now), cronExpr, TimeZoneInfo.Local);
                 RecurringJob.RemoveIfExists("defaultCaseXls");
 
                 Debug.WriteLine($"\n--- Scheduled xls generation&sending every {input} days (From the beginning of the month)!--- \n");

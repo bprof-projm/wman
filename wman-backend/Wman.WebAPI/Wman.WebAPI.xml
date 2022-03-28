@@ -192,7 +192,7 @@
         </member>
         <member name="M:Wman.WebAPI.Controllers.ManagerController.StatsThisMonth">
             <summary>
-            Testing endpoint to test the output of the upcoming xls export.
+            Testing endpoint to test the output of the xls export.
             </summary>
             <returns></returns>
             
