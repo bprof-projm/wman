@@ -12,6 +12,8 @@ import ManageWorkforce from "./manage-workforce/manage-workforce.component";
 
 const AdminPage = () => {
     const [userdata, setUserdata] = useState("");
+    const [showManage, setShowManage] = useState(true);
+    
 
     useEffect(() => {
         const token = Cookies.get("auth");
@@ -45,10 +47,10 @@ const AdminPage = () => {
                 </div>
                 <div className="select-intervall">
                     <div>
-                        <Button onClick={''} >Manage Workforce</Button>
+                        <Button onClick={() => setShowManage(true)} >Manage Workforce</Button>
                     </div>
                     <div>
-                        <Button onClick={''} >Display workloads</Button>
+                        <Button onClick={() => setShowManage(false)} >Display workloads</Button>
                     </div>
                 </div>
 
@@ -65,8 +67,8 @@ const AdminPage = () => {
                         src={`https://eu.ui-avatars.com/api?name=${userdata}`} />
                 </Popover>
             </Header>
-
-            <ManageWorkforce/>
+            {showManage ? 
+                <ManageWorkforce/> :null}
 
         </div>
     )
