@@ -1,10 +1,11 @@
 import { Button, Form, Input } from "antd";
 import './manage-workforce.styles.css';
-
+import Swal from 'sweetalert2';
 import { Upload } from 'antd';
 import ImgCrop from 'antd-img-crop';
 import { useState } from "react";
 import axios from "axios";
+import FileUpload from "../file-upload";
 
 const AddWorkforce = () => {
   const [form] = Form.useForm();
@@ -38,21 +39,32 @@ const AddWorkforce = () => {
     imgWindow.document.write(image.outerHTML);
   };
 
-  const onFinish =(values) =>{
-    console.log(values)
-    axios
-        .post("/Admin/Create", {
-          username: values.username,
-          email: values.email,
-          password: values.password,
-          role: values.role,
-          firstname: values.firstname,
-          lastname: values.lastname,
-          phoneNumber: values.phoneNumber,
-          photo: fileList[0],         
-        })
-        .then(() => console.log("User Created!"))
-        .catch((err) => console.log(err));
+  const onFinish = (values) => {
+    const formData = new FormData();
+    formData.append("username", values.username);
+    formData.append("email", values.email);
+    formData.append("password", values.password);
+    formData.append("role", values.role);
+    formData.append("firstname", values.firstname);
+    formData.append("lastname", values.lastname);
+    formData.append("phoneNumber", values.phoneNumber);
+    formData.append("photo", fileList[0]);
+
+    axios.post(
+      "/Admin/Create",
+      formData
+    ).then(x => {
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'User Created!',
+      });
+      this.props.func();
+    }).catch(x => Swal.fire({
+      icon: 'error',
+      title: 'Oops',
+      text: 'There is already a user with this name',
+    }));
   }
 
   return (
@@ -82,18 +94,21 @@ const AddWorkforce = () => {
             <Input />
           </Form.Item>
           <Form.Item label="Photo:" name="photo">
-                        <ImgCrop rotate>
-                            <Upload
-                                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                                listType="picture-card"
-                                fileList={fileList}
-                                onChange={onChange}
-                                onPreview={onPreview}
-                            >
-                                {fileList.length < 3 && '+ Upload'}
-                            </Upload>
-                        </ImgCrop>
-                    </Form.Item>
+            <ImgCrop rotate>
+              <Upload
+                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                listType="picture-card"
+                fileList={fileList}
+                onChange={onChange}
+                onPreview={onPreview}
+              >
+                {fileList.length < 3 && '+ Upload'}
+              </Upload>
+            </ImgCrop>
+          </Form.Item>
+          <Form.Item label="Photo:" name="photo">
+            <FileUpload />
+          </Form.Item>
           <div className="admin-form-button">
             <Button className="form-button" htmlType="submit">OK</Button></div>
         </Form>

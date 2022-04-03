@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Upload } from 'antd';
 import ImgCrop from 'antd-img-crop';
 import './manage-workforce.styles.css';
+import Swal from "sweetalert2";
 
 const UpdateWorkforce = (props) => {
     const [form] = Form.useForm();
@@ -15,6 +16,7 @@ const UpdateWorkforce = (props) => {
         lastname: lastname,
         phoneNumber: phoneNumber,
     });
+
     useEffect(() => {
         axios.get(`/Auth/userrole?username=${username}`)
             .then((response) => form.setFieldsValue({
@@ -52,6 +54,32 @@ const UpdateWorkforce = (props) => {
         imgWindow.document.write(image.outerHTML);
     };
 
+    const onFinish = (values) => {
+        const formData = new FormData();
+        formData.append("username", values.username);
+        formData.append("email", values.email);
+        formData.append("role", values.role);
+        formData.append("firstname", values.firstname);
+        formData.append("lastname", values.lastname);
+        formData.append("phoneNumber", values.phoneNumber);
+        formData.append("photo", fileList[0]);
+
+        axios.put(
+            `/Admin/Modify/${username}`,
+            formData
+        ).then(x => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'User Updated!',
+            });
+            props.func();
+        }).catch(x => Swal.fire({
+            icon: 'error',
+            title: 'Oops',
+            text: 'Error updating user!',
+        }));
+    }
     return (
         <div>
             <div className="admin-form-container">
