@@ -1,0 +1,45 @@
+.admin-form-container{
+    margin: auto;
+    margin-top: 4vh;
+    padding: 5%;
+    justify-content: center;
+    background-color: #ffffff;
+    width: 50vw;
+    border-radius: 7px;
+}
+.form-button{
+    width:10vw;
+    border-radius: 7px;
+}
+.admin-form-button{
+    display: flex;
+    justify-content: center;
+    width:100%;
+}
+.manage-workforce{
+    display: flex;
+    flex-direction: row;
+}
+.admin-workforce-operations{
+    width: 60vw;
+    height: 92vh;
+    background-color: aquamarine;
+}
+.admin-list-of-users{
+    width: 40vw;        
+}
+.users-list{
+    overflow: auto;     
+    height: 83vh;    
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;  
+    margin: 0;
+}
+.search-admin{
+    display: flex;
+    justify-content: space-around;
+    margin: 0;
+    margin-top: 1vh;
+
+}

@@ -25,10 +25,6 @@
     align-items: center;
     margin-top:1vh;
 }
-.popover-name{
-    display: flex;
-    justify-content: center;
-}
 .worker-avatar-popover{
     position: absolute;
     left:95vw;
