@@ -7,7 +7,7 @@ const MyCard = (props) => {
     src = `https://eu.ui-avatars.com/api/?name=${firstname} ${lastname}`;
     
     return (
-        <div className="card-container" onClick={() => props.func(username)}>
+        <div className="card-container" onClick={() => props.func(props.object)}>
             <div className="card-top">
                 <div className="card-avatar">
                     <img src={src} alt={src}></img>

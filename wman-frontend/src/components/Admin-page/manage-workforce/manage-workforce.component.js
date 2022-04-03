@@ -1,13 +1,16 @@
+import { Button } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { SearchBox } from "../../SearchBox/search-box.component";
 import MyCard from "../../User-card/mycard.component";
+import AddWorkforce from "./add-workforce.component";
 import './manage-workforce.styles.css'
+import UpdateWorkforce from "./update-workforce.component";
 
 const ManageWorkforce = () => {
-    const [updateUser, setUpdateUser] = useState('')
     const [users, setUsers] = useState([]);
     const [searchField, setSearchField] = useState("");
+    const [selected, setSelected] = useState('');
     // Search specific user
     const handleChange = (e) => {
         setSearchField(e.target.value);
@@ -23,16 +26,38 @@ const ManageWorkforce = () => {
     }, []);
     return (
         <div className="manage-workforce">
-            <div className="admin-workforce-operations"><h1>opsd</h1></div>
+            <div className="admin-workforce-information">
+                <div className="admin-workforce-information">
+                    <h1>Selected User:</h1>
+                    {selected === ''
+                        ? <h2>No user selected</h2>
+                        : <div className="admin-workforce-information">
+                            <MyCard key={selected.lastname} object={selected} func={() => ''} />
+                            <Button onClick={() => setSelected('')}>Deselect</Button>
+                        </div>}
+                </div>
+                <br />
+                {selected === ''
+                    ? null
+                    : <Button>Delete</Button>}
+            </div>
+            <div className="admin-workforce-operations">
+                {selected === ''
+                    ?
+                    <AddWorkforce />
+                    : <UpdateWorkforce object={selected} />}
+            </div>
+
             <div className="admin-list-of-users">
                 <div className="search-admin"><SearchBox
                     placeholder="Type the lastname of the user"
                     handleChange={handleChange}
-                /></div>
+                />
+                </div>
 
                 <div className="users-list">
                     {filteredUsers.map((user, index) => (
-                        <MyCard key={index} object={user} src={user.picture?.url} func={() => setUpdateUser} />
+                        <MyCard key={index} object={user} func={setSelected} src={user.picture?.url} />
                     ))}
                 </div>
             </div>

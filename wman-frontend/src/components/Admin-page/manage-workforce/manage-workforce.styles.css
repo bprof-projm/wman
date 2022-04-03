@@ -1,6 +1,4 @@
 .admin-form-container{
-    margin: auto;
-    margin-top: 4vh;
     padding: 5%;
     justify-content: center;
     background-color: #ffffff;
@@ -20,13 +18,26 @@
     display: flex;
     flex-direction: row;
 }
+.admin-workforce-information{
+    width: 24vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.admin-workforce-information Button{
+    margin-top: 1vh;
+}
 .admin-workforce-operations{
-    width: 60vw;
-    height: 92vh;
-    background-color: aquamarine;
+    width: 52vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 .admin-list-of-users{
-    width: 40vw;        
+    width: 24vw;
+    background-color:rgb(245, 245, 248);
 }
 .users-list{
     overflow: auto;     
@@ -34,7 +45,8 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;  
-    margin: 0;
+    justify-content: center;
+
 }
 .search-admin{
     display: flex;
