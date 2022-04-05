@@ -23,5 +23,16 @@ namespace Wman.Repository.Classes
         {
             return new DirectoryInfo(path);
         }
+        public async Task DeleteOldFiles(string path, string extension, DateTime olderThan)
+        {
+            var files = Directory.GetFiles(path).Where(x => x.ToLower().EndsWith(extension.ToLower()));
+
+            foreach (string file in files)
+            {
+                FileInfo fi = new FileInfo(file);
+                if (fi.CreationTime < olderThan)
+                    fi.Delete();
+            }
+        }
     }
 }

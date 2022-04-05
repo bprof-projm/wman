@@ -192,14 +192,14 @@
         </member>
         <member name="M:Wman.WebAPI.Controllers.ManagerController.StatsThisMonth">
             <summary>
-            Endpoint to test the output of the upcoming xls export. Will be removed once excel exporting is implemented
+            Testing endpoint to test the output of the xls export.
             </summary>
             <returns></returns>
             
         </member>
         <member name="M:Wman.WebAPI.Controllers.ManagerController.SendEmails(System.String)">
             <summary>
-            Endpoint used for sending the xls stats to all the managers. 
+            Testing endpoint used for sending the xls stats to all the managers. 
             </summary>
             <param name="filename">Name of the .xlsx. If left empty, the latest one is used</param>
             <returns></returns>

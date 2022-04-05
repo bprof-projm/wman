@@ -14,7 +14,7 @@ namespace Wman.WebAPI.Controllers
     /// </summary>
     [Route("[controller]")]
     [ApiController]
-    [Authorize(Roles = "Manager")]
+    [Authorize(Roles = "Manager, Admin")]
     public class ManagerController : ControllerBase
     {
         IEventLogic eventLogic;
@@ -31,10 +31,11 @@ namespace Wman.WebAPI.Controllers
 
         }
         /// <summary>
-        /// Endpoint to test the output of the upcoming xls export. Will be removed once excel exporting is implemented
+        /// Testing endpoint to test the output of the xls export.
         /// </summary>
         /// <returns></returns>
         /// 
+        [Authorize(Roles = "Admin")]
         [HttpGet("GenerateXls")]
         public async Task<ActionResult> StatsThisMonth()
         {
@@ -42,11 +43,12 @@ namespace Wman.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Endpoint used for sending the xls stats to all the managers. 
+        /// Testing endpoint used for sending the xls stats to all the managers. 
         /// </summary>
         /// <param name="filename">Name of the .xlsx. If left empty, the latest one is used</param>
         /// <returns></returns>
-        [HttpGet("sendemails")]
+        [HttpGet("Sendemails")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> SendEmails(string filename)
             {
             await this.statsLogic.SendEmails(filename);
