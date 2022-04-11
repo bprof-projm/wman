@@ -7,7 +7,7 @@ import { useState } from "react";
 import axios from "axios";
 import FileUpload from "../file-upload";
 
-const AddWorkforce = () => {
+const AddWorkforce = (props) => {
   const [form] = Form.useForm();
 
   //picture
@@ -59,12 +59,15 @@ const AddWorkforce = () => {
         title: 'Success',
         text: 'User Created!',
       });
-      this.props.func();
-    }).catch(x => Swal.fire({
+      console.log(x);
+      props.func();
+    }).catch(x => {Swal.fire({
       icon: 'error',
       title: 'Oops',
-      text: 'There is already a user with this name',
-    }));
+      text: x.response.data,
+    })
+    console.log(x);
+  });
   }
 
   return (
@@ -105,9 +108,6 @@ const AddWorkforce = () => {
                 {fileList.length < 3 && '+ Upload'}
               </Upload>
             </ImgCrop>
-          </Form.Item>
-          <Form.Item label="Photo:" name="photo">
-            <FileUpload />
           </Form.Item>
           <div className="admin-form-button">
             <Button className="form-button" htmlType="submit">OK</Button></div>

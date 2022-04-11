@@ -24,6 +24,7 @@ const ManageWorkforce = () => {
     );
     const handleUpdate = () => {
         setUpdate(!update);
+        console.log('running')
     }
     const handleDelete = () => {
         axios.delete(`/Admin/Delete?username=${selected.username}`)
@@ -68,7 +69,7 @@ const ManageWorkforce = () => {
             <div className="admin-workforce-operations">
                 {selected === ''
                     ?
-                    <AddWorkforce func={handleUpdate} />
+                    <AddWorkforce func={() => setUpdate(!update)} />
                     : <UpdateWorkforce object={selected} func={handleUpdate} />}
             </div>
 

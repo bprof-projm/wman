@@ -10,7 +10,6 @@ const UpdateWorkforce = (props) => {
     const [form] = Form.useForm();
     const { username, email, firstname, lastname, phoneNumber } = props.object;
     form.setFieldsValue({
-        username: username,
         email: email,
         firstname: firstname,
         lastname: lastname,
@@ -56,7 +55,6 @@ const UpdateWorkforce = (props) => {
 
     const onFinish = (values) => {
         const formData = new FormData();
-        formData.append("username", values.username);
         formData.append("email", values.email);
         formData.append("role", values.role);
         formData.append("firstname", values.firstname);
@@ -67,14 +65,15 @@ const UpdateWorkforce = (props) => {
         axios.put(
             `/Admin/Modify/${username}`,
             formData
-        ).then(x => {
+        ).then(x => {            
             Swal.fire({
                 icon: 'success',
                 title: 'Success',
                 text: 'User Updated!',
             });
-            props.func();
-        }).catch(x => Swal.fire({
+        }).then(x =>             
+            props.func()
+        ).catch(x => Swal.fire({
             icon: 'error',
             title: 'Oops',
             text: 'Error updating user!',
@@ -85,9 +84,6 @@ const UpdateWorkforce = (props) => {
             <div className="admin-form-container">
                 <h1>Update Workforce</h1>
                 <Form form={form} onFinish={(values) => onFinish(values)}>
-                    <Form.Item label="Username:" name="username" rules={[{ required: true }]}>
-                        <Input />
-                    </Form.Item>
                     <Form.Item label="Email:" name="email" rules={[{ required: true }]}>
                         <Input />
                     </Form.Item>
