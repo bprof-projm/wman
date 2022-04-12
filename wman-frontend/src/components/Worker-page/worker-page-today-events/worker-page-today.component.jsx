@@ -30,8 +30,10 @@ const WorkerToday = () => {
 
     return (
         <div>
-            <div className="events-of-the-day">                
-
+        <div className="today-title">
+        <h1>Works for today:</h1>
+        </div>
+            <div className="events-of-the-day">
                 <div className="one-day">
                     {showEmptyMessage
                         ? <div><h2>There are no jobs for today, go home! </h2> <br /> <h1><SmileTwoTone twoToneColor="lightgreen" /></h1></div>

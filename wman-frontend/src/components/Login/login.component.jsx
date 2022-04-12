@@ -51,7 +51,10 @@ export const NormalLoginForm = () => {
           history.push("/calendar");
         } else if (response.data[0] == "Worker") {
           history.push("/worker");
-        } else {
+        } else if (response.data[0] == "Admin") {
+          history.push("/admin");
+        }
+        else {
           alert("something went wrong, check the navigateUser function!");
         }
       })

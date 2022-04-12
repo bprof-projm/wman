@@ -12,6 +12,7 @@ import Cookies from "js-cookie";
 import PrintEvents from "./components/Print-functionality/Print-events/print-events.component.jsx";
 import WorkerPage from "./components/Worker-page/worker-page.component.jsx";
 import CalendarListComponent from "./components/Manager/calendar-list.component.jsx";
+import AdminPage from './components/Admin-page/admin-page.component';
 
 const axios = require("axios").default;
 
@@ -35,6 +36,7 @@ function App() {
         <Route path="/login" component={NormalLoginForm} />
         <ProtectedRoute path="/print" component={PrintEvents} />
         <ProtectedRoute path="/worker" component={WorkerPage} />
+        <ProtectedRoute path="/admin" component={AdminPage} />
         <ProtectedRoute path="/calendar" component={CalendarListComponent} />
         <ProtectedRoute path="/" component={CalendarListComponent} />
       </Switch>

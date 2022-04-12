@@ -21,6 +21,11 @@ body{
     width: 30vw ;
     margin: auto;
 }
+.today-title{
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5vh;
+}
 
 @media screen and (max-width:600px) {
     .one-day{
