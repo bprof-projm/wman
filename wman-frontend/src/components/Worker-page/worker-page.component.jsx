@@ -11,10 +11,13 @@ import WorkerToday from "./worker-page-today-events/worker-page-today.component"
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
 import "./worker-page.styles.css"
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import Swal from "sweetalert2";
 
 const WorkerPage = () => {
     const [workload, setWorkLoad] = useState("");
     const [userdata, setUserdata] = useState("");
+
     const [showToday, setShowToday] = useState(true);
 
     useEffect(() => {
@@ -30,6 +33,32 @@ const WorkerPage = () => {
 
     const setThisWeek = () => {
         setShowToday(false);
+    }
+
+    const connection = new HubConnectionBuilder()
+        .withUrl("/notify", { accessTokenFactory: () => Cookies.get("auth"), withCredentials: true, transport: 1 })
+        .configureLogging(LogLevel.Information)
+        .build();
+
+    connection.start()
+        .then(console.log("SignalR Connected."))
+        .catch(err => console.log(err))
+
+    connection.onclose(async () => {
+        await start();
+    });
+
+    connection.on('UserAssignedCurrentDay', (args) => notifyUser(args));
+    connection.on('UserAssigned', (args) => notifyUser(args));
+    connection.on('EventChangedForToday', (args) => notifyUser(args));
+    connection.on('EventChanged', (args) => notifyUser(args));
+    connection.on('EventChangedFromTodayToNotToday', (args) => notifyUser(args));
+    connection.on('EventStateChanged', (args) => notifyUser(args));
+
+
+    const notifyUser = ( args ) => {
+        console.log(args);
+        console.log('asd')
     }
 
     return (
@@ -64,20 +93,20 @@ const WorkerPage = () => {
                     </div>
                 </div>
 
-                <><Popover placement="bottomRight"
+                <div><Popover placement="bottomRight"
                     className="worker-avatar-popover"
                     content=
-                    {<>
+                    {<div>
                         <div className="popover-name">
                             {userdata}
                         </div>
                         <div className="logout">
                             <Logout />
                         </div>
-                    </>}>
+                    </div>}>
                     <Avatar
                         src={`https://eu.ui-avatars.com/api?name=${userdata} ${userdata}`} />
-                </Popover></>
+                </Popover></div>
 
             </Header>
             <div className="rendered-intervall">
