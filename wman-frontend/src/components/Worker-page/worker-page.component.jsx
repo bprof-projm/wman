@@ -3,7 +3,7 @@ import Avatar from "antd/lib/avatar/avatar";
 import { Header } from "antd/lib/layout/layout";
 import axios from "axios";
 import { useEffect } from "react";
-import { useState } from "react/cjs/react.development";
+import { useRef, useState } from "react/cjs/react.development";
 import { Logout } from "../Logout/logout.component";
 import ProgressCard from "../Worker-load/Progress-card/progress-card.component";
 import WorkerThisWeek from "./worker-page-this-week-events/worker-page-this-week.component";
@@ -11,8 +11,6 @@ import WorkerToday from "./worker-page-today-events/worker-page-today.component"
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
 import "./worker-page.styles.css"
-import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
-import Swal from "sweetalert2";
 
 const WorkerPage = () => {
     const [workload, setWorkLoad] = useState("");
@@ -22,10 +20,11 @@ const WorkerPage = () => {
 
     useEffect(() => {
         const token = Cookies.get("auth");
+        console.log(token)
         const decoded = jwt_decode(token);
         const username = decoded.sub;
         setUserdata(username);
-    })
+    }, [])
     //handle changes
     const setToday = () => {
         setShowToday(true);
@@ -34,32 +33,7 @@ const WorkerPage = () => {
     const setThisWeek = () => {
         setShowToday(false);
     }
-
-    const connection = new HubConnectionBuilder()
-        .withUrl("/notify", { accessTokenFactory: () => Cookies.get("auth"), withCredentials: true, transport: 1 })
-        .configureLogging(LogLevel.Information)
-        .build();
-
-    connection.start()
-        .then(console.log("SignalR Connected."))
-        .catch(err => console.log(err))
-
-    connection.onclose(async () => {
-        await start();
-    });
-
-    connection.on('UserAssignedCurrentDay', (args) => notifyUser(args));
-    connection.on('UserAssigned', (args) => notifyUser(args));
-    connection.on('EventChangedForToday', (args) => notifyUser(args));
-    connection.on('EventChanged', (args) => notifyUser(args));
-    connection.on('EventChangedFromTodayToNotToday', (args) => notifyUser(args));
-    connection.on('EventStateChanged', (args) => notifyUser(args));
-
-
-    const notifyUser = ( args ) => {
-        console.log(args);
-        console.log('asd')
-    }
+ 
 
     return (
         <div className="worker-page">

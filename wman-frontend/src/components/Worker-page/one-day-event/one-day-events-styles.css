@@ -3,20 +3,25 @@ body{
 }
 
 .one-event table{
-    width: 22vw;
+    max-width: 30vw;
+    width: 30vw;
     border-collapse: collapse;
-    border-radius: 5px;
     overflow: hidden;
     color: rgb(26, 2, 133);
     background-color:rgb(255, 255, 255);
 }
 .label-container{
+    
+    max-width: 30vw;
+    width: 30vw;    
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    margin: auto;
+    margin: auto;    
+    background-color:rgb(255, 255, 255);
+    
 }
 .one-event th, tr{    
     text-align: center;
@@ -34,14 +39,13 @@ body{
 
 .one-event-tables{    
     background-color:rgb(255, 255, 255);
-    border-radius: 5px;
     transform: translateZ(0);
     transition: transform 0.25s ease-out;  
+    box-shadow: inset -1px 3px 8px 5px #979797, 2px 5px 16px 0px #858585, 5px 5px 15px 5px rgba(105, 105, 105, 0);
 }
 
 .one-event{
     margin-top: 1vh;
-    box-shadow: inset -1px 3px 8px 5px #979797, 2px 5px 16px 0px #858585, 5px 5px 15px 5px rgba(105, 105, 105, 0);
     border-radius: 5px;
 }
 
