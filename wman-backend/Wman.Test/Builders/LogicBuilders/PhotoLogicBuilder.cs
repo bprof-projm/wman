@@ -11,7 +11,7 @@ using Wman.Repository.Interfaces;
 
 namespace Wman.Test.Builders.LogicBuilders
 {
-    class PhotoLogicBuilder
+    public class PhotoLogicBuilder
     {
         public static Mock<IPicturesRepo> GetPicturesRepo(List<Pictures> pictureList)
         {
