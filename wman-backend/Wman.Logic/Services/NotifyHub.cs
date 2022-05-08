@@ -127,13 +127,13 @@ namespace Wman.Logic.Services
             }
         }
 
-        public async Task NotifyWorkerAboutWorkEventDelete(string user)
+        public async Task NotifyWorkerAboutWorkEventDelete(string user, string we)
         {
             try
             {
                 if (Clients != null)
                 {
-                    await Clients.User(user).SendAsync("EventDeleted");
+                    await Clients.User(user).SendAsync("EventDeleted", we);
                 }
 
             }
