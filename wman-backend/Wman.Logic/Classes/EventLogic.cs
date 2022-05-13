@@ -164,6 +164,18 @@ namespace Wman.Logic.Classes
         {
             var test = await this.GetEvent(Id);
             await eventRepo.Delete(Id);
+            var n = mapper.Map<WorkEventForWorkCardDTO>(test);
+            var k = Newtonsoft.Json.JsonConvert.SerializeObject(n, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                StringEscapeHandling = StringEscapeHandling.Default,
+                Converters = { new Newtonsoft.Json.Converters.StringEnumConverter() }
+            });
+            foreach (var item in test.AssignedUsers)
+            {
+                await _notifyHub.NotifyWorkerAboutWorkEventDelete(item.UserName, k);
+            }
+            
         }
 
         public async Task<IQueryable<WorkEvent>> GetAllEvents()
