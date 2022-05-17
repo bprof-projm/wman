@@ -47,6 +47,8 @@ const ProgressMenu = () => {
     user.username.toLowerCase().includes(searchField.toLowerCase())
   );
 
+  console.log(filteredUsers);
+
   return (
     <div>
       <Button type="text" icon={<PieChartOutlined />} onClick={showMenu}>
@@ -58,6 +60,7 @@ const ProgressMenu = () => {
         placement={placement}
         onClose={closeMenu}
         visible={visible}
+        width={350}
       >
         <details>
           <summary>Placement Options</summary>
@@ -74,7 +77,7 @@ const ProgressMenu = () => {
         <div className="searchbox">
           <SearchBox placeholder="Search User" handleChange={handleChange} />
         </div>
-        <br />
+
         {/*props needed objects(list)*/}
         <div>
           <ProgressList objects={filteredUsers} />

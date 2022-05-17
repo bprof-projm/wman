@@ -171,6 +171,7 @@ const LabelsMenu = () => {
         placement={placement}
         onClose={closeMenu}
         visible={visible}
+        width={350}
       >
         <details>
           <summary>Placement Options</summary>
@@ -238,7 +239,7 @@ const LabelsMenu = () => {
         <div className="searchbox">
           <SearchBox placeholder="Search Label" handleChange={handleChange} />
         </div>
-        <br />
+
         {/*props needed objects(list)*/}
         <div>
           <LabelsList
