@@ -55,16 +55,16 @@ const LandingPage = () => {
       <Hero imageSrc={travel03} />
       <Slider
         imageSrc={travel01}
-        title={"Lorem Ipsum"}
+        title={"About Us"}
         subtitle={
-          "valami valami valami valami valami valami valami valami valami valami valami valami valami valami valami valami valami valami valami valami"
+          "We first started out as a school project back in 2021, but with everyone's passion put into the initial Wman software, we couldn't let it be just another school project. We continued to refine each part of the whole platform and eventually started adding exciting new features. Today we have the trust of hundreds of companies throughout the world and we hope that we can convince you to do the same after trying out our free demo now!"
         }
         id="about"
       />
       <Slider
         imageSrc={travel02}
-        title={"Lorem Ipsum"}
-        subtitle={"valami valami valami valami valami"}
+        title={"Services"}
+        subtitle={"We offer a solution for your and your company's organizing challenges with our workforce management software. Our main focus was to create an out-of-the-box platform to make life easier for everyone in your company. Wman includes a platform for admins to check their workforce's data, managers can create events on an easy-to-use calendar-like interface and workers have access to a mobile application to check their work schedule, give indication about their start and finish of a particular job and in the end upload pictures as their proof of work. Moreover we have throughout notification and statitsics generation systems to assisst everyone."}
         flipped={true}
         id="services"
       />
