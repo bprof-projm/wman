@@ -18,6 +18,8 @@ import EventDetailsModal from "../eventDetails/EventDetailsModal.jsx";
 import styled from "styled-components";
 import "./calendar-list.styles.css";
 
+import {  HubConnectionBuilder, LogLevel, HttpTransportType } from '@microsoft/signalr';
+import Cookies from "js-cookie";
 const { Header, Content } = Layout;
 const { Title } = Typography;
 
@@ -122,11 +124,37 @@ const initialData = {
 };
 
 class CalendarListComponent extends Component {
+  
   state = initialData;
-
   componentDidMount() {
     this.fetchUsername();
     this.fetchEvents(moment().isoWeek());
+/*
+    let connection = new HubConnectionBuilder()
+      .withUrl('https://localhost:5001/notify/', {
+        skipNegotiation: true, accessTokenFactory: () => Cookies.get("auth"),
+        withCredentials: true, transport: HttpTransportType.WebSockets
+      })
+      .configureLogging(LogLevel.Information)
+      .withAutomaticReconnect()
+      .build();
+
+      this.setState({connection}, ()=>{
+        connection.start()
+        
+        connection.on('Connected', () => console.log('Connected to signalR'));
+        connection.on('Disconnected', () => console.log('disconnected signalR'));
+
+        connection.on('EventDeleted', (args) => this.fetchEvents(this.state.week));
+        connection.on('EventChanged', (args) => this.fetchEvents(this.state.week));
+        connection.on('EventStateChanged', (args) => this.fetchEvents(this.state.week));
+
+        connection.on('UserAssignedCurrentDay', (args) => this.fetchEvents(this.state.week));
+        connection.on('EventChangedForToday', (args) => this.fetchEvents(this.state.week));
+        connection.on('EventChangedFromTodayToNotToday', (args) => this.fetchEvents(this.state.week));
+      
+      })     */
+
   }
 
   getUserMenu = () => {

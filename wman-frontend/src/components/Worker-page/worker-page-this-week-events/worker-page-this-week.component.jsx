@@ -54,6 +54,9 @@ const WorkerThisWeek = (props) => {
 
     const notifyUser = (args) => {
         setUpdate(!update);
+        console.log(calendarEvents)
+        console.log(args)
+        //setCalendarEvents(arr => [...arr,args])
     }
 
     const filteredEvents = calendarEvents.filter(
