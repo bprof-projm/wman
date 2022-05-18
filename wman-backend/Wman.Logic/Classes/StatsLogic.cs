@@ -69,12 +69,12 @@ namespace Wman.Logic.Classes
         public async Task<ICollection<ICollection<StatsXlsModel>>> GetWorkerStats(DateTime input)
         {
             var _allWorkersNoInclude = await userManager.GetUsersInRoleAsync("Worker");
-            var _everyUserWithInclude = await userManager.Users.Include(x => x.WorkEvents).ToListAsync();
+            var _everyUserWithInclude = await userManager.Users.Include(x => x.WorkEvents).ThenInclude(y => y.Address).ToListAsync();
             var workersWithIncludedEvents = _everyUserWithInclude.Intersect<WmanUser>(_allWorkersNoInclude);
             //Workaround, because userManager.GetUsersInRoleAsync() does not include the associated workevents. Possible alternate solutions are:
             // 1.) Implementing our own, modified IUserStore<WmanUser>, which would include the events as well
             // 2.) Migrating to .NET / EFCORE 6, as it's possible to configure auto inclusion there
-            ;
+
             var tempTest = new List<string>();
             List<WorkEvent> allCompletedThisMonth = await eventRepo.GetAll()
                 .Where(x => x.Status == Status.finished &&
@@ -84,7 +84,6 @@ namespace Wman.Logic.Classes
             var output = new List<ICollection<StatsXlsModel>>();
             foreach (var user in workersWithIncludedEvents)
             {
-                
                 var userCompletedJobs = user.WorkEvents.Where(x => x.Status == Status.finished &&
                 x.WorkFinishDate.Year == input.Year &&
                 x.WorkFinishDate.Month == input.Month);
@@ -97,7 +96,10 @@ namespace Wman.Logic.Classes
                     {
                         picUrls += pic.Url + ", ";
                     }
-                    picUrls = picUrls.Substring(picUrls.Length - 2);
+                    if (!string.IsNullOrWhiteSpace(picUrls))
+                    {
+                        picUrls = picUrls.Substring(picUrls.Length - 2); //remove last trailing comma
+                    }
 
                     oneWorker.Add(new StatsXlsModel
                     {
@@ -108,9 +110,10 @@ namespace Wman.Logic.Classes
                         WorkHours = 2,
                         PicUrl = picUrls
                     });
+                    ;
                 }
                 output.Add(oneWorker);
-                await this.makeManagerxls(oneWorker);
+                //await this.makeManagerxls(oneWorker); //TODO UNCOMMENT
             }
            
             return output;
