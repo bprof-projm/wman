@@ -157,7 +157,7 @@ namespace Wman.Logic.Classes
             }
             await this.SendManagerEmails(this.GetFilename());
         }
-        public async Task makeWorkerxls(List<StatsXlsModel> input)
+        private async Task makeWorkerxls(List<StatsXlsModel> input)
         {
 
             using (var workbook = new XLWorkbook())
@@ -220,25 +220,25 @@ namespace Wman.Logic.Classes
             }
         }
 
-        public async Task SendWorkerEmail(string filename, string username)
+        private async Task SendWorkerEmail(string filename, string username)
         {
             var worker = await userManager.FindByNameAsync(username);
                 await emailService.SendXls(worker, filename);
         }
 
-        public async void registerRecurringJob(string input)
+        public async void registerRecurringManagerJob(string input)
         {
             if (!int.TryParse(input, out _) || int.Parse(input) > 31) //No valid config value, use defaults
             {
                 RecurringJob.RemoveIfExists("scheduledXlsReport");
                 RecurringJob.AddOrUpdate("defaultCaseXls", () => this.GetManagerStats(DateTime.Now.AddDays(-2)), Cron.Monthly, TimeZoneInfo.Local); //No schedule provided, default is sending the prev. month's stats on the first day of current month
-                Debug.WriteLine("\n--- No valid \"xlsSchedule\" tag found in appsettings.json, using defaults (1st day of each month)!--- \n");
+                Debug.WriteLine("\n--- MANAGERS: No valid \"xlsSchedule\" tag found in appsettings.json, using defaults (1st day of each month)!--- \n");
             }
             else if (int.Parse(input) <= 0) // 0 or less value, disable scheduled emails
             {
                 RecurringJob.RemoveIfExists("scheduledXlsReport");
                 RecurringJob.RemoveIfExists("defaultCaseXls");
-                Debug.WriteLine("\n--- Scheduled xls sending is disabled by \"xlsSchedule\" tag in appsettings.json!--- \n");
+                Debug.WriteLine("\n--- MANAGERS: Scheduled xls sending is disabled by \"xlsSchedule\" tag in appsettings.json!--- \n");
             }
             else //Valid value, schedule based on input (Every x days counting from the first of month)
             {
@@ -246,10 +246,36 @@ namespace Wman.Logic.Classes
                 RecurringJob.AddOrUpdate("scheduledXlsReport", () => this.GetManagerStats(DateTime.Now), cronExpr, TimeZoneInfo.Local);
                 RecurringJob.RemoveIfExists("defaultCaseXls");
 
-                Debug.WriteLine($"\n--- Scheduled xls generation&sending every {input} days (From the beginning of the month)!--- \n");
+                Debug.WriteLine($"\n--- MANAGERS: Scheduled xls generation&sending every {input} days (From the beginning of the month)!--- \n");
             }
             await fileRepo.DeleteOldFiles(this.GetPath(), ".xlsx", DateTime.Now.AddMonths(-1)); //Delete every .xlsx file older than a month
         }
+
+        public async void registerRecurringWorkerJob(string input)
+        {
+            if (!int.TryParse(input, out _) || int.Parse(input) > 31) //No valid config value, use defaults
+            {
+                RecurringJob.RemoveIfExists("scheduledXlsReport_Worker");
+                RecurringJob.AddOrUpdate("defaultCaseXls_Worker", () => this.GetWorkerStats(DateTime.Now.AddDays(-2)), Cron.Monthly, TimeZoneInfo.Local); //No schedule provided, default is sending the prev. month's stats on the first day of current month
+                Debug.WriteLine("\n--- WORKERS: No valid \"xlsSchedule\" tag found in appsettings.json, using defaults (1st day of each month)!--- \n");
+            }
+            else if (int.Parse(input) <= 0) // 0 or less value, disable scheduled emails
+            {
+                RecurringJob.RemoveIfExists("scheduledXlsReport_Worker");
+                RecurringJob.RemoveIfExists("defaultCaseXls_Worker");
+                Debug.WriteLine("\n--- WORKERS: Scheduled xls sending is disabled by \"xlsSchedule\" tag in appsettings.json!--- \n");
+            }
+            else //Valid value, schedule based on input (Every x days counting from the first of month)
+            {
+                var cronExpr = $"0 12 1/{input} * *";
+                RecurringJob.AddOrUpdate("scheduledXlsReport_Worker", () => this.GetWorkerStats(DateTime.Now), cronExpr, TimeZoneInfo.Local);
+                RecurringJob.RemoveIfExists("defaultCaseXls_Worker");
+
+                Debug.WriteLine($"\n--- WORKERS: Scheduled xls generation&sending every {input} days (From the beginning of the month)!--- \n");
+            }
+            await fileRepo.DeleteOldFiles(this.GetPath(), ".xlsx", DateTime.Now.AddDays(-5)); //Delete every .xlsx file older than 5 days
+        }
+
         private string GetFilename()
         {
             return this.GetFilename(DateTime.Now);

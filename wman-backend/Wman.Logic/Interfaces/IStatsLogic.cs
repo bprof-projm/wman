@@ -13,6 +13,7 @@ namespace Wman.Logic.Interfaces
         Task<ICollection<StatsXlsModel>> GetManagerStats(DateTime month);
         Task<ICollection<ICollection<StatsXlsModel>>> GetWorkerStats(DateTime input);
         Task SendManagerEmails(string username);
-        void registerRecurringJob(string x);
+        void registerRecurringManagerJob(string x);
+        void registerRecurringWorkerJob(string x);
     }
 }

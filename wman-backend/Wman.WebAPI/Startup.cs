@@ -242,7 +242,8 @@ namespace Wman.WebAPI
 
                 });
             });
-            statsLogic.registerRecurringJob(Configuration.GetValue<string>("xlsSchedule"));
+            statsLogic.registerRecurringManagerJob(Configuration.GetValue<string>("xlsSchedule"));
+            statsLogic.registerRecurringWorkerJob(Configuration.GetValue<string>("xlsSchedule_Worker"));
         }
 
         static string XmlCommentsFilePath
