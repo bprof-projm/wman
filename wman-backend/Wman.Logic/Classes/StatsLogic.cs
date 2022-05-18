@@ -68,26 +68,31 @@ namespace Wman.Logic.Classes
 
         public async Task<ICollection<ICollection<StatsXlsModel>>> GetWorkerStats(DateTime input)
         {
-            var _allWorkersNoInclude = await userManager.GetUsersInRoleAsync("Worker");
-            var _everyUserWithInclude = await userManager.Users.Include(x => x.WorkEvents).ThenInclude(y => y.Address).ToListAsync();
-            var workersWithIncludedEvents = _everyUserWithInclude.Intersect<WmanUser>(_allWorkersNoInclude);
-            //Workaround, because userManager.GetUsersInRoleAsync() does not include the associated workevents. Possible alternate solutions are:
+            var workers = await userManager.GetUsersInRoleAsync("Worker");
+            var AllUsers = await userManager.Users
+                .Include(x => x.WorkEvents)
+                .ThenInclude(y => y.Address)
+                .Include(z => z.WorkEvents)
+                .ThenInclude(zs => zs.ProofOfWorkPic)
+                .AsNoTracking()
+                .ToListAsync();
+            //Workaround, because userManager.GetUsersInRoleAsync("Worker") does not include the associated workevents, addresses, pictures...
+            //The filtering for workers part happens on it's own, as theoretically only workers can be assigned to completed events.
+            //Possible alternate solutions are:
             // 1.) Implementing our own, modified IUserStore<WmanUser>, which would include the events as well
             // 2.) Migrating to .NET / EFCORE 6, as it's possible to configure auto inclusion there
 
             var tempTest = new List<string>();
-            List<WorkEvent> allCompletedThisMonth = await eventRepo.GetAll()
-                .Where(x => x.Status == Status.finished &&
-                x.WorkFinishDate.Year == input.Year &&
-                x.WorkFinishDate.Month == input.Month)
-                .ToListAsync();
             var output = new List<ICollection<StatsXlsModel>>();
-            foreach (var user in workersWithIncludedEvents)
+            foreach (var user in AllUsers)
             {
                 var userCompletedJobs = user.WorkEvents.Where(x => x.Status == Status.finished &&
                 x.WorkFinishDate.Year == input.Year &&
                 x.WorkFinishDate.Month == input.Month);
-
+                if (!userCompletedJobs.Any())
+                {
+                    continue;
+                }
                 var oneWorker = new List<StatsXlsModel>();
                 foreach (var job in userCompletedJobs)
                 {
@@ -98,9 +103,8 @@ namespace Wman.Logic.Classes
                     }
                     if (!string.IsNullOrWhiteSpace(picUrls))
                     {
-                        picUrls = picUrls.Substring(picUrls.Length - 2); //remove last trailing comma
+                        picUrls = picUrls.Substring(0, picUrls.Length - 2); //remove last trailing comma
                     }
-
                     oneWorker.Add(new StatsXlsModel
                     {
                         JobDesc = job.JobDescription,
@@ -108,9 +112,9 @@ namespace Wman.Logic.Classes
                         JobStart = job.WorkStartDate,
                         JobEnd = job.WorkFinishDate,
                         WorkHours = 2,
-                        PicUrl = picUrls
+                        PicUrl = picUrls,
+                        WorkerName = user.UserName
                     });
-                    ;
                 }
                 output.Add(oneWorker);
                 //await this.makeManagerxls(oneWorker); //TODO UNCOMMENT
