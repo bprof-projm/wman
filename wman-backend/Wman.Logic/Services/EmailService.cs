@@ -48,14 +48,21 @@ namespace Wman.Logic.Services
                 we.Address.ZIPCode + ", " + we.Address.City + "<br>" + we.Address.Street + " " + we.Address.BuildingNumber + $" {we.Address.Floordoor}");
             await SendEmail(user.Email, $"The {we.JobDescription} event has been modified!", htmlContent);
         }
-        public async Task SendXls(WmanUser user, string path)
+        public async Task SendXls(WmanUser user, string path, bool worker = false)
         {
             string htmlContent = File.ReadAllText("./Assets/managerEmail.html");
             htmlContent = htmlContent.Replace("NameDynamicValue", $"Dear Mr/Mrs. {user.LastName}");
             htmlContent = htmlContent.Replace("SubjectDynamicValue", $"XLS generated at: {File.GetLastWriteTime(path)}");
             htmlContent = htmlContent.Replace("MessageDynamicValue", $"Please find the generated statistics attached below");
-
-            await SendEmail(user.Email, $"Manager statistics", htmlContent, path);
+            if (worker)
+            {
+                await SendEmail(user.Email, $"This month's completed jobs", htmlContent, path);
+            }
+            else
+            {
+                await SendEmail(user.Email, $"Manager statistics", htmlContent, path);
+            }
+            
         }
         private async Task SendEmail(string toAddress, string subject, string htmlContent, string filePath = "")
         {
