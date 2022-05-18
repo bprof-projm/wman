@@ -111,7 +111,7 @@ namespace Wman.Logic.Classes
                         JobLocation = job.Address.ToString(),
                         JobStart = job.WorkStartDate,
                         JobEnd = job.WorkFinishDate,
-                        WorkHours = 2,
+                        WorkHours = (int)Math.Ceiling((job.WorkFinishDate - job.WorkStartDate).TotalMinutes / 60.0),
                         PicUrl = picUrls,
                         WorkerName = user.UserName
                     });
@@ -164,12 +164,12 @@ namespace Wman.Logic.Classes
             {
                 var sheet = workbook.Worksheets.Add("WorkerStats");
                 var rowIndex = 1;
-                sheet.Cell(rowIndex, 1).Value = "Job Description";
+                sheet.Cell(rowIndex, 1).Value = "Job description";
                 sheet.Cell(rowIndex, 2).Value = "Location";
                 sheet.Cell(rowIndex, 3).Value = "Started at";
                 sheet.Cell(rowIndex, 4).Value = "Finished at";
                 sheet.Cell(rowIndex, 5).Value = "Working hours";
-                sheet.Cell(rowIndex, 6).Value = "ProofOfPic(s)";
+                sheet.Cell(rowIndex, 6).Value = "Proof of work picture(s)";
                 foreach (var item in input)
                 {
                     rowIndex++;
@@ -188,6 +188,10 @@ namespace Wman.Logic.Classes
                 using (var ms = new MemoryStream())
                 {
                     workbook.SaveAs(ms);
+                    if (File.Exists(workerFilename))
+                    {
+                        File.Delete(workerFilename);
+                    }
                     await fileRepo.Create(workerFilename, ms);
                 }
                 await this.SendWorkerEmail(workerFilename, input.First().WorkerName);
