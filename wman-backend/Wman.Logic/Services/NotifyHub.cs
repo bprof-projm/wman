@@ -38,8 +38,7 @@ namespace Wman.Logic.Services
             {
                 Console.WriteLine(ex.Message);
                 
-            }
-                
+            }         
             
             
         }

@@ -3,7 +3,7 @@ import Avatar from "antd/lib/avatar/avatar";
 import { Header } from "antd/lib/layout/layout";
 import axios from "axios";
 import { useEffect } from "react";
-import { useState } from "react/cjs/react.development";
+import { useRef, useState } from "react/cjs/react.development";
 import { Logout } from "../Logout/logout.component";
 import ProgressCard from "../Worker-load/Progress-card/progress-card.component";
 import WorkerThisWeek from "./worker-page-this-week-events/worker-page-this-week.component";
@@ -15,14 +15,16 @@ import "./worker-page.styles.css"
 const WorkerPage = () => {
     const [workload, setWorkLoad] = useState("");
     const [userdata, setUserdata] = useState("");
+
     const [showToday, setShowToday] = useState(true);
 
     useEffect(() => {
         const token = Cookies.get("auth");
+        console.log(token)
         const decoded = jwt_decode(token);
         const username = decoded.sub;
         setUserdata(username);
-    })
+    }, [])
     //handle changes
     const setToday = () => {
         setShowToday(true);
@@ -31,6 +33,7 @@ const WorkerPage = () => {
     const setThisWeek = () => {
         setShowToday(false);
     }
+ 
 
     return (
         <div className="worker-page">
@@ -64,20 +67,20 @@ const WorkerPage = () => {
                     </div>
                 </div>
 
-                <><Popover placement="bottomRight"
+                <div><Popover placement="bottomRight"
                     className="worker-avatar-popover"
                     content=
-                    {<>
+                    {<div>
                         <div className="popover-name">
                             {userdata}
                         </div>
                         <div className="logout">
                             <Logout />
                         </div>
-                    </>}>
+                    </div>}>
                     <Avatar
                         src={`https://eu.ui-avatars.com/api?name=${userdata} ${userdata}`} />
-                </Popover></>
+                </Popover></div>
 
             </Header>
             <div className="rendered-intervall">
