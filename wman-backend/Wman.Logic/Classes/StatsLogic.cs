@@ -68,7 +68,7 @@ namespace Wman.Logic.Classes
 
         public async Task<ICollection<ICollection<StatsXlsModel>>> GetWorkerStats(DateTime input)
         {
-            var workers = await userManager.GetUsersInRoleAsync("Worker");
+            //var workers = await userManager.GetUsersInRoleAsync("Worker");
             var AllUsers = await userManager.Users
                 .Include(x => x.WorkEvents)
                 .ThenInclude(y => y.Address)
