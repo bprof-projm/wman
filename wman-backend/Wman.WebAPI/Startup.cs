@@ -53,7 +53,7 @@ namespace Wman.WebAPI
             services.AddSingleton<NotifyHub>();
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
-            services.AddControllers(x => x.Filters.Add(new ApiExceptionFilter()));
+            //services.AddControllers(x => x.Filters.Add(new ApiExceptionFilter()));
             services.AddTransient<IAuthLogic, AuthLogic>();
             services.AddTransient<ICalendarEventLogic, CalendarEventLogic>();
             services.AddTransient<IEventLogic, EventLogic>();

@@ -117,7 +117,7 @@ namespace Wman.Logic.Classes
                     });
                 }
                 output.Add(oneWorker);
-                //await this.makeManagerxls(oneWorker); //TODO UNCOMMENT
+                await this.makeWorkerxls(oneWorker); //TODO UNCOMMENT
             }
            
             return output;
@@ -155,9 +155,45 @@ namespace Wman.Logic.Classes
                 }
 
             }
-            await this.SendEmails(this.GetFilename());
+            await this.SendManagerEmails(this.GetFilename());
         }
-        public async Task SendEmails(string fileName = "")
+        public async Task makeWorkerxls(List<StatsXlsModel> input)
+        {
+
+            using (var workbook = new XLWorkbook())
+            {
+                var sheet = workbook.Worksheets.Add("WorkerStats");
+                var rowIndex = 1;
+                sheet.Cell(rowIndex, 1).Value = "Job Description";
+                sheet.Cell(rowIndex, 2).Value = "Location";
+                sheet.Cell(rowIndex, 3).Value = "Started at";
+                sheet.Cell(rowIndex, 4).Value = "Finished at";
+                sheet.Cell(rowIndex, 5).Value = "Working hours";
+                sheet.Cell(rowIndex, 6).Value = "ProofOfPic(s)";
+                foreach (var item in input)
+                {
+                    rowIndex++;
+                    sheet.Cell(rowIndex, 1).Value = item.JobDesc;
+                    sheet.Cell(rowIndex, 2).Value = item.JobLocation;
+                    sheet.Cell(rowIndex, 3).Value = item.JobStart;
+                    sheet.Cell(rowIndex, 4).Value = item.JobEnd;
+                    sheet.Cell(rowIndex, 5).Value = item.WorkHours;
+                    sheet.Cell(rowIndex, 6).Value = item.PicUrl;
+                }
+                sheet.Row(1).Cells().Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                sheet.Row(1).Cells().Style.Font.SetBold();
+                sheet.Range(2, 3, sheet.LastRowUsed().RowNumber(), 4).Style.NumberFormat.Format = "yyyy.MM.dd. HH:mm";
+                sheet.Columns().AdjustToContents();
+                var workerFilename = this.GetPath() + input.First().WorkerName + "_Worker" + this.GetFilename();
+                using (var ms = new MemoryStream())
+                {
+                    workbook.SaveAs(ms);
+                    await fileRepo.Create(workerFilename, ms);
+                }
+                await this.SendWorkerEmail(workerFilename, input.First().WorkerName);
+            }
+        }
+        public async Task SendManagerEmails(string fileName = "")
         {
             if (String.IsNullOrWhiteSpace(fileName)) //If no specific file is selected, assume the latest is needed
             {
@@ -179,6 +215,13 @@ namespace Wman.Logic.Classes
                 await emailService.SendXls(item, fileName);
             }
         }
+
+        public async Task SendWorkerEmail(string filename, string username)
+        {
+            var worker = await userManager.FindByNameAsync(username);
+                await emailService.SendXls(worker, filename);
+        }
+
         public async void registerRecurringJob(string input)
         {
             if (!int.TryParse(input, out _) || int.Parse(input) > 31) //No valid config value, use defaults
