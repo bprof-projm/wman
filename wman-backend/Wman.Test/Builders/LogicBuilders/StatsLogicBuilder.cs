@@ -16,6 +16,7 @@ namespace Wman.Test.Builders.LogicBuilders
 
             fileRepo.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<Stream>())).Returns(Task.CompletedTask);
             fileRepo.Setup(x => x.GetDetails(It.IsAny<string>())).Returns(TaskDirectoryInfoHelper());
+            fileRepo.Setup(x => x.DeleteOldFiles(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>())).Returns(Task.CompletedTask);
             return fileRepo;
         }
 
@@ -34,7 +35,7 @@ namespace Wman.Test.Builders.LogicBuilders
 
         private static Task<DirectoryInfo> TaskDirectoryInfoHelper()
         {
-            var akarmi = new DirectoryInfo("Teszt_data");
+            var akarmi = new DirectoryInfo("Test_data");
             return Task.FromResult(akarmi);
         }
     }

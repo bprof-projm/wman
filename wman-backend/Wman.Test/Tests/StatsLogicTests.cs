@@ -68,5 +68,19 @@ namespace Wman.Test.Tests
             this.userManager.Verify(x => x.GetUsersInRoleAsync("Manager"), Times.Once);
             this.emailService.Verify(x => x.SendXls(It.IsAny<WmanUser>(), It.IsAny<string>()));
         }
+
+        [Test]
+        public async Task RegisterRecurringJobTestt()
+        {
+            //Arrange
+            StatsLogic statsLogic = new(eventRepo.Object, fileRepo.Object, config, emailService.Object, userManager.Object);
+            string input = "Test_String";
+
+            //Act
+            statsLogic.registerRecurringJob(input);
+
+            //Assert
+            this.fileRepo.Verify(x => x.DeleteOldFiles(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>()), Times.Once);
+        }
     }
 }
