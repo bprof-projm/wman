@@ -53,7 +53,7 @@ namespace Wman.WebAPI
             services.AddSingleton<NotifyHub>();
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
-            //services.AddControllers(x => x.Filters.Add(new ApiExceptionFilter()));
+            services.AddControllers(x => x.Filters.Add(new ApiExceptionFilter()));
             services.AddTransient<IAuthLogic, AuthLogic>();
             services.AddTransient<ICalendarEventLogic, CalendarEventLogic>();
             services.AddTransient<IEventLogic, EventLogic>();
@@ -68,7 +68,7 @@ namespace Wman.WebAPI
           options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             //services.AddSingleton(Configuration);
 #if DEBUG
-            services.AddSingleton<IAuthorizationHandler, AllowAnonymous>(); //Uncommenting this will disable auth, for debugging purposes.
+            //services.AddSingleton<IAuthorizationHandler, AllowAnonymous>(); //Uncommenting this will disable auth, for debugging purposes.
 #endif
 
             services.AddTransient<IProofOfWorkRepo, ProofOfWorkRepo>();

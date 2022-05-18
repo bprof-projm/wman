@@ -119,7 +119,7 @@ namespace Wman.Logic.Classes
                 output.Add(oneWorker);
                 await this.makeWorkerxls(oneWorker); //TODO UNCOMMENT
             }
-           
+
             return output;
         }
 
@@ -223,7 +223,7 @@ namespace Wman.Logic.Classes
         private async Task SendWorkerEmail(string filename, string username)
         {
             var worker = await userManager.FindByNameAsync(username);
-                await emailService.SendXls(worker, filename);
+            await emailService.SendXls(worker, filename);
         }
 
         public async void registerRecurringManagerJob(string input)

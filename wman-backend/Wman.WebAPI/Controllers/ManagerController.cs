@@ -42,13 +42,6 @@ namespace Wman.WebAPI.Controllers
             return Ok(await this.statsLogic.GetManagerStats(DateTime.Now));
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpGet("testme")]
-        public async Task<ActionResult> testworkerstats()
-        {
-            return Ok(await this.statsLogic.GetWorkerStats(DateTime.Now));
-        }
-
         /// <summary>
         /// Testing endpoint used for sending the xls stats to all the managers. 
         /// </summary>
