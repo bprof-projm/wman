@@ -68,7 +68,7 @@ namespace Wman.WebAPI
           options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             //services.AddSingleton(Configuration);
 #if DEBUG
-            //services.AddSingleton<IAuthorizationHandler, AllowAnonymous>(); //Uncommenting this will disable auth, for debugging purposes.
+            services.AddSingleton<IAuthorizationHandler, AllowAnonymous>(); //Uncommenting this will disable auth, for debugging purposes.
 #endif
 
             services.AddTransient<IProofOfWorkRepo, ProofOfWorkRepo>();
