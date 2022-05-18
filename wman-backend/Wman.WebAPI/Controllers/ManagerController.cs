@@ -39,7 +39,7 @@ namespace Wman.WebAPI.Controllers
         [HttpGet("GenerateXls")]
         public async Task<ActionResult> StatsThisMonth()
         {
-            return Ok(await this.statsLogic.GetStats(DateTime.Now));
+            return Ok(await this.statsLogic.GetManagerStats(DateTime.Now));
         }
 
         /// <summary>

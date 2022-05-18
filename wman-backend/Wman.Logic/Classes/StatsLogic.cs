@@ -35,13 +35,16 @@ namespace Wman.Logic.Classes
             this.userManager = userManager;
         }
 
-        public async Task<ICollection<StatsXlsModel>> GetStats(DateTime input)
+        public async Task<ICollection<StatsXlsModel>> GetManagerStats(DateTime input)
         {
-            var allCompletedThisMonth = await eventRepo.GetAll()
+            List<WorkEvent> allCompletedThisMonth = new List<WorkEvent>();
+            allCompletedThisMonth = await eventRepo.GetAll()
                 .Where(x => x.Status == Status.finished &&
                 x.WorkFinishDate.Year == input.Year &&
                 x.WorkFinishDate.Month == input.Month)
                 .ToListAsync();
+
+
             var output = new List<StatsXlsModel>();
 
             foreach (var job in allCompletedThisMonth)
@@ -59,10 +62,42 @@ namespace Wman.Logic.Classes
                     });
                 }
             }
-            await this.makexls(output);
+            await this.makeManagerxls(output);
             return output;
         }
-        public async Task makexls(List<StatsXlsModel> input)
+
+        public async Task<ICollection<StatsXlsModel>> GetWorkerStats(DateTime input, string username)
+        {
+            List<WorkEvent> allCompletedThisMonth = new List<WorkEvent>();
+            allCompletedThisMonth = await eventRepo.GetAll()
+                .Where(x => x.Status == Status.finished &&
+                x.WorkFinishDate.Year == input.Year &&
+                x.WorkFinishDate.Month == input.Month)
+                .ToListAsync();
+
+
+            var output = new List<StatsXlsModel>();
+
+            foreach (var job in allCompletedThisMonth)
+            {
+                foreach (var person in job.AssignedUsers)
+                {
+                    output.Add(new StatsXlsModel
+                    {
+                        JobDesc = job.JobDescription,
+                        JobLocation = job.Address.ToString(),
+                        JobStart = job.WorkStartDate,
+                        JobEnd = job.WorkFinishDate,
+                        WorkerName = person.LastName + " " + person.FirstName
+
+                    });
+                }
+            }
+            await this.makeManagerxls(output);
+            return output;
+        }
+
+        public async Task makeManagerxls(List<StatsXlsModel> input)
         {
 
             using (var workbook = new XLWorkbook())
@@ -123,7 +158,7 @@ namespace Wman.Logic.Classes
             if (!int.TryParse(input, out _) || int.Parse(input) > 31) //No valid config value, use defaults
             {
                 RecurringJob.RemoveIfExists("scheduledXlsReport");
-                RecurringJob.AddOrUpdate("defaultCaseXls", () => this.GetStats(DateTime.Now.AddDays(-2)), Cron.Monthly, TimeZoneInfo.Local); //No schedule provided, default is sending the prev. month's stats on the first day of current month
+                RecurringJob.AddOrUpdate("defaultCaseXls", () => this.GetManagerStats(DateTime.Now.AddDays(-2)), Cron.Monthly, TimeZoneInfo.Local); //No schedule provided, default is sending the prev. month's stats on the first day of current month
                 Debug.WriteLine("\n--- No valid \"xlsSchedule\" tag found in appsettings.json, using defaults (1st day of each month)!--- \n");
             }
             else if (int.Parse(input) <= 0) // 0 or less value, disable scheduled emails
@@ -135,7 +170,7 @@ namespace Wman.Logic.Classes
             else //Valid value, schedule based on input (Every x days counting from the first of month)
             {
                 var cronExpr = $"0 12 1/{input} * *";
-                RecurringJob.AddOrUpdate("scheduledXlsReport", () => this.GetStats(DateTime.Now), cronExpr, TimeZoneInfo.Local);
+                RecurringJob.AddOrUpdate("scheduledXlsReport", () => this.GetManagerStats(DateTime.Now), cronExpr, TimeZoneInfo.Local);
                 RecurringJob.RemoveIfExists("defaultCaseXls");
 
                 Debug.WriteLine($"\n--- Scheduled xls generation&sending every {input} days (From the beginning of the month)!--- \n");

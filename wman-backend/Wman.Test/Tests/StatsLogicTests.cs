@@ -54,7 +54,7 @@ namespace Wman.Test.Tests
             DateTime input = DateTime.Now;
 
             //Act
-            var call = await statsLogic.GetStats(input);
+            var call = await statsLogic.GetManagerStats(input);
 
             //Assert
             Assert.IsNotNull(call);
