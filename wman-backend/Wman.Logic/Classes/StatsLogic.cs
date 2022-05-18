@@ -44,7 +44,6 @@ namespace Wman.Logic.Classes
                 x.WorkFinishDate.Month == input.Month)
                 .ToListAsync();
 
-
             var output = new List<StatsXlsModel>();
 
             foreach (var job in allCompletedThisMonth)
@@ -58,7 +57,6 @@ namespace Wman.Logic.Classes
                         JobStart = job.WorkStartDate,
                         JobEnd = job.WorkFinishDate,
                         WorkerName = person.LastName + " " + person.FirstName
-
                     });
                 }
             }
@@ -82,14 +80,14 @@ namespace Wman.Logic.Classes
             // 1.) Implementing our own, modified IUserStore<WmanUser>, which would include the events as well
             // 2.) Migrating to .NET / EFCORE 6, as it's possible to configure auto inclusion there
 
-            var tempTest = new List<string>();
             var output = new List<ICollection<StatsXlsModel>>();
             foreach (var user in AllUsers)
             {
-                var userCompletedJobs = user.WorkEvents.Where(x => x.Status == Status.finished &&
+                var userCompletedJobs = user.WorkEvents.Where(x =>
+                x.Status == Status.finished &&
                 x.WorkFinishDate.Year == input.Year &&
                 x.WorkFinishDate.Month == input.Month);
-                if (!userCompletedJobs.Any())
+                if (!userCompletedJobs.Any()) //Not a worker, or didn't do anything
                 {
                     continue;
                 }
@@ -117,7 +115,7 @@ namespace Wman.Logic.Classes
                     });
                 }
                 output.Add(oneWorker);
-                await this.makeWorkerxls(oneWorker); //TODO UNCOMMENT
+                await this.makeWorkerxls(oneWorker);
             }
 
             return output;
@@ -293,7 +291,6 @@ namespace Wman.Logic.Classes
             if (String.IsNullOrWhiteSpace(path))
             {
                 path = AppDomain.CurrentDomain.BaseDirectory;
-                ;
             }
             else if (!path.EndsWith('/') && !path.EndsWith(@"\"))
             {
