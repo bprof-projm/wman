@@ -54,7 +54,7 @@ namespace Wman.Test.Tests
             DateTime input = DateTime.Now;
 
             //Act
-            var call = await statsLogic.GetStats(input);
+            var call = await statsLogic.GetManagerStats(input);
 
             //Assert
             Assert.IsNotNull(call);
@@ -66,7 +66,7 @@ namespace Wman.Test.Tests
             //SendEmails
             this.fileRepo.Verify(x => x.GetDetails(It.IsAny<string>()), Times.Never);
             this.userManager.Verify(x => x.GetUsersInRoleAsync("Manager"), Times.Once);
-            this.emailService.Verify(x => x.SendXls(It.IsAny<WmanUser>(), It.IsAny<string>()));
+            this.emailService.Verify(x => x.SendXls(It.IsAny<WmanUser>(), It.IsAny<string>(), It.IsAny <bool>()));
         }
     }
 }

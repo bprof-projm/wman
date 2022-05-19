@@ -10,8 +10,10 @@ namespace Wman.Logic.Interfaces
 {
     public interface IStatsLogic
     {
-        Task<ICollection<StatsXlsModel>> GetStats(DateTime month);
-        Task SendEmails(string username);
-        void registerRecurringJob(string x);
+        Task<ICollection<StatsXlsModel>> GetManagerStats(DateTime month);
+        Task<ICollection<ICollection<StatsXlsModel>>> GetWorkerStats(DateTime input);
+        Task SendManagerEmails(string username);
+        void registerRecurringManagerJob(string x);
+        void registerRecurringWorkerJob(string x);
     }
 }

@@ -13,6 +13,8 @@ namespace Wman.Logic.DTO_Models
         public string JobLocation { get; set; }
         public DateTime JobStart { get; set; }
         public DateTime JobEnd { get; set; }
+        public int WorkHours { get; set; }
+        public string PicUrl { get; set; }
 
     }
 }

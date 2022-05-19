@@ -39,7 +39,7 @@ namespace Wman.WebAPI.Controllers
         [HttpGet("GenerateXls")]
         public async Task<ActionResult> StatsThisMonth()
         {
-            return Ok(await this.statsLogic.GetStats(DateTime.Now));
+            return Ok(await this.statsLogic.GetManagerStats(DateTime.Now));
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace Wman.WebAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> SendEmails(string filename)
             {
-            await this.statsLogic.SendEmails(filename);
+            await this.statsLogic.SendManagerEmails(filename);
             return Ok();
         }
     }
