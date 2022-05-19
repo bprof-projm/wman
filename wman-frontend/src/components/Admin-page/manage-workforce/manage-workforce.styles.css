@@ -1,0 +1,57 @@
+.admin-form-container{
+    padding: 5%;
+    justify-content: center;
+    background-color: #ffffff;
+    width: 50vw;
+    border-radius: 7px;
+}
+.form-button{
+    width:10vw;
+    border-radius: 7px;
+}
+.admin-form-button{
+    display: flex;
+    justify-content: center;
+    width:100%;
+}
+.manage-workforce{
+    display: flex;
+    flex-direction: row;
+}
+.admin-workforce-information{
+    width: 24vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.admin-workforce-information Button{
+    margin-top: 1vh;
+}
+.admin-workforce-operations{
+    width: 52vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.admin-list-of-users{
+    width: 24vw;
+    background-color:rgb(245, 245, 248);
+}
+.users-list{
+    overflow: auto;     
+    height: 83vh;    
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;  
+    justify-content: center;
+
+}
+.search-admin{
+    display: flex;
+    justify-content: space-around;
+    margin: 0;
+    margin-top: 1vh;
+
+}

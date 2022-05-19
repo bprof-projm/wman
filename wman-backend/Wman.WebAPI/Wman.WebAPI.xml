@@ -178,6 +178,32 @@
             <param name="usernames">A list of string string usernames, which we'd like to assign to the event</param>
             <returns>A list of userDTOs, where the users could be assigned without date collision</returns>
         </member>
+        <member name="T:Wman.WebAPI.Controllers.ManagerController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.ManagerController.#ctor(Wman.Logic.Interfaces.IEventLogic,Wman.Logic.Interfaces.IStatsLogic)">
+            <summary>
+            
+            </summary>
+            <param name="eventLogic"></param>
+            <param name="statsLogic"></param>
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.ManagerController.StatsThisMonth">
+            <summary>
+            Testing endpoint to test the output of the xls export.
+            </summary>
+            <returns></returns>
+            
+        </member>
+        <member name="M:Wman.WebAPI.Controllers.ManagerController.SendEmails(System.String)">
+            <summary>
+            Testing endpoint used for sending the xls stats to all the managers. 
+            </summary>
+            <param name="filename">Name of the .xlsx. If left empty, the latest one is used</param>
+            <returns></returns>
+        </member>
         <member name="M:Wman.WebAPI.Controllers.SeedController.PopulateDB">
             <summary>
             Fill database with testing data. Used only for testing purposes.

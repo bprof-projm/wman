@@ -38,8 +38,7 @@ namespace Wman.Logic.Services
             {
                 Console.WriteLine(ex.Message);
                 
-            }
-                
+            }         
             
             
         }
@@ -117,6 +116,23 @@ namespace Wman.Logic.Services
                 if (Clients != null)
                 {
                     await Clients.User(user).SendAsync("EventStateChanged", we);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+            }
+        }
+
+        public async Task NotifyWorkerAboutWorkEventDelete(string user, string we)
+        {
+            try
+            {
+                if (Clients != null)
+                {
+                    await Clients.User(user).SendAsync("EventDeleted", we);
                 }
 
             }

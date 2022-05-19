@@ -11,5 +11,6 @@ namespace Wman.Logic.Services
     {
         Task AssigedToWorkEvent(WorkEvent we, WmanUser user);
         Task WorkEventUpdated(WorkEvent we, WmanUser user);
+        Task SendXls(WmanUser user, string path, bool worker = false);
     }
 }

@@ -3,40 +3,27 @@ import Avatar from "antd/lib/avatar/avatar";
 import { Header } from "antd/lib/layout/layout";
 import axios from "axios";
 import { useEffect } from "react";
-import { useRef, useState } from "react/cjs/react.development";
+import { useState } from "react/cjs/react.development";
 import { Logout } from "../Logout/logout.component";
-import ProgressCard from "../Worker-load/Progress-card/progress-card.component";
-import WorkerThisWeek from "./worker-page-this-week-events/worker-page-this-week.component";
-import WorkerToday from "./worker-page-today-events/worker-page-today.component";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
-import "./worker-page.styles.css"
+import "./admin-page.styles.css"
+import ManageWorkforce from "./manage-workforce/manage-workforce.component";
 
-const WorkerPage = () => {
-    const [workload, setWorkLoad] = useState("");
+const AdminPage = () => {
     const [userdata, setUserdata] = useState("");
-
-    const [showToday, setShowToday] = useState(true);
+    const [showManage, setShowManage] = useState(true);
+    
 
     useEffect(() => {
         const token = Cookies.get("auth");
-        console.log(token)
         const decoded = jwt_decode(token);
         const username = decoded.sub;
         setUserdata(username);
-    }, [])
-    //handle changes
-    const setToday = () => {
-        setShowToday(true);
-    }
-
-    const setThisWeek = () => {
-        setShowToday(false);
-    }
- 
+    })
 
     return (
-        <div className="worker-page">
+        <div className="admin-page">
             <Header style={{ zIndex: 1, width: "100%" }}>
                 <div className="logoLeftSide" style={{ width: "200px" }}>
                     <div className="logo" style={{ marginTop: "7px" }}>
@@ -60,33 +47,30 @@ const WorkerPage = () => {
                 </div>
                 <div className="select-intervall">
                     <div>
-                        <Button onClick={setToday} >Today</Button>
+                        <Button onClick={() => setShowManage(true)} >Manage Workforce</Button>
                     </div>
                     <div>
-                        <Button onClick={setThisWeek} >This Week</Button>
+                        <Button onClick={() => setShowManage(false)} >Display workloads</Button>
                     </div>
                 </div>
 
-                <div><Popover placement="bottomRight"
+                <Popover placement="bottomRight"
                     className="worker-avatar-popover"
                     content=
-                    {<div>
-                        <div className="popover-name">
-                            {userdata}
-                        </div>
+                    {<><div className="popover-name">
+                        {userdata}
+                    </div>
                         <div className="logout">
                             <Logout />
-                        </div>
-                    </div>}>
+                        </div></>}>
                     <Avatar
-                        src={`https://eu.ui-avatars.com/api?name=${userdata} ${userdata}`} />
-                </Popover></div>
-
+                        src={`https://eu.ui-avatars.com/api?name=${userdata}`} />
+                </Popover>
             </Header>
-            <div className="rendered-intervall">
-                {showToday ? <WorkerToday /> : <WorkerThisWeek />}
-            </div>
+            {showManage ? 
+                <ManageWorkforce/> :null}
+
         </div>
     )
 }
-export default WorkerPage;
+export default AdminPage;

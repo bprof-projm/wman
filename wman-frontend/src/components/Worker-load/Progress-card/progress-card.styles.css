@@ -2,7 +2,7 @@
   display:flex;  
   align-items: center;
   justify-content: space-around;
-  background-color:rgb(103, 162, 245);
+  background-color: #009688;
   border: 1px solid rgb(240, 220, 220);
   border-radius:20px;
   padding-left: 0;
@@ -13,17 +13,38 @@
   transform: translateZ(0);
   transition: transform 0.25s ease-out;
   align-content: center;
-  }
+}
   
-  .progress-card-container:hover {
-    transform: scale(1.05);
-  }
-  .card-name{ 
-    align-items:center ;
-    width:max-content;
-  }
-  .progress-card-container img{
-    border-radius: 50%;
-    width: 65px;
-    height: 65px;
+.progress-card-container:hover {
+  transform: scale(1.05);
+}
+
+.card-name{ 
+  align-items:center ;
+  width:max-content;
+}
+
+.card-name h4 {
+  color: white;
+}
+
+.progress-card-container img{
+  border-radius: 50%;
+  width: 65px;
+  height: 65px;
+  margin-left: 5px;
+}
+
+.card-progress-circle {
+  margin-right: 5px;
+}
+
+.ant-drawer-header {
+  height: 65px;
+  background-color: #009688;
+}
+
+.ant-drawer-title {
+  margin-top: 5px;
+  color: white;
 }

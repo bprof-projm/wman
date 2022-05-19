@@ -1,3 +1,5 @@
+using Hangfire;
+using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -15,6 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -60,6 +63,7 @@ namespace Wman.WebAPI
             services.AddTransient<IAllInWorkEventLogic, AllInWorkEventLogic>();
             services.AddTransient<IPhotoLogic, PhotoLogic>();
             services.AddTransient<IAdminLogic, AdminLogic>();
+            services.AddTransient<IStatsLogic, StatsLogic>();
             services.AddControllers().AddJsonOptions(options =>
           options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             //services.AddSingleton(Configuration);
@@ -72,9 +76,10 @@ namespace Wman.WebAPI
             services.AddTransient<IPicturesRepo, PicturesRepo>();
             services.AddTransient<ILabelRepo, LabelRepo>();
             services.AddTransient<IAddressRepo, AddressRepo>();
+            services.AddTransient<IFileRepo, FileRepo>();
             services.AddTransient<IPhotoService, PhotoService>();
             services.AddTransient<IEmailService, EmailService>();
-            
+
             services.AddSwaggerGen(c =>
             {
                 //c.DescribeAllEnumsAsStrings();
@@ -184,16 +189,33 @@ namespace Wman.WebAPI
 
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.AddSignalR();
+            services.AddHangfire(configuration => configuration
+        .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UseSqlServerStorage(Configuration.GetConnectionString("wmandb"), new SqlServerStorageOptions
+        {
+            CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+            SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+            QueuePollInterval = TimeSpan.Zero,
+            UseRecommendedIsolationLevel = true,
+            DisableGlobalLocks = true
+        }));
 
+            services.AddHangfireServer();
         }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IStatsLogic statsLogic)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
 
             }
+#if DEBUG
+            app.UseHangfireDashboard();
+#endif
             app.UseSwagger();
             //app.UseStatusCodePages();
             app.UseSwaggerUI(c =>
@@ -212,11 +234,16 @@ namespace Wman.WebAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+#if DEBUG
+                endpoints.MapHangfireDashboard();
+#endif
                 endpoints.MapHub<NotifyHub>("/notify", opt =>
                 {
 
                 });
             });
+            statsLogic.registerRecurringManagerJob(Configuration.GetValue<string>("xlsSchedule"));
+            statsLogic.registerRecurringWorkerJob(Configuration.GetValue<string>("xlsSchedule_Worker"));
         }
 
         static string XmlCommentsFilePath
